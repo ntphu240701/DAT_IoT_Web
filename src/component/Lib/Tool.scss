@@ -1,0 +1,1951 @@
+.DAT_Tool_Connect {
+    position: absolute;
+    z-index: 10;
+    height: 35px;
+    width: 35px;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 30px;
+    background-color: rgb(0, 0, 0, 0.3);
+    box-shadow: 2px 2px 5px rgba(74, 74, 74, 0.3), -2px -2px 5px rgba(176, 176, 176, 0.3);
+
+}
+
+.DAT_Name {
+    position: absolute;
+    z-index: 10;
+    height: 35px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    color: white;
+    background-color: rgb(0, 0, 0, 0.3);
+    box-shadow: 2px 2px 5px rgba(74, 74, 74, 0.3), -2px -2px 5px rgba(176, 176, 176, 0.3);
+}
+
+
+.DAT_Menu {
+    position: absolute;
+    z-index: 10;
+    height: 35px;
+    width: 35px;
+    cursor: pointer;
+    background-color: rgb(0, 0, 0, 0.3);
+    border-radius: 5px;
+    text-align: center;
+    line-height: 40px;
+    color: #ffffff;
+    box-shadow: 2px 2px 5px rgba(74, 74, 74, 0.3), -2px -2px 5px rgba(176, 176, 176, 0.3);
+
+}
+
+.DAT_ToolConfig {
+    position: absolute;
+    z-index: 10;
+    height: 35px;
+    width: 35px;
+    cursor: pointer;
+    background-color: rgb(0, 0, 0, 0.3);
+    border-radius: 5px;
+    text-align: center;
+    line-height: 30px;
+    color: #ffffff;
+    box-shadow: 2px 2px 5px rgba(74, 74, 74, 0.3), -2px -2px 5px rgba(176, 176, 176, 0.3);
+
+}
+
+.DAT_Align {
+    position: absolute;
+    z-index: 10;
+    height: 35px;
+    width: 35px;
+    cursor: pointer;
+    background-color: rgb(0, 0, 0, 0.3);
+    border-radius: 5px;
+    color: #ffffff;
+    box-shadow: 2px 2px 5px rgba(74, 74, 74, 0.3), -2px -2px 5px rgba(176, 176, 176, 0.3);
+    text-align: center;
+    line-height: 30px;
+}
+
+.DAT_Editor {
+
+    position: absolute;
+    z-index: 10;
+    height: 35px;
+    width: 35px;
+    cursor: pointer;
+    background-color: rgb(0, 0, 0, 0.3);
+    border-radius: 5px;
+    color: #ffffff;
+    box-shadow: 2px 2px 5px rgba(74, 74, 74, 0.3), -2px -2px 5px rgba(176, 176, 176, 0.3);
+    text-align: center;
+    line-height: 30px;
+}
+
+
+.DAT_zoom {
+    position: absolute;
+    z-index: 7;
+    height: 35px;
+    width: 35px;
+    cursor: pointer;
+    background-color: rgb(0, 0, 0, 0.3);
+    border-radius: 5px;
+    text-align: center;
+    line-height: 40px;
+    padding-left: 1px;
+    color: #ffffff;
+    box-shadow: 2px 2px 5px rgba(74, 74, 74, 0.3), -2px -2px 5px rgba(176, 176, 176, 0.3);
+}
+
+
+.DAT_Toollist_Loading {
+    height: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7px;
+    box-shadow: inset 0 0 4px 4px rgba(160, 160, 160, 0.5);
+}
+
+
+.DAT_Toollist_Tab_Mobile {
+    position: relative;
+    background-color: #ececec;
+    padding: 12px;
+    border-radius: 10px 10px 0 0;
+    border-bottom: solid 1px gray;
+    //height: 60px;
+    display: flex;
+    gap: 20px;
+
+    &_content {
+        // -webkit-appearance: none;
+        // -moz-appearance: none;
+        // appearance: none;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 200px;
+        height: 40px;
+        border-radius: 5px;
+        border: 1px solid #b4b4b4;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.5s ease-in;
+        z-index: 1;
+
+        &::before,
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 100%;
+            transform: skew(15deg);
+            transition: all 0.5s;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+
+        &::before {
+            left: -10px;
+            background: #240046;
+        }
+
+        &::after {
+            right: -10px;
+            background: #5a189a;
+        }
+
+        &:hover::before,
+        &:hover::after {
+            width: 58%;
+        }
+
+        &:hover span {
+            color: #e0aaff;
+            transition: 0.3s;
+        }
+
+        & span {
+            color: #03045e;
+            font-size: 18px;
+            transition: all 0.3s ease-in;
+        }
+
+
+        &:hover {
+            background-color: #c6c6c6;
+        }
+
+        & span {
+            width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+
+    }
+
+    &_list {
+        margin-top: 50px;
+        position: absolute;
+        z-index: 20;
+        width: 350px;
+        height: 320px;
+        background-color: white;
+        border-radius: 5px;
+        overflow: hidden;
+        box-shadow: 0 0 4px 4px rgba(193, 193, 193, 0.5);
+        overflow-y: scroll;
+
+        &_item {
+            font-size: 14px;
+            padding: 7px;
+            padding-left: 15px;
+            cursor: pointer;
+            border-bottom: solid 1px rgb(219, 219, 219);
+
+            &:hover {
+                background-color: #c6c6c6;
+            }
+        }
+
+    }
+
+    & select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+
+        border-radius: 5px;
+        padding: 10px;
+        width: 200px;
+        cursor: pointer;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: black;
+        font-size: 17px;
+        background-color: white;
+        //text-align: center;
+        text-align-last: center;
+        outline: none;
+        border: none;
+
+
+
+
+
+    }
+}
+
+.DAT_Toollist_Tab {
+    position: relative;
+    display: flex;
+    overflow-y: hidden;
+    overflow-x: auto;
+    background-color: #dadada;
+    border-radius: 10px 10px 0 0;
+    //border-bottom: solid 1px darkgray;
+    padding: 15px 10px 0px 10px;
+    height: 60px;
+
+
+    &-close {
+        position: absolute;
+        z-index: 10;
+        top: 10px;
+        right: 10px;
+        width: 40px;
+        height: 40px;
+        background-color: rgba(253, 253, 253, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        cursor: pointer;
+
+
+        & ion-icon {
+            font-size: 20px;
+            color: gray;
+        }
+
+        &:hover {
+            background-color: rgb(0, 0, 0, 0.3);
+        }
+    }
+
+    &-warn {
+        position: absolute;
+        top: 10px;
+        right: 60px;
+        display: flex;
+        gap: 10px;
+
+        &-item {
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            outline: none;
+            border: none;
+            background-color: rgba(253, 253, 253, 0.5);
+            &:hover {
+                background-color: rgb(0, 0, 0, 0.3);
+            }
+
+        }
+    }
+
+
+
+    &_main {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        //align-items: ;
+
+        &_left {
+            border-radius: 45%;
+            top: 21px;
+            left: -25px;
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background-color: #dadada;
+            box-shadow: 7px 10px 0px rgb(255, 255, 255);
+        }
+
+        &_right {
+            border-radius: 45%;
+            top: 21px;
+            right: -25px;
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background-color: #dadada;
+            box-shadow: -7px 10px 0px white;
+        }
+
+        &_content2 {
+
+            cursor: pointer;
+            max-width: 100px;
+            font-size: 17px;
+            color: rgb(80, 80, 80);
+            background-color: #dadada;
+            padding: 10px 25px 10px 25px; //   
+            //border-radius: 5px;
+            // background-size: cover;
+            // background-position: center !important;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+
+        }
+
+
+        &_content1 {
+
+            cursor: pointer;
+            max-width: 350px;
+            font-size: 17px;
+            color: rgb(80, 80, 80);
+            background-color: #dadada;
+            padding: 10px 25px 10px 25px;
+            //border-radius: 5px;
+            // background-size: cover;
+            // background-position: center !important;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+
+        }
+
+        &_Add {
+            flex: 1;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-end;
+
+            & form {
+                display: flex;
+                padding: 5px;
+                border-radius: 5px;
+                border: solid 1px gray;
+                overflow: hidden;
+                background-color: white;
+
+                & input {
+                    border: none;
+                    outline: none;
+                    background-color: white;
+                }
+
+                & button {
+                    border: none;
+                    outline: none;
+                    background-color: white;
+
+                }
+            }
+
+        }
+
+
+    }
+
+
+
+}
+
+
+.DAT_Toollist_Content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    //height: 80vh;
+    //background-color: #ececec;
+
+}
+
+.DAT_ToolTit {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 25px;
+    background-color: rgb(255, 255, 255);
+    z-index: 10;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(74, 74, 74, 0.5), -2px -2px 5px rgba(188, 188, 188, 0.5);
+
+    &-group {
+        border-radius: 10px;
+        border: solid 4px white;
+        display: flex;
+
+        &:focus-within {
+            border: solid 4px #BAEAFF;
+        }
+
+
+        & input {
+
+            outline: none;
+            border: solid 1px white;
+            background-color: rgb(230, 230, 230);
+            line-height: 40px;
+            border-radius: 10px 0 0 10px;
+            padding-left: 10px;
+            font-size: 17px;
+            height: 45px;
+
+
+        }
+
+        &-btn {
+            cursor: pointer;
+            outline: none;
+            border: solid 1px white;
+            background-color: rgb(230, 230, 230);
+            width: 60px;
+            height: 45px;
+
+            border-radius: 0 10px 10px 0;
+            font-size: 15px;
+            font-weight: 400;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+    }
+
+
+}
+
+.DAT_ToolRemove {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 30;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    background-color: rgb(0, 0, 0, 0.7);
+
+    &-group {
+        margin: auto;
+        margin-top: 15vh;
+        width: 90%;
+        border-radius: 10px;
+        padding: 20px;
+        background-color: #ffffff;
+        text-align: justify;
+
+        & span {
+            color: red;
+
+        }
+
+        &-action {
+            display: flex;
+            width: 100%;
+            height: 30px;
+            justify-content: center;
+            margin-top: 10px;
+            gap: 10px;
+
+            &-yes {
+                cursor: pointer;
+                width: 80px;
+                border-radius: 10px;
+                color: white;
+                background-color: red;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                &:hover {
+                    background-color: rgba(196, 0, 0, 0.2);
+                }
+            }
+
+            &-no {
+                cursor: pointer;
+                width: 80px;
+                border-radius: 10px;
+                color: white;
+                background-color: green;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                &:hover {
+                    background-color: rgba(4, 218, 4, 0.2);
+                }
+            }
+        }
+    }
+}
+
+.DAT_ToolStore {
+    position: absolute;
+    z-index: 30;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    background-color: rgb(0, 0, 0, 0.7);
+
+    &-group {
+        position: relative;
+        margin: auto;
+        margin-top: 15vh;
+        width: 90%;
+        border-radius: 10px;
+        padding: 20px;
+        background-color: #ffffff;
+        text-align: justify;
+
+        &-close {
+            cursor: pointer;
+            position: absolute;
+            right: 20px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f3f3f3;
+
+            &:hover {
+                background-color: rgb(66, 59, 50, 0.3);
+            }
+
+
+        }
+
+        &-tit {
+            margin-top: 30px;
+        }
+
+        &-action {
+            width: 100%;
+            height: 40px;
+            display: flex;
+            margin-top: 10px;
+            border-radius: 7px;
+            border: solid 4px gray;
+            overflow: hidden;
+
+            & input {
+                width: 100%;
+                padding: 10px;
+                outline: none;
+                border: none;
+                background-color: #f7f7f7;
+            }
+
+            & select {
+                width: 100%;
+                outline: none;
+                border: none;
+                background-color: #f7f7f7;
+            }
+
+            & button {
+                width: 100px;
+                outline: none;
+                border: none;
+                background-color: #dbdbdb;
+            }
+        }
+    }
+}
+
+.DAT_ToolMenu {
+    position: absolute;
+    right: 50px;
+    margin-top: 10px;
+    background-color: white;
+    width: 200px;
+
+    border-radius: 5px;
+    
+    
+    box-shadow: 5px 5px 10px rgba(158, 158, 158, 0.3), -5px -5px 10px rgba(158, 158, 158, 0.3);
+    -webkit-animation: animatetop 0.6s;
+    animation: animatetop 0.6s;
+    z-index: 20;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+   
+    /* Firefox */
+
+    &-content{
+       margin-bottom: 10px;
+       &-tit{
+           width: 100%;
+           display: flex;
+           align-items: center;
+           justify-content: flex-start;
+           font-size: 14px;
+           padding: 7px;
+           color: rgb(255, 255, 255);
+           //padding-left: 10px;
+       }
+        &-group{
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            &-item{
+                cursor: pointer;
+                height: 35px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                &:hover{
+                    background-color: #e5e5e5;
+                }
+            }
+        }
+    }
+
+
+
+    // &::-webkit-scrollbar {
+    //     display: none;
+    //     /* Safari and Chrome */
+    // }
+
+
+    // &-content {
+    //     cursor: pointer;
+    //     height: 35px;
+    //     line-height: 35px;
+    //     font-size: 15px;
+    //     padding-left: 10px;
+    //     text-align: left;
+
+    //     &:hover {
+    //         background-color: rgb(220, 220, 220);
+    //     }
+
+    // }
+
+
+    // &-action {
+    //     cursor: pointer;
+    //     font-weight: 600;
+    //     padding-left: 10px;
+    //     height: 35px;
+    //     line-height: 35px;
+    //     font-size: 15px;
+    //     padding-left: 10px;
+    //     text-align: left;
+
+    //     &:hover {
+    //         background-color: rgb(220, 220, 220);
+    //     }
+
+
+
+    // }
+}
+
+
+//Tool
+.DAT_Tool {
+    position: relative;
+
+
+    &_SVG {
+        position: relative;
+        text-align: center;
+        transform-origin: 0% 0% 0px;
+        height: 50vh;
+        width: 100%;
+        margin: auto;
+        box-shadow: inset 3px 3px 5px rgba(152, 152, 152, 0.5), inset -3px -3px 5px rgba(222, 222, 222, 0.5);
+        border-radius: 15px;
+        // background-image: url("../../../public/theme/theme_1.png");
+        // background-position: center top !important;
+        // background-repeat: no-repeat;
+        // background-size: cover;
+        overflow: hidden;
+
+        &-content {
+
+
+            position: relative;
+            margin: auto;
+            width: 100%;
+            height: 100%;
+
+
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            overflow-x: hidden;
+            overflow-y: scroll;
+
+
+            &::-webkit-scrollbar {
+                width: 8px;
+
+            }
+
+            /* Track */
+            &::-webkit-scrollbar-track {
+                background-color: rgba(0, 0, 0, 0);
+                border-radius: 3px;
+            }
+
+            /* Handle */
+            &::-webkit-scrollbar-thumb {
+                background: #b0b0b0;
+                border-radius: 10px;
+            }
+
+            /* Handle on hover */
+            &::-webkit-scrollbar-thumb:hover {
+                background: #555;
+            }
+
+
+
+
+            &-view {
+
+                position: relative;
+                border-radius: 15px;
+                transform: scale(1);
+                transform-origin: 0% 0% 0px;
+                width: 1490px;
+                height: 1500px;
+                margin-bottom: 15px;
+
+                // background-color: #326ba8;
+
+            }
+
+
+
+
+
+        }
+
+        // &-content::-webkit-scrollbar {
+        //     display: none;
+        //     /* Safari and Chrome  */
+        // }
+
+
+
+
+    }
+
+
+
+}
+
+//Thang máy
+.box {
+    cursor: pointer;
+    position: relative;
+    margin: auto;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 280px;
+    padding: 8px;
+    -webkit-box-sizing: border-box;
+    /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;
+    /* Firefox, other Gecko */
+    box-sizing: border-box;
+    background-color: gray;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(198, 197, 197, 0.4), -2px -2px 5px rgba(198, 197, 197, 0.4);
+
+    .elevator-wrapper {
+        position: relative;
+        z-index: 0;
+        border: 0px none;
+        height: 400px;
+
+        width: 303px;
+
+
+        .elevator {
+            border-radius: 5px;
+            height: 400px;
+            left: 0;
+            overflow: hidden;
+            position: relative;
+            top: 0;
+            width: 303px;
+            z-index: 0;
+
+            .ng {
+                height: 401px;
+                width: 263px;
+
+                .background {
+                    height: 208px;
+                    left: 80px;
+                    position: absolute;
+                    z-index: 0;
+                    top: 126px;
+                    width: 102px;
+                }
+
+                .leftdoor {
+                    height: 212px;
+                    left: 76px;
+                    position: absolute;
+                    z-index: 0;
+                    top: 126px;
+                    width: 52px;
+                }
+
+
+
+
+                .rightdoor {
+                    height: 212px;
+                    left: 128px;
+                    position: absolute;
+                    top: 126px;
+                    width: 58px;
+                }
+
+                .frames {
+                    height: 235px;
+                    left: 74px;
+                    position: absolute;
+                    top: 114px;
+                    width: 112px;
+                }
+
+                .rightwall {
+                    height: 401px;
+                    left: 221px;
+                    position: absolute;
+                    top: 0;
+                    width: 42px;
+                }
+
+                .leftwall {
+                    height: 401px;
+                    left: 0;
+                    position: absolute;
+                    top: 0;
+                    width: 40px;
+                }
+
+                .ceiling {
+                    height: 70px;
+                    left: 0;
+                    position: absolute;
+                    top: 0;
+                    width: 263px;
+                }
+
+                .wall {
+                    height: 279px;
+                    left: 39px;
+                    position: absolute;
+                    top: 70px;
+                    width: 182px;
+                }
+
+                .floor {
+                    height: 67px;
+                    left: 0;
+                    position: absolute;
+                    top: 334px;
+                    width: 263px;
+                }
+
+                .screennumber {
+                    background-color: #423a32;
+                    border-radius: 1px;
+                    box-shadow: 4px 4px 30px #8e8871;
+                    height: 21px;
+                    left: 113px;
+                    position: absolute;
+                    top: 85px;
+                    width: 32px;
+                }
+
+                .number {
+                    color: #6fcef7;
+                    font-family: "Inter", Helvetica;
+                    font-size: 13px;
+                    font-weight: 800;
+                    left: 121px;
+                    letter-spacing: 0;
+                    line-height: normal;
+                    position: absolute;
+                    top: 87px;
+                    white-space: nowrap;
+                    width: 24px;
+                }
+
+                .screenupdown {
+                    background-color: #423b32;
+                    border-radius: 1px;
+                    height: 42px;
+                    left: 194px;
+                    position: absolute;
+                    top: 117px;
+                    width: 20px;
+                }
+
+                .down {
+                    height: 8px;
+                    left: 199px;
+                    position: absolute;
+                    top: 126px;
+                    width: 10px;
+                }
+
+                .up {
+                    height: 8px;
+                    left: 199px;
+                    position: absolute;
+                    top: 142px;
+                    width: 10px;
+                }
+
+
+            }
+
+            .ng-instance {
+                left: 20px !important;
+                position: absolute !important;
+                top: 0px !important;
+            }
+        }
+    }
+}
+
+//Biểu đồ tròn
+.DAT_Circle {
+    display: flex;
+
+    &_Main {
+        padding: 5px;
+
+        .DAT_Circle_Main-outer {
+            position: relative;
+            // width: 120px;
+            // height: 120px;
+            border-radius: 50%;
+            padding: 20px;
+            /* background: rgba(167, 166, 166, 0.8); */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 2px 2px 3px rgba(74, 74, 74, 0.8), -2px -2px 3px rgba(188, 188, 188, 0.8);
+
+
+            .DAT_Circle_Main-inner {
+
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(255, 255, 255, 0);
+                //box-shadow: inset 2px 2px 3px rgba(78, 78, 78, 0.8), inset -2px -2px 3px rgba(188, 188, 188, 0.8);
+
+                .DAT_Circle_Main-number {
+                    font-weight: 600;
+                    color: #555;
+                }
+
+            }
+
+            .DAT_Circle_Main-value {
+                // width: 120px;
+                // height: 120px;
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+        }
+    }
+}
+
+
+//ON/OFF
+.DAT_Switch {
+    position: relative;
+    z-index: 0;
+
+
+    &-box {
+        /* margin-right: 15px; */
+        position: relative;
+        display: inline-block;
+        // width: 80px;
+        // height: 40px;
+        border: solid 5px rgb(220, 219, 219);
+        border-radius: 50%;
+
+
+
+        &-check {
+            display: none;
+        }
+
+        &-check:active+&-slider:before {
+            width: 80%;
+            border-radius: 50%;
+
+
+        }
+
+        // &-check:checked:active+&-slider:before {
+        //     margin-left: 0px;
+        // }
+
+        &-check:checked+&-slider:before {
+            content: "ON";
+            //left: 55%;
+
+            background-color: #03a9f4;
+        }
+
+
+        &-check:checked+&-slider {
+            background-color: #BAEAFF;
+        }
+
+        &-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #D6D6D6;
+            width: 100%;
+            border-radius: 50%;
+
+            &:before {
+                content: "OFF";
+                position: absolute;
+                height: 100%;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                color: #fff;
+                font-size: 12px;
+                font-weight: bold;
+
+
+                background-color: gray;
+                border-radius: 50%;
+                transition: 0.5s ease all, left 0.5s cubic-bezier(0.18, 0.89, 0.35, 1.15);
+            }
+        }
+
+
+    }
+
+
+}
+
+
+.DAT_SwitchToggle {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 0;
+
+    &-Toggle {
+        position: relative;
+
+        &-Icon {
+            position: absolute;
+            cursor: pointer;
+        }
+
+        &-Labelchoice1 {
+            position: absolute;
+            left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50%;
+            height: 100%;
+
+
+            cursor: pointer;
+
+            & :focus-within {
+                transition: 0.5s ease-in-out;
+            }
+        }
+
+        &-Labelchoice2 {
+            position: absolute;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 50%;
+            height: 100%;
+
+            cursor: pointer;
+
+            & :focus-within {
+                transition: 0.5s ease-in-out;
+            }
+        }
+
+
+    }
+
+
+}
+
+//Nhập liệu
+.DAT_Input {
+    position: relative;
+    z-index: 0;
+    width: 100%;
+    display: flex;
+    justify-content: left;
+
+    & input {
+
+        padding: 10px;
+        outline: none;
+
+    }
+
+}
+
+
+//Dữ liệu
+.DAT_Value {
+    position: relative;
+    z-index: 0;
+    width: 100%;
+    padding: 10px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    /* background-image: linear-gradient(to right, #ebff9a , rgb(255, 97, 34)); */
+    /* box-shadow: 2px 2px 3px #cbced1, -2px -2px 3px #fff; */
+}
+
+
+.DAT_Valuev2 {
+    position: relative;
+    z-index: 0;
+    width: 100%;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    /* background-image: linear-gradient(to right, #ebff9a , rgb(255, 97, 34)); */
+    /* box-shadow: 2px 2px 3px #cbced1, -2px -2px 3px #fff; */
+}
+
+
+.DAT_Arrow {
+
+    position: relative;
+    z-index: 0;
+    width: 100%;
+    height: 35px;
+    background-color: rgb(0, 0, 0, 0.7);
+
+    &-scroll {
+
+        height: 100%;
+
+        //rotate: (180deg);
+        & span {
+            display: block;
+            margin: auto;
+            width: 10px;
+            height: 10px;
+
+            // border-bottom:  solid #6d6d6d;
+            // border-right:  solid #6d6d6d;
+            transform: rotate(45deg);
+            //animation: scroll 2s infinite;
+
+            &:nth-child(2) {
+                animation-delay: -.2s;
+            }
+
+            &:nth-child(3) {
+                animation-delay: -.4s;
+            }
+
+
+        }
+    }
+
+
+
+}
+
+
+.DAT_Led {
+    // width: 50px;
+    // height: 50px;
+    padding: 5px;
+
+    &-cir {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        box-shadow: 0px 0px 8px rgba(152, 152, 152, 0.5);
+        font-weight: 700;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+    }
+
+}
+
+
+.DAT_Icon {
+    // width: 60px;
+    // height: 60px;
+    padding: 5px;
+    position: relative;
+    z-index: 0;
+
+    // & img {
+    //     width: 50px;
+    //     height: 50px;
+
+    // }
+
+}
+
+
+.DAT_LineChart {
+
+    position: relative;
+    z-index: 0;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    gap: 10px;
+
+
+    &-y {
+        position: absolute;
+        display: flex;
+        left: 0;
+        color: #8e8871;
+        transform: rotateZ(-90deg);
+
+    }
+
+    &-g {
+        position: absolute;
+        z-index: 1;
+        left: 40px;
+
+        &-x {
+            color: #8e8871;
+            margin-top: 10px;
+        }
+    }
+
+    & button {
+        position: absolute;
+        z-index: 2;
+        top: 10px;
+        right: 10px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        outline: none;
+        border: none;
+        background-color: #e6e6e6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        & ion-icon {
+            font-size: 20px;
+            color: #7e7e7e;
+        }
+
+        &:hover {
+            background-color: rgb(85, 85, 85, 0.5);
+        }
+    }
+
+
+}
+
+
+//Trạng thái
+.DAT_Note {
+    position: relative;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    font-weight: 500;
+}
+
+//Config(move, add, remove)
+.DAT_Edit {
+    position: relative;
+    z-index: 0;
+    cursor: move;
+
+    &-view {
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0);
+    }
+
+
+    &-setting {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 1;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        color: rgb(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        //box-shadow: 2px 2px 3px rgba(74, 74, 74, 0.8), -2px -2px 3px rgba(188, 188, 188, 0.8);
+
+        &:hover {
+            background-color: #adadad;
+
+        }
+
+    }
+
+
+
+
+
+}
+
+.DAT_Pic {
+    &-img {
+        width: 100%;
+        //height: 300px;
+        //background-image: url("../../../public/picture/Valve.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        position: relative;
+        z-index: 0;
+    }
+}
+
+.DAT_Timer {
+
+    position: relative;
+    z-index: 0;
+    width: 100%;
+    padding: 10px;
+    overflow: hidden;
+
+    &-control {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        border-radius: 5px;
+        background-color: rgb(0, 0, 0, 0.5);
+
+        &-number {
+            position: relative;
+            width: 90%;
+            margin: auto;
+            padding: 30px;
+            margin-top: 100px;
+            border-radius: 10px;
+            background-color: #ffffff;
+
+            &-close {
+                position: absolute;
+                width: 35px;
+                height: 35px;
+                right: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                background-color: #ebebeb;
+                border-radius: 50%;
+
+                &:hover {
+                    background-color: rgb(85, 85, 85, 0.5);
+                }
+
+                & ion-icon {
+                    color: #555;
+                }
+            }
+
+            &-tit {
+                position: relative;
+                margin-top: 40px;
+                width: 100%;
+                text-align: left;
+
+            }
+
+            &-group {
+                margin-top: 10px;
+                width: 100%;
+                //background-color: #03a9f4;
+                height: 60px;
+                border-radius: 5px;
+                display: flex;
+
+                &:focus-within {
+                    box-shadow: 0 0 0 4px rgba(14, 219, 255, 0.4);
+                }
+
+                overflow: hidden;
+
+                & input {
+                    flex: 1;
+                    background-color: #eeeeee;
+                    height: 100%;
+                    outline: none;
+                    border: none;
+                    padding: 10px;
+                }
+
+                & button {
+                    width: 80px;
+                    height: 100%;
+                    outline: none;
+                    border: none;
+                }
+            }
+        }
+    }
+
+
+
+    &-tb {
+
+        background-color: rgb(255, 255, 255);
+        width: 100%;
+        margin: auto;
+        //height: 630px;
+        border-radius: 10px;
+        box-shadow: 2px 2px 3px rgba(74, 74, 74, 0.8), -2px -2px 3px rgba(188, 188, 188, 0.8);
+
+        &-tit {
+            width: 100%;
+            text-align: left;
+            background-color: #f1f1f1;
+            border-radius: 10px 10px 0 0;
+            padding: 20px 0 20px 10px;
+            border-bottom: solid 1px gray;
+        }
+
+        &-content {
+            padding: 10px;
+            margin-top: 15px;
+        }
+    }
+
+    &-box {
+
+        width: 100%;
+        text-align: right;
+        color: #000000;
+        padding: 10px;
+
+        & input {
+            display: none;
+        }
+
+        & input+label:before {
+            cursor: pointer;
+            margin-right: 10px;
+            padding-bottom: 5px;
+            display: block;
+            content: "\2713";
+            width: 15px;
+            height: 15px;
+            line-height: 15px;
+            text-align: center;
+            border: 1px solid #000000;
+            color: transparent;
+            transition: 0.2s;
+            border-radius: 2px;
+        }
+
+        & input:checked+label:before {
+            //background-color: rgb(255, 255, 255);
+            color: rgb(0, 0, 0);
+        }
+
+        & input+label:active:before {
+            transform: scale(0);
+        }
+
+        & button {
+            width: 70px;
+            height: 35px;
+            border-radius: 10px;
+            background-color: rgb(54, 148, 255);
+            color: wheat;
+        }
+    }
+
+
+
+
+}
+
+// Thuật toán
+.DAT_Calculate {
+    position: fixed;
+    z-index: 20;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0, 0, 0, 0.8);
+    overflow-y: scroll;
+
+
+    &::-webkit-scrollbar {
+        display: none;
+        /* Safari and Chrome */
+    }
+
+    &-cover {
+        position: relative;
+        margin: auto;
+        margin-top: calc(15vh);
+        background-color: white;
+        border-radius: 5px;
+        width: 80%;
+        padding: 20px;
+        z-index: 10;
+        /* height: 200px; */
+        margin-bottom: 60px;
+        box-shadow: 5px 5px 10px rgba(158, 158, 158, 0.3), -5px -5px 10px rgba(158, 158, 158, 0.3);
+
+        &-head {
+            position: relative;
+            margin: auto;
+            height: 40px;
+            width: 100%;
+            margin-bottom: 10px;
+            //background-color: #03a9f4;
+            display: flex;
+            justify-content: right;
+            gap: 10px;
+
+
+
+            & span {
+
+                background-color: #f6f6f6;
+                height: 40px;
+                width: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+            }
+
+
+
+        }
+
+
+        &-number {
+            height: 40px;
+            margin-bottom: 20px;
+            display: flex;
+            border-radius: 10px;
+            gap: 1px;
+            overflow: hidden;
+
+
+            &:focus-within {
+                box-shadow: 0 0 0 5px rgba(14, 219, 255, 0.4);
+            }
+
+            & input {
+                width: 100%;
+                height: 40px;
+                padding-left: 10px;
+                outline: none;
+                background-color: #d0f0ff;
+                border: none;
+                outline: none;
+            }
+
+            & span {
+                width: 100%;
+                padding: 10px;
+                outline: none;
+                background-color: #d0f0ff;
+                display: flex;
+                align-items: center;
+            }
+
+            & button {
+                width: 100px;
+                border: none;
+                outline: none;
+            }
+
+        }
+
+        // &-multilnum {
+        //     text-align: center;
+        //     /* background-color: #326ba8; */
+        //     margin-bottom: 10px;
+        //     display: flex;
+        //     border-radius: 10px;
+        //     border: solid 4px #ffffff;
+        //     gap: 1px;
+        //     border-radius: 10px;
+        //     overflow: hidden;
+
+        //     & input {
+        //         margin-top: 1px;
+        //         margin-bottom: 1px;
+        //         width: 100%;
+        //         height: 40px;
+        //         outline: none;
+        //         background-color: #d0f0ff;
+        //         border: solid 1px #d0f0ff;
+        //     }
+
+        //     & button {
+        //         width: 100px;
+        //         outline: none;
+        //         border: solid 1px white;
+        //     }
+
+
+        // }
+
+        &-showstatus {
+            width: 80%;
+
+            margin: auto;
+            border-radius: 10px;
+            border: solid 1px gray;
+            padding: 10px;
+            margin-bottom: 10px;
+
+            &-content {
+
+                display: flex;
+                gap: 10px;
+
+                & span {
+                    flex: 3.3;
+
+                }
+            }
+        }
+
+
+        &-status {
+            width: 100%;
+            text-align: center;
+            /* background-color: #326ba8; */
+            margin-bottom: 10px;
+            display: flex;
+            border-radius: 10px;
+            border: solid 4px #ffffff;
+
+            & button {
+                width: 200px;
+                outline: none;
+                border: solid 1px white;
+            }
+
+            & input {
+                margin-top: 1px;
+                margin-bottom: 1px;
+                width: 60%;
+                height: 40px;
+                padding-left: 10px;
+                outline: none;
+                background-color: #d0f0ff;
+                border: solid 4px #d0f0ff;
+
+
+
+            }
+
+            &:focus-within {
+                border: solid 4px #8be2f5;
+            }
+
+        }
+
+        &-box {
+            width: 100%;
+
+            margin-bottom: 10px;
+            align-items: center;
+
+            & select {
+                cursor: pointer;
+                width: 100%;
+                height: 50px;
+                padding-left: 10px;
+                border-radius: 10px;
+                background-color: #d0f0ff;
+                border: solid 4px #ffffff;
+                outline: none;
+
+                &:focus-visible {
+                    border: solid 4px #8be2f5;
+                }
+
+                & option {
+                    background-color: white;
+                }
+            }
+
+            & button {
+
+                height: 42px;
+                outline: none;
+                border: none;
+                width: 42px;
+                border-radius: 50%;
+            }
+
+        }
+
+
+        &-result {
+            width: 100%;
+            /* height: 40px; */
+            display: flex;
+
+            & input {
+                flex: 6;
+                /* height: 40px; */
+                text-align: justify;
+                padding-left: 10px;
+                border-radius: 10px;
+                margin-bottom: 10px;
+                border: solid 1px #8be2f5;
+                color: #326ba8;
+                font-size: 12px;
+                padding: 10px;
+            }
+
+
+
+
+            & button {
+                height: 40px;
+                margin-left: 10px;
+                border-radius: 10px;
+                outline: none;
+                border: solid 1px white;
+                background-color: #326ba8;
+                color: whitesmoke;
+                font-weight: 600;
+
+            }
+        }
+
+        &-chart {
+            position: relative;
+            border-radius: 10px;
+            border: solid 1px gray;
+            padding: 10px;
+            padding-top: 60px;
+            margin-bottom: 10px;
+            overflow: hidden;
+
+            &-remove {
+                cursor: pointer;
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: #eeeeee;
+                border: none;
+                outline: none;
+
+                &:hover {
+                    background-color: rgb(66, 59, 50, 0.3);
+                }
+
+            }
+
+            // & input{
+            //     padding: 10px;
+            //     height: 35px;
+            //     width: 100%;
+            //     border-radius: 7px;
+            //     margin-bottom: 10px;
+            // }
+
+            // & button{
+            //     height: 35px;
+            //     outline: none;
+            //     border: none;
+            //     width: 120px;
+            //     border-radius: 10px;
+            // }
+        }
+
+
+
+
+
+    }
+}
+
+
+@keyframes scroll {
+    0% {
+        opacity: 0;
+
+        transform: rotate(45deg) translate(-5px, -5px);
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: rotate(45deg) translate(5px, 5px);
+
+    }
+}
+
+
+
+@media (min-width: 700px) {
+
+
+    .DAT_Tool_SVG {
+        height: calc(100vh - 110px);
+    }
+
+    .DAT_Toollist_Loading {
+        height: calc(100vh - 110px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 7px;
+        box-shadow: inset 0 0 4px 4px rgba(160, 160, 160, 0.5);
+    }
+
+
+    .DAT_ToolRemove-group {
+        width: 300px;
+    }
+
+    .DAT_ToolStore-group {
+        width: 300px;
+    }
+
+    .DAT_Calculate-cover {
+        width: 800px;
+    }
+
+
+
+
+}

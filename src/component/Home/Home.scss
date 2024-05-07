@@ -1,0 +1,285 @@
+.DAT_viewIOT {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../../../public/dat_picture/Embody_APP_22.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center bottom !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+   
+
+
+
+
+
+    &-3D {
+        //background-color: aqua;
+        position: relative;
+        z-index: 10px;
+        // margin-bottom: 100px;
+        width: 100px;
+        height: 100px;
+        transition: 1.5s;
+        transform-style: preserve-3d;
+        transform: perspective(1000px) rotateY(0deg);
+        // background-color: aqua;
+
+
+        &-Item {
+            position: absolute;
+            z-index: 10px;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform-origin: center;
+            transform-style: preserve-3d;
+            transform: rotateY(calc(var(--i) * 42deg)) translateZ(180px);
+            -webkit-box-reflect: below 0px linear-gradient(transparent, transparent, #0004);
+            box-shadow: 0 0 1em .25em var(--glow-color),
+                0 0 4em 1em var(--glow-spread-color),
+                inset 0 0 .75em .25em var(--glow-color);
+            text-shadow: 0 0 .5em var(--glow-color);
+
+            & img {
+                //background-color: rgba(255, 255, 255, 0.3);
+                --glow-color: rgb(176, 212, 255, 0.8);
+                --glow-spread-color: rgba(123, 167, 255, 0.781);
+                --enhanced-glow-color: rgb(206, 235, 255, 0.8);
+                --btn-color: rgb(61, 64, 136, 0.8);
+                border: .25em solid var(--glow-color);
+                padding: 15px;
+                box-sizing: border-box;
+                border-radius: 5px;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                cursor: pointer !important;
+                box-shadow: 0 0 1em .25em var(--glow-color),
+                    0 0 4em 1em var(--glow-spread-color),
+                    inset 0 0 .75em .25em var(--glow-color);
+                text-shadow: 0 0 .5em var(--glow-color);
+                transition: all 0.3s;
+
+                &::after {
+                    pointer-events: none;
+                    content: "";
+                    position: absolute;
+                    top: 120%;
+                    left: 0;
+                    height: 100%;
+                    width: 100%;
+                    background-color: var(--glow-spread-color);
+                    filter: blur(2em);
+                    opacity: .7;
+                    transform: perspective(1.5em) rotateX(35deg) scale(1, .6);
+                }
+
+                &:hover {
+                    color: var(--btn-color);
+                    background-color: var(--glow-color);
+                    box-shadow: 0 0 1em .25em var(--glow-color),
+                        0 0 4em 2em var(--glow-spread-color),
+                        inset 0 0 .75em .25em var(--glow-color);
+                }
+
+                &:active {
+                    box-shadow: 0 0 0.6em .25em var(--glow-color),
+                        0 0 2.5em 2em var(--glow-spread-color),
+                        inset 0 0 .5em .25em var(--glow-color);
+                }
+
+                // &:hover {
+                //     transition: all 0.8s;
+                //     transform: scale(1.2);
+                // }
+            }
+
+            & label {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: absolute;
+                bottom: -20px;
+                color: white;
+
+            }
+        }
+    }
+
+
+    &-Arrow {
+        position: relative;
+        z-index: 20;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: solid 1px white;
+        cursor: pointer;
+        display: flex;
+        //margin: 0 10px;
+        justify-content: center;
+        align-items: center;
+        font-size: 30px;
+        background-color: rgb(204, 204, 204,0.5);
+
+        & ion-icon {
+            color: white;
+        }
+
+        &:hover {
+            background-color: antiquewhite;
+        }
+    }
+
+
+
+}
+
+
+
+
+@media (min-width: 900px) {
+    .DAT_viewIOT {
+        background-image: url('../../../public/dat_picture/Embody_APP_22.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center bottom !important;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+
+
+        &-3D {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            transform-style: preserve-3d;
+
+            transition: 1.5s;
+            transform: perspective(1000px) rotate(0deg);
+            // background-color: aqua;
+
+            &-Item {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                transform-origin: center;
+                transform-style: preserve-3d;
+                transform: rotateY(calc(var(--i) * 42deg)) translateZ(360px);
+                -webkit-box-reflect: below 0px linear-gradient(transparent, transparent, #0004);
+
+
+
+                & img {
+                    --glow-color: rgb(176, 212, 255, 0.8);
+                    --glow-spread-color: rgba(123, 167, 255, 0.781);
+                    --enhanced-glow-color: rgb(206, 235, 255, 0.8);
+                    --btn-color: rgb(61, 64, 136, 0.8);
+                    border: .25em solid var(--glow-color);
+                    padding: 15px;
+                    box-sizing: border-box;
+                    border-radius: 5px;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    cursor: pointer !important;
+                    box-shadow: 0 0 1em .25em var(--glow-color),
+                        0 0 4em 1em var(--glow-spread-color),
+                        inset 0 0 .75em .25em var(--glow-color);
+                    text-shadow: 0 0 .5em var(--glow-color);
+                    transition: all 0.3s;
+
+                    &::after {
+                        pointer-events: none;
+                        content: "";
+                        position: absolute;
+                        top: 120%;
+                        left: 0;
+                        height: 100%;
+                        width: 100%;
+                        background-color: var(--glow-spread-color);
+                        filter: blur(2em);
+                        opacity: .7;
+                        transform: perspective(1.5em) rotateX(35deg) scale(1, .6);
+                    }
+
+                    &:hover {
+                        color: var(--btn-color);
+                        background-color: var(--glow-color);
+                        box-shadow: 0 0 1em .25em var(--glow-color),
+                            0 0 4em 2em var(--glow-spread-color),
+                            inset 0 0 .75em .25em var(--glow-color);
+                    }
+
+                    &:active {
+                        box-shadow: 0 0 0.6em .25em var(--glow-color),
+                            0 0 2.5em 2em var(--glow-spread-color),
+                            inset 0 0 .5em .25em var(--glow-color);
+                    }
+
+                    // &:hover {
+                    //     transition: all 0.8s;
+                    //     transform: scale(1.2);
+                    // }
+                }
+
+                & label {
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    position: absolute;
+                    bottom: -20px;
+                    color: white;
+                }
+            }
+        }
+
+
+
+        &-Arrow {
+            position: relative;
+            z-index: 20;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: solid 1px white;
+            cursor: pointer;
+            display: flex;
+            margin: 0 10px;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            background-color: rgb(204, 204, 204,0.5);
+
+            & ion-icon {
+                color: white;
+            }
+
+            &:hover {
+                background-color: antiquewhite;
+            }
+
+
+        }
+
+
+    }
+
+}
