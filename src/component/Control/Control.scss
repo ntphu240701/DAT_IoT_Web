@@ -4189,9 +4189,9 @@
             box-shadow:
                 2px 2px 5px rgba(128, 128, 128, 0.1),
                 -2px -2px 5px rgba(128, 128, 128, 0.1);
-            white-space: nowrap;
+            // white-space: nowrap;
             overflow: hidden;
-            text-overflow: ellipsis;
+            // text-overflow: ellipsis;
 
             &_Info {
                 padding: 15px;
@@ -4258,13 +4258,15 @@
                 cursor: pointer;
                 display: flex;
                 font-size: 15px;
-
+                border: 1.5px solid rgb(11, 25, 103);
+                border-radius: 5px;
+                overflow: hidden;
                 & span {
-                    padding: 7px;
+                    width: 55px;
+                    padding: 3px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    background-color: rgb(11, 25, 103);
                 }
             }
 

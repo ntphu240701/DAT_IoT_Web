@@ -310,12 +310,7 @@ export default function Dashboard(props) {
                   style={{
                     backgroundColor:
                       chart === "year" ? "rgb(11, 25, 103)" : "white",
-                    border:
-                      chart === "year"
-                        ? "solid 1.5px rgb(11, 25, 103)"
-                        : "solid 1.5px 0 1.5px 1.5px rgb(11, 25, 103)",
                     color: chart === "year" ? "white" : "black",
-                    borderRadius: "5px 0px 0px 5px",
                   }}
                   onClick={() => {
                     setChart("year");
@@ -327,12 +322,7 @@ export default function Dashboard(props) {
                   style={{
                     backgroundColor:
                       chart === "month" ? "rgb(11, 25, 103)" : "white",
-                    border:
-                      chart === "month"
-                        ? "solid 1.5px rgb(11, 25, 103)"
-                        : "solid 1.5px 1.5px 1.5px 0 rgb(11, 25, 103)",
                     color: chart === "month" ? "white" : "black",
-                    borderRadius: "0px 5px 5px 0",
                   }}
                   onClick={() => {
                     setChart("month");
