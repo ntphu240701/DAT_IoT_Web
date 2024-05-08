@@ -22,11 +22,13 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { isBrowser } from "react-device-detect";
+import { useIntl } from "react-intl";
 
 export default function Dashboard(props) {
   const [devicedata, setDevicedata] = useState([]);
   const [chart, setChart] = useState("year");
 
+  const datalang = useIntl();
   const v = "Dữ liệu tháng";
   const data = [
     {
@@ -167,7 +169,7 @@ export default function Dashboard(props) {
                 className="DAT_MainInfo_Status_Item_Header"
                 style={{ color: "rgba(13, 190, 0)" }}
               >
-                <span>Online</span>
+                <span>{datalang.formatMessage({ id: "online" })}</span>
                 <LuInfo />
               </div>
               <div
@@ -183,7 +185,7 @@ export default function Dashboard(props) {
                 className="DAT_MainInfo_Status_Item_Header"
                 style={{ color: "rgba(117, 117, 117)" }}
               >
-                <span>Offline</span>
+                <span>{datalang.formatMessage({ id: "offline" })}</span>
                 <LuInfo />
               </div>
               <div
@@ -199,7 +201,7 @@ export default function Dashboard(props) {
                 className="DAT_MainInfo_Status_Item_Header"
                 style={{ color: "rgba(158, 0, 0, 0.8)" }}
               >
-                <span>Đang có lỗi</span>
+                <span>{datalang.formatMessage({ id: "erroccur" })}</span>
                 <LuInfo />
               </div>
               <div
@@ -215,7 +217,7 @@ export default function Dashboard(props) {
                 className="DAT_MainInfo_Status_Item_Header"
                 style={{ color: "rgba(209, 118, 0, 0.9)" }}
               >
-                <span>Hạn bảo trì</span>
+                <span>Bảo trì</span>
                 <LuInfo />
               </div>
               <div
@@ -244,7 +246,7 @@ export default function Dashboard(props) {
                   </div>
                   <div className="DAT_MainInfo_Map_Item2_Info_Row_Data">
                     <div className="DAT_MainInfo_Map_Item2_Info_Row_Data_Tit">
-                      Tên doanh nghiệp
+                      {datalang.formatMessage({ id: "companyName" })}
                     </div>
                     {props.data.company_}
                   </div>
@@ -255,7 +257,7 @@ export default function Dashboard(props) {
                   </div>
                   <div className="DAT_MainInfo_Map_Item2_Info_Row_Data">
                     <div className="DAT_MainInfo_Map_Item2_Info_Row_Data_Tit">
-                      Địa chỉ
+                      {datalang.formatMessage({ id: "address" })}
                     </div>
                     {props.data.addr_}
                   </div>
@@ -266,7 +268,7 @@ export default function Dashboard(props) {
                   </div>
                   <div className="DAT_MainInfo_Map_Item2_Info_Row_Data">
                     <div className="DAT_MainInfo_Map_Item2_Info_Row_Data_Tit">
-                      Liên hệ
+                      {datalang.formatMessage({ id: "contact" })}
                     </div>
                     {props.data.contact_}
                   </div>
@@ -277,7 +279,7 @@ export default function Dashboard(props) {
                   </div>
                   <div className="DAT_MainInfo_Map_Item2_Info_Row_Data">
                     <div className="DAT_MainInfo_Map_Item2_Info_Row_Data_Tit">
-                      Số điện thoại
+                      {datalang.formatMessage({ id: "phone" })}
                     </div>
                     {props.data.phone_}
                   </div>
@@ -288,7 +290,7 @@ export default function Dashboard(props) {
                   </div>
                   <div className="DAT_MainInfo_Map_Item2_Info_Row_Data">
                     <div className="DAT_MainInfo_Map_Item2_Info_Row_Data_Tit">
-                      Ngày tạo dự án
+                      {datalang.formatMessage({ id: "createdate" })}
                     </div>
                     {props.data.createdate_}
                   </div>
@@ -301,7 +303,7 @@ export default function Dashboard(props) {
             {/* <div className="DAT_MainInfo_Graph_Header"></div> */}
             <div className="DAT_MainInfo_Graph_Head">
               <div className="DAT_MainInfo_Graph_Head_Title">
-                Lịch sử phát điện
+                {datalang.formatMessage({ id: "history" })}
               </div>
               <div className="DAT_MainInfo_Graph_Head_Option">
                 <span
@@ -319,7 +321,7 @@ export default function Dashboard(props) {
                     setChart("year");
                   }}
                 >
-                  Năm
+                  {datalang.formatMessage({ id: "year" })}
                 </span>
                 <span
                   style={{
@@ -336,7 +338,7 @@ export default function Dashboard(props) {
                     setChart("month");
                   }}
                 >
-                  Tháng
+                  {datalang.formatMessage({ id: "month" })}
                 </span>
               </div>
               <div className="DAT_MainInfo_Graph_Head_Datetime">
@@ -391,7 +393,7 @@ export default function Dashboard(props) {
                 className="DAT_MainInfoMobile_Status_Item_Header"
                 style={{ color: "rgba(13, 190, 0)" }}
               >
-                <span>Online</span>
+                <span>{datalang.formatMessage({ id: "online" })}</span>
                 <LuInfo />
               </div>
               <div
@@ -407,7 +409,7 @@ export default function Dashboard(props) {
                 className="DAT_MainInfoMobile_Status_Item_Header"
                 style={{ color: "rgba(117, 117, 117)" }}
               >
-                <span>Offline</span>
+                <span>{datalang.formatMessage({ id: "offline" })}</span>
                 <LuInfo />
               </div>
               <div
@@ -423,7 +425,7 @@ export default function Dashboard(props) {
                 className="DAT_MainInfoMobile_Status_Item_Header"
                 style={{ color: "rgba(158, 0, 0, 0.8)" }}
               >
-                <span>Đang có lỗi</span>
+                <span>{datalang.formatMessage({ id: "erroccur" })}</span>
                 <LuInfo />
               </div>
               <div
@@ -439,7 +441,7 @@ export default function Dashboard(props) {
                 className="DAT_MainInfoMobile_Status_Item_Header"
                 style={{ color: "rgba(209, 118, 0, 0.9)" }}
               >
-                <span>Hạn bảo trì</span>
+                <span>{datalang.formatMessage({ id: "maintenance" })}</span>
                 <LuInfo />
               </div>
               <div
@@ -468,7 +470,7 @@ export default function Dashboard(props) {
                   </div>
                   <div className="DAT_MainInfoMobile_Map_Item2_Info_Row_Data">
                     <div className="DAT_MainInfoMobile_Map_Item2_Info_Row_Data_Tit">
-                      Tên doanh nghiệp
+                      {datalang.formatMessage({ id: "companyName" })}
                     </div>
                     {props.data.company_}
                   </div>
@@ -479,7 +481,7 @@ export default function Dashboard(props) {
                   </div>
                   <div className="DAT_MainInfoMobile_Map_Item2_Info_Row_Data">
                     <div className="DAT_MainInfoMobile_Map_Item2_Info_Row_Data_Tit">
-                      Địa chỉ
+                      {datalang.formatMessage({ id: "address" })}
                     </div>
                     {props.data.addr_}
                   </div>
@@ -490,7 +492,7 @@ export default function Dashboard(props) {
                   </div>
                   <div className="DAT_MainInfoMobile_Map_Item2_Info_Row_Data">
                     <div className="DAT_MainInfoMobile_Map_Item2_Info_Row_Data_Tit">
-                      Liên hệ
+                      {datalang.formatMessage({ id: "contact" })}
                     </div>
                     {props.data.contact_}
                   </div>
@@ -501,7 +503,7 @@ export default function Dashboard(props) {
                   </div>
                   <div className="DAT_MainInfoMobile_Map_Item2_Info_Row_Data">
                     <div className="DAT_MainInfoMobile_Map_Item2_Info_Row_Data_Tit">
-                      Số điện thoại
+                      {datalang.formatMessage({ id: "phone" })}
                     </div>
                     {props.data.phone_}
                   </div>
@@ -512,7 +514,7 @@ export default function Dashboard(props) {
                   </div>
                   <div className="DAT_MainInfoMobile_Map_Item2_Info_Row_Data">
                     <div className="DAT_MainInfoMobile_Map_Item2_Info_Row_Data_Tit">
-                      Ngày tạo dự án
+                      {datalang.formatMessage({ id: "createdate" })}
                     </div>
                     {props.data.createdate_}
                   </div>
@@ -525,7 +527,7 @@ export default function Dashboard(props) {
             {/* <div className="DAT_MainInfo_Graph_Header"></div> */}
             <div className="DAT_MainInfoMobile_Graph_Head">
               <div className="DAT_MainInfoMobile_Graph_Head_Title">
-                Lịch sử phát điện
+                {datalang.formatMessage({ id: "history" })}
               </div>
               <div className="DAT_MainInfoMobile_Graph_Head_Option">
                 <span
@@ -543,7 +545,7 @@ export default function Dashboard(props) {
                     setChart("year");
                   }}
                 >
-                  Năm
+                  {datalang.formatMessage({ id: "year" })}
                 </span>
                 <span
                   style={{
@@ -560,7 +562,7 @@ export default function Dashboard(props) {
                     setChart("month");
                   }}
                 >
-                  Tháng
+                  {datalang.formatMessage({ id: "month" })}
                 </span>
               </div>
               <div className="DAT_MainInfoMobile_Graph_Head_Datetime">
@@ -582,7 +584,7 @@ export default function Dashboard(props) {
             <div className="DAT_MainInfoMobile_Graph_Group">
               {/* <div className="DAT_MainInfo_Graph_Group_Unit">Unit</div> */}
               <div className="DAT_MainInfoMobile_Graph_Group_Label">
-                Dữ liệu theo năm: 0 kW
+                {datalang.formatMessage({ id: "yearlyReport" })}: 0 Wh
               </div>
             </div>
             <div style={{ width: "100%", height: "250px" }}>

@@ -39,7 +39,7 @@ export const messages = {
     analytic: "Analytic",
     analyticsList: "List of Analytics",
     dashboard: "Dashboard",
-    view:"Overview",
+    view: "Overview",
     overview: "Production Overview",
     history: "Historical Production",
     historyInverter: "Historical Inverter",
@@ -78,6 +78,7 @@ export const messages = {
     monthlyReport: "Monthly Data Report",
     yearlyReport: "Yearly Data Report",
     totalReport: "Total Data Report",
+
     dailyReportDesc:
       "View the data of the selected plants in the selected daily range,including plant power generation, subsystem power generation, inverter power generation under plant, etc.",
     monthlyReportDesc:
@@ -87,6 +88,8 @@ export const messages = {
     log: "Log",
     logList: "Log List",
     errlist: "Error list",
+    erroccur: "Error occur",
+    maintenance: "Maintenance",
     address: "Address",
     coord: "Coordinates",
     longitude: "Longitude",
@@ -567,7 +570,7 @@ export const messages = {
     LeadAcidBattery: "Lead Acid Battery",
     LithumBattery: "Lithum Battery",
 
-    // Others 
+    // Others
     RatedPower: "Rated power",
 
     //--------------------
@@ -936,7 +939,7 @@ export const messages = {
     maintain: "Vận hành-Bảo trì",
     analytic: "Phân tích",
     analyticsList: "Danh sách mẫu phân tích",
-    view:'Tổng quan',
+    view: "Tổng quan",
     overview: "Tổng quan dữ liệu phát điện",
     history: "Lịch sử phát điện",
     historyInverter: "Lịch sử biến tần",
@@ -984,6 +987,8 @@ export const messages = {
     log: "Nhật ký",
     logList: "Danh sách nhật ký",
     errlist: "Danh sách lỗi",
+    erroccur: "Đang có lỗi",
+    maintenance: "Bảo trì",
     address: "Địa chỉ",
     coord: "Tọa độ",
     longitude: "Kinh độ",
@@ -1464,7 +1469,7 @@ export const messages = {
     LeadAcidBattery: "Ắc quy axit chì",
     LithumBattery: "Ắc quy Lithum",
 
-    // Others 
+    // Others
     RatedPower: "Công suất danh định",
 
     //--------------------
