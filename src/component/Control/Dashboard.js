@@ -22,7 +22,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { isBrowser } from "react-device-detect";
-import { isBrowser } from "react-device-detect";
 
 export default function Dashboard(props) {
   const [devicedata, setDevicedata] = useState([]);
@@ -552,7 +551,7 @@ export default function Dashboard(props) {
                       chart === "month" ? "rgb(11, 25, 103)" : "white",
                     border:
                       chart === "month"
-                        ? "solid 1.5px rgb(11, 25, 103)"
+                        ? "solid 1.5px rgb(11, 25, 103) !important"
                         : "solid 1.5px 1.5px 1.5px 0 rgb(11, 25, 103)",
                     color: chart === "month" ? "white" : "black",
                     borderRadius: "0px 5px 5px 0",
