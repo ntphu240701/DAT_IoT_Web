@@ -27,7 +27,7 @@ import Gauge from "./Gauge";
 import Picture from "./Picture";
 import SwitchToggle from "./SwitchToggle";
 import { useSelector } from "react-redux";
-import { host } from "../constant";
+import { host } from "../Lang/Contant";
 import Tablepro from "./Tablepro";
 import View32bit from "./View32bit";
 
@@ -35,7 +35,7 @@ import View32bit from "./View32bit";
 import { socket } from '../../App'
 import { TbSettingsCog } from "react-icons/tb";
 import { signal } from "@preact/signals-react";
-
+import { ImConnection } from "react-icons/im";
 const show = signal(true)
 
 export default function Interface(props) {
@@ -51,11 +51,11 @@ export default function Interface(props) {
     // const [isZoomSVG, setIsZoomSVG] = useState(false)
     const [zoom, setZoom] = useState(true)
     const [step, setStep] = useState(0)
-   
+
 
 
     useEffect(() => {
-    
+
         var i = 0
         var startTimer = () => {
 
@@ -392,17 +392,16 @@ export default function Interface(props) {
 
                 {show.value
                     ? <>
-                        {(type === 'master' || type === 'admin')
-                            ? <div className="DAT_ToolConfig" onClick={(event) => { handleConfig(event) }} style={{ top: "10px", right: "10px" }}>
-                                <TbSettingsCog size={20} />
-                            </div>
-                            : <></>
-                        }
+
+                        {/* <div className="DAT_ToolConfig" onClick={(event) => { handleConfig(event) }} style={{ top: "10px", right: "10px" }}>
+                            <TbSettingsCog size={20} />
+                        </div> */}
+
                         <div className="DAT_Tool_Connect" style={{ bottom: "10px", left: "10px" }} >
                             {(invt !== undefined)
                                 ? (invt['enabled'] === '1')
-                                    ? <img alt="" style={{ width: "20px" }} src="/lib/online_state.png"></img>
-                                    : <img alt="" style={{ width: "20px" }} src="/lib/offline_state.png"></img>
+                                    ? <ImConnection size={20} color="green" />
+                                    : <ImConnection size={20} color="gray" />
                                 : <img alt="" style={{ width: "20px" }} src="/lib/offline_state.png"></img>
                             }
                         </div>
@@ -428,8 +427,8 @@ export default function Interface(props) {
                             <TransformComponent >
                                 <svg id="SVGVIEW" className="DAT_Tool_SVG-content-view">
                                     {visual[props.tab].map((data, index) => (
-                                        <foreignObject key={data.id} x={data.x} y={data.y} width={data.w} height={data.h} style={{ position: "relative", zIndex: "0" }}>
-                                            {visdata(data.type, props.id, props.tab, data.id, data.w, data.h)}
+                                        <foreignObject key={data.id} x={data.x} y={data.y} width={data.w} height={data.h} style={{ padding: "5px", boxSizing: "border-box", position: "relative", zIndex: "0" }}>
+                                            {visdata(data.type, props.id, props.tab, data.id, data.w - 10, data.h - 10)}
                                         </foreignObject>
                                     ))}
                                 </svg>
@@ -442,7 +441,7 @@ export default function Interface(props) {
 
 
             </div >
-           
+
 
         </>
     )

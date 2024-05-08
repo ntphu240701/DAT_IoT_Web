@@ -1,17 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./Tool.scss";
-import { AlertContext } from "../Context/AlertContext";
+// import { AlertContext } from "../Context/AlertContext";
 import { useIntl } from "react-intl";
 import axios from "axios";
-import { action } from "../Control/Action";
-import { host } from "../constant";
+// import { action } from "../Control/Action";
+import { host } from "../Lang/Contant";
 import { useSelector } from "react-redux";
 
 export default function SwitchToggle(props) {
   const token = useSelector((state) => state.admin.token)
 
   const dataLang = useIntl();
-  const { alertDispatch } = useContext(AlertContext);
+  // const { alertDispatch } = useContext(AlertContext);
   const [data, setData] = useState(props.data)
   const [setting, setSetting] = useState(props.setting)
   const [check, setCheck] = useState("off");
@@ -83,7 +83,7 @@ export default function SwitchToggle(props) {
       setting[props.id].stt = 'off'
       NUMB = setting[props.id].off
     }
-    alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_19" }), show: 'block' }))
+    // alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_19" }), show: 'block' }))
     //console.log(e.currentTarget.id);
     console.log(setting[props.id]);
 
@@ -91,7 +91,7 @@ export default function SwitchToggle(props) {
 
         console.log(res)
         if(res.ret === 0){
-            alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_5" }), show: 'block' }))
+            // alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_5" }), show: 'block' }))
             axios.post(host.DEVICE + "/setRegisterDevice", { id: props.deviceid, data: JSON.stringify(setting), tab: props.tab }, { secure: true, reconnect: true }).then(
                 function (res) {
                     if (res.data) {
@@ -101,7 +101,7 @@ export default function SwitchToggle(props) {
                     }
                 })
         }else{
-            alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_3" }), show: 'block' }))
+            // alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_3" }), show: 'block' }))
         }
   };
 

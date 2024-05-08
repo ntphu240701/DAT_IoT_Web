@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./Control.scss";
 
 // import ProjectData from "./ProjectData";
@@ -38,6 +38,10 @@ import AddProject from "./AddProject";
 import { plantData, plantState } from "./Signal";
 import ShareBox from "./ShareBox";
 import Project from "./Project";
+import Toollist from "../Lib/Toollist";
+import { SettingContext } from "../Context/SettingContext";
+import { ToolContext } from "../Context/ToolContext";
+import { deviceData } from "./Device";
 
 
 const online = signal([]);
@@ -86,6 +90,26 @@ export default function Auto(props) {
   const [tabState, setTabState] = useState(false)
   const [plantobj, setPlantobj] = useState({})
   const bu = 'auto'
+  const { screen } = useContext(SettingContext)
+  const { toolDispatch } = useContext(ToolContext)
+  useEffect(() => {
+
+
+    console.log(screen)
+    screen.map((data, index) => {
+      toolDispatch({
+        type: "LOAD_DEVICE",
+        payload: {
+          tab: data.tab_,
+          visual: data.data_.data,
+          setting: data.setting_,
+          name: data.name_,
+          lastid: data.data_.id,
+        },
+      })
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [screen])
 
 
 
@@ -341,6 +365,9 @@ export default function Auto(props) {
       (item) => item.plantid_ == e.currentTarget.id
     );
     setPlantobj(newPlant);
+    deviceData.value = [];
+  
+
   };
 
   const handleEdit = (e) => {
@@ -552,7 +579,7 @@ export default function Auto(props) {
     care.value = plantData.value.filter((item) => item.mark_ == 1);
     demo.value = plantData.value.filter((item) => item.shared_ == 1);
     // tabLable.value = listTab[0].name;
-    console.log('dataproject', plantData.value);
+    // console.log('dataproject', plantData.value);
     setDatafilter(plantData.value);
   }, [plantData.value, plantState.value]);
 
@@ -564,7 +591,7 @@ export default function Auto(props) {
         type: userInfor.value.type,
         system: 'auto'
       });
-      console.log(d);
+      // console.log(d);
       if (d.status === true) {
         plantData.value = d.data.sort((a, b) => a.plantid_ - b.plantid_);
       }
@@ -1941,9 +1968,18 @@ export default function Auto(props) {
             case "add":
               return <AddProject usr={user} type={bu} />;
             case "drop":
-              return <Popup name={plantobj.name_} usr={user} plantid={plantobj.plantid_} type={"plant"} />;
+              return <Popup name={plantobj.name_} usr={user} plantid={plantobj.plantid_} />;
             case 'share':
               return <ShareBox plantid={plantobj.plantid_} usr={user} />
+            case "toollist":
+              return <div className="DAT_Toollist">
+                <div
+                  className="DAT_Toollist-card"
+                  id="CARD"
+                >
+                  <Toollist></Toollist>
+                </div>
+              </div>;
             default:
               return <></>;
           }

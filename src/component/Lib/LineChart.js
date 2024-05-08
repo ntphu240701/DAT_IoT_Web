@@ -7,7 +7,7 @@ import { Line } from 'react-chartjs-2';
 
 import zoomPlugin from "chartjs-plugin-zoom";
 import axios from "axios";
-import { host } from "../constant";
+import { host } from "../Lang/Contant";
 import { _tab } from "./Toollist";
 
 Chart.register(zoomPlugin);

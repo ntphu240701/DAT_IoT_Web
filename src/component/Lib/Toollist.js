@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useLayoutEffect, useReducer, useRef, useState } from "react";
 import "./Tool.scss"
-import Config from "./Config";
+// import Config from "./Config";
 import { ToolContext } from "../Context/ToolContext";
 import { SettingContext } from "../Context/SettingContext";
-import Calculate from "./Calculate";
+// import Calculate from "./Calculate";
 import Interface from "./Interface";
 import toolslice from "../Redux/toolslice";
 import { useDispatch, useSelector } from "react-redux";
 import { io } from "socket.io-client";
-import { host } from "../constant";
+import { host } from "../Lang/Contant";
 import { signal } from "@preact/signals-react";
 import { PacmanLoader } from "react-spinners";
 import { IoIosArrowDown } from "react-icons/io";
@@ -19,24 +19,26 @@ import { SiPagespeedinsights } from "react-icons/si";
 import { MdContactPhone } from "react-icons/md";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { AlertContext } from "../Context/AlertContext";
+// import { AlertContext } from "../Context/AlertContext";
 import { useIntl } from "react-intl";
-import { action } from "../Control/Action";
+// import { action } from "../Control/Action";
 import { view } from "../../App";
 import { useMobileOrientation } from 'react-device-detect';
 import { IoPhoneLandscapeOutline } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
+import { plantState } from "../Control/Signal";
+import { callApi } from "../Api/Api";
+import { alertDispatch } from "../Alert/Alert";
 const length = signal(0);
 export const _tab = signal();
 
 export default function Toollist(props) {
-
+    const dataLang = useIntl();
     const { name, config, control, toolDispatch } = useContext(ToolContext)
-    const { lasttab, defaulttab, currentID, screen, settingDispatch } = useContext(SettingContext)
+    const { lasttab, defaulttab, currentID, currentSN, screen,  settingDispatch } = useContext(SettingContext)
     const [tab, setTab] = useState(String(defaulttab))
     const [searchmoblile, setSearchmoblile] = useState(false)
     const rootDispatch = useDispatch()
-    const { alertDispatch } = useContext(AlertContext);
     const lang = useIntl();
     const [statetab, setStatetab] = useState(false)
     const type = useSelector((state) => state.admin.type)
@@ -46,19 +48,7 @@ export default function Toollist(props) {
 
 
 
-    // useEffect(() => {
 
-
-    //     if (window.innerWidth >= 700) {
-    //         setSearchmoblile(true)
-    //     } else {
-    //         setSearchmoblile(false)
-    //     }
-    //     return (() => {
-    //         socket_client.current.off("Server/data");
-    //     })
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [])
 
 
     const handleWindowResize = () => {
@@ -102,29 +92,34 @@ export default function Toollist(props) {
 
 
     const handleTabclose = () => {
-        rootDispatch(toolslice.actions.setstatus(false))
+        // rootDispatch(toolslice.actions.setstatus(false))
         toolDispatch({ type: "RESET_TOOL", payload: [] })
         settingDispatch({ type: "REMOVE_CURRENTID", payload: '' })
+        
+        plantState.value = "info"
     }
 
-    const handleAdd = (event) => {
-        //console.log(view.value)
+    const handleAdd = async(event) => {
+        
+        
+
         let tab = parseInt(lasttab) + 1
         let name = String("Màn hình " + tab)
-        settingDispatch({ type: "ADD_SCREEN", payload: { deviceid: currentID, tab: tab, name: name, data: { id: '0', width: '500', data: [] }, setting: {} } })
+        console.log(currentID,currentSN)
+        settingDispatch({ type: "ADD_SCREEN", payload: {sn_: currentSN, loggerdataid_: currentID, tab_: tab, name_: name, data_: { id: '0', data: [] }, setting_: {} } })
         settingDispatch({ type: "LOAD_LASTTAB", payload: tab })
 
-        axios.post(host.DEVICE + "/addTabMD", { id: currentID, tab: tab, name: name, groupid: view.value.id, data: JSON.stringify({ id: '0', width: '500', data: [] }), setting: JSON.stringify({}) }, { secure: true, reconnect: true }).then(
-            function (res) {
-                //console.log(res.data.status)
-                if (res.data.status) {
-                    alertDispatch(action('LOAD_CONTENT', { content: lang.formatMessage({ id: "alert_7" }), show: 'block' }))
-                } else {
-                    alertDispatch(action('LOAD_CONTENT', { content: lang.formatMessage({ id: "alert_3" }), show: 'block' }))
-                }
+        let res = await callApi("post", host.DATA + "/addLoggerScreen", {
+            id: currentID,
+            sn: currentSN,
+            tab: tab,
+            name: name
+        })
 
-            })
-
+  
+        if(res.status){
+            alertDispatch(dataLang.formatMessage({ id: "alert_6" }));
+        }
 
     }
 
@@ -137,128 +132,96 @@ export default function Toollist(props) {
 
 
 
-            {/* {(searchmoblile)
 
+            {(length.value > 5)
                 ?
-                (length.value > 5)
-                    ?
-                    <div className="DAT_Toollist_Tab_Mobile">
+                <div className="DAT_Tool_Tab_Mobile">
 
 
-                        <button className="DAT_Toollist_Tab_Mobile_content" onClick={() => setStatetab(!statetab)} > <span> {name[tab]}</span>  {(statetab) ? <IoIosArrowDown /> : <IoIosArrowForward />} </button>
-                        {(statetab)
-                            ? <div className="DAT_Toollist_Tab_Mobile_list" >
-                                {Object.keys(name).map((keyName, i) => {
-                                    return (
-                                        <div className="DAT_Toollist_Tab_Mobile_list_item" key={i} id={keyName} onClick={(e) => handleTabMobile(e)} >{i + 1}: {name[keyName]}</div>
-                                    )
-                                })}
-                                {(type === 'master' || type === 'admin')
-                                    ? <div className="DAT_Toollist_Tab_Mobile_list_item" onClick={() => handleAdd()} >Thêm màn hình</div>
-                                    : <></>}
-                            </div>
-                            : <></>
-                        }
-                        <div className="DAT_Toollist_Tab-warn">
-                            <Link to="/Log" style={{ textDecoration: "none" }} >
-                                <div className="DAT_Toollist_Tab-warn-item"  ><BiSolidMessageError style={{ color: "red" }} /></div>
-                            </Link>
-                            <Link to="/Report" style={{ textDecoration: "none" }} >
-                                <div className="DAT_Toollist_Tab-warn-item"  ><FaFileExport style={{ color: "green" }} /></div>
-                            </Link>
-                            <Link to="/Contact" style={{ textDecoration: "none" }} >
-                                <div className="DAT_Toollist_Tab-warn-item"  ><MdContactPhone size={20} style={{ color: "blue" }} /></div>
-                            </Link>
-                        </div>
-                        <div className="DAT_Toollist_Tab-close" onClick={handleTabclose}><IoMdClose size={20} /></div>
-
-
-                    </div>
-                    :
-                    <div className="DAT_Toollist_Tab">
-                        {Object.keys(name).map((keyName, i) => {
-                            return (
-                                (keyName === tab)
-                                    ? <div key={i} className="DAT_Toollist_Tab_main">
-                                        <p className="DAT_Toollist_Tab_main_left"></p>
-                                        <span className="DAT_Toollist_Tab_main_content1" id={keyName} style={{ backgroundColor: "White", color: "black", borderRadius: "10px 10px 0 0" }} onClick={(e) => handleTab(e)}>{name[keyName]}</span>
-                                        <p className="DAT_Toollist_Tab_main_right"></p>
-                                    </div>
-                                    : <span className="DAT_Toollist_Tab_main_content2" key={i} id={keyName} style={{ backgroundColor: "#dadada" }} onClick={(e) => handleTab(e)}><SiPagespeedinsights /></span>
-                            )
-
-                        })}
-                        {(type === 'master' || type === 'admin')
-                            ? <span className="DAT_Toollist_Tab_main_content2" style={{ backgroundColor: "#dadada" }} onClick={() => handleAdd()} >+</span>
-                            : <></>}
-                        <div className="DAT_Toollist_Tab-warn">
-                            <Link to="/Log" style={{ textDecoration: "none" }} >
-                                <div className="DAT_Toollist_Tab-warn-item"  ><BiSolidMessageError size={20} style={{ color: "red" }} /></div>
-                            </Link>
-                            <Link to="/Report" style={{ textDecoration: "none" }} >
-                                <div className="DAT_Toollist_Tab-warn-item"  ><FaFileExport size={20} style={{ color: "green" }} /></div>
-                            </Link>
-                            <Link to="/Contact" style={{ textDecoration: "none" }} >
-                                <div className="DAT_Toollist_Tab-warn-item"  ><MdContactPhone size={20} style={{ color: "blue" }} /></div>
-                            </Link>
-                        </div>
-
-                        <div className="DAT_Toollist_Tab-close" onClick={handleTabclose}><IoMdClose size={20} /></div>
-                    </div>
-                :
-                <div className="DAT_Toollist_Tab_Mobile">
-                    <button className="DAT_Toollist_Tab_Mobile_content" onClick={() => setStatetab(!statetab)} > <span> {name[tab]}</span>  {(statetab) ? <IoIosArrowDown /> : <IoIosArrowForward />} </button>
+                    <button className="DAT_Tool_Tab_Mobile_content" onClick={() => setStatetab(!statetab)} > <span> {name[tab]}</span>  {(statetab) ? <IoIosArrowDown /> : <IoIosArrowForward />} </button>
                     {(statetab)
-                        ? <div className="DAT_Toollist_Tab_Mobile_list" >
+                        ? <div className="DAT_Tool_Tab_Mobile_list" >
                             {Object.keys(name).map((keyName, i) => {
                                 return (
-                                    <div className="DAT_Toollist_Tab_Mobile_list_item" key={i} id={keyName} onClick={(e) => handleTabMobile(e)} >{i + 1}: {name[keyName]}</div>
+                                    <div className="DAT_Tool_Tab_Mobile_list_item" key={i} id={keyName} onClick={(e) => handleTabMobile(e)} >{i + 1}: {name[keyName]}</div>
                                 )
                             })}
                             {(type === 'master' || type === 'admin')
-                                ? <div className="DAT_Toollist_Tab_Mobile_list_item" onClick={() => handleAdd()} >Thêm màn hình</div>
+                                ? <div className="DAT_Tool_Tab_Mobile_list_item" onClick={() => handleAdd()} >Thêm màn hình</div>
                                 : <></>}
                         </div>
                         : <></>
                     }
-                    <Link to="/Log" >
-                        <button className="DAT_Toollist_Tab-warn" style={{ right: "320px" }} ><span>CẢNH BÁO</span></button>
-                    </Link>
-                    <Link to="/Report" >
-                        <button className="DAT_Toollist_Tab-warn" style={{ right: "190px" }} ><span>BÁO CÁO</span></button>
-                    </Link>
-                    <button className="DAT_Toollist_Tab-warn" style={{ right: "60px" }} ><span>LIÊN HỆ</span></button>
-                    <div className="DAT_Toollist_Tab-close" onClick={handleTabclose}><ion-icon name="close-outline"></ion-icon></div>
+                    <div className="DAT_Tool_Tab-warn">
+                        <Link to="/Log" style={{ textDecoration: "none" }} >
+                            <div className="DAT_Tool_Tab-warn-item"  ><BiSolidMessageError style={{ color: "red" }} /></div>
+                        </Link>
+                        <Link to="/Report" style={{ textDecoration: "none" }} >
+                            <div className="DAT_Tool_Tab-warn-item"  ><FaFileExport style={{ color: "green" }} /></div>
+                        </Link>
+                        <Link to="/Contact" style={{ textDecoration: "none" }} >
+                            <div className="DAT_Tool_Tab-warn-item"  ><MdContactPhone size={20} style={{ color: "blue" }} /></div>
+                        </Link>
+                    </div>
+                    <div className="DAT_Tool_Tab-close" onClick={handleTabclose}><IoMdClose size={20} /></div>
 
 
                 </div>
+                :
+                <div className="DAT_Tool_Tab">
+                    {Object.keys(name).map((keyName, i) => {
+                        return (
+                            (keyName === tab)
+                                ? <div key={i} className="DAT_Tool_Tab_main">
+                                    <p className="DAT_Tool_Tab_main_left"></p>
+                                    <span className="DAT_Tool_Tab_main_content1" id={keyName} style={{ backgroundColor: "White", color: "black", borderRadius: "10px 10px 0 0" }} onClick={(e) => handleTab(e)}>{name[keyName]}</span>
+                                    <p className="DAT_Tool_Tab_main_right"></p>
+                                </div>
+                                : <span className="DAT_Tool_Tab_main_content2" key={i} id={keyName} style={{ backgroundColor: "#dadada" }} onClick={(e) => handleTab(e)}>{name[keyName]}</span>
+                        )
+
+                    })}
+
+                    <span className="DAT_Tool_Tab_main_content2" style={{ backgroundColor: "#dadada" }} onClick={() => handleAdd()} >+</span>
+
+                    <div className="DAT_Tool_Tab-warn">
+                        <Link to="/Log" style={{ textDecoration: "none" }} >
+                            <div className="DAT_Tool_Tab-warn-item"  ><BiSolidMessageError size={20} style={{ color: "red" }} /></div>
+                        </Link>
+                        <Link to="/Report" style={{ textDecoration: "none" }} >
+                            <div className="DAT_Tool_Tab-warn-item"  ><FaFileExport size={20} style={{ color: "green" }} /></div>
+                        </Link>
+                        <Link to="/Contact" style={{ textDecoration: "none" }} >
+                            <div className="DAT_Tool_Tab-warn-item"  ><MdContactPhone size={20} style={{ color: "blue" }} /></div>
+                        </Link>
+                    </div>
+
+                    <div className="DAT_Tool_Tab-close" onClick={handleTabclose}><IoMdClose size={20} /></div>
+                </div>
+
+            }
 
 
+            <div className="DAT_Tool_Content" style={{ padding: "10px" }}>
 
-            } */}
-
-
-            <div className="DAT_Toollist_Content" style={{ padding: "10px" }}>
-
-                <Interface id={currentID} tab={tab}/>
-                {/* {(config[tab] !== undefined)
+                {(config[tab] !== undefined)
 
                     ? (config[tab].stt)
 
                         ? <>
-                            <Config id={currentID} tab={tab} ></Config>
+                            {/* <Config id={currentID} tab={tab} ></Config>
                             {(control[tab].stt)
                                 ? <Calculate id={currentID} tab={tab} />
                                 : <></>
-                            }
+                            } */}
                         </>
-                        // : <Interface id={currentID} tab={tab} />
+                        : <Interface id={currentID} tab={tab} />
 
 
-                    : <div className="DAT_Toollist_Loading"><PacmanLoader color="#36d7b7" size={35} loading={true} /></div>
+                    : <div className="DAT_Tool_Loading"><PacmanLoader color="#36d7b7" size={35} loading={true} /></div>
 
 
-                } */}
+                }
 
             </div>
 

@@ -2,11 +2,11 @@
 /* eslint no-unused-vars: "off"*/
 import React, { useContext, useEffect, useState } from "react"
 import "./Tool.scss";
-import { action } from "../Control/Action";
+// import { action } from "../Control/Action";
 import { useIntl } from "react-intl";
-import { AlertContext } from "../Context/AlertContext";
+// import { AlertContext } from "../Context/AlertContext";
 import axios from "axios";
-import { host } from "../constant";
+import { host } from "../Lang/Contant";
 import { useSelector } from "react-redux";
 
 
@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 export default function Input(props) {
     const token = useSelector((state) => state.admin.token)
     const dataLang = useIntl();
-    const { alertDispatch } = useContext(AlertContext);
+    // const { alertDispatch } = useContext(AlertContext);
     const [data, setData] = useState(props.data)
     const [setting, setSetting] = useState(props.setting)
 
@@ -74,14 +74,14 @@ export default function Input(props) {
                 var INP = get.value
                 setting[InputArray[2]].curr = get.value
                 //settingDispatch({ type: "LOAD_STATE", payload: false })
-                alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_19" }), show: 'block' }))
+                // alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_19" }), show: 'block' }))
                 console.log("INP: ", parseInt(eval(setting[InputArray[2]].cal)), setting[InputArray[2]].register)
 
                 const res = await remotecloud('{"deviceCode": "' + InputArray[0] + '","address":"' + setting[InputArray[2]].register + '","value":"' + parseInt(eval(setting[InputArray[2]].cal)) + '"}', token);
 
                 console.log(res)
                 if(res.ret === 0){
-                    alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_5" }), show: 'block' }))
+                    // alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_5" }), show: 'block' }))
                     axios.post(host.DEVICE + "/setRegisterDevice", { id: InputArray[0], data: JSON.stringify(setting), tab: InputArray[1] }, { secure: true, reconnect: true }).then(
                         function (res) {
                             if (res.data) {
@@ -91,13 +91,13 @@ export default function Input(props) {
                             }
                         })
                 }else{
-                    alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_3" }), show: 'block' }))
+                    // alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_3" }), show: 'block' }))
                 }
                 console.log(setting[InputArray[2]])
 
         } else {
                 //console.log("không được để trống")
-                alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_1" }), show: 'block' }))
+                // alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_1" }), show: 'block' }))
         }
     }
         
