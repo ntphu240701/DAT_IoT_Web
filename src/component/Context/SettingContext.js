@@ -15,6 +15,7 @@ export const SettingContextProvider =({children})=>{
                 listdevice: state.listdevice,
                 listdevice2: state.listdevice2,
                 currentID:state.currentID,
+                currentSN:state.currentSN,
                 currentName:state.currentName,
                 currentState:state.currentState,
                 lasttab:state.lasttab,

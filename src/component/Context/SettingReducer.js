@@ -1,3 +1,5 @@
+import { current } from "@reduxjs/toolkit";
+
 /* eslint eqeqeq: 0 */
 const INITIAL_STATE = {
     whatdevice: '',
@@ -5,6 +7,7 @@ const INITIAL_STATE = {
     listdevice2: [],
     screen: [],
     currentID: '',
+    currentSN: '',
     currentName: '',
     currentState: 0,
     lasttab: 0,
@@ -24,6 +27,7 @@ const SettingReducer = (state, action) => {
                 listdevice: [],
                 screen: [],
                 currentID: '',
+                currentSN: '',
                 currentName: '',
                 currentState: 0,
                 lasttab: 0,
@@ -62,16 +66,17 @@ const SettingReducer = (state, action) => {
             return {
                 ...state,
                 currentID: action.payload.currentID,
+                currentSN: action.payload.currentSN,
                 currentName: action.payload.currentName,
                 screen: action.payload.screen,
-                sttdata: action.payload.sttdata
+                // sttdata: action.payload.sttdata
 
             };
 
 
         case "REMOVE_SCREEN":
             var newscreen = [...state.screen];
-            newscreen = newscreen.filter(newscreen => newscreen.tab != action.payload)
+            newscreen = newscreen.filter(newscreen => newscreen.tab_ != action.payload)
             return {
                 ...state,
                 screen: newscreen
@@ -120,6 +125,7 @@ const SettingReducer = (state, action) => {
             return {
                 ...state,
                 currentID: '',
+                currentSN: '',
             };
 
 

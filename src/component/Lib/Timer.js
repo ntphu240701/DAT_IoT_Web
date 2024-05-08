@@ -4,19 +4,19 @@ import React, { useEffect, useState } from "react"
 import "./Tool.scss";
 import _ from "lodash";
 import { useIntl } from "react-intl";
-import { action } from "../Control/Action";
-import { AlertContext } from "../Context/AlertContext";
+// import { action } from "../Control/Action";
+// import { AlertContext } from "../Context/AlertContext";
 import axios from "axios";
 import { SettingContext } from "../Context/SettingContext";
 import { useContext } from "react";
-import { host } from "../constant";
+import { host } from "../Lang/Contant";
 import { ToolContext } from "../Context/ToolContext";
 
 
 
 export default function Timer(props) {
     const { setting } = useContext(ToolContext)
-    const { alertDispatch } = useContext(AlertContext);
+    // const { alertDispatch } = useContext(AlertContext);
     const dataLang = useIntl();
     const [data, setData] = useState(props.data)
     const [setting2, setSetting] = useState(props.setting)
@@ -123,9 +123,9 @@ export default function Timer(props) {
         axios.post(host.TIME +"/setData", { id: currentID, data: JSON.stringify(setting2) }, { secure: true, reconnect: true }).then(
             function (res) {
                 if (res.data.status) {
-                    alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_5" }), show: 'block' }))
+                    // alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_5" }), show: 'block' }))
                 } else {
-                    alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_2" }), show: 'block' }))
+                    // alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_2" }), show: 'block' }))
                 }
             })
 
