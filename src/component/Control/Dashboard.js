@@ -22,10 +22,12 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { isBrowser } from "react-device-detect";
+import { isBrowser } from "react-device-detect";
 
 export default function Dashboard(props) {
   const [devicedata, setDevicedata] = useState([]);
   const [chart, setChart] = useState("year");
+
   const v = "Dữ liệu tháng";
   const data = [
     {
@@ -77,6 +79,7 @@ export default function Dashboard(props) {
       [v]: 0,
     },
   ];
+
   const TriangleBar = (props) => {
     const { fill, x, y, width, height } = props;
 
@@ -93,25 +96,6 @@ export default function Dashboard(props) {
       ></rect>
     );
   };
-  useEffect(() => {
-    console.log("Dashboard", props.data);
-  }, []);
-
-  useEffect(() => {
-    const getGateway = async () => {
-      let res = await callApi("post", host.DATA + "/getLogger", {
-        plantid: props.data.plantid_,
-      });
-      if (res.status) {
-        // console.log(res.data);
-        setDevicedata(res.data);
-        const t = res.data.filter((item) => item.state_ === 0).length;
-        console.log(t);
-      }
-    };
-
-    getGateway();
-  }, []);
 
   const defaultProps = {
     center: {
@@ -156,6 +140,22 @@ export default function Dashboard(props) {
   useEffect(() => {
     initMap(props.data);
   }, [props.data]);
+
+  useEffect(() => {
+    const getGateway = async () => {
+      let res = await callApi("post", host.DATA + "/getLogger", {
+        plantid: props.data.plantid_,
+      });
+      if (res.status) {
+        // console.log(res.data);
+        setDevicedata(res.data);
+        const t = res.data.filter((item) => item.state_ === 0).length;
+        console.log(t);
+      }
+    };
+
+    getGateway();
+  }, []);
 
   return (
     <>
@@ -228,6 +228,7 @@ export default function Dashboard(props) {
               </div>
             </div>
           </div>
+
           {/* <div className="DAT_MainInfo_Title">Thông tin dự án</div> */}
           <div className="DAT_MainInfo_Map">
             <div className="DAT_MainInfo_Map_Item1">
@@ -296,6 +297,7 @@ export default function Dashboard(props) {
               </div>
             </div>
           </div>
+
           <div className="DAT_MainInfo_Graph">
             {/* <div className="DAT_MainInfo_Graph_Header"></div> */}
             <div className="DAT_MainInfo_Graph_Head">
@@ -383,7 +385,7 @@ export default function Dashboard(props) {
         </div>
       ) : (
         <div className="DAT_MainInfoMobile">
-          {/* <div className="DAT_MainInfoMobile_Title">Tổng số thiết bị : 3</div> */}
+          {/* <div className="DAT_MainInfo_Title">Tổng số thiết bị : 3</div> */}
           <div className="DAT_MainInfoMobile_Status">
             <div className="DAT_MainInfoMobile_Status_Item">
               <div
@@ -450,7 +452,8 @@ export default function Dashboard(props) {
               </div>
             </div>
           </div>
-          {/* <div className="DAT_MainInfoMobile_Title">Thông tin dự án</div> */}
+
+          {/* <div className="DAT_MainInfo_Title">Thông tin dự án</div> */}
           <div className="DAT_MainInfoMobile_Map">
             <div className="DAT_MainInfoMobile_Map_Item1">
               <div
@@ -518,8 +521,9 @@ export default function Dashboard(props) {
               </div>
             </div>
           </div>
+
           <div className="DAT_MainInfoMobile_Graph">
-            {/* <div className="DAT_MainInfoMobile_Graph_Header"></div> */}
+            {/* <div className="DAT_MainInfo_Graph_Header"></div> */}
             <div className="DAT_MainInfoMobile_Graph_Head">
               <div className="DAT_MainInfoMobile_Graph_Head_Title">
                 Lịch sử phát điện
@@ -577,7 +581,7 @@ export default function Dashboard(props) {
             </div>
 
             <div className="DAT_MainInfoMobile_Graph_Group">
-              {/* <div className="DAT_MainInfoMobile_Graph_Group_Unit">Unit</div> */}
+              {/* <div className="DAT_MainInfo_Graph_Group_Unit">Unit</div> */}
               <div className="DAT_MainInfoMobile_Graph_Group_Label">
                 Dữ liệu theo năm: 0 kW
               </div>
