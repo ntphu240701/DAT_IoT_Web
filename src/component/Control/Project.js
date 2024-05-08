@@ -20,8 +20,8 @@ function Project(props) {
     const [modeState, setModeState] = useState(false);
     // const [mode, setMode] = useState('Dashboard');
     const popup_state = {
-        pre: { transform: "rotate(0deg)", transition: "0.5s", color: "rgba(11, 25, 103)", },
-        new: { transform: "rotate(90deg)", transition: "0.5s", color: "rgba(11, 25, 103)", },
+        pre: { transform: "rotate(0deg)", transition: "0.5s", color: "white", },
+        new: { transform: "rotate(90deg)", transition: "0.5s", color: "white", },
     };
 
     useEffect(() => {
@@ -73,7 +73,7 @@ function Project(props) {
     return (
         <>
             {isBrowser
-                ?<div className="DAT_ProjectData">
+                ? <div className="DAT_ProjectData">
                     <div className="DAT_ProjectData_Header">
                         <div className="DAT_ProjectData_Header_Left">
                             <div className="DAT_ProjectData_Header_Left_Top"
@@ -96,7 +96,7 @@ function Project(props) {
                             <div className="DAT_ProjectData_Header_Right_More">
                                 <BsThreeDotsVertical
                                     size={20}
-                                    color="#9e9e9e"
+                                    color="white"
                                     onClick={() => {
                                         setModeState(!modeState);
                                         viewNav.value = true;
@@ -119,7 +119,7 @@ function Project(props) {
                                                 setModeState(false);
                                             }}
                                         >
-                                            <IoAddOutline size={25} color="white" />
+                                            <IoAddOutline size={25} color="rgba(11, 25, 103)" />
                                         </button>
                                     </div>
                                 : <></>
@@ -133,7 +133,7 @@ function Project(props) {
                                 }}
                             >
                                 <IoClose
-                                    size={25} color="rgba(11, 25, 103)"
+                                    size={25} color="white"
                                     id="Popup_"
                                     onMouseEnter={(e) => handlePopup("new")}
                                     onMouseLeave={(e) => handlePopup("pre")}
@@ -158,7 +158,7 @@ function Project(props) {
                                 default:
                                     return (
                                         <div>
-                                           <Dashboard data={props.data} />
+                                            <Dashboard data={props.data} />
                                         </div>
                                     );
                             }
@@ -253,42 +253,42 @@ function Project(props) {
                     }
 
                 </div>
-                :<div className="DAT_ProjectDataMobile">
-                <div className="DAT_ProjectDataMobile_Header">
-                    <div className="DAT_ProjectDataMobile_Header_Left">
-                        <div className="DAT_ProjectDataMobile_Header_Left_Top"
-                            style={{ fontSize: 22 }}
-                        >
-                            <img src={props.data.img ? props.data.img : "/dat_picture/solar_panel.png"} alt="" />
-                            <div className="DAT_ProjectDataMobile_Header_Left_Top_Content">
-                                <div className="DAT_ProjectDataMobile_Header_Left_Top_Content_Name">
-                                    {props.data.name_}
-                                </div>
-                                <div>
-                                    {props.data.state_ === 1 ? <FaCheckCircle size={16} color="green" /> : <MdOutlineError size={16} color="red" />}
-                                </div>
-                                {/* <div className="DAT_ProjectDataMobile_Header_Left_Top_Content_Addr">
+                : <div className="DAT_ProjectDataMobile">
+                    <div className="DAT_ProjectDataMobile_Header">
+                        <div className="DAT_ProjectDataMobile_Header_Left">
+                            <div className="DAT_ProjectDataMobile_Header_Left_Top"
+                                style={{ fontSize: 22 }}
+                            >
+                                <img src={props.data.img ? props.data.img : "/dat_picture/solar_panel.png"} alt="" />
+                                <div className="DAT_ProjectDataMobile_Header_Left_Top_Content">
+                                    <div className="DAT_ProjectDataMobile_Header_Left_Top_Content_Name">
+                                        {props.data.name_}
+                                    </div>
+                                    <div>
+                                        {props.data.state_ === 1 ? <FaCheckCircle size={16} color="green" /> : <MdOutlineError size={16} color="red" />}
+                                    </div>
+                                    {/* <div className="DAT_ProjectDataMobile_Header_Left_Top_Content_Addr">
                                 {props.data.addr_}
                             </div> */}
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className="DAT_ProjectDataMobile_Header_Right">
-                        <div className="DAT_ProjectDataMobile_Header_Right_More">
-                            <BsThreeDotsVertical
-                                size={20}
-                                color="#9e9e9e"
-                                onClick={() => {
-                                    setModeState(!modeState);
-                                    viewNav.value = true;
-                                    viewStateNav.value = [true, true];
-                                }}
-                                onMouseLeave={() => handleOutsideView()}
-                            />
-                        </div>
+                        <div className="DAT_ProjectDataMobile_Header_Right">
+                            <div className="DAT_ProjectDataMobile_Header_Right_More">
+                                <BsThreeDotsVertical
+                                    size={20}
+                                    color="white"
+                                    onClick={() => {
+                                        setModeState(!modeState);
+                                        viewNav.value = true;
+                                        viewStateNav.value = [true, true];
+                                    }}
+                                    onMouseLeave={() => handleOutsideView()}
+                                />
+                            </div>
 
-                        {/* {ruleInfor.value.setting.device.add
+                            {/* {ruleInfor.value.setting.device.add
                             ? props.data.shared_ === 1
                                 ? <></>
                                 : <div className="DAT_ProjectDataMobile_Header_Right_Add"
@@ -307,130 +307,130 @@ function Project(props) {
                             : <></>
                         } */}
 
-                        <div className="DAT_ProjectDataMobile_Header_Right_Close"
-                            onClick={() => {
-                                plantState.value = "default";
-                                setModeState(false);
-                            }}
-                        >
-                            <IoClose
-                                size={25} color="rgba(11, 25, 103)"
-                                id="Popup_"
-                                onMouseEnter={(e) => handlePopup("new")}
-                                onMouseLeave={(e) => handlePopup("pre")}
-                            />
+                            <div className="DAT_ProjectDataMobile_Header_Right_Close"
+                                onClick={() => {
+                                    plantState.value = "default";
+                                    setModeState(false);
+                                }}
+                            >
+                                <IoClose
+                                    size={25} color="white"
+                                    id="Popup_"
+                                    onMouseEnter={(e) => handlePopup("new")}
+                                    onMouseLeave={(e) => handlePopup("pre")}
+                                />
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div className="DAT_ProjectDataMobile_Content">
-                    {(() => {
-                        switch (mode.value) {
-                            case "device":
-                                return (
-                                    <Device data={props.data} popupGateway={handlePopupGateway} />
-                                );
-                            case "overview":
-                                return (
-                                    <div>
-                                        Tổng quan
-                                    </div>
-                                );
-                            default:
-                                return (
-                                    <div>
-                                        <Dashboard data={props.data} />
-                                    </div>
-                                );
-                        }
-                    })()}
-                </div>
-
-                {modeState
-                    ? <div className="DAT_ProjectDataDropMobile"
-                        style={{ display: viewNav.value ? "block" : "none" }}
-                        onMouseEnter={() => {
-                            viewStateNav.value = [true, true];
-                        }}
-                        onMouseLeave={() => {
-                            viewNav.value = false;
-                            viewStateNav.value = [false, false];
-                        }}
-
-                    >
+                    <div className="DAT_ProjectDataMobile_Content">
                         {(() => {
-                            switch (mode) {
+                            switch (mode.value) {
                                 case "device":
                                     return (
-                                        <>
-                                            <div className="DAT_ProjectDataDropMobile_Item"
-                                                id="dashboard"
-                                                onClick={(e) => handleView(e)}
-                                            >
-                                                {dataLang.formatMessage({ id: "dashboard" })}
-                                            </div>
-
-                                            <div className="DAT_ProjectDataDropMobile_Item"
-                                                id="view"
-                                                onClick={(e) => handleView(e)}
-                                            >
-                                                {dataLang.formatMessage({ id: "view" })}
-                                            </div>
-                                        </>
+                                        <Device data={props.data} popupGateway={handlePopupGateway} />
                                     );
                                 case "overview":
                                     return (
-                                        <>
-                                            <div className="DAT_ProjectDataDropMobile_Item"
-                                                id="dashboard"
-                                                onClick={(e) => handleView(e)}
-                                            >
-                                                {dataLang.formatMessage({ id: "dashboard" })}
-                                            </div>
-
-                                            <div className="DAT_ProjectDataDropMobile_Item"
-                                                id="device"
-                                                onClick={(e) => handleView(e)}
-                                            >
-                                                {dataLang.formatMessage({ id: "device" })}
-                                            </div>
-                                        </>
+                                        <div>
+                                            Tổng quan
+                                        </div>
                                     );
                                 default:
                                     return (
-                                        <>
-                                            <div className="DAT_ProjectDataDropMobile_Item"
-                                                id="view"
-                                                onClick={(e) => handleView(e)}
-                                            >
-                                                {dataLang.formatMessage({ id: "view" })}
-                                            </div>
-
-                                            <div className="DAT_ProjectDataDropMobile_Item"
-                                                id="device"
-                                                onClick={(e) => handleView(e)}
-                                            >
-                                                {dataLang.formatMessage({ id: "device" })}
-                                            </div>
-                                        </>
+                                        <div>
+                                            <Dashboard data={props.data} />
+                                        </div>
                                     );
                             }
                         })()}
                     </div>
-                    : <></>
-                }
 
-                {gatewayState
-                    ? <div className="DAT_AddGatewayPopup">
-                        <AddGateway
-                            data={props.data}
-                            // handleInvt={handleInvt}
-                            handleClose={handleCloseGateway}
-                        />
-                    </div>
-                    : <></>
-                }
-            </div>}
+                    {modeState
+                        ? <div className="DAT_ProjectDataDropMobile"
+                            style={{ display: viewNav.value ? "block" : "none" }}
+                            onMouseEnter={() => {
+                                viewStateNav.value = [true, true];
+                            }}
+                            onMouseLeave={() => {
+                                viewNav.value = false;
+                                viewStateNav.value = [false, false];
+                            }}
+
+                        >
+                            {(() => {
+                                switch (mode) {
+                                    case "device":
+                                        return (
+                                            <>
+                                                <div className="DAT_ProjectDataDropMobile_Item"
+                                                    id="dashboard"
+                                                    onClick={(e) => handleView(e)}
+                                                >
+                                                    {dataLang.formatMessage({ id: "dashboard" })}
+                                                </div>
+
+                                                <div className="DAT_ProjectDataDropMobile_Item"
+                                                    id="view"
+                                                    onClick={(e) => handleView(e)}
+                                                >
+                                                    {dataLang.formatMessage({ id: "view" })}
+                                                </div>
+                                            </>
+                                        );
+                                    case "overview":
+                                        return (
+                                            <>
+                                                <div className="DAT_ProjectDataDropMobile_Item"
+                                                    id="dashboard"
+                                                    onClick={(e) => handleView(e)}
+                                                >
+                                                    {dataLang.formatMessage({ id: "dashboard" })}
+                                                </div>
+
+                                                <div className="DAT_ProjectDataDropMobile_Item"
+                                                    id="device"
+                                                    onClick={(e) => handleView(e)}
+                                                >
+                                                    {dataLang.formatMessage({ id: "device" })}
+                                                </div>
+                                            </>
+                                        );
+                                    default:
+                                        return (
+                                            <>
+                                                <div className="DAT_ProjectDataDropMobile_Item"
+                                                    id="view"
+                                                    onClick={(e) => handleView(e)}
+                                                >
+                                                    {dataLang.formatMessage({ id: "view" })}
+                                                </div>
+
+                                                <div className="DAT_ProjectDataDropMobile_Item"
+                                                    id="device"
+                                                    onClick={(e) => handleView(e)}
+                                                >
+                                                    {dataLang.formatMessage({ id: "device" })}
+                                                </div>
+                                            </>
+                                        );
+                                }
+                            })()}
+                        </div>
+                        : <></>
+                    }
+
+                    {gatewayState
+                        ? <div className="DAT_AddGatewayPopup">
+                            <AddGateway
+                                data={props.data}
+                                // handleInvt={handleInvt}
+                                handleClose={handleCloseGateway}
+                            />
+                        </div>
+                        : <></>
+                    }
+                </div>}
         </>
     );
 }

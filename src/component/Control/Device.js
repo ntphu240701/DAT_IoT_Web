@@ -23,6 +23,7 @@ import Toollist from '../Lib/Toollist';
 import { plantState } from './Signal';
 import Popup from './Popup';
 import { isBrowser } from 'react-device-detect';
+import { AiOutlineAppstoreAdd } from 'react-icons/ai';
 
 
 export const device = signal([]);
@@ -260,7 +261,15 @@ function Device(props) {
                                 )
                             })}
                         </div>
+
                         <div className='DAT_Screen_sub' >
+                            <div className='DAT_Screen_sub_add'>
+                                {/* <button>{dataLang.formatMessage({ id: "add" })}</button> */}
+                                <div>
+                                    {dataLang.formatMessage({ id: 'monitorlist' })}
+                                </div>
+                                <AiOutlineAppstoreAdd size={25} style={{ cursor: "pointer" }} />
+                            </div>
                             <div className='DAT_Screen_sub_list' >
                                 {deviceData.value.map((data, i) => {
                                     return (
@@ -308,6 +317,10 @@ function Device(props) {
                                     onClick={() => setMonitorList(false)}
                                 />
                                 {dataLang.formatMessage({ id: 'monitorlist' })}
+                                <IoAddOutline
+                                    size={20}
+                                    color="white"
+                                />
                             </div>
                             <div className='DAT_ScreenMobile_sub'>
                                 <div className='DAT_ScreenMobile_sub_list'>

@@ -389,14 +389,14 @@
     // height: 200px;
     margin: auto;
     overflow: hidden;
-    margin-top: 10px;
+    margin-top: 80px;
     margin-bottom: 30px;
     border-radius: 5px;
     box-shadow: 3px 3px 10px rgba(193, 193, 193, 0.5);
     background-color: rgba(240, 242, 245, 1);
 
     &_Header {
-        background-color: white;
+        background-color: COLOR.$Primary-color;
         display: flex;
         flex-wrap: wrap;
         overflow: hidden;
@@ -428,6 +428,7 @@
                         display: flex;
                         align-items: center;
                         gap: 10px;
+                        color: white;
                     }
 
                     &_Addr {
@@ -449,7 +450,7 @@
 
             &_Add {
                 & button {
-                    background-color: COLOR.$Primary-color;
+                    background-color: white;
                     width: 30px;
                     height: 30px;
                     display: flex;
@@ -1713,14 +1714,14 @@
     // height: 200px;
     margin: auto;
     overflow: hidden;
-    margin-top: 10px;
-    margin-bottom: 30px;
+    margin-top: 80px;
+    margin-bottom: 100px;
     border-radius: 5px;
     box-shadow: 3px 3px 10px rgba(193, 193, 193, 0.5);
     background-color: rgba(240, 242, 245, 1);
 
     &_Header {
-        background-color: white;
+        background-color: COLOR.$Primary-color;
         display: flex;
         flex-wrap: wrap;
         overflow: hidden;
@@ -1752,6 +1753,7 @@
                         align-items: center;
                         gap: 10px;
                         font-size: 12px;
+                        color: white;
                     }
 
                     &_Addr {
@@ -3885,6 +3887,21 @@
             2px 2px 5px rgba(128, 128, 128, 0.1),
             -2px -2px 5px rgba(128, 128, 128, 0.1);
 
+        &_add {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+
+            & button {
+                padding: 8px 16px;
+                border-radius: 5px;
+                border: none;
+                cursor: pointer;
+                font-family: Montserrat-SemiBold;
+            }
+        }
+
         &_list {
             display: grid;
             gap: 10px;
@@ -4233,6 +4250,7 @@
                     }
 
                     &_Data {
+
                         // font-size: 15px;
                         // width: calc(100% - 150px);
                         &_Tit {
@@ -4313,15 +4331,22 @@
     }
 
     &_Status {
-        display: flex;
+        display: grid;
+        // flex-wrap: wrap;
+        grid-template-rows: repeat(2, 2fr);
+        /* Creates 4 equal-width columns */
+        grid-template-columns: repeat(2, 2fr);
+        /* Creates 4 equal-width columns */
+        gap: 10px;
+        /* Optional gap between columns */
         width: 100%;
         height: fit-content;
-        justify-content: space-between;
+        // justify-content: space-between;
         margin-bottom: 10px;
 
         // gap: 1%;
         &_Item {
-            width: 22%;
+            // width: calc(50% - 27px);
             height: 100px;
             background-color: #fff;
             border: 2px solid rgba(128, 128, 128, 0.2);
@@ -4412,6 +4437,7 @@
                     }
 
                     &_Data {
+
                         // font-size: 15px;
                         // width: calc(100% - 150px);
                         &_Tit {
@@ -4458,7 +4484,8 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    background-color: rgb(11, 25, 103);
+                    // background-color: rgb(11, 25, 103);
+                    border-color: #0b1967 !important;
                 }
             }
 
