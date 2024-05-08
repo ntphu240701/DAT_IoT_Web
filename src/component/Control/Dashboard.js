@@ -21,10 +21,12 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { isBrowser } from "react-device-detect";
 
 export default function Dashboard(props) {
   const [devicedata, setDevicedata] = useState([]);
   const [chart, setChart] = useState("year");
+
   const v = "Dữ liệu tháng";
   const data = [
     {
@@ -76,6 +78,7 @@ export default function Dashboard(props) {
       [v]: 0,
     },
   ];
+
   const TriangleBar = (props) => {
     const { fill, x, y, width, height } = props;
 
@@ -92,25 +95,6 @@ export default function Dashboard(props) {
       ></rect>
     );
   };
-  useEffect(() => {
-    console.log("Dashboard", props.data);
-  }, []);
-
-  useEffect(() => {
-    const getGateway = async () => {
-      let res = await callApi("post", host.DATA + "/getLogger", {
-        plantid: props.data.plantid_,
-      });
-      if (res.status) {
-        // console.log(res.data);
-        setDevicedata(res.data);
-        const t = res.data.filter((item) => item.state_ === 0).length;
-        console.log(t);
-      }
-    };
-
-    getGateway();
-  }, []);
 
   const defaultProps = {
     center: {
@@ -156,225 +140,468 @@ export default function Dashboard(props) {
     initMap(props.data);
   }, [props.data]);
 
-  return (
-    <div className="DAT_MainInfo">
-      {/* <div className="DAT_MainInfo_Title">Tổng số thiết bị : 3</div> */}
-      <div className="DAT_MainInfo_Status">
-        <div className="DAT_MainInfo_Status_Item">
-          <div
-            className="DAT_MainInfo_Status_Item_Header"
-            style={{ color: "rgba(13, 190, 0)" }}
-          >
-            <span>Online</span>
-            <LuInfo />
-          </div>
-          <div
-            className="DAT_MainInfo_Status_Item_State"
-            style={{ color: "#0B1967" }}
-          >
-            {devicedata.filter((item) => item.state_ === 1).length}/
-            {devicedata.length}
-          </div>
-        </div>
-        <div className="DAT_MainInfo_Status_Item">
-          <div
-            className="DAT_MainInfo_Status_Item_Header"
-            style={{ color: "rgba(117, 117, 117)" }}
-          >
-            <span>Offline</span>
-            <LuInfo />
-          </div>
-          <div
-            className="DAT_MainInfo_Status_Item_State"
-            style={{ color: "#0B1967" }}
-          >
-            {devicedata.filter((item) => item.state_ === 0).length}/
-            {devicedata.length}
-          </div>
-        </div>
-        <div className="DAT_MainInfo_Status_Item">
-          <div
-            className="DAT_MainInfo_Status_Item_Header"
-            style={{ color: "rgba(158, 0, 0, 0.8)" }}
-          >
-            <span>Đang có lỗi</span>
-            <LuInfo />
-          </div>
-          <div
-            className="DAT_MainInfo_Status_Item_State"
-            style={{ color: "#0B1967" }}
-          >
-            0/
-            {devicedata.length}
-          </div>
-        </div>
-        <div className="DAT_MainInfo_Status_Item">
-          <div
-            className="DAT_MainInfo_Status_Item_Header"
-            style={{ color: "rgba(209, 118, 0, 0.9)" }}
-          >
-            <span>Hạn bảo trì</span>
-            <LuInfo />
-          </div>
-          <div
-            className="DAT_MainInfo_Status_Item_State"
-            style={{ color: "#0B1967" }}
-          >
-            0/
-            {devicedata.length}
-          </div>
-        </div>
-      </div>
-      {/* <div className="DAT_MainInfo_Title">Thông tin dự án</div> */}
-      <div className="DAT_MainInfo_Map">
-        <div className="DAT_MainInfo_Map_Item1">
-          <div
-            id="map"
-            style={{ width: "100%", height: "100%", borderRadius: "5px" }}
-          ></div>
-        </div>
-        <div className="DAT_MainInfo_Map_Item2">
-          <div className="DAT_MainInfo_Map_Item2_Info">
-            <div className="DAT_MainInfo_Map_Item2_Info_Row">
-              <div className="DAT_MainInfo_Map_Item2_Info_Row_Head">
-                <MdDriveFileRenameOutline size={23} color="white" />
-              </div>
-              <div className="DAT_MainInfo_Map_Item2_Info_Row_Data">
-                <div className="DAT_MainInfo_Map_Item2_Info_Row_Data_Tit">
-                  Tên doanh nghiệp
-                </div>
-                {props.data.company_}
-              </div>
-            </div>
-            <div className="DAT_MainInfo_Map_Item2_Info_Row">
-              <div className="DAT_MainInfo_Map_Item2_Info_Row_Head">
-                <IoLocationSharp size={23} color="white" />
-              </div>
-              <div className="DAT_MainInfo_Map_Item2_Info_Row_Data">
-                <div className="DAT_MainInfo_Map_Item2_Info_Row_Data_Tit">
-                  Địa chỉ
-                </div>
-                {props.data.addr_}
-              </div>
-            </div>
-            <div className="DAT_MainInfo_Map_Item2_Info_Row">
-              <div className="DAT_MainInfo_Map_Item2_Info_Row_Head">
-                <IoMdContact size={23} color="white" />
-              </div>
-              <div className="DAT_MainInfo_Map_Item2_Info_Row_Data">
-                <div className="DAT_MainInfo_Map_Item2_Info_Row_Data_Tit">
-                  Liên hệ
-                </div>
-                {props.data.contact_}
-              </div>
-            </div>
-            <div className="DAT_MainInfo_Map_Item2_Info_Row">
-              <div className="DAT_MainInfo_Map_Item2_Info_Row_Head">
-                <FaPhone size={18} color="white" />
-              </div>
-              <div className="DAT_MainInfo_Map_Item2_Info_Row_Data">
-                <div className="DAT_MainInfo_Map_Item2_Info_Row_Data_Tit">
-                  Số điện thoại
-                </div>
-                {props.data.phone_}
-              </div>
-            </div>
-            <div className="DAT_MainInfo_Map_Item2_Info_Row">
-              <div className="DAT_MainInfo_Map_Item2_Info_Row_Head">
-                <IoCalendar size={20} color="white" />
-              </div>
-              <div className="DAT_MainInfo_Map_Item2_Info_Row_Data">
-                <div className="DAT_MainInfo_Map_Item2_Info_Row_Data_Tit">
-                  Ngày tạo dự án
-                </div>
-                {props.data.createdate_}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="DAT_MainInfo_Graph">
-        {/* <div className="DAT_MainInfo_Graph_Header"></div> */}
-        <div className="DAT_MainInfo_Graph_Head">
-          <div className="DAT_MainInfo_Graph_Head_Title">Lịch sử phát điện</div>
-          <div className="DAT_MainInfo_Graph_Head_Option">
-            <span
-              style={{
-                backgroundColor:
-                  chart === "year" ? "rgb(11, 25, 103)" : "white",
-                border:
-                  chart === "year"
-                    ? "solid 1.5px rgb(11, 25, 103)"
-                    : "solid 1.5px 0 1.5px 1.5px rgb(11, 25, 103)",
-                color: chart === "year" ? "white" : "black",
-                borderRadius: "5px 0px 0px 5px",
-              }}
-              onClick={() => {
-                setChart("year");
-              }}
-            >
-              Năm
-            </span>
-            <span
-              style={{
-                backgroundColor:
-                  chart === "month" ? "rgb(11, 25, 103)" : "white",
-                border:
-                  chart === "month"
-                    ? "solid 1.5px rgb(11, 25, 103)"
-                    : "solid 1.5px 1.5px 1.5px 0 rgb(11, 25, 103)",
-                color: chart === "month" ? "white" : "black",
-                borderRadius: "0px 5px 5px 0",
-              }}
-              onClick={() => {
-                setChart("month");
-              }}
-            >
-              Tháng
-            </span>
-          </div>
-          <div className="DAT_MainInfo_Graph_Head_Datetime">
-            <DatePicker
-              // id="datepicker"
-              // onChange={(date) => handleChart(date)}
-              showMonthYearPicker={chart === "year" ? false : true}
-              showYearPicker={chart === "month" ? false : true}
-              customInput={
-                <button className="DAT_CustomPicker">
-                  <span>{[chart]}</span>
-                  <IoCalendarOutline color="gray" />
-                </button>
-              }
-            />
-          </div>
-        </div>
+  useEffect(() => {
+    const getGateway = async () => {
+      let res = await callApi("post", host.DATA + "/getLogger", {
+        plantid: props.data.plantid_,
+      });
+      if (res.status) {
+        // console.log(res.data);
+        setDevicedata(res.data);
+        const t = res.data.filter((item) => item.state_ === 0).length;
+        console.log(t);
+      }
+    };
 
-        <div className="DAT_MainInfo_Graph_Group">
-          {/* <div className="DAT_MainInfo_Graph_Group_Unit">Unit</div> */}
-          <div className="DAT_MainInfo_Graph_Group_Label">
-            Dữ liệu theo năm: 0 kW
+    getGateway();
+  }, []);
+
+  return (
+    <>
+      {isBrowser
+        ? <div className="DAT_MainInfo">
+          {/* <div className="DAT_MainInfo_Title">Tổng số thiết bị : 3</div> */}
+          <div className="DAT_MainInfo_Status">
+            <div className="DAT_MainInfo_Status_Item">
+              <div
+                className="DAT_MainInfo_Status_Item_Header"
+                style={{ color: "rgba(13, 190, 0)" }}
+              >
+                <span>Online</span>
+                <LuInfo />
+              </div>
+              <div
+                className="DAT_MainInfo_Status_Item_State"
+                style={{ color: "#0B1967" }}
+              >
+                {devicedata.filter((item) => item.state_ === 1).length}/
+                {devicedata.length}
+              </div>
+            </div>
+            <div className="DAT_MainInfo_Status_Item">
+              <div
+                className="DAT_MainInfo_Status_Item_Header"
+                style={{ color: "rgba(117, 117, 117)" }}
+              >
+                <span>Offline</span>
+                <LuInfo />
+              </div>
+              <div
+                className="DAT_MainInfo_Status_Item_State"
+                style={{ color: "#0B1967" }}
+              >
+                {devicedata.filter((item) => item.state_ === 0).length}/
+                {devicedata.length}
+              </div>
+            </div>
+            <div className="DAT_MainInfo_Status_Item">
+              <div
+                className="DAT_MainInfo_Status_Item_Header"
+                style={{ color: "rgba(158, 0, 0, 0.8)" }}
+              >
+                <span>Đang có lỗi</span>
+                <LuInfo />
+              </div>
+              <div
+                className="DAT_MainInfo_Status_Item_State"
+                style={{ color: "#0B1967" }}
+              >
+                0/
+                {devicedata.length}
+              </div>
+            </div>
+            <div className="DAT_MainInfo_Status_Item">
+              <div
+                className="DAT_MainInfo_Status_Item_Header"
+                style={{ color: "rgba(209, 118, 0, 0.9)" }}
+              >
+                <span>Hạn bảo trì</span>
+                <LuInfo />
+              </div>
+              <div
+                className="DAT_MainInfo_Status_Item_State"
+                style={{ color: "#0B1967" }}
+              >
+                0/
+                {devicedata.length}
+              </div>
+            </div>
+          </div>
+
+          {/* <div className="DAT_MainInfo_Title">Thông tin dự án</div> */}
+          <div className="DAT_MainInfo_Map">
+            <div className="DAT_MainInfo_Map_Item1">
+              <div
+                id="map"
+                style={{ width: "100%", height: "100%", borderRadius: "5px" }}
+              ></div>
+            </div>
+            <div className="DAT_MainInfo_Map_Item2">
+              <div className="DAT_MainInfo_Map_Item2_Info">
+                <div className="DAT_MainInfo_Map_Item2_Info_Row">
+                  <div className="DAT_MainInfo_Map_Item2_Info_Row_Head">
+                    <MdDriveFileRenameOutline size={23} color="white" />
+                  </div>
+                  <div className="DAT_MainInfo_Map_Item2_Info_Row_Data">
+                    <div className="DAT_MainInfo_Map_Item2_Info_Row_Data_Tit">
+                      Tên doanh nghiệp
+                    </div>
+                    {props.data.company_}
+                  </div>
+                </div>
+                <div className="DAT_MainInfo_Map_Item2_Info_Row">
+                  <div className="DAT_MainInfo_Map_Item2_Info_Row_Head">
+                    <IoLocationSharp size={23} color="white" />
+                  </div>
+                  <div className="DAT_MainInfo_Map_Item2_Info_Row_Data">
+                    <div className="DAT_MainInfo_Map_Item2_Info_Row_Data_Tit">
+                      Địa chỉ
+                    </div>
+                    {props.data.addr_}
+                  </div>
+                </div>
+                <div className="DAT_MainInfo_Map_Item2_Info_Row">
+                  <div className="DAT_MainInfo_Map_Item2_Info_Row_Head">
+                    <IoMdContact size={23} color="white" />
+                  </div>
+                  <div className="DAT_MainInfo_Map_Item2_Info_Row_Data">
+                    <div className="DAT_MainInfo_Map_Item2_Info_Row_Data_Tit">
+                      Liên hệ
+                    </div>
+                    {props.data.contact_}
+                  </div>
+                </div>
+                <div className="DAT_MainInfo_Map_Item2_Info_Row">
+                  <div className="DAT_MainInfo_Map_Item2_Info_Row_Head">
+                    <FaPhone size={18} color="white" />
+                  </div>
+                  <div className="DAT_MainInfo_Map_Item2_Info_Row_Data">
+                    <div className="DAT_MainInfo_Map_Item2_Info_Row_Data_Tit">
+                      Số điện thoại
+                    </div>
+                    {props.data.phone_}
+                  </div>
+                </div>
+                <div className="DAT_MainInfo_Map_Item2_Info_Row">
+                  <div className="DAT_MainInfo_Map_Item2_Info_Row_Head">
+                    <IoCalendar size={20} color="white" />
+                  </div>
+                  <div className="DAT_MainInfo_Map_Item2_Info_Row_Data">
+                    <div className="DAT_MainInfo_Map_Item2_Info_Row_Data_Tit">
+                      Ngày tạo dự án
+                    </div>
+                    {props.data.createdate_}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="DAT_MainInfo_Graph">
+            {/* <div className="DAT_MainInfo_Graph_Header"></div> */}
+            <div className="DAT_MainInfo_Graph_Head">
+              <div className="DAT_MainInfo_Graph_Head_Title">Lịch sử phát điện</div>
+              <div className="DAT_MainInfo_Graph_Head_Option">
+                <span
+                  style={{
+                    backgroundColor:
+                      chart === "year" ? "rgb(11, 25, 103)" : "white",
+                    border:
+                      chart === "year"
+                        ? "solid 1.5px rgb(11, 25, 103)"
+                        : "solid 1.5px 0 1.5px 1.5px rgb(11, 25, 103)",
+                    color: chart === "year" ? "white" : "black",
+                    borderRadius: "5px 0px 0px 5px",
+                  }}
+                  onClick={() => {
+                    setChart("year");
+                  }}
+                >
+                  Năm
+                </span>
+                <span
+                  style={{
+                    backgroundColor:
+                      chart === "month" ? "rgb(11, 25, 103)" : "white",
+                    border:
+                      chart === "month"
+                        ? "solid 1.5px rgb(11, 25, 103)"
+                        : "solid 1.5px 1.5px 1.5px 0 rgb(11, 25, 103)",
+                    color: chart === "month" ? "white" : "black",
+                    borderRadius: "0px 5px 5px 0",
+                  }}
+                  onClick={() => {
+                    setChart("month");
+                  }}
+                >
+                  Tháng
+                </span>
+              </div>
+              <div className="DAT_MainInfo_Graph_Head_Datetime">
+                <DatePicker
+                  // id="datepicker"
+                  // onChange={(date) => handleChart(date)}
+                  showMonthYearPicker={chart === "year" ? false : true}
+                  showYearPicker={chart === "month" ? false : true}
+                  customInput={
+                    <button className="DAT_CustomPicker">
+                      <span>{[chart]}</span>
+                      <IoCalendarOutline color="gray" />
+                    </button>
+                  }
+                />
+              </div>
+            </div>
+
+            <div className="DAT_MainInfo_Graph_Group">
+              {/* <div className="DAT_MainInfo_Graph_Group_Unit">Unit</div> */}
+              <div className="DAT_MainInfo_Graph_Group_Label">
+                Dữ liệu theo năm: 0 kW
+              </div>
+            </div>
+            <div style={{ width: "100%", height: "250px" }}>
+              <ResponsiveContainer style={{ width: "100%", height: "100%" }}>
+                <BarChart width={150} height={100} data={data}>
+                  <XAxis dataKey="name" axisLine={false} tickLine={false} />
+                  <YAxis axisLine={false} tickLine={false} />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                  <Tooltip />
+                  <Legend />
+                  <Bar
+                    shape={<TriangleBar />}
+                    dataKey={v}
+                    fill="#6495ed"
+                    barSize={15}
+                    legendType="circle"
+                    style={{ fill: "#6495ed" }}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
-        <div style={{ width: "100%", height: "250px" }}>
-          <ResponsiveContainer style={{ width: "100%", height: "100%" }}>
-            <BarChart width={150} height={100} data={data}>
-              <XAxis dataKey="name" axisLine={false} tickLine={false} />
-              <YAxis axisLine={false} tickLine={false} />
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <Tooltip />
-              <Legend />
-              <Bar
-                shape={<TriangleBar />}
-                dataKey={v}
-                fill="#6495ed"
-                barSize={15}
-                legendType="circle"
-                style={{ fill: "#6495ed" }}
-              />
-            </BarChart>
-          </ResponsiveContainer>
+        : <div className="DAT_MainInfoMobile">
+          {/* <div className="DAT_MainInfo_Title">Tổng số thiết bị : 3</div> */}
+          <div className="DAT_MainInfoMobile_Status">
+            <div className="DAT_MainInfoMobile_Status_Item">
+              <div
+                className="DAT_MainInfoMobile_Status_Item_Header"
+                style={{ color: "rgba(13, 190, 0)" }}
+              >
+                <span>Online</span>
+                <LuInfo />
+              </div>
+              <div
+                className="DAT_MainInfoMobile_Status_Item_State"
+                style={{ color: "#0B1967" }}
+              >
+                {devicedata.filter((item) => item.state_ === 1).length}/
+                {devicedata.length}
+              </div>
+            </div>
+            <div className="DAT_MainInfoMobile_Status_Item">
+              <div
+                className="DAT_MainInfoMobile_Status_Item_Header"
+                style={{ color: "rgba(117, 117, 117)" }}
+              >
+                <span>Offline</span>
+                <LuInfo />
+              </div>
+              <div
+                className="DAT_MainInfoMobile_Status_Item_State"
+                style={{ color: "#0B1967" }}
+              >
+                {devicedata.filter((item) => item.state_ === 0).length}/
+                {devicedata.length}
+              </div>
+            </div>
+            <div className="DAT_MainInfoMobile_Status_Item">
+              <div
+                className="DAT_MainInfoMobile_Status_Item_Header"
+                style={{ color: "rgba(158, 0, 0, 0.8)" }}
+              >
+                <span>Đang có lỗi</span>
+                <LuInfo />
+              </div>
+              <div
+                className="DAT_MainInfoMobile_Status_Item_State"
+                style={{ color: "#0B1967" }}
+              >
+                0/
+                {devicedata.length}
+              </div>
+            </div>
+            <div className="DAT_MainInfoMobile_Status_Item">
+              <div
+                className="DAT_MainInfoMobile_Status_Item_Header"
+                style={{ color: "rgba(209, 118, 0, 0.9)" }}
+              >
+                <span>Hạn bảo trì</span>
+                <LuInfo />
+              </div>
+              <div
+                className="DAT_MainInfoMobile_Status_Item_State"
+                style={{ color: "#0B1967" }}
+              >
+                0/
+                {devicedata.length}
+              </div>
+            </div>
+          </div>
+
+          {/* <div className="DAT_MainInfo_Title">Thông tin dự án</div> */}
+          <div className="DAT_MainInfoMobile_Map">
+            <div className="DAT_MainInfoMobile_Map_Item1">
+              <div
+                id="map"
+                style={{ width: "100%", height: "100%", borderRadius: "5px" }}
+              ></div>
+            </div>
+            <div className="DAT_MainInfoMobile_Map_Item2">
+              <div className="DAT_MainInfoMobile_Map_Item2_Info">
+                <div className="DAT_MainInfoMobile_Map_Item2_Info_Row">
+                  <div className="DAT_MainInfoMobile_Map_Item2_Info_Row_Head">
+                    <MdDriveFileRenameOutline size={23} color="white" />
+                  </div>
+                  <div className="DAT_MainInfoMobile_Map_Item2_Info_Row_Data">
+                    <div className="DAT_MainInfoMobile_Map_Item2_Info_Row_Data_Tit">
+                      Tên doanh nghiệp
+                    </div>
+                    {props.data.company_}
+                  </div>
+                </div>
+                <div className="DAT_MainInfoMobile_Map_Item2_Info_Row">
+                  <div className="DAT_MainInfoMobile_Map_Item2_Info_Row_Head">
+                    <IoLocationSharp size={23} color="white" />
+                  </div>
+                  <div className="DAT_MainInfoMobile_Map_Item2_Info_Row_Data">
+                    <div className="DAT_MainInfoMobile_Map_Item2_Info_Row_Data_Tit">
+                      Địa chỉ
+                    </div>
+                    {props.data.addr_}
+                  </div>
+                </div>
+                <div className="DAT_MainInfoMobile_Map_Item2_Info_Row">
+                  <div className="DAT_MainInfoMobile_Map_Item2_Info_Row_Head">
+                    <IoMdContact size={23} color="white" />
+                  </div>
+                  <div className="DAT_MainInfoMobile_Map_Item2_Info_Row_Data">
+                    <div className="DAT_MainInfoMobile_Map_Item2_Info_Row_Data_Tit">
+                      Liên hệ
+                    </div>
+                    {props.data.contact_}
+                  </div>
+                </div>
+                <div className="DAT_MainInfoMobile_Map_Item2_Info_Row">
+                  <div className="DAT_MainInfoMobile_Map_Item2_Info_Row_Head">
+                    <FaPhone size={18} color="white" />
+                  </div>
+                  <div className="DAT_MainInfoMobile_Map_Item2_Info_Row_Data">
+                    <div className="DAT_MainInfoMobile_Map_Item2_Info_Row_Data_Tit">
+                      Số điện thoại
+                    </div>
+                    {props.data.phone_}
+                  </div>
+                </div>
+                <div className="DAT_MainInfoMobile_Map_Item2_Info_Row">
+                  <div className="DAT_MainInfoMobile_Map_Item2_Info_Row_Head">
+                    <IoCalendar size={20} color="white" />
+                  </div>
+                  <div className="DAT_MainInfoMobile_Map_Item2_Info_Row_Data">
+                    <div className="DAT_MainInfoMobile_Map_Item2_Info_Row_Data_Tit">
+                      Ngày tạo dự án
+                    </div>
+                    {props.data.createdate_}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="DAT_MainInfoMobile_Graph">
+            {/* <div className="DAT_MainInfo_Graph_Header"></div> */}
+            <div className="DAT_MainInfoMobile_Graph_Head">
+              <div className="DAT_MainInfoMobile_Graph_Head_Title">Lịch sử phát điện</div>
+              <div className="DAT_MainInfoMobile_Graph_Head_Option">
+                <span
+                  style={{
+                    backgroundColor:
+                      chart === "year" ? "rgb(11, 25, 103)" : "white",
+                    border:
+                      chart === "year"
+                        ? "solid 1.5px rgb(11, 25, 103)"
+                        : "solid 1.5px 0 1.5px 1.5px rgb(11, 25, 103)",
+                    color: chart === "year" ? "white" : "black",
+                    borderRadius: "5px 0px 0px 5px",
+                  }}
+                  onClick={() => {
+                    setChart("year");
+                  }}
+                >
+                  Năm
+                </span>
+                <span
+                  style={{
+                    backgroundColor:
+                      chart === "month" ? "rgb(11, 25, 103)" : "white",
+                    border:
+                      chart === "month"
+                        ? "solid 1.5px rgb(11, 25, 103)"
+                        : "solid 1.5px 1.5px 1.5px 0 rgb(11, 25, 103)",
+                    color: chart === "month" ? "white" : "black",
+                    borderRadius: "0px 5px 5px 0",
+                  }}
+                  onClick={() => {
+                    setChart("month");
+                  }}
+                >
+                  Tháng
+                </span>
+              </div>
+              <div className="DAT_MainInfoMobile_Graph_Head_Datetime">
+                <DatePicker
+                  // id="datepicker"
+                  // onChange={(date) => handleChart(date)}
+                  showMonthYearPicker={chart === "year" ? false : true}
+                  showYearPicker={chart === "month" ? false : true}
+                  customInput={
+                    <button className="DAT_CustomPicker">
+                      <span>{[chart]}</span>
+                      <IoCalendarOutline color="gray" />
+                    </button>
+                  }
+                />
+              </div>
+            </div>
+
+            <div className="DAT_MainInfoMobile_Graph_Group">
+              {/* <div className="DAT_MainInfo_Graph_Group_Unit">Unit</div> */}
+              <div className="DAT_MainInfoMobile_Graph_Group_Label">
+                Dữ liệu theo năm: 0 kW
+              </div>
+            </div>
+            <div style={{ width: "100%", height: "250px" }}>
+              <ResponsiveContainer style={{ width: "100%", height: "100%" }}>
+                <BarChart width={150} height={100} data={data}>
+                  <XAxis dataKey="name" axisLine={false} tickLine={false} />
+                  <YAxis axisLine={false} tickLine={false} />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                  <Tooltip />
+                  <Legend />
+                  <Bar
+                    shape={<TriangleBar />}
+                    dataKey={v}
+                    fill="#6495ed"
+                    barSize={15}
+                    legendType="circle"
+                    style={{ fill: "#6495ed" }}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      }
+    </>
   );
 }
