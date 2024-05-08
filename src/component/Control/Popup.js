@@ -10,10 +10,12 @@ import { userInfor } from "../../App";
 import { useIntl } from "react-intl";
 
 import { IoClose } from "react-icons/io5";
+import Device, { device, deviceCurrent, deviceData } from "./Device";
 
 export default function Popup(props) {
   const dataLang = useIntl();
-  const name = useRef();
+
+  const name_ = useRef();
 
   const popup_state = {
     pre: { transform: "rotate(0deg)", transition: "0.5s", color: "white" },
@@ -27,7 +29,8 @@ export default function Popup(props) {
     popup.style.color = popup_state[state].color;
   }
 
-  const handleDelete = (e) => {
+
+  const handleConfirm = async (e) => {
     const dropProject = async () => {
       let d = await callApi('post', host.DATA + '/dropPlant', {
         plantid: props.plantid,
@@ -44,8 +47,167 @@ export default function Popup(props) {
         plantState.value = 'default';
       }
     };
-    dropProject()
+
+    const dropLogger = async (sn, plantid) => {
+      let d = await callApi('post', host.DATA + '/dropLogger', {
+        plantid: plantid,
+        sn: sn,
+      })
+      if (d.status) {
+        alertDispatch(dataLang.formatMessage({ id: 'alert_25' }));
+        props.handleClose();
+        device.value = device.value.filter((item) => item.sn_ != sn);
+        deviceData.value = []
+        deviceCurrent.value = 0
+
+      }
+    }
+
+    const updateLogger = async (sn, name, des) => {
+      let d = await callApi('post', host.DATA + '/updateLogger', {
+        sn: sn,
+        name: name,
+        des: des
+      })
+      console.log(d)
+      if (d.status) {
+        alertDispatch(dataLang.formatMessage({ id: 'alert_25' }));
+        props.handleClose();
+        let index = device.value.findIndex(item => item.sn_ == sn)
+        device.value[index] = {
+          ...device.value[index],
+          name_: name,
+          description_: des
+        }
+
+      }
+    }
+
+    const addLoggerData = async (loggerid, sn, name) => {
+      let d = await callApi('post', host.DATA + '/addLoggerData', {
+        loggerid: loggerid,
+        sn: sn,
+        name: name
+      })
+      console.log(d)
+      if (d.status) {
+        // alertDispatch(dataLang.formatMessage({ id: 'alert_25' }));
+        // props.handleClose();
+
+
+      }
+    }
+
+    const dropLoggerData = async (loggerid, sn) => {
+      let d = await callApi('post', host.DATA + '/dropLoggerData', {
+        loggerdataid: loggerid,
+        sn: sn
+      })
+      console.log(d)
+      if (d.status) {
+        // alertDispatch(dataLang.formatMessage({ id: 'alert_25' }));
+        // props.handleClose();
+
+
+      }
+    }
+
+    const updateLoggerData = async (loggerid, name) => {
+      let d = await callApi('post', host.DATA + '/updateLoggerData', {
+        loggerdataid: loggerid,
+        name: name
+      })
+      console.log(d)
+      if (d.status) {
+        // alertDispatch(dataLang.formatMessage({ id: 'alert_25' }));
+        // props.handleClose();
+
+
+      }
+    }
+
+
+    if (props.type === "plant") {
+      dropProject()
+    } else {
+      console.log(props.popupType)
+      if (props.popupType === "delete") {
+        // console.log(props.data, props.plant)
+        dropLogger(props.data.sn_, props.plant.plantid_)
+      }
+
+      if (props.popupType === "edit") {
+        let name = document.getElementById("edit-name").value
+        let des = document.getElementById("edit-des").value
+
+        if (!name || !des) {
+          alertDispatch(dataLang.formatMessage({ id: 'alert_17' }));
+        } else {
+          updateLogger(props.data.sn_, name, des)
+        }
+      }
+
+      if (props.popupType === 'add') {
+        if (!name_.current.value) {
+          alertDispatch(dataLang.formatMessage({ id: 'alert_17' }));
+        } else {
+          addLoggerData(props.data.id_, props.data.sn_, name_.current.value)
+        }
+      }
+
+
+      if (props.popupType === 'delete-monitor') {
+
+        // console.log(props.monitor)
+        dropLoggerData(props.monitor.id_, props.monitor.sn_)
+
+      }
+
+      if (props.popupType === 'edit-monitor') {
+
+        // console.log(props.monitor)
+        let editname = document.getElementById("edit-monitor")
+        if (!editname.value) {
+          alertDispatch(dataLang.formatMessage({ id: 'alert_17' }));
+        } else {
+          console.log(editname.value, props.monitor.id_)
+          updateLoggerData(props.monitor.id_, editname.value)
+        }
+
+      }
+    }
   };
+
+  // useEffect(() => {
+  //   // console.log(props.monitor)
+  //   let m = document.getElementById("edit-monitor")
+  //   if (m !== null) {
+  //     m.value = props.monitor.name_
+  //   }
+
+  // }, [props.monitor])
+
+  useEffect(() => {
+    // console.log(props.data)
+
+    let n = document.getElementById("edit-name")
+    if (n !== null) {
+      n.value = props.data.name_
+    }
+
+    let d = document.getElementById("edit-des")
+    if (d !== null) {
+      d.value = props.data.description_
+    }
+
+    // let a = document.getElementById("add")
+    // if (a !== null) {
+    //   a.value = 'New Sreen'
+    // }
+
+
+
+  }, [props.data])
 
   const handleUpdate = (e) => {
 
@@ -124,39 +286,43 @@ export default function Popup(props) {
                     case "add":
                       return (
                         <>
-                          <label>Tên</label>
+                          <label>{dataLang.formatMessage({ id: 'name' })}</label>
                           <input
                             type="text"
-                            placeholder="Nhập tên"
+                            ref={name_}
+                            placeholder={dataLang.formatMessage({ id: 'typename' })}
                           />
                         </>
                       );
                     case "edit":
                       return (
                         <>
-                          <label>Tên</label>
+                          <label>{dataLang.formatMessage({ id: 'name' })}</label>
                           <input
                             type="text"
-                            placeholder="Nhập tên"
-                            // defaultValue={props.devname}
+                            placeholder={dataLang.formatMessage({ id: 'typename' })}
+                            id="edit-name"
                             style={{ marginBottom: "16px" }}
+
                           />
 
-                          <label>Mô tả</label>
+                          <label>{dataLang.formatMessage({ id: 'description' })}</label>
                           <textarea
                             type="text"
-                            placeholder="Nhập mô tả"
-                          // defaultValue={props.devdes}
+                            placeholder={dataLang.formatMessage({ id: 'typedescription' })}
+                            id="edit-des"
                           />
                         </>
                       );
                     case "edit-monitor":
                       return (
                         <>
-                          <label>Tên</label>
+                          <label>{dataLang.formatMessage({ id: 'name' })}</label>
                           <input
                             type="text"
-                            placeholder="Nhập tên"
+                            id="edit-monitor"
+                            placeholder={dataLang.formatMessage({ id: 'typename' })}
+
                           />
                         </>
                       )
@@ -166,7 +332,7 @@ export default function Popup(props) {
                           {dataLang.formatMessage({ id: 'delDevicemess' })}
                           &nbsp;
                           <span style={{ fontFamily: "Montserrat-Bold" }}>
-                            {props.name}
+                            {props.monitor.name_}
                           </span>
                         </>
                       )
@@ -175,8 +341,8 @@ export default function Popup(props) {
                         <>
                           {dataLang.formatMessage({ id: 'delDevicemess' })}
                           &nbsp;
-                          <span style={{ fontFamily: "Montserrat-Bold" }}>
-                            {props.name}
+                          <span style={{ fontFamily: "Montserrat-Bold" }} >
+                            {props.data?.sn_ || '...'}
                           </span>
                         </>
                       )
@@ -190,7 +356,7 @@ export default function Popup(props) {
         <div className="DAT_Popup_Box_Foot">
           <button
             style={{ backgroundColor: "rgba(11, 25, 103)", color: "white" }}
-            onClick={(e) => handleDelete(e)}
+            onClick={(e) => handleConfirm(e)}
           >
             {dataLang.formatMessage({ id: 'confirm' })}
           </button>

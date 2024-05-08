@@ -9,6 +9,7 @@ import { alertDispatch } from "../Alert/Alert";
 import { Token } from "../../App";
 
 import { IoClose } from "react-icons/io5";
+import { device, deviceCurrent, deviceData } from "./Device";
 
 export default function AddGateway(props) {
   const dataLang = useIntl();
@@ -40,20 +41,18 @@ export default function AddGateway(props) {
       if (d.status) {
         // temp.value = [...temp.value, d.data];
         props.handleClose();
+        device.value = [...device.value, d.data];
+        deviceData.value = []
+        deviceCurrent.value = 0
       }
       if (d.status === true) {
         alertDispatch(dataLang.formatMessage({ id: "alert_32" }))
       } else if (d.number === 0) {
-        alertDispatch(dataLang.formatMessage({ id: "alert_33" }))
-      } else if (d.number === 1) {
-        alertDispatch(dataLang.formatMessage({ id: "alert_34" }))
-      } else if (d.number === 2) {
         alertDispatch(dataLang.formatMessage({ id: "alert_35" }))
-      } else if (d.number === 3) {
-        alertDispatch(dataLang.formatMessage({ id: "alert_34" }))
-      } else if (d.number === 4) {
-        alertDispatch(dataLang.formatMessage({ id: "alert_36" }))
+      } else {
+        alertDispatch(dataLang.formatMessage({ id: "alert_7" }))
       }
+      
     }
   };
 

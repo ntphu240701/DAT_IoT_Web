@@ -1,5 +1,9 @@
 @use "../../index.scss" as COLOR;
 
+
+
+
+
 .DAT_ProjectHeader {
     width: 98%;
     margin: auto;
@@ -3828,6 +3832,7 @@
         box-shadow:
             2px 2px 5px rgba(128, 128, 128, 0.1),
             -2px -2px 5px rgba(128, 128, 128, 0.1);
+        overflow: hidden;
 
         &_item {
             display: flex;
@@ -3838,7 +3843,7 @@
 
             padding: 10px;
             border-bottom: solid 1px rgb(199, 199, 199);
-            background-color: rgb(250, 250, 250);
+            // background-color: rgb(250, 250, 250);
 
             &_content {
                 cursor: pointer;
@@ -3848,6 +3853,10 @@
                     font-family: Montserrat-SemiBold;
                     display: flex;
                     align-items: center;
+                    overflow: hidden;
+                    text-align: justify;
+                    min-width: 280px;
+                    max-width: 300px;
                 }
 
                 &_sn {
@@ -3860,6 +3869,10 @@
                 font-size: 15px;
                 color: gray;
                 text-align: justify;
+                min-width: 280px;
+                max-width: 300px;
+                overflow: hidden;
+
             }
 
             &:hover {
@@ -4095,6 +4108,7 @@
     }
 }
 
+
 .DAT_Toollist {
 
 
@@ -4133,6 +4147,7 @@
 
 
 }
+
 
 .DAT_MainInfo {
     margin: 10px;
@@ -4484,425 +4499,426 @@
     }
 }
 
-// @media (max-width: 900px) {
-//     // .DAT_ProjectHeader {
-//     //     &_Title {
-//     //         margin-bottom: 10px;
-//     //     }
 
-//     //     &_Filter {
-//     //         min-width: 95%;
-//     //         margin: auto;
-//     //         margin-bottom: 10px;
-//     //     }
+@media (max-width: 900px) {
+    // .DAT_ProjectHeader {
+    //     &_Title {
+    //         margin-bottom: 10px;
+    //     }
 
-//     //     &_New {
-//     //         color: white !important;
-//     //         min-width: 100px;
-//     //     }
-//     // }
+    //     &_Filter {
+    //         min-width: 95%;
+    //         margin: auto;
+    //         margin-bottom: 10px;
+    //     }
 
-//     .DAT_Project {
-//         width: 98%;
+    //     &_New {
+    //         color: white !important;
+    //         min-width: 100px;
+    //     }
+    // }
 
-//         //height: 68vh;
-//         // overflow: hidden;
-//         &_Content {
-//             height: calc(100vh - 300px);
-//         }
-//     }
+    .DAT_Project {
+        width: 98%;
 
-//     .DAT_ProjectData {
-//         &_Header {
-//             &_Left {
-//                 flex: 8;
-//                 padding: 8px;
+        //height: 68vh;
+        // overflow: hidden;
+        &_Content {
+            height: calc(100vh - 300px);
+        }
+    }
 
-//                 &_Top {
-//                     display: flex;
-//                     gap: 8px;
+    .DAT_ProjectData {
+        &_Header {
+            &_Left {
+                flex: 8;
+                padding: 8px;
 
-//                     &_Content {
-//                         display: flex;
-//                         gap: 4px;
+                &_Top {
+                    display: flex;
+                    gap: 8px;
 
-//                         &_Name {
-//                             font-size: 12px;
-//                             font-family: Montserrat-SemiBold;
-//                         }
+                    &_Content {
+                        display: flex;
+                        gap: 4px;
 
-//                         &_Addr {
-//                             font-size: 11px;
-//                         }
-//                     }
-//                 }
-//             }
+                        &_Name {
+                            font-size: 12px;
+                            font-family: Montserrat-SemiBold;
+                        }
 
-//             &_Right {
-//                 flex: 2;
-//                 display: flex;
-//                 gap: 0px;
-//                 padding: 8px;
-//             }
-//         }
+                        &_Addr {
+                            font-size: 11px;
+                        }
+                    }
+                }
+            }
 
-//         &_Dashboard {
-//             margin-top: 16px;
-//             margin-bottom: 16px;
+            &_Right {
+                flex: 2;
+                display: flex;
+                gap: 0px;
+                padding: 8px;
+            }
+        }
 
-//             &_Data {
-//                 display: contents;
+        &_Dashboard {
+            margin-top: 16px;
+            margin-bottom: 16px;
 
-//                 &_Left {
-//                     width: 98%;
-//                     height: 100%;
-//                     margin: auto;
-//                     margin-bottom: 16px;
-//                 }
+            &_Data {
+                display: contents;
 
-//                 &_Center {
-//                     width: 98%;
-//                     height: 100%;
-//                     margin: auto;
-//                     margin-bottom: 16px;
+                &_Left {
+                    width: 98%;
+                    height: 100%;
+                    margin: auto;
+                    margin-bottom: 16px;
+                }
 
-//                     &_Production {
-//                         &_Total {
-//                             display: flex;
-//                             flex-wrap: wrap;
-//                             gap: 10px;
-//                             padding: 10px;
-//                             -webkit-box-sizing: border-box;
-//                             /* Safari/Chrome, other WebKit */
-//                             -moz-box-sizing: border-box;
-//                             /* Firefox, other Gecko */
-//                             box-sizing: border-box;
-//                             overflow: hidden;
+                &_Center {
+                    width: 98%;
+                    height: 100%;
+                    margin: auto;
+                    margin-bottom: 16px;
 
-//                             &_Item {
-//                                 width: 100%;
-//                                 padding: 16px;
-//                                 border-radius: 5px;
-//                                 -webkit-box-sizing: border-box;
-//                                 /* Safari/Chrome, other WebKit */
-//                                 -moz-box-sizing: border-box;
-//                                 /* Firefox, other Gecko */
-//                                 box-sizing: border-box;
+                    &_Production {
+                        &_Total {
+                            display: flex;
+                            flex-wrap: wrap;
+                            gap: 10px;
+                            padding: 10px;
+                            -webkit-box-sizing: border-box;
+                            /* Safari/Chrome, other WebKit */
+                            -moz-box-sizing: border-box;
+                            /* Firefox, other Gecko */
+                            box-sizing: border-box;
+                            overflow: hidden;
 
-//                                 &_Tit {
-//                                     font-size: 14px;
-//                                     color: gray;
-//                                     white-space: nowrap;
-//                                     overflow: hidden;
-//                                     text-overflow: ellipsis;
-//                                 }
+                            &_Item {
+                                width: 100%;
+                                padding: 16px;
+                                border-radius: 5px;
+                                -webkit-box-sizing: border-box;
+                                /* Safari/Chrome, other WebKit */
+                                -moz-box-sizing: border-box;
+                                /* Firefox, other Gecko */
+                                box-sizing: border-box;
 
-//                                 &_Data {
-//                                     margin: 4px 0px 0px 0px;
-//                                 }
-//                             }
-//                         }
-//                     }
+                                &_Tit {
+                                    font-size: 14px;
+                                    color: gray;
+                                    white-space: nowrap;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                }
 
-//                     &_Consumption {
-//                         &_Total {
-//                             display: flex;
-//                             flex-wrap: wrap;
-//                             gap: 10px;
-//                             padding: 10px;
-//                             -webkit-box-sizing: border-box;
-//                             /* Safari/Chrome, other WebKit */
-//                             -moz-box-sizing: border-box;
-//                             /* Firefox, other Gecko */
-//                             box-sizing: border-box;
-//                             overflow: hidden;
+                                &_Data {
+                                    margin: 4px 0px 0px 0px;
+                                }
+                            }
+                        }
+                    }
 
-//                             &_Item {
-//                                 width: 100%;
-//                                 padding: 16px;
-//                                 border-radius: 5px;
-//                                 -webkit-box-sizing: border-box;
-//                                 /* Safari/Chrome, other WebKit */
-//                                 -moz-box-sizing: border-box;
-//                                 /* Firefox, other Gecko */
-//                                 box-sizing: border-box;
+                    &_Consumption {
+                        &_Total {
+                            display: flex;
+                            flex-wrap: wrap;
+                            gap: 10px;
+                            padding: 10px;
+                            -webkit-box-sizing: border-box;
+                            /* Safari/Chrome, other WebKit */
+                            -moz-box-sizing: border-box;
+                            /* Firefox, other Gecko */
+                            box-sizing: border-box;
+                            overflow: hidden;
 
-//                                 &_Tit {
-//                                     font-size: 14px;
-//                                     color: gray;
-//                                     white-space: nowrap;
-//                                     overflow: hidden;
-//                                     text-overflow: ellipsis;
-//                                 }
+                            &_Item {
+                                width: 100%;
+                                padding: 16px;
+                                border-radius: 5px;
+                                -webkit-box-sizing: border-box;
+                                /* Safari/Chrome, other WebKit */
+                                -moz-box-sizing: border-box;
+                                /* Firefox, other Gecko */
+                                box-sizing: border-box;
 
-//                                 &_Data {
-//                                     margin: 4px 0px 0px 0px;
-//                                 }
-//                             }
-//                         }
-//                     }
+                                &_Tit {
+                                    font-size: 14px;
+                                    color: gray;
+                                    white-space: nowrap;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                }
 
-//                     &_Grid {
-//                         &_Row {
-//                             &_Left {
-//                                 display: flex;
-//                                 flex-wrap: wrap;
-//                                 -webkit-box-sizing: border-box;
-//                                 /* Safari/Chrome, other WebKit */
-//                                 -moz-box-sizing: border-box;
-//                                 /* Firefox, other Gecko */
-//                                 box-sizing: border-box;
-//                                 overflow: hidden;
+                                &_Data {
+                                    margin: 4px 0px 0px 0px;
+                                }
+                            }
+                        }
+                    }
 
-//                                 &_Tit {
-//                                     width: 100%;
-//                                 }
+                    &_Grid {
+                        &_Row {
+                            &_Left {
+                                display: flex;
+                                flex-wrap: wrap;
+                                -webkit-box-sizing: border-box;
+                                /* Safari/Chrome, other WebKit */
+                                -moz-box-sizing: border-box;
+                                /* Firefox, other Gecko */
+                                box-sizing: border-box;
+                                overflow: hidden;
 
-//                                 &_Data {
-//                                     &_Item {
-//                                         padding: 8px 4px;
-//                                     }
-//                                 }
-//                             }
-//                         }
-//                     }
+                                &_Tit {
+                                    width: 100%;
+                                }
 
-//                     &_Battery {
-//                         &_Row {
-//                             &_Left {
-//                                 display: flex;
-//                                 flex-wrap: wrap;
-//                                 -webkit-box-sizing: border-box;
-//                                 /* Safari/Chrome, other WebKit */
-//                                 -moz-box-sizing: border-box;
-//                                 /* Firefox, other Gecko */
-//                                 box-sizing: border-box;
-//                                 overflow: hidden;
+                                &_Data {
+                                    &_Item {
+                                        padding: 8px 4px;
+                                    }
+                                }
+                            }
+                        }
+                    }
 
-//                                 &_Tit {
-//                                     width: 100%;
-//                                 }
+                    &_Battery {
+                        &_Row {
+                            &_Left {
+                                display: flex;
+                                flex-wrap: wrap;
+                                -webkit-box-sizing: border-box;
+                                /* Safari/Chrome, other WebKit */
+                                -moz-box-sizing: border-box;
+                                /* Firefox, other Gecko */
+                                box-sizing: border-box;
+                                overflow: hidden;
 
-//                                 &_Data {
-//                                     &_Item {
-//                                         padding: 8px 4px;
-//                                     }
-//                                 }
-//                             }
-//                         }
-//                     }
-//                 }
+                                &_Tit {
+                                    width: 100%;
+                                }
 
-//                 &_Right {
-//                     width: 98%;
-//                     margin: auto;
-//                     margin-bottom: 16px;
-//                 }
-//             }
-//         }
+                                &_Data {
+                                    &_Item {
+                                        padding: 8px 4px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
 
-//         &_Device {
-//             margin-top: 16px;
-//             height: calc(100vh - 200px);
-//             // margin-bottom: 100px;
-//             background-color: rgba(240, 242, 245);
-//         }
-//     }
+                &_Right {
+                    width: 98%;
+                    margin: auto;
+                    margin-bottom: 16px;
+                }
+            }
+        }
 
-//     .DAT_ProjectDataDrop {
-//         top: 130px;
-//         right: 40px;
-//     }
+        &_Device {
+            margin-top: 16px;
+            height: calc(100vh - 200px);
+            // margin-bottom: 100px;
+            background-color: rgba(240, 242, 245);
+        }
+    }
 
-//     .DAT_AddProject {
+    .DAT_ProjectDataDrop {
+        top: 130px;
+        right: 40px;
+    }
 
-//         // height: calc(100vh - 20px);
-//         &_BasicInfo {
-//             box-sizing: border-box;
-//             -webkit-box-sizing: border-box;
-//             -moz-box-sizing: border-box;
-//             overflow-y: scroll;
-//             -ms-overflow-style: none;
-//             scrollbar-width: none;
+    .DAT_AddProject {
 
-//             &::-webkit-scrollbar {
-//                 display: none;
-//                 /* Safari and Chrome */
-//             }
+        // height: calc(100vh - 20px);
+        &_BasicInfo {
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            overflow-y: scroll;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
 
-//             &_Body {
-//                 display: contents;
-//             }
-//         }
+            &::-webkit-scrollbar {
+                display: none;
+                /* Safari and Chrome */
+            }
 
-//         &_SystemInfo {
-//             box-sizing: border-box;
-//             -webkit-box-sizing: border-box;
-//             -moz-box-sizing: border-box;
-//             overflow-y: scroll;
-//             -ms-overflow-style: none;
-//             scrollbar-width: none;
+            &_Body {
+                display: contents;
+            }
+        }
 
-//             &::-webkit-scrollbar {
-//                 display: none;
-//                 /* Safari and Chrome */
-//             }
+        &_SystemInfo {
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            overflow-y: scroll;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
 
-//             &_Body {
-//                 display: contents;
-//             }
-//         }
+            &::-webkit-scrollbar {
+                display: none;
+                /* Safari and Chrome */
+            }
 
-//         &_YieldInfo {
-//             box-sizing: border-box;
-//             -webkit-box-sizing: border-box;
-//             -moz-box-sizing: border-box;
-//             overflow-y: scroll;
-//             -ms-overflow-style: none;
-//             scrollbar-width: none;
+            &_Body {
+                display: contents;
+            }
+        }
 
-//             &::-webkit-scrollbar {
-//                 display: none;
-//                 /* Safari and Chrome */
-//             }
+        &_YieldInfo {
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            overflow-y: scroll;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
 
-//             &_Body {
-//                 display: contents;
-//             }
-//         }
+            &::-webkit-scrollbar {
+                display: none;
+                /* Safari and Chrome */
+            }
 
-//         &_OwnerInfo {
-//             box-sizing: border-box;
-//             -webkit-box-sizing: border-box;
-//             -moz-box-sizing: border-box;
-//             overflow-y: scroll;
-//             -ms-overflow-style: none;
-//             scrollbar-width: none;
-//             margin-bottom: 100px;
+            &_Body {
+                display: contents;
+            }
+        }
 
-//             &::-webkit-scrollbar {
-//                 display: none;
-//                 /* Safari and Chrome */
-//             }
+        &_OwnerInfo {
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            overflow-y: scroll;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            margin-bottom: 100px;
 
-//             &_Tit {
-//                 &_Left {
-//                     min-width: 300px;
-//                 }
-//             }
+            &::-webkit-scrollbar {
+                display: none;
+                /* Safari and Chrome */
+            }
 
-//             &_Body {
-//                 display: contents;
-//             }
-//         }
-//     }
+            &_Tit {
+                &_Left {
+                    min-width: 300px;
+                }
+            }
 
-//     .DAT_EditProject {
-//         &_BasicInfo {
-//             box-sizing: border-box;
-//             -webkit-box-sizing: border-box;
-//             -moz-box-sizing: border-box;
-//             overflow-y: scroll;
-//             -ms-overflow-style: none;
-//             scrollbar-width: none;
+            &_Body {
+                display: contents;
+            }
+        }
+    }
 
-//             &::-webkit-scrollbar {
-//                 display: none;
-//                 /* Safari and Chrome */
-//             }
+    .DAT_EditProject {
+        &_BasicInfo {
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            overflow-y: scroll;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
 
-//             &_Body {
-//                 display: contents;
-//             }
-//         }
+            &::-webkit-scrollbar {
+                display: none;
+                /* Safari and Chrome */
+            }
 
-//         &_SystemInfo {
-//             box-sizing: border-box;
-//             -webkit-box-sizing: border-box;
-//             -moz-box-sizing: border-box;
-//             overflow-y: scroll;
-//             -ms-overflow-style: none;
-//             scrollbar-width: none;
+            &_Body {
+                display: contents;
+            }
+        }
 
-//             &::-webkit-scrollbar {
-//                 display: none;
-//                 /* Safari and Chrome */
-//             }
+        &_SystemInfo {
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            overflow-y: scroll;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
 
-//             &_Body {
-//                 display: contents;
-//             }
-//         }
+            &::-webkit-scrollbar {
+                display: none;
+                /* Safari and Chrome */
+            }
 
-//         &_YieldInfo {
-//             box-sizing: border-box;
-//             -webkit-box-sizing: border-box;
-//             -moz-box-sizing: border-box;
-//             overflow-y: scroll;
-//             -ms-overflow-style: none;
-//             scrollbar-width: none;
+            &_Body {
+                display: contents;
+            }
+        }
 
-//             &::-webkit-scrollbar {
-//                 display: none;
-//                 /* Safari and Chrome */
-//             }
+        &_YieldInfo {
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            overflow-y: scroll;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
 
-//             &_Body {
-//                 display: contents;
-//             }
-//         }
+            &::-webkit-scrollbar {
+                display: none;
+                /* Safari and Chrome */
+            }
 
-//         &_OwnerInfo {
-//             box-sizing: border-box;
-//             -webkit-box-sizing: border-box;
-//             -moz-box-sizing: border-box;
-//             overflow-y: scroll;
-//             -ms-overflow-style: none;
-//             scrollbar-width: none;
-//             // margin-bottom: 100px;
+            &_Body {
+                display: contents;
+            }
+        }
 
-//             &::-webkit-scrollbar {
-//                 display: none;
-//                 /* Safari and Chrome */
-//             }
+        &_OwnerInfo {
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            overflow-y: scroll;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            // margin-bottom: 100px;
 
-//             &_Tit {
-//                 &_Left {
-//                     min-width: 300px;
-//                 }
-//             }
+            &::-webkit-scrollbar {
+                display: none;
+                /* Safari and Chrome */
+            }
 
-//             &_Body {
-//                 display: contents;
-//             }
-//         }
+            &_Tit {
+                &_Left {
+                    min-width: 300px;
+                }
+            }
 
-//         &_ImgInfo {
-//             box-sizing: border-box;
-//             -webkit-box-sizing: border-box;
-//             -moz-box-sizing: border-box;
-//             overflow-y: scroll;
-//             -ms-overflow-style: none;
-//             scrollbar-width: none;
-//             margin-bottom: 100px;
+            &_Body {
+                display: contents;
+            }
+        }
 
-//             &::-webkit-scrollbar {
-//                 display: none;
-//                 /* Safari and Chrome */
-//             }
+        &_ImgInfo {
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            overflow-y: scroll;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            margin-bottom: 100px;
 
-//             &_Tit {
-//                 &_Left {
-//                     min-width: 300px;
-//                 }
-//             }
+            &::-webkit-scrollbar {
+                display: none;
+                /* Safari and Chrome */
+            }
 
-//             &_Body {
-//                 display: contents;
-//             }
-//         }
-//     }
-// }
+            &_Tit {
+                &_Left {
+                    min-width: 300px;
+                }
+            }
+
+            &_Body {
+                display: contents;
+            }
+        }
+    }
+}
 
 @keyframes red-ball {
     from {
