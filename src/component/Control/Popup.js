@@ -71,7 +71,7 @@ export default function Popup(props) {
       })
       console.log(d)
       if (d.status) {
-        alertDispatch(dataLang.formatMessage({ id: 'alert_25' }));
+        alertDispatch(dataLang.formatMessage({ id: 'alert_6' }));
         props.handleClose();
         let index = device.value.findIndex(item => item.sn_ == sn)
         device.value[index] = {
@@ -79,49 +79,6 @@ export default function Popup(props) {
           name_: name,
           description_: des
         }
-
-      }
-    }
-
-    const addLoggerData = async (loggerid, sn, name) => {
-      let d = await callApi('post', host.DATA + '/addLoggerData', {
-        loggerid: loggerid,
-        sn: sn,
-        name: name
-      })
-      console.log(d)
-      if (d.status) {
-        // alertDispatch(dataLang.formatMessage({ id: 'alert_25' }));
-        // props.handleClose();
-
-
-      }
-    }
-
-    const dropLoggerData = async (loggerid, sn) => {
-      let d = await callApi('post', host.DATA + '/dropLoggerData', {
-        loggerdataid: loggerid,
-        sn: sn
-      })
-      console.log(d)
-      if (d.status) {
-        // alertDispatch(dataLang.formatMessage({ id: 'alert_25' }));
-        // props.handleClose();
-
-
-      }
-    }
-
-    const updateLoggerData = async (loggerid, name) => {
-      let d = await callApi('post', host.DATA + '/updateLoggerData', {
-        loggerdataid: loggerid,
-        name: name
-      })
-      console.log(d)
-      if (d.status) {
-        // alertDispatch(dataLang.formatMessage({ id: 'alert_25' }));
-        // props.handleClose();
-
 
       }
     }
@@ -147,48 +104,14 @@ export default function Popup(props) {
         }
       }
 
-      if (props.popupType === 'add') {
-        if (!name_.current.value) {
-          alertDispatch(dataLang.formatMessage({ id: 'alert_17' }));
-        } else {
-          addLoggerData(props.data.id_, props.data.sn_, name_.current.value)
-        }
-      }
 
-
-      if (props.popupType === 'delete-monitor') {
-
-        // console.log(props.monitor)
-        dropLoggerData(props.monitor.id_, props.monitor.sn_)
-
-      }
-
-      if (props.popupType === 'edit-monitor') {
-
-        // console.log(props.monitor)
-        let editname = document.getElementById("edit-monitor")
-        if (!editname.value) {
-          alertDispatch(dataLang.formatMessage({ id: 'alert_17' }));
-        } else {
-          console.log(editname.value, props.monitor.id_)
-          updateLoggerData(props.monitor.id_, editname.value)
-        }
-
-      }
     }
   };
 
-  // useEffect(() => {
-  //   // console.log(props.monitor)
-  //   let m = document.getElementById("edit-monitor")
-  //   if (m !== null) {
-  //     m.value = props.monitor.name_
-  //   }
 
-  // }, [props.monitor])
 
   useEffect(() => {
-    // console.log(props.data)
+
 
     let n = document.getElementById("edit-name")
     if (n !== null) {
@@ -200,34 +123,12 @@ export default function Popup(props) {
       d.value = props.data.description_
     }
 
-    // let a = document.getElementById("add")
-    // if (a !== null) {
-    //   a.value = 'New Sreen'
-    // }
-
-
-
   }, [props.data])
 
   const handleUpdate = (e) => {
 
   }
 
-  // Handle close when press ESC
-  // useEffect(() => {
-  //   const handleKeyDown = (event) => {
-  //     if (event.key === "Escape") {
-  //       popupState.value = false;
-  //     }
-  //   };
-
-  //   document.addEventListener("keydown", handleKeyDown);
-
-  //   return () => {
-  //     document.removeEventListener("keydown", handleKeyDown);
-  //   };
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
 
   return (
     <div className="DAT_DevicePopup">
@@ -247,8 +148,8 @@ export default function Popup(props) {
                       return dataLang.formatMessage({ id: 'add' });
                     case "edit":
                       return dataLang.formatMessage({ id: 'edit' });
-                    case "edit-monitor":
-                      return dataLang.formatMessage({ id: 'edit' });
+                    // case "edit-monitor":
+                    //   return dataLang.formatMessage({ id: 'edit' });
                     default:
                       return dataLang.formatMessage({ id: 'delete' });
                   }
@@ -283,17 +184,7 @@ export default function Popup(props) {
               <>
                 {(() => {
                   switch (props.popupType) {
-                    case "add":
-                      return (
-                        <>
-                          <label>{dataLang.formatMessage({ id: 'name' })}</label>
-                          <input
-                            type="text"
-                            ref={name_}
-                            placeholder={dataLang.formatMessage({ id: 'typename' })}
-                          />
-                        </>
-                      );
+                 
                     case "edit":
                       return (
                         <>
@@ -314,28 +205,7 @@ export default function Popup(props) {
                           />
                         </>
                       );
-                    case "edit-monitor":
-                      return (
-                        <>
-                          <label>{dataLang.formatMessage({ id: 'name' })}</label>
-                          <input
-                            type="text"
-                            id="edit-monitor"
-                            placeholder={dataLang.formatMessage({ id: 'typename' })}
-
-                          />
-                        </>
-                      )
-                    case "delete-monitor":
-                      return (
-                        <>
-                          {dataLang.formatMessage({ id: 'delDevicemess' })}
-                          &nbsp;
-                          <span style={{ fontFamily: "Montserrat-Bold" }}>
-                            {props.monitor.name_}
-                          </span>
-                        </>
-                      )
+                  
                     default:
                       return (
                         <>

@@ -24,40 +24,12 @@ import { plantState } from './Signal';
 import Popup from './Popup';
 import { isBrowser } from 'react-device-detect';
 import { AiOutlineAppstoreAdd } from 'react-icons/ai';
+import PopupMonitor from './PopupMonitor';
 
 
 export const device = signal([]);
 export const deviceData = signal([]);
 export const deviceCurrent = signal(0);
-
-export const Empty = (props) => {
-    const dataLang = useIntl();
-
-    return (
-        <div
-            className="DAT_TableEmpty"
-            style={{
-                backgroundColor: props.backgroundColor
-                    ? props.backgroundColor
-                    : "white",
-                height: props.height ? props.height : "calc(100vh - 180px)",
-                width: props.width ? props.width : "100%",
-            }}
-        >
-            <div className="DAT_TableEmpty_Group">
-                <div className="DAT_TableEmpty_Group_Icon">
-                    <FaRegFileAlt size={50} color="gray" />
-                </div>
-                <div className="DAT_TableEmpty_Group_Text">
-                    {dataLang.formatMessage({ id: "empty" })}
-                </div>
-                <div className="DAT_TableEmpty_Group_Text">
-                    {dataLang.formatMessage({ id: "enterMore" })}
-                </div>
-            </div>
-        </div>
-    );
-};
 
 
 function Device(props) {
@@ -65,8 +37,9 @@ function Device(props) {
     // const [device, setDevice] = useState([]);
 
     const { toolDispatch } = useContext(ToolContext);
-    const { settingDispatch } = useContext(SettingContext);
+    const { currentID, settingDispatch } = useContext(SettingContext);
     const [popupState, setPopupState] = useState(false);
+    const [popupMonitor, setPopupMonitor] = useState(false);
     const [popupType, setPopupType] = useState("");
     const [dev, setDev] = useState({});
     const [monitor, setMonitor] = useState({});
@@ -85,17 +58,22 @@ function Device(props) {
     }
 
     const handleEditMonitor = (e) => {
-        console.log(e.currentTarget.id);
         let arr = e.currentTarget.id.split("_");
+        console.log(arr)
         let index = deviceData.value.findIndex((data) => data.id_ == arr[0]);
         setMonitor(deviceData.value[index]);
-        setPopupState(true);
-        setPopupType(`${arr[1]}-monitor`);
+        setPopupMonitor(true);
+        setPopupType(arr[1]);
+    }
+    const handleAddMonitor = (e) => {
+        console.log(deviceCurrent.value);
+        setMonitor([]);
+        setPopupMonitor(true);
+        setPopupType('add');
     }
 
-    const handleRemove = (e) => {
 
-    }
+
 
     const handleScreen = (e) => {
         // console.log(e.currentTarget.id);
@@ -180,11 +158,15 @@ function Device(props) {
         setPopupState(false);
     };
 
+    const handleCloseMonitor = () => {
+        setPopupMonitor(false);
+    };
+
 
 
     const handleShowInfo = (e) => {
         let arr = e.currentTarget.id.split("_");
-        // console.log(arr);
+        console.log(arr);
         deviceCurrent.value = arr[0]
         const getList = async () => {
 
@@ -228,14 +210,7 @@ function Device(props) {
                                                 {(popupState) => (<div className="DAT_TableEdit">
                                                     <IoMdMore size={20}   {...bindToggle(popupState)} />
                                                     <Menu {...bindMenu(popupState)}>
-                                                        <MenuItem
-                                                            id={`${data.id_}_add`}
-                                                            onClick={(e) => { handleEdit(e); popupState.close(); }}
-                                                        >
-                                                            <IoAddOutline size={16} />
-                                                            &nbsp;
-                                                            {dataLang.formatMessage({ id: "add" })}
-                                                        </MenuItem>
+
                                                         <MenuItem
                                                             id={`${data.id_}_edit`}
                                                             onClick={(e) => { handleEdit(e); popupState.close(); }}
@@ -268,14 +243,19 @@ function Device(props) {
                                 <div>
                                     {dataLang.formatMessage({ id: 'monitorlist' })}
                                 </div>
-                                <AiOutlineAppstoreAdd size={25} style={{ cursor: "pointer" }} />
+                                {deviceCurrent.value === 0
+                                    ? <></>
+                                    : <AiOutlineAppstoreAdd size={25} style={{ cursor: "pointer" }} onClick={() => { handleAddMonitor() }} />
+                                }
                             </div>
                             <div className='DAT_Screen_sub_list' >
                                 {deviceData.value.map((data, i) => {
                                     return (
                                         <div className="DAT_Screen_sub_list_item" key={i}  >
                                             <div className='DAT_Screen_sub_list_item_content' >
-                                                <div className='DAT_Screen_sub_list_item_content_name' id={`${data.id_}_SCREEN`} onClick={(e) => handleScreen(e)} ><FiMonitor size={20} /> &nbsp; {data.name_}</div>
+                                                <div className='DAT_Screen_sub_list_item_content_name' id={`${data.id_}_SCREEN`} onClick={(e) => handleScreen(e)} >
+                                                    <div className='DAT_Screen_sub_list_item_content_name_icon' ><FiMonitor size={30} /></div> &nbsp; <div className='DAT_Screen_sub_list_item_content_name_text' >{data.name_}</div>
+                                                </div>
                                             </div>
                                             <div className='DAT_Screen_sub_list_item_modify' >
                                                 <FiEdit
@@ -303,7 +283,12 @@ function Device(props) {
                     <div className="DAT_PopupBG"
                         style={{ display: popupState ? "block" : "none" }}
                     >
-                        <Popup handleClose={handleClosePopup} popupType={popupType} type={"device"} data={dev} monitor={monitor} plant={props.data} />
+                        <Popup handleClose={handleClosePopup} popupType={popupType} type={"device"} data={dev} plant={props.data} />
+                    </div>
+                    <div className="DAT_PopupBG"
+                        style={{ display: popupMonitor ? "block" : "none" }}
+                    >
+                        <PopupMonitor handleClose={handleCloseMonitor} popupType={popupType} type={"monitor"} monitor={monitor} plant={props.data} />
                     </div>
                 </>
                 : <>
@@ -320,6 +305,7 @@ function Device(props) {
                                 <IoAddOutline
                                     size={20}
                                     color="white"
+                                    onClick={() => { handleAddMonitor() }} 
                                 />
                             </div>
                             <div className='DAT_ScreenMobile_sub'>
@@ -327,13 +313,8 @@ function Device(props) {
                                     {deviceData.value.map((data, i) => {
                                         return (
                                             <div className="DAT_ScreenMobile_sub_list_item" key={i}>
-                                                <div className='DAT_ScreenMobile_sub_list_item_content'>
-                                                    <div className='DAT_ScreenMobile_sub_list_item_content_name'
-                                                        id={`${data.id_}_SCREEN`}
-                                                        onClick={(e) => handleScreen(e)}
-                                                    >
-                                                        <FiMonitor size={20} /> &nbsp; {data.name_}
-                                                    </div>
+                                               <div className='DAT_ScreenMobile_sub_list_item_content_name' id={`${data.id_}_SCREEN`} onClick={(e) => handleScreen(e)} >
+                                                    <div className='DAT_ScreenMobile_sub_list_item_content_name_icon' ><FiMonitor size={30} /></div> &nbsp; <div className='DAT_ScreenMobile_sub_list_item_content_name_text' >{data.name_}</div>
                                                 </div>
                                                 <div className='DAT_ScreenMobile_sub_list_item_modify'>
                                                     <FiEdit
@@ -393,14 +374,7 @@ function Device(props) {
                                                     {(popupState) => (<div className="DAT_TableEdit">
                                                         <IoMdMore size={20}   {...bindToggle(popupState)} />
                                                         <Menu {...bindMenu(popupState)}>
-                                                            <MenuItem
-                                                                id={`${data.id_}_add`}
-                                                                onClick={(e) => { handleEdit(e); popupState.close(); }}
-                                                            >
-                                                                <IoAddOutline size={16} />
-                                                                &nbsp;
-                                                                {dataLang.formatMessage({ id: "add" })}
-                                                            </MenuItem>
+
                                                             <MenuItem
                                                                 id={`${data.id_}_edit`}
                                                                 onClick={(e) => { handleEdit(e); popupState.close(); }}
@@ -432,7 +406,12 @@ function Device(props) {
                     <div className="DAT_PopupBG"
                         style={{ display: popupState ? "block" : "none" }}
                     >
-                        <Popup handleClose={handleClosePopup} popupType={popupType} type={"device"} data={dev} monitor={monitor} plant={props.data} />
+                        <Popup handleClose={handleClosePopup} popupType={popupType} type={"device"} data={dev} plant={props.data} />
+                    </div>
+                    <div className="DAT_PopupBG"
+                        style={{ display: popupMonitor ? "block" : "none" }}
+                    >
+                        <PopupMonitor handleClose={handleCloseMonitor} popupType={popupType} type={"monitor"} monitor={monitor} plant={props.data} />
                     </div>
                 </>
 
