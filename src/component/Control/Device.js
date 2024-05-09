@@ -8,7 +8,7 @@ import { ruleInfor } from '../../App';
 import { MdOutlineError } from 'react-icons/md';
 import { IoMdMore } from 'react-icons/io';
 import { Menu, MenuItem, snackbarClasses } from '@mui/material';
-import PopupState, { bindMenu, bindToggle } from 'material-ui-popup-state';
+import PopupState, { bindMenu, bindToggle, bindPopper, bindHover } from 'material-ui-popup-state';
 import { FiEdit, FiMonitor } from 'react-icons/fi';
 import { IoAddOutline, IoCaretBackOutline, IoTrashOutline } from 'react-icons/io5';
 import { get, last, snakeCase } from 'lodash';
@@ -25,7 +25,13 @@ import Popup from './Popup';
 import { isBrowser } from 'react-device-detect';
 import { AiOutlineAppstoreAdd } from 'react-icons/ai';
 import PopupMonitor from './PopupMonitor';
-
+import { TbDeviceDesktopPlus } from 'react-icons/tb';
+import Typography from "@mui/material/Typography";
+import Popper from "@mui/material/Popper";
+// import PopupState, { bindPopper, bindHover } from "material-ui-popup-state";
+import Fade from "@mui/material/Fade";
+import Paper from "@mui/material/Paper";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
 export const device = signal([]);
 export const deviceData = signal([]);
@@ -190,92 +196,151 @@ function Device(props) {
 
             {isBrowser
                 ? <>
-                    <div className="DAT_Screen"  >
-                        <div className='DAT_Screen_main' >
-                            {device.value.map((data, i) => {
-                                return (
-                                    <div className="DAT_Screen_main_item" key={i} style={{ backgroundColor: Number(data.id_) === Number(deviceCurrent.value) ? 'rgb(175, 175, 175,.5)' : 'rgb(250, 250, 250)' }}   >
-                                        <div className='DAT_Screen_main_item_content'  >
-                                            <div className='DAT_Screen_main_item_content_name' id={`${data.id_}_${data.sn_}`} onClick={(e) => handleShowInfo(e)}  >
-                                                {data.name_}&nbsp;{data.state_ === 1 ? <FaCheckCircle size={16} color="green" /> : <MdOutlineError size={16} color="red" />}
+                    <div className="DAT_Screen">
+                        <div className="DAT_Screen_Left">
+                            <div className='DAT_Screen_Left_head'>
+                                <div>
+                                    {dataLang.formatMessage({ id: 'devicelist' })}
+                                </div>
+                                <AiOutlineAppstoreAdd size={25} style={{ cursor: "pointer" }} onClick={() => props.popupGateway()} />
+                            </div>
+
+                            <div className='DAT_Screen_Left_main'>
+                                <div className='DAT_Screen_Left_main_list'>
+                                    {device.value.map((data, i) => {
+                                        return (
+                                            <div className="DAT_Screen_Left_main_list_item" key={i} style={{ backgroundColor: Number(data.id_) === Number(deviceCurrent.value) ? 'rgb(175, 175, 175,.5)' : 'white' }}   >
+                                                <div className='DAT_Screen_Left_main_list_item_content'  >
+                                                    <div className='DAT_Screen_Left_main_list_item_content_name'
+                                                        id={`${data.id_}_${data.sn_}`}
+                                                        onClick={(e) => handleShowInfo(e)}
+                                                    >
+                                                        <div className='DAT_Screen_Left_main_list_item_content_name_content'>{data.name_}</div>
+                                                        <div className="DAT_Screen_Left_main_list_item_content_name_Icon"
+                                                            style={{ cursor: "pointer" }}
+                                                        >
+                                                            <PopupState variant="popper" popupId="demo-popup-popper">
+                                                                {(popupState) => (
+                                                                    <div style={{ cursor: "pointer" }}>
+                                                                        <HelpOutlineIcon
+                                                                            {...bindHover(popupState)}
+                                                                            color="action"
+                                                                            fontSize="5px"
+                                                                        />
+                                                                        <Popper {...bindPopper(popupState)} transition>
+                                                                            {({ TransitionProps }) => (
+                                                                                <Fade {...TransitionProps} timeout={350}>
+                                                                                    <Paper
+                                                                                        sx={{ width: "200px", marginLeft: "100px", p: 2 }}
+                                                                                    >
+                                                                                        <Typography
+                                                                                            sx={{
+                                                                                                fontSize: "12px",
+                                                                                                textAlign: "justify",
+                                                                                                marginBottom: 1.7,
+                                                                                            }}
+                                                                                        >
+                                                                                            {dataLang.formatMessage({ id: "description" })}: <br />
+                                                                                            - {data.description_}
+                                                                                        </Typography>
+                                                                                    </Paper>
+                                                                                </Fade>
+                                                                            )}
+                                                                        </Popper>
+                                                                    </div>
+                                                                )}
+                                                            </PopupState>
+                                                        </div>
+                                                    </div>
+                                                    <div className='DAT_Screen_Left_main_list_item_content_sn'>
+                                                        {data.sn_}
+                                                        <div className='DAT_Screen_Left_main_list_item_content_sn_state'>{data.state_ === 1 ? <FaCheckCircle size={16} color="green" /> : <MdOutlineError size={16} color="red" />} </div>
+                                                    </div>
+                                                </div>
+                                                {/* <div className='DAT_Screen_main_list_item_des' >{data.description_}</div> */}
+                                                <div className='DAT_Screen_Left_main_list_item_modify'>
+                                                    <PopupState variant="popper" popupId="demo-popup-popper">
+                                                        {(popupState) => (<div className="DAT_TableEdit">
+                                                            <IoMdMore size={20}   {...bindToggle(popupState)} />
+                                                            <Menu {...bindMenu(popupState)}>
+                                                                <MenuItem
+                                                                    id={`${data.id_}_edit`}
+                                                                    onClick={(e) => { handleEdit(e); popupState.close(); }}
+
+                                                                >
+                                                                    <FiEdit size={14} />
+                                                                    &nbsp;
+                                                                    {dataLang.formatMessage({ id: "edit" })}
+                                                                </MenuItem>
+                                                                <MenuItem
+                                                                    id={`${data.id_}_delete`}
+                                                                    onClick={(e) => { handleEdit(e); popupState.close(); }}
+                                                                >
+                                                                    <IoTrashOutline size={16} />
+                                                                    &nbsp;
+                                                                    {dataLang.formatMessage({ id: "delete" })}
+                                                                </MenuItem>
+                                                            </Menu>
+                                                        </div>)}
+                                                    </PopupState>
+                                                </div>
                                             </div>
-                                            <div className='DAT_Screen_main_item_content_sn'>{data.sn_}</div>
-                                        </div>
-                                        <div className='DAT_Screen_main_item_des' >
-                                            <div>{data.description_}</div>
-                                        </div>
-                                        <div className='DAT_Screen_main_item_modify'>
-                                            {/* <BsThreeDotsVertical /> */}
-                                            <PopupState variant="popper" popupId="demo-popup-popper">
-                                                {(popupState) => (<div className="DAT_TableEdit">
-                                                    <IoMdMore size={20}   {...bindToggle(popupState)} />
-                                                    <Menu {...bindMenu(popupState)}>
-
-                                                        <MenuItem
-                                                            id={`${data.id_}_edit`}
-                                                            onClick={(e) => { handleEdit(e); popupState.close(); }}
-
-                                                        >
-                                                            <FiEdit size={14} />
-                                                            &nbsp;
-                                                            {dataLang.formatMessage({ id: "edit" })}
-                                                        </MenuItem>
-                                                        <MenuItem
-                                                            id={`${data.id_}_delete`}
-                                                            onClick={(e) => { handleEdit(e); popupState.close(); }}
-                                                        >
-                                                            <IoTrashOutline size={16} />
-                                                            &nbsp;
-                                                            {dataLang.formatMessage({ id: "delete" })}
-                                                        </MenuItem>
-                                                    </Menu>
-                                                </div>)}
-                                            </PopupState>
-                                        </div>
-                                    </div>
-                                )
-                            })}
+                                        )
+                                    })}
+                                </div>
+                            </div>
                         </div>
 
-                        <div className='DAT_Screen_sub' >
-                            <div className='DAT_Screen_sub_add'>
-                                {/* <button>{dataLang.formatMessage({ id: "add" })}</button> */}
+                        <div className="DAT_Screen_Right">
+                            <div className='DAT_Screen_Right_head'>
                                 <div>
                                     {dataLang.formatMessage({ id: 'monitorlist' })}
                                 </div>
                                 {deviceCurrent.value === 0
                                     ? <></>
-                                    : <AiOutlineAppstoreAdd size={25} style={{ cursor: "pointer" }} onClick={() => { handleAddMonitor() }} />
+                                    : <TbDeviceDesktopPlus size={25} style={{ cursor: "pointer" }} onClick={() => { handleAddMonitor() }} />
                                 }
                             </div>
-                            <div className='DAT_Screen_sub_list' >
-                                {deviceData.value.map((data, i) => {
-                                    return (
-                                        <div className="DAT_Screen_sub_list_item" key={i}  >
-                                            <div className='DAT_Screen_sub_list_item_content' >
-                                                <div className='DAT_Screen_sub_list_item_content_name' id={`${data.id_}_SCREEN`} onClick={(e) => handleScreen(e)} >
-                                                    <div className='DAT_Screen_sub_list_item_content_name_icon' ><FiMonitor size={30} /></div> &nbsp; <div className='DAT_Screen_sub_list_item_content_name_text' >{data.name_}</div>
+
+                            <div className='DAT_Screen_Right_sub' >
+                                <div className='DAT_Screen_Right_sub_list' >
+                                    {deviceData.value.map((data, i) => {
+                                        return (
+                                            <div className="DAT_Screen_Right_sub_list_item" key={i}  >
+                                                <div className='DAT_Screen_Right_sub_list_item_content' >
+                                                    <div className='DAT_Screen_Right_sub_list_item_content_name'
+                                                        id={`${data.id_}_SCREEN`}
+                                                        onClick={(e) => handleScreen(e)}
+                                                    >
+                                                        <div className='DAT_Screen_Right_sub_list_item_content_name_icon' >
+                                                            <FiMonitor size={20} />
+                                                        </div>
+                                                        {/* &nbsp; */}
+                                                        <div className='DAT_Screen_Right_sub_list_item_content_name_text' >
+                                                            {data.name_}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className='DAT_Screen_Right_sub_list_item_modify' >
+                                                    <FiEdit
+                                                        size={16}
+                                                        color='gray'
+                                                        style={{ cursor: 'pointer' }}
+                                                        id={`${data.id_}_edit`}
+                                                        onClick={(e) => { handleEditMonitor(e) }}
+                                                    />
+                                                    <RiDeleteBin6Line
+                                                        size={16}
+                                                        color='red'
+                                                        style={{ cursor: 'pointer' }}
+                                                        id={`${data.id_}_delete`}
+                                                        onClick={(e) => { handleEditMonitor(e) }}
+                                                    />
                                                 </div>
                                             </div>
-                                            <div className='DAT_Screen_sub_list_item_modify' >
-                                                <FiEdit
-                                                    size={16}
-                                                    color='gray'
-                                                    style={{ cursor: 'pointer' }}
-                                                    id={`${data.id_}_edit`}
-                                                    onClick={(e) => { handleEditMonitor(e) }}
-                                                />
-                                                <RiDeleteBin6Line
-                                                    size={16}
-                                                    color='red'
-                                                    style={{ cursor: 'pointer' }}
-                                                    id={`${data.id_}_delete`}
-                                                    onClick={(e) => { handleEditMonitor(e) }}
-                                                />
-                                            </div>
-                                        </div>
-                                    )
-                                })}
+                                        )
+                                    })}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -298,14 +363,14 @@ function Device(props) {
                             <div className="DAT_ScreenMobile_Tit">
                                 <IoCaretBackOutline
                                     size={20}
-                                    color="white"
+                                    color="black"
                                     onClick={() => setMonitorList(false)}
                                 />
                                 {dataLang.formatMessage({ id: 'monitorlist' })}
                                 <IoAddOutline
                                     size={20}
-                                    color="white"
-                                    onClick={() => { handleAddMonitor() }} 
+                                    color="black"
+                                    onClick={() => { handleAddMonitor() }}
                                 />
                             </div>
                             <div className='DAT_ScreenMobile_sub'>
@@ -313,8 +378,17 @@ function Device(props) {
                                     {deviceData.value.map((data, i) => {
                                         return (
                                             <div className="DAT_ScreenMobile_sub_list_item" key={i}>
-                                               <div className='DAT_ScreenMobile_sub_list_item_content_name' id={`${data.id_}_SCREEN`} onClick={(e) => handleScreen(e)} >
-                                                    <div className='DAT_ScreenMobile_sub_list_item_content_name_icon' ><FiMonitor size={30} /></div> &nbsp; <div className='DAT_ScreenMobile_sub_list_item_content_name_text' >{data.name_}</div>
+                                                <div className='DAT_ScreenMobile_sub_list_item_content'>
+                                                    <div className='DAT_ScreenMobile_sub_list_item_content_name'
+                                                        id={`${data.id_}_SCREEN`}
+                                                        onClick={(e) => handleScreen(e)}
+                                                    >
+                                                        <div className='DAT_ScreenMobile_sub_list_item_content_name_icon' >
+                                                            <FiMonitor size={30} />
+                                                        </div>
+                                                        {/* &nbsp; */}
+                                                        <div className='DAT_ScreenMobile_sub_list_item_content_name_text' >{data.name_}</div>
+                                                    </div>
                                                 </div>
                                                 <div className='DAT_ScreenMobile_sub_list_item_modify'>
                                                     <FiEdit
@@ -344,7 +418,7 @@ function Device(props) {
                                 {dataLang.formatMessage({ id: 'devicelist' })}
                                 <IoAddOutline
                                     size={20}
-                                    color="white"
+                                    color="black"
                                     onClick={() => props.popupGateway()}
                                 />
                             </div>
@@ -357,16 +431,13 @@ function Device(props) {
                                                     id={`${data.id_}_${data.sn_}`}
                                                     onClick={(e) => { handleShowInfo(e); setMonitorList(true) }}
                                                 >
-                                                    {data.name_}
-                                                    &nbsp;
-                                                    {data.state_ === 1 ? <FaCheckCircle size={16} color="green" /> : <MdOutlineError size={16} color="red" />}
+                                                    <div className='DAT_ScreenMobile_main_item_content_name_content'>{data.name_}</div>
+                                                    <div className='DAT_ScreenMobile_main_item_content_name_state'>{data.state_ === 1 ? <FaCheckCircle size={16} color="green" /> : <MdOutlineError size={16} color="red" />}</div>
                                                 </div>
                                                 <div className='DAT_ScreenMobile_main_item_content_sn'>{data.sn_}</div>
                                             </div>
 
-                                            <div className='DAT_ScreenMobile_main_item_des' >
-                                                <div>{data.description_}</div>
-                                            </div>
+                                            <div className='DAT_ScreenMobile_main_item_des' >{data.description_}</div>
 
                                             <div className='DAT_ScreenMobile_main_item_modify'>
 

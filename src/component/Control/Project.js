@@ -106,7 +106,7 @@ function Project(props) {
                                 />
                             </div>
 
-                            {ruleInfor.value.setting.device.add
+                            {/* {ruleInfor.value.setting.device.add
                                 ? props.data.shared_ === 1
                                     ? <></>
                                     : <div className="DAT_ProjectData_Header_Right_Add"
@@ -123,7 +123,7 @@ function Project(props) {
                                         </button>
                                     </div>
                                 : <></>
-                            }
+                            } */}
 
                             <div className="DAT_ProjectData_Header_Right_Close"
                                 onClick={() => {
@@ -147,7 +147,7 @@ function Project(props) {
                             switch (mode.value) {
                                 case "device":
                                     return (
-                                        <Device data={props.data} />
+                                        <Device data={props.data} popupGateway={handlePopupGateway} />
                                     );
                                 case "overview":
                                     return (
