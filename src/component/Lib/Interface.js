@@ -32,7 +32,7 @@ import Tablepro from "./Tablepro";
 import View32bit from "./View32bit";
 
 
-import { socket } from '../../App'
+import { Token, socket } from '../../App'
 import { TbSettingsCog } from "react-icons/tb";
 import { signal } from "@preact/signals-react";
 import { ImConnection } from "react-icons/im";
@@ -40,7 +40,7 @@ const show = signal(true)
 
 export default function Interface(props) {
     const type = useSelector((state) => state.admin.type)
-    const token = useSelector((state) => state.admin.token)
+    
     //const { token } = useContext(EnvContext);
     const intervalIDRef = useReducer(null);
     const [invt, setInvt] = useState({})
@@ -89,9 +89,10 @@ export default function Interface(props) {
 
 
     useEffect(function () {
-
+        console.log(props.sn,Token.value.token)
         var loaddata = async () => {
-            const res = await cloud('{"deviceCode":"' + props.id + '"}', token);
+            const res = await cloud('{"deviceCode":"' + props.sn + '"}', Token.value.token);
+            // console.log(res)
             if (res.ret === 0) {
                 setInvt(res.data)
                 setStep(1)
@@ -106,8 +107,8 @@ export default function Interface(props) {
         } else {
             console.log(invt)
             try {
-                socket.value.on("Server/" + props.id, function (data) {
-                    if (data.deviceid === props.id) {
+                socket.value.on("Server/" + props.sn, function (data) {
+                    if (data.deviceid === props.sn) {
                         console.log("Toollist socket")
                         //console.log(data.data)
                         Object.keys(data.data).map((keyName, i) => {
@@ -116,16 +117,16 @@ export default function Interface(props) {
                     }
                 })
 
-                socket.value.on("Server/up/" + props.id, function (data) {
-                    if (data.deviceid === props.id) {
+                socket.value.on("Server/up/" + props.sn, function (data) {
+                    if (data.deviceid === props.sn) {
                         console.log("Toollist up")
                         setInvt(invt => ({ ...invt, enabled: '1' }))
 
                     }
                 })
 
-                socket.value.on("Server/down/" + props.id, function (data) {
-                    if (data.deviceid === props.id) {
+                socket.value.on("Server/down/" + props.sn, function (data) {
+                    if (data.deviceid === props.sn) {
                         console.log("Toollist down")
                         setInvt(invt => ({ ...invt, enabled: '0' }))
                     }
@@ -165,9 +166,9 @@ export default function Interface(props) {
         }
         return () => {
             //console.log("UnMounting Interface")
-            socket.value.off("Server/" + props.id);
-            socket.value.off("Server/up/" + props.id)
-            socket.value.off("Server/down/" + props.id)
+            socket.value.off("Server/" + props.sn);
+            socket.value.off("Server/up/" + props.sn)
+            socket.value.off("Server/down/" + props.sn)
             // props.socket.current.off("Server/" + props.id);
             // props.socket.current.off("Server/up/" + props.id)
             // props.socket.current.off("Server/down/" + props.id)
@@ -195,7 +196,7 @@ export default function Interface(props) {
         try {
 
             const response = await axios({
-                url: host.ClOUD,
+                url: host.CLOUD,
                 method: "post",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
@@ -393,15 +394,15 @@ export default function Interface(props) {
                 {show.value
                     ? <>
 
-                        {/* <div className="DAT_ToolConfig" onClick={(event) => { handleConfig(event) }} style={{ top: "10px", right: "10px" }}>
+                        <div className="DAT_ToolConfig" onClick={(event) => { handleConfig(event) }} style={{ top: "10px", right: "10px" }}>
                             <TbSettingsCog size={20} />
-                        </div> */}
+                        </div>
 
                         <div className="DAT_Tool_Connect" style={{ bottom: "10px", left: "10px" }} >
                             {(invt !== undefined)
                                 ? (invt['enabled'] === '1')
-                                    ? <ImConnection size={20} color="green" />
-                                    : <ImConnection size={20} color="gray" />
+                                    ?<ImConnection size={20} color="green" />
+                                    :<ImConnection size={20} color="gray"/>
                                 : <img alt="" style={{ width: "20px" }} src="/lib/offline_state.png"></img>
                             }
                         </div>
@@ -428,7 +429,7 @@ export default function Interface(props) {
                                 <svg id="SVGVIEW" className="DAT_Tool_SVG-content-view">
                                     {visual[props.tab].map((data, index) => (
                                         <foreignObject key={data.id} x={data.x} y={data.y} width={data.w} height={data.h} style={{ padding: "5px", boxSizing: "border-box", position: "relative", zIndex: "0" }}>
-                                            {visdata(data.type, props.id, props.tab, data.id, data.w - 10, data.h - 10)}
+                                            {visdata(data.type, props.id, props.tab, data.id, data.w-10, data.h-10)}
                                         </foreignObject>
                                     ))}
                                 </svg>

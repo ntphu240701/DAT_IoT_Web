@@ -35,7 +35,7 @@ export const _tab = signal();
 export default function Toollist(props) {
     const dataLang = useIntl();
     const { name, config, control, toolDispatch } = useContext(ToolContext)
-    const { lasttab, defaulttab, currentID, currentSN, screen,  settingDispatch } = useContext(SettingContext)
+    const { lasttab, defaulttab, currentID, currentSN, screen, settingDispatch } = useContext(SettingContext)
     const [tab, setTab] = useState(String(defaulttab))
     const [searchmoblile, setSearchmoblile] = useState(false)
     const rootDispatch = useDispatch()
@@ -95,18 +95,18 @@ export default function Toollist(props) {
         // rootDispatch(toolslice.actions.setstatus(false))
         toolDispatch({ type: "RESET_TOOL", payload: [] })
         settingDispatch({ type: "REMOVE_CURRENTID", payload: '' })
-        
+
         plantState.value = "info"
     }
 
-    const handleAdd = async(event) => {
-        
-        
+    const handleAdd = async (event) => {
+
+
 
         let tab = parseInt(lasttab) + 1
         let name = String("Màn hình " + tab)
-        console.log(currentID,currentSN)
-        settingDispatch({ type: "ADD_SCREEN", payload: {sn_: currentSN, loggerdataid_: currentID, tab_: tab, name_: name, data_: { id: '0', data: [] }, setting_: {} } })
+        console.log(currentID, currentSN)
+        settingDispatch({ type: "ADD_SCREEN", payload: { sn_: currentSN, loggerdataid_: currentID, tab_: tab, name_: name, data_: { id: '0', data: [] }, setting_: {} } })
         settingDispatch({ type: "LOAD_LASTTAB", payload: tab })
 
         let res = await callApi("post", host.DATA + "/addLoggerScreen", {
@@ -116,8 +116,8 @@ export default function Toollist(props) {
             name: name
         })
 
-  
-        if(res.status){
+
+        if (res.status) {
             alertDispatch(dataLang.formatMessage({ id: "alert_6" }));
         }
 
@@ -141,14 +141,15 @@ export default function Toollist(props) {
                     <button className="DAT_Tool_Tab_Mobile_content" onClick={() => setStatetab(!statetab)} > <span> {name[tab]}</span>  {(statetab) ? <IoIosArrowDown /> : <IoIosArrowForward />} </button>
                     {(statetab)
                         ? <div className="DAT_Tool_Tab_Mobile_list" >
+                            <div className="DAT_Tool_Tab_Mobile_list_item" onClick={() => handleAdd()} >Thêm màn hình</div>
                             {Object.keys(name).map((keyName, i) => {
                                 return (
                                     <div className="DAT_Tool_Tab_Mobile_list_item" key={i} id={keyName} onClick={(e) => handleTabMobile(e)} >{i + 1}: {name[keyName]}</div>
                                 )
                             })}
-                            {(type === 'master' || type === 'admin')
-                                ? <div className="DAT_Tool_Tab_Mobile_list_item" onClick={() => handleAdd()} >Thêm màn hình</div>
-                                : <></>}
+
+
+
                         </div>
                         : <></>
                     }
@@ -209,13 +210,13 @@ export default function Toollist(props) {
                     ? (config[tab].stt)
 
                         ? <>
-                            {/* <Config id={currentID} tab={tab} ></Config>
+                            {/* <Config id={currentID} sn={currentSN} tab={tab} ></Config>
                             {(control[tab].stt)
-                                ? <Calculate id={currentID} tab={tab} />
+                                ? <Calculate id={currentID} sn={currentSN} tab={tab} />
                                 : <></>
                             } */}
                         </>
-                        : <Interface id={currentID} tab={tab} />
+                        : <Interface id={currentID} sn={currentSN} tab={tab} />
 
 
                     : <div className="DAT_Tool_Loading"><PacmanLoader color="#36d7b7" size={35} loading={true} /></div>
