@@ -184,7 +184,7 @@ export default function Popup(props) {
               <>
                 {(() => {
                   switch (props.popupType) {
-                 
+
                     case "edit":
                       return (
                         <>
@@ -205,7 +205,7 @@ export default function Popup(props) {
                           />
                         </>
                       );
-                  
+
                     default:
                       return (
                         <>

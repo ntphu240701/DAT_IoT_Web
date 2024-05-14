@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Project.scss";
 
 import { dataproject, plantState, projectData } from "./Project";
-
+import GoogleMap from "google-maps-react-markers";
 import { isMobile } from "../Navigation/Navigation";
 import moment from "moment-timezone";
 import { callApi } from "../Api/Api";
@@ -780,7 +780,7 @@ export default function EditProject(props) {
           usrtype: userInfor.value.type,
           img: projectData.value.img
             ? projectData.value.img
-            : "/dat_picture/solar_panel.png",
+            : `/dat_picture/${props.bu}.png`,
         });
         if (d.status === true) {
           alertDispatch(dataLang.formatMessage({ id: "alert_30" }));

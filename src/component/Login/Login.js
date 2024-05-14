@@ -202,13 +202,13 @@ export default function Login(props) {
     <div className="DAT_Login">
       <div className="DAT_Login_Head">
         <div className="DAT_Login_Head_Logo">
-          <img src={"/dat_icon/Embody_APP_24.png"} alt="" />
+          <img src={"/dat_icon/Embody_APP_25.png"} alt="" />
         </div>
 
         <div className="DAT_Login_Head_Title">
           <div className="DAT_Login_Head_Title_Main">
             {/* <img src={"/dat_icon/Embody_APP_27.png"} width={'150px'} height={'30px'} alt='' ></img> */}
-            AIOT Energy
+            Embody
           </div>
           <div className="DAT_Login_Head_Title_Sub">
             {dataLang.formatMessage({ id: "sologon" })}{" "}

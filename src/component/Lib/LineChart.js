@@ -9,6 +9,7 @@ import zoomPlugin from "chartjs-plugin-zoom";
 import axios from "axios";
 import { host } from "../Lang/Contant";
 import { _tab } from "./Toollist";
+import { callApi } from "../Api/Api";
 
 Chart.register(zoomPlugin);
 
@@ -46,7 +47,7 @@ export default function LineChart(props) {
     datasets: dataset,
   };
 
-  
+
 
   const config = {
     type: 'line',
@@ -83,7 +84,7 @@ export default function LineChart(props) {
           enabled: onzoom,
           mode: 'xy',
           modifierKey: 'ctrl',
-         
+
 
         },
         zoom: {
@@ -191,32 +192,38 @@ export default function LineChart(props) {
 
   useEffect(function () {
 
-    //console.log(_tab.value  )
-    axios.post(host.DEVICE + "/getChart", { deviceid: props.deviceid, tab: props.tab, id: props.id }, { secure: true, reconnect: true }).then(
-      (res) => {
-        //console.log(props.id)
-        if (res.data.status) {
-          //console.log(props.tab, props.id, res.data.data, dataset)
 
-          const newState = [...dataset]
-          newState.map((data, index) => {
-            data.data = res.data.data.value[index].data
-          })
-          setDataset(newState)
 
-          setlabel(res.data.data.time)
-          // })
 
-        } else {
-          const newState = [...dataset]
-          newState.map((data, index) => {
-            data.data = []
-          })
-          setDataset(newState)
-          setlabel([])
-        }
+    const getchart = async () => {
+      let res = await callApi("post", host.DATA + "/getChart", {
+        deviceid: props.sn,
+        tab: props.tab,
+        id: props.id
+      })
+      // console.log(res)
+      if (res.status) {
+
+        const newState = [...dataset]
+        newState.map((data, index) => {
+          data.data = res.data.value[index].data
+        })
+        setDataset(newState)
+
+        setlabel(res.data.time)
+
+      } else {
+        const newState = [...dataset]
+        newState.map((data, index) => {
+          data.data = []
+        })
+        setDataset(newState)
+        setlabel([])
       }
-    )
+
+    }
+
+    getchart()
 
     return () => {
       const newState = [...dataset]

@@ -2,13 +2,14 @@ import React from "react";
 import "./Analytics.scss";
 
 import DataTable from "react-data-table-component";
-import { Empty } from "../Project/Project";
+
 import { signal } from "@preact/signals-react";
 import AnaCreate from "./AnaCreate";
 import { useIntl } from "react-intl";
 
 import { TiFlowSwitch } from "react-icons/ti";
 import { isMobile } from "../Navigation/Navigation";
+import { Empty } from "../../App";
 
 export const anaState = signal("default");
 

@@ -18,27 +18,14 @@ const temp = signal({
   setting: {
     contact: { edit: false },
     device: { add: false, modify: false, remove: false },
-    project: {
-      add: false,
-      modify: false,
-      remove: false,
-    },
-    report: {
-      add: false,
-      modify: false,
-      remove: false,
-    },
-    rule: {
-      // active: false,
-      add: false,
-      modify: false,
-      remove: false,
-    },
+    monitor: { add: false, modify: false, remove: false },
+    project: { add: false, modify: false, remove: false, share: false },
+    report: { add: false, modify: false, remove: false },
+    rule: { add: false, modify: false, remove: false },
     user: { add: false, modify: false, remove: false },
     warn: { remove: false },
-    partner: {
-      modify: false,
-    },
+    screen: { add: false, modify: false, remove: false },
+    system: { auto: false, energy: false, elev: false },
   },
 });
 

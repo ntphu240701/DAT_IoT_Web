@@ -85,12 +85,19 @@ const ToolReducer = (state, action) => {
                 lastid: action.payload
             }
         case 'REMOVE_NAME':
-            var newname  = state.name
+            var newname = state.name
             delete newname[action.payload]
 
             return {
                 ...state,
                 name: newname
+            }
+        case 'RE_NAME':
+           
+
+            return {
+                ...state,
+                name: action.payload
             }
         case 'RESET_TOOL':
             return {

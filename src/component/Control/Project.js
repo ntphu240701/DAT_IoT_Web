@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { mode, plantState } from './Signal';
+import React, { useContext, useEffect, useState } from 'react';
+import { listDevice, mode, plantData, plantState } from './Signal';
 import { IoAddOutline, IoClose } from 'react-icons/io5';
 import { FaCheckCircle } from 'react-icons/fa';
 import { MdOutlineError } from 'react-icons/md';
@@ -11,6 +11,8 @@ import AddGateway from './AddGateway';
 import Device, { deviceCurrent, deviceData } from './Device';
 import { isBrowser } from 'react-device-detect';
 import Dashboard from './Dashboard';
+import Tooloverview from '../LibOverview/Tooloverview';
+import { OverviewContext } from '../Context/OverviewContext';
 const viewNav = signal(false);
 const viewStateNav = signal([false, false]);
 function Project(props) {
@@ -18,6 +20,7 @@ function Project(props) {
 
     const [gatewayState, setGatewayState] = useState(false);
     const [modeState, setModeState] = useState(false);
+    const { overviewDispatch } = useContext(OverviewContext);
     // const [mode, setMode] = useState('Dashboard');
     const popup_state = {
         pre: { transform: "rotate(0deg)", transition: "0.5s", color: "white", },
@@ -29,7 +32,8 @@ function Project(props) {
             setModeState(false);
         }
         return () => {
-            mode.value = 'dashboard';
+            // mode.value = 'dashboard';
+
         }
 
     }, [viewNav.value]);
@@ -43,7 +47,7 @@ function Project(props) {
 
             }
             clearTimeout();
-        }, 15000);
+        }, 1000);
     };
 
     const handlePopup = (state) => {
@@ -68,6 +72,17 @@ function Project(props) {
         setModeState(false);
     };
 
+    const handleCloseProjet = () => {
+        plantState.value = "default";
+        deviceCurrent.value = 0;
+        listDevice.value = [];
+        mode.value = 'overview';
+        setModeState(false);
+        overviewDispatch({
+            type: "RESET_TOOLOVERVIEW",
+            payload: [],
+        })
+    }
 
 
     return (
@@ -79,7 +94,7 @@ function Project(props) {
                             <div className="DAT_ProjectData_Header_Left_Top"
                                 style={{ fontSize: 22 }}
                             >
-                                <img src={props.data.img ? props.data.img : "/dat_picture/solar_panel.png"} alt="" />
+                                <img src={props.data?.img ? props.data.img : `/dat_picture/${props.bu}.jpg`} alt="" />
                                 <div className="DAT_ProjectData_Header_Left_Top_Content">
                                     <div className="DAT_ProjectData_Header_Left_Top_Content_Name">
                                         {props.data.name_}
@@ -127,9 +142,7 @@ function Project(props) {
 
                             <div className="DAT_ProjectData_Header_Right_Close"
                                 onClick={() => {
-                                    plantState.value = "default";
-                                    deviceCurrent.value = 0;
-                                    setModeState(false);
+                                   handleCloseProjet();
                                 }}
                             >
                                 <IoClose
@@ -147,19 +160,18 @@ function Project(props) {
                             switch (mode.value) {
                                 case "device":
                                     return (
-                                        <Device data={props.data} popupGateway={handlePopupGateway} />
+                                        <Device  data={props.data} popupGateway={handlePopupGateway} />
                                     );
                                 case "overview":
                                     return (
-                                        <div>
-                                            Tổng quan
-                                        </div>
+                                        <Dashboard data={props.data} />
+
                                     );
                                 default:
                                     return (
-                                        <div>
-                                            <Dashboard data={props.data} />
-                                        </div>
+
+
+                                        <Tooloverview projectid={props.data.plantid_} />
                                     );
                             }
                         })()}
@@ -186,23 +198,27 @@ function Project(props) {
                                         return (
                                             <>
                                                 <div className="DAT_ProjectDataDrop_Item"
+                                                    id="overview"
+                                                    onClick={(e) => handleView(e)}
+                                                >
+                                                    {dataLang.formatMessage({ id: "view" })}
+                                                </div>
+
+                                                <div className="DAT_ProjectDataDrop_Item"
                                                     id="dashboard"
                                                     onClick={(e) => handleView(e)}
                                                 >
                                                     {dataLang.formatMessage({ id: "dashboard" })}
                                                 </div>
 
-                                                <div className="DAT_ProjectDataDrop_Item"
-                                                    id="view"
-                                                    onClick={(e) => handleView(e)}
-                                                >
-                                                    {dataLang.formatMessage({ id: "view" })}
-                                                </div>
                                             </>
                                         );
                                     case "overview":
                                         return (
                                             <>
+
+
+
                                                 <div className="DAT_ProjectDataDrop_Item"
                                                     id="dashboard"
                                                     onClick={(e) => handleView(e)}
@@ -221,19 +237,6 @@ function Project(props) {
                                     default:
                                         return (
                                             <>
-                                                <div className="DAT_ProjectDataDrop_Item"
-                                                    id="view"
-                                                    onClick={(e) => handleView(e)}
-                                                >
-                                                    {dataLang.formatMessage({ id: "view" })}
-                                                </div>
-
-                                                <div className="DAT_ProjectDataDrop_Item"
-                                                    id="device"
-                                                    onClick={(e) => handleView(e)}
-                                                >
-                                                    {dataLang.formatMessage({ id: "device" })}
-                                                </div>
                                             </>
                                         );
                                 }
@@ -259,14 +262,14 @@ function Project(props) {
                             <div className="DAT_ProjectDataMobile_Header_Left_Top"
                                 style={{ fontSize: 22 }}
                             >
-                                <img src={props.data.img ? props.data.img : "/dat_picture/solar_panel.png"} alt="" />
+                                {/* <img src={props.data.img ? props.data.img : "/dat_picture/solar_panel.png"} alt="" /> */}
                                 <div className="DAT_ProjectDataMobile_Header_Left_Top_Content">
                                     <div className="DAT_ProjectDataMobile_Header_Left_Top_Content_Name">
                                         {props.data.name_}
                                     </div>
-                                    <div>
-                                        {props.data.state_ === 1 ? <FaCheckCircle size={16} color="green" /> : <MdOutlineError size={16} color="red" />}
-                                    </div>
+                                    {/* <div style={{display: "flex", alignItems: "center" ,gap: 10}} >
+                                        <div style={{color: "white", fontSize: 15}}>Trạng thái:  </div>{props.data.state_ === 1 ? <FaCheckCircle size={16} color="green" /> : <MdOutlineError size={16} color="red" />}
+                                    </div> */}
                                     {/* <div className="DAT_ProjectDataMobile_Header_Left_Top_Content_Addr">
                                 {props.data.addr_}
                             </div> */}
@@ -309,8 +312,7 @@ function Project(props) {
 
                             <div className="DAT_ProjectDataMobile_Header_Right_Close"
                                 onClick={() => {
-                                    plantState.value = "default";
-                                    setModeState(false);
+                                    handleCloseProjet();
                                 }}
                             >
                                 <IoClose
@@ -332,14 +334,17 @@ function Project(props) {
                                     );
                                 case "overview":
                                     return (
-                                        <div>
-                                            Tổng quan
-                                        </div>
+                                        <Dashboard data={props.data} />
                                     );
                                 default:
                                     return (
-                                        <div>
-                                            <Dashboard data={props.data} />
+
+                                        <div
+
+                                            className="DAT_Mobile_Overview"
+                                            id="DAT_overview"
+                                        >
+                                            <Tooloverview projectid={props.data.plantid_} />
                                         </div>
                                     );
                             }
@@ -359,36 +364,37 @@ function Project(props) {
 
                         >
                             {(() => {
-                                switch (mode) {
+                                switch (mode.value) {
                                     case "device":
                                         return (
                                             <>
-                                                <div className="DAT_ProjectDataDropMobile_Item"
+                                                <div className="DAT_ProjectDataDrop_Item"
+                                                    id="overview"
+                                                    onClick={(e) => handleView(e)}
+                                                >
+                                                    {dataLang.formatMessage({ id: "view" })}
+                                                </div>
+
+                                                <div className="DAT_ProjectDataDrop_Item"
                                                     id="dashboard"
                                                     onClick={(e) => handleView(e)}
                                                 >
                                                     {dataLang.formatMessage({ id: "dashboard" })}
-                                                </div>
-
-                                                <div className="DAT_ProjectDataDropMobile_Item"
-                                                    id="view"
-                                                    onClick={(e) => handleView(e)}
-                                                >
-                                                    {dataLang.formatMessage({ id: "view" })}
                                                 </div>
                                             </>
                                         );
                                     case "overview":
                                         return (
                                             <>
-                                                <div className="DAT_ProjectDataDropMobile_Item"
+
+                                                <div className="DAT_ProjectDataDrop_Item"
                                                     id="dashboard"
                                                     onClick={(e) => handleView(e)}
                                                 >
                                                     {dataLang.formatMessage({ id: "dashboard" })}
                                                 </div>
 
-                                                <div className="DAT_ProjectDataDropMobile_Item"
+                                                <div className="DAT_ProjectDataDrop_Item"
                                                     id="device"
                                                     onClick={(e) => handleView(e)}
                                                 >
@@ -399,11 +405,13 @@ function Project(props) {
                                     default:
                                         return (
                                             <>
-                                                <div className="DAT_ProjectDataDropMobile_Item"
-                                                    id="view"
+
+
+                                                {/* <div className="DAT_ProjectDataDropMobile_Item"
+                                                    id="dashboard"
                                                     onClick={(e) => handleView(e)}
                                                 >
-                                                    {dataLang.formatMessage({ id: "view" })}
+                                                    {dataLang.formatMessage({ id: "dashboard" })}
                                                 </div>
 
                                                 <div className="DAT_ProjectDataDropMobile_Item"
@@ -411,7 +419,7 @@ function Project(props) {
                                                     onClick={(e) => handleView(e)}
                                                 >
                                                     {dataLang.formatMessage({ id: "device" })}
-                                                </div>
+                                                </div> */}
                                             </>
                                         );
                                 }

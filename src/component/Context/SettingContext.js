@@ -10,17 +10,13 @@ export const SettingContextProvider =({children})=>{
 
     return (
         <SettingContext.Provider value = {{
-                whatdevice: state.whatdevice,
+ 
                 screen: state.screen,
-                listdevice: state.listdevice,
-                listdevice2: state.listdevice2,
                 currentID:state.currentID,
                 currentSN:state.currentSN,
                 currentName:state.currentName,
-                currentState:state.currentState,
                 lasttab:state.lasttab,
                 defaulttab:state.defaulttab,
-                sttdata:state.sttdata,
                 settingDispatch
             }}
         >

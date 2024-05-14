@@ -1,5 +1,9 @@
 @use "../../index.scss" as COLOR;
 
+
+
+
+
 .DAT_ProjectHeader {
     width: 98%;
     margin: auto;
@@ -1719,6 +1723,9 @@
     &_Header {
         background-color: COLOR.$Primary-color;
         display: flex;
+        align-items: flex-start;
+        padding: 4px;
+        box-sizing: border-box;
         flex-wrap: wrap;
         overflow: hidden;
         box-shadow: 3px 3px 10px rgba(193, 193, 193, 0.5);
@@ -1731,25 +1738,26 @@
             &_Top {
                 display: flex;
                 align-items: center;
-                gap: 4px;
+                gap: 10px;
 
                 & img {
-                    width: 35px;
-                    height: 35px;
+                    width: 50px;
+                    height: 50px;
                     border-radius: 50%;
                     // cursor: pointer;
                 }
 
                 &_Content {
-                    display: flex;
-                    flex-direction: column;
+                    // display: flex;
+                    // flex-direction: column;
 
                     &_Name {
                         display: flex;
                         align-items: center;
                         gap: 10px;
-                        font-size: 12px;
+                        font-size: 21px;
                         color: white;
+                        margin-bottom: 5px;
                     }
 
                     &_Addr {
@@ -4040,6 +4048,7 @@
                         // position: absolute;
                         // bottom: 0;
                         // right: 0;
+                        border-top: solid 1px rgb(199, 199, 199);
                         display: flex;
                         align-items: center;
                         justify-content: flex-end;
@@ -4061,100 +4070,175 @@
 }
 
 .DAT_ScreenMobile {
-    width: 100%;
-    height: calc(100vh - 190px);
+    width: 99%;
+    margin: auto;
+    height: calc(100vh - 160px);
     background-color: rgba(240, 242, 245, 1);
     // display: flex;
     // gap: 10px;
-    padding: 0px 10px 10px 10px;
+    // padding: 0px 10px 10px 10px;
     box-sizing: border-box;
-    margin-top: 10px;
+    // margin-top: 10px;
 
     &_Tit {
-        height: 52px;
-        font-size: 14px;
+        height: 60px;
+        font-size: 18px;
+        padding: 10px;
+        box-sizing: border-box;
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: space-between;
         gap: 10px;
-        background-color: rgba(95, 95, 98, 0.2);
+        background-color: rgba(255, 255, 255);
+        border-bottom: solid 1px rgb(199, 199, 199);
+        &_icon{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         // color: white;
         // border-top-left-radius: 5px;
         // border-top-right-radius: 5px;
     }
 
     &_main {
-        background-color: white;
+        overflow-y: scroll;
+        height: calc(100vh - 220px);
+       
+        background-color: rgb(241, 241, 241);
         box-shadow:
             2px 2px 5px rgba(128, 128, 128, 0.1),
             -2px -2px 5px rgba(128, 128, 128, 0.1);
         // border-radius: 5px;
         // border: solid 1px rgb(199, 199, 199);
+        &_item{
+            border-radius: 7px;
+            background-color: white;
+            margin-top: 10px;
 
-        &_item {
-            // border-radius: 5px;
-            display: flex;
-            gap: 25px;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px;
-            border-top: solid 1px rgb(199, 199, 199);
-            background-color: rgb(250, 250, 250);
-
-            &_content {
-                cursor: pointer;
-
-                &_name {
-                    font-size: 17px;
-                    font-family: Montserrat-SemiBold;
+            border: solid 1px rgb(199, 199, 199);
+           
+            &_top{
+                padding: 10px;
+                box-sizing: border-box;
+                display: flex;
+                align-items: flex-start;
+                gap: 10px;
+                
+           
+                &_avatar{
+                    width: 80px;
+                    height: 80px;
+                    border-radius: 10px;
+                    background-color: #0b1967;
                     display: flex;
                     align-items: center;
-                    text-align: justify;
-                    min-width: 100px;
-                    max-width: 120px;
+                    justify-content: center;
+                    color: white;
+                    font-size: 20px
 
-                    &_content {
-                        max-width: 100px;
-                        white-space: nowrap;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                    }
-
-                    &_state {
-                        display: flex;
-                        align-items: center;
-                        margin-left: 4px;
-                    }
                 }
 
-                &_sn {
-                    color: gray;
-                    font-size: 12px;
+                &_content{
+                        &_name{
+                            font-size: 16px;
+                            // font-family: Montserrat-SemiBold;
+                            margin-bottom: 10px
+                        }
+                        &_sn{
+                            font-size: 14px;
+                            color: gray;
+                        }
+                        &_state{
+                            font-size: 14px;
+                            color: gray;
+                            display: flex;
+                            align-items: center;
+                            gap: 20px;
+                            &_status{
+                                display: flex;
+                                align-items: center;
+                                gap: 5px;
+                            }
+                        }
                 }
             }
-
-            &_des {
-                font-size: 15px;
-                color: gray;
-                text-align: justify;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-
-            &:hover {
-                background-color: rgb(230, 230, 230);
+            &_bottom{
+                border-top: solid 1px rgb(199, 199, 199);
+                padding: 10px;
+                box-sizing: border-box;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                gap : 10px;
             }
         }
+        // &_item {
+        //     // border-radius: 5px;
+        //     display: flex;
+        //     gap: 25px;
+        //     align-items: center;
+        //     justify-content: space-between;
+        //     padding: 10px;
+        //     border-top: solid 1px rgb(199, 199, 199);
+        //     background-color: rgb(250, 250, 250);
+
+        //     &_content {
+        //         cursor: pointer;
+
+        //         &_name {
+        //             font-size: 17px;
+        //             font-family: Montserrat-SemiBold;
+        //             display: flex;
+        //             align-items: center;
+        //             text-align: justify;
+        //             min-width: 100px;
+        //             max-width: 120px;
+
+        //             &_content {
+        //                 max-width: 100px;
+        //                 white-space: nowrap;
+        //                 overflow: hidden;
+        //                 text-overflow: ellipsis;
+        //             }
+
+        //             &_state {
+        //                 display: flex;
+        //                 align-items: center;
+        //                 margin-left: 4px;
+        //             }
+        //         }
+
+        //         &_sn {
+        //             color: gray;
+        //             font-size: 12px;
+        //         }
+        //     }
+
+        //     &_des {
+        //         font-size: 15px;
+        //         color: gray;
+        //         text-align: justify;
+        //         white-space: nowrap;
+        //         overflow: hidden;
+        //         text-overflow: ellipsis;
+        //     }
+
+        //     &:hover {
+        //         background-color: rgb(230, 230, 230);
+        //     }
+        // }
     }
 
     &_sub {
-        flex: 4;
-        padding: 10px;
+        // flex: 4;
+        // padding: 10px;
+        
         box-sizing: border-box;
         // position: relative;
         // border-radius: 5px;
-        background-color: white;
+        background-color: rgb(241, 241, 241);
+    
         // box-shadow:
         //     2px 2px 5px rgba(128, 128, 128, 0.1),
         //     -2px -2px 5px rgba(128, 128, 128, 0.1);
@@ -4168,15 +4252,16 @@
             /* Safari and Chrome */
         }
 
-        height: calc(100vh - 260px);
+        height: calc(100vh - 210px);
 
         &_list {
             // display: grid;
             // gap: 10px;
             // grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-
+            padding-top: 10px;
 
             &_item {
+                background-color: white;
                 border: solid 1px rgb(199, 199, 199);
                 border-radius: 5px;
                 margin-bottom: 10px;
@@ -4184,7 +4269,7 @@
                 // width: 200px;
 
                 position: relative;
-                background-color: rgb(250, 250, 250);
+                background-color: rgb(255, 255, 255);
 
                 &_content {
                     padding: 4px;
@@ -4194,6 +4279,7 @@
                     align-items: flex-start;
                     justify-content: flex-start;
                     gap: 8px;
+                    height: 80px;
                     overflow: hidden;
 
                     &_name {
@@ -4203,7 +4289,7 @@
                         display: flex;
                         align-items: flex-start;
                         cursor: pointer;
-                        font-family: Montserrat-SemiBold;
+                        // font-family: Montserrat-SemiBold;
                         overflow: hidden;
                         gap: 8px;
 
@@ -4228,6 +4314,7 @@
                     // position: absolute;
                     // bottom: 0;
                     // right: 0;
+                    border-top: solid 1px rgb(199, 199, 199);
                     display: flex;
                     align-items: center;
                     justify-content: flex-end;
@@ -4246,6 +4333,7 @@
         }
     }
 }
+
 
 .DAT_Toollist {
     position: fixed;
@@ -4275,6 +4363,7 @@
         height: 200px;
     }
 }
+
 
 .DAT_MainInfo {
     margin: 10px;
@@ -4483,10 +4572,10 @@
             // width: calc(50% - 27px);
             height: 100px;
             background-color: #fff;
-            border: 2px solid rgba(128, 128, 128, 0.2);
-            box-shadow:
-                2px 2px 5px rgba(128, 128, 128, 0.1),
-                -2px -2px 5px rgba(128, 128, 128, 0.1);
+            border: 1px solid rgba(128, 128, 128, 0.2);
+            // box-shadow:
+            //     2px 2px 5px rgba(128, 128, 128, 0.1),
+            //     -2px -2px 5px rgba(128, 128, 128, 0.1);
             border-radius: 5px;
             cursor: pointer;
             overflow: hidden;
@@ -4538,10 +4627,10 @@
             height: 300px;
             background-color: #ffffff;
             border-radius: 5px;
-            border: 2px solid rgba(128, 128, 128, 0.2);
-            box-shadow:
-                2px 2px 5px rgba(128, 128, 128, 0.1),
-                -2px -2px 5px rgba(128, 128, 128, 0.1);
+            border: 1px solid rgba(128, 128, 128, 0.2);
+            // box-shadow:
+            //     2px 2px 5px rgba(128, 128, 128, 0.1),
+            //     -2px -2px 5px rgba(128, 128, 128, 0.1);
             // white-space: nowrap;
             // overflow: hidden;
             // text-overflow: ellipsis;
@@ -4588,10 +4677,10 @@
         width: 100%;
         // height: 400px;
         background-color: #ffffff;
-        border: 2px solid rgba(128, 128, 128, 0.2);
-        box-shadow:
-            2px 2px 5px rgba(128, 128, 128, 0.1),
-            -2px -2px 5px rgba(128, 128, 128, 0.1);
+        border: 1px solid rgba(128, 128, 128, 0.2);
+        // box-shadow:
+        //     2px 2px 5px rgba(128, 128, 128, 0.1),
+        //     -2px -2px 5px rgba(128, 128, 128, 0.1);
         border-radius: 5px;
 
         &_Head {
@@ -4642,109 +4731,6 @@
     }
 }
 
-.DAT_Filter {
-    background-color: rgb(128, 128, 128, 0.5);
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    z-index: 26;
-    top: 0;
-    left: 0;
-
-    &_Dropdown {
-        background-color: white;
-        border-top: 1px solid #b8b8b8;
-        padding: 16px;
-
-        &_Item {
-            padding: 16px;
-            font-size: 15px;
-
-            // color: hwb(0 33% 67%);
-            &_Table {
-                border-top: solid 1px #b8b8b8;
-                border-left: solid 1px #b8b8b8;
-                border-right: solid 1px #b8b8b8;
-
-                & tr:first-child {
-                    border-bottom: solid 1px #b8b8b8;
-                }
-            }
-
-            &_Table {
-                border-collapse: collapse;
-                min-width: 100%;
-
-                &_Tr {
-                    display: flex;
-                    align-items: center;
-
-                    &_Th {
-                        padding: 12px;
-                        background-color: #d4d4d4;
-                        min-width: 200px;
-                        min-height: 40px;
-                        text-align: left;
-                        display: flex;
-                        align-items: center;
-                    }
-
-                    &_Td {
-                        padding: 0px 16px;
-                        display: flex;
-                        justify-content: space-between;
-
-                        &_Checkbox {
-                            display: flex;
-                            align-items: center;
-                            justify-content: space-between;
-                            padding-left: 10px;
-                            height: 40px;
-                            // min-width: 120px;
-
-                            & input {
-                                outline: none;
-                                padding: 4px;
-                                border: solid 1px rgb(199, 199, 199);
-                                border-radius: 5px;
-                                box-sizing: border-box;
-                                -webkit-box-sizing: border-box;
-                                -moz-box-sizing: border-box;
-                            }
-
-                            & input::-webkit-outer-spin-button,
-                            input::-webkit-inner-spin-button {
-                                -webkit-appearance: none;
-                                margin: 0;
-                            }
-
-                            & label {
-                                padding-left: 10px;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        &_Bot {
-            padding: 16px;
-            display: flex;
-            gap: 16px;
-
-            & button {
-                padding: 5px 15px;
-                border-radius: 4px;
-                cursor: pointer;
-                border: none;
-                box-shadow: 0 0 3px 3px rgba(193, 193, 193, 0.5);
-                width: 100px;
-                height: 35px;
-                font-family: Montserrat-SemiBold;
-            }
-        }
-    }
-}
 
 @media (max-width: 900px) {
     // .DAT_ProjectHeader {

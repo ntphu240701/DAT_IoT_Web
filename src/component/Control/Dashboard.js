@@ -96,25 +96,9 @@ export default function Dashboard(props) {
       ></rect>
     );
   };
-  useEffect(() => {
-    console.log("Dashboard", props.data);
-  }, []);
 
-  useEffect(() => {
-    const getGateway = async () => {
-      let res = await callApi("post", host.DATA + "/getLogger", {
-        plantid: props.data.plantid_,
-      });
-      if (res.status) {
-        // console.log(res.data);
-        setDevicedata(res.data);
-        const t = res.data.filter((item) => item.state_ === 0).length;
-        console.log(t);
-      }
-    };
 
-    getGateway();
-  }, []);
+
 
   const defaultProps = {
     center: {
@@ -136,7 +120,7 @@ export default function Dashboard(props) {
     const { Map } = await loader.importLibrary("maps");
 
     let map = new Map(document.getElementById("map"), defaultProps);
-    console.log(data.lat_);
+    // console.log(data.lat_);
 
     const marker = {
       lat: parseFloat(data.lat_),
@@ -157,7 +141,27 @@ export default function Dashboard(props) {
   };
 
   useEffect(() => {
-    initMap(props.data);
+  
+    if(props.data){
+      initMap(props.data);
+
+      const getGateway = async () => {
+        let res = await callApi("post", host.DATA + "/getLogger", {
+          plantid: props.data.plantid_,
+        });
+        if (res.status) {
+          console.log(res.data);
+          setDevicedata(res.data);
+        }
+      };
+  
+      getGateway();
+
+
+    }
+
+
+
   }, [props.data]);
 
   return (

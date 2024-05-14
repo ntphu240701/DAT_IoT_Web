@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./ErrorSetting.scss";
 
-import { Empty } from "../Project/Project";
+
 import { useIntl } from "react-intl";
 import DataTable from "react-data-table-component";
 import CreateErrSetting from "./CreateErrSetting";
@@ -19,6 +19,7 @@ import { host } from "../Lang/Contant";
 import { isMobile } from "../Navigation/Navigation";
 import PopupState, { bindMenu, bindToggle } from "material-ui-popup-state";
 import { Menu, MenuItem } from "@mui/material";
+import { Empty } from "../../App";
 
 export const lowercasedata = (str) => {
   return str

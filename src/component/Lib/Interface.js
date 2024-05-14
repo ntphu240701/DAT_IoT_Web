@@ -32,15 +32,17 @@ import Tablepro from "./Tablepro";
 import View32bit from "./View32bit";
 
 
-import { Token, socket } from '../../App'
+import { Token, ruleInfor, socket } from '../../App'
 import { TbSettingsCog } from "react-icons/tb";
 import { signal } from "@preact/signals-react";
 import { ImConnection } from "react-icons/im";
+import { callApi } from "../Api/Api";
+import { isBrowser } from "react-device-detect";
 const show = signal(true)
 
 export default function Interface(props) {
     const type = useSelector((state) => state.admin.type)
-    
+
     //const { token } = useContext(EnvContext);
     const intervalIDRef = useReducer(null);
     const [invt, setInvt] = useState({})
@@ -89,12 +91,24 @@ export default function Interface(props) {
 
 
     useEffect(function () {
-        console.log(props.sn,Token.value.token)
+        // console.log(props.sn, Token.value.token)
         var loaddata = async () => {
             const res = await cloud('{"deviceCode":"' + props.sn + '"}', Token.value.token);
             // console.log(res)
             if (res.ret === 0) {
                 setInvt(res.data)
+                // console.log(res.data.enabled)
+
+
+                let res_ = await callApi("post", host.DATA + "/updateStateLogger", {
+                    sn: props.sn,
+                    state: res.data.enabled
+                })
+
+                console.log(res_)
+
+
+
                 setStep(1)
             } else {
                 //alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_42" }), show: 'block' }))
@@ -215,20 +229,20 @@ export default function Interface(props) {
 
     }
 
-    const visdata = (type, deviceid, tab, id, w, h) => {
+    const visdata = (type, deviceid, sn, tab, id, w, h) => {
 
 
         switch (type) {
             case 'circle':
                 return <Circle deviceid={deviceid} tab={tab} id={id} data={invt} setting={setting[tab][id]} width={w} height={h} />
             case 'lineChart':
-                return <LineChart deviceid={deviceid} tab={tab} id={id} data={invt} setting={setting[tab][id]} width={w} height={h} />
+                return <LineChart deviceid={deviceid} sn={sn} tab={tab} id={id} data={invt} setting={setting[tab][id]} width={w} height={h} />
             case 'switch':
-                return <Switch deviceid={deviceid} tab={tab} id={id} data={invt} setting={setting[tab]} width={w} height={h} />
+                return <Switch deviceid={deviceid} sn={sn} tab={tab} id={id} data={invt} setting={setting[tab]} width={w} height={h} />
             case 'switchtoggle':
-                return <SwitchToggle deviceid={deviceid} tab={tab} id={id} data={invt} setting={setting[tab]} width={w} height={h} />
+                return <SwitchToggle deviceid={deviceid} sn={sn} tab={tab} id={id} data={invt} setting={setting[tab]} width={w} height={h} />
             case 'input':
-                return <Input deviceid={deviceid} tab={tab} id={id} data={invt} setting={setting[tab]} width={w} height={h} />
+                return <Input deviceid={deviceid} sn={sn} tab={tab} id={id} data={invt} setting={setting[tab]} width={w} height={h} />
             case 'text':
                 return <Note deviceid={deviceid} tab={tab} id={id} data={invt} setting={setting[tab][id]} width={w} height={h} />
             case 'view':
@@ -236,7 +250,7 @@ export default function Interface(props) {
             case 'view2':
                 return <Valuev2 deviceid={deviceid} tab={tab} id={id} data={invt} setting={setting[tab][id]} width={w} height={h} />
             case 'slider':
-                return <Dimmer deviceid={deviceid} tab={tab} id={id} data={invt} setting={setting[tab]} width={w} height={h} />
+                return <Dimmer deviceid={deviceid} sn={sn} tab={tab} id={id} data={invt} setting={setting[tab]} width={w} height={h} />
             case 'elev':
                 return <Elevroom deviceid={deviceid} tab={tab} id={id} data={invt} setting={setting[tab][id]} width={w} height={h} />
             case 'status':
@@ -248,7 +262,7 @@ export default function Interface(props) {
             case 'icon':
                 return <Icon deviceid={deviceid} tab={tab} id={id} data={invt} setting={setting[tab][id]} width={w} height={h} />
             case 'timer':
-                return <Timer deviceid={deviceid} tab={tab} id={id} data={invt} setting={setting[tab][id]} width={w} height={h} />
+                return <Timer deviceid={deviceid} sn={sn} tab={tab} id={id} data={invt} setting={setting[tab][id]} width={w} height={h} />
             case 'gauge':
                 return <Gauge deviceid={deviceid} tab={tab} id={id} data={invt} setting={setting[tab][id]} width={w} height={h} />
             case 'picture':
@@ -393,16 +407,24 @@ export default function Interface(props) {
 
                 {show.value
                     ? <>
+                        {/* {isBrowser
+                            ?
+                            ruleInfor.value.setting.screen.modify
+                                ? <div className="DAT_ToolConfig" onClick={(event) => { handleConfig(event) }} style={{ top: "10px", right: "10px" }}>
+                                    <TbSettingsCog size={20} />
+                                </div>
+                                : <></>
+                            : <></>
+                        } */}
 
-                        <div className="DAT_ToolConfig" onClick={(event) => { handleConfig(event) }} style={{ top: "10px", right: "10px" }}>
-                            <TbSettingsCog size={20} />
-                        </div>
+                        
+
 
                         <div className="DAT_Tool_Connect" style={{ bottom: "10px", left: "10px" }} >
                             {(invt !== undefined)
                                 ? (invt['enabled'] === '1')
-                                    ?<ImConnection size={20} color="green" />
-                                    :<ImConnection size={20} color="gray"/>
+                                    ? <ImConnection size={20} color="green" />
+                                    : <ImConnection size={20} color="gray" />
                                 : <img alt="" style={{ width: "20px" }} src="/lib/offline_state.png"></img>
                             }
                         </div>
@@ -427,9 +449,14 @@ export default function Interface(props) {
                         <div className="DAT_Tool_SVG-content" id="SVGCONTAINNER">
                             <TransformComponent >
                                 <svg id="SVGVIEW" className="DAT_Tool_SVG-content-view">
+
                                     {visual[props.tab].map((data, index) => (
-                                        <foreignObject key={data.id} x={data.x} y={data.y} width={data.w} height={data.h} style={{ padding: "5px", boxSizing: "border-box", position: "relative", zIndex: "0" }}>
-                                            {visdata(data.type, props.id, props.tab, data.id, data.w-10, data.h-10)}
+                                        <foreignObject key={data.id} x={data.x} y={data.y} width={data.w} height={data.h}
+                                            style={{ border: "solid 1px rgb(219, 219, 219,0)" }}
+                                        >
+                                            <div className="DAT_Edit">
+                                                {visdata(data.type, props.id, props.sn, props.tab, data.id, data.w, data.h-2)}
+                                            </div>
                                         </foreignObject>
                                     ))}
                                 </svg>

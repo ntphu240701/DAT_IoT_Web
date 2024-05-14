@@ -8,7 +8,7 @@ import AddUsers from "./AddUsers";
 import ConfirmDeleteGroup from "./ConfirmDeleteGroup";
 import EditGroup from "./EditGroup";
 import DataTable from "react-data-table-component";
-import { Empty } from "../Project/Project";
+import { Empty } from "../../App";
 import { useIntl } from "react-intl";
 import { isMobile } from "../Navigation/Navigation";
 import { callApi } from "../Api/Api";
@@ -26,6 +26,7 @@ import { IoMdMore } from "react-icons/io";
 import { IoAddOutline, IoTrashOutline } from "react-icons/io5";
 import { PiUsersFour } from "react-icons/pi";
 import { CiSearch } from "react-icons/ci";
+import { ruleInfor } from "../../App";
 
 //DATA TEMP
 export const group = signal([]);
@@ -372,29 +373,29 @@ export default function GroupRole(props) {
                                 </div>
 
                                 <div className="DAT_ProjectMobile_Content_Bottom_Right">
-                                  {/* {ruleInfor.value.setting.project.modify ===
-                                  true ? (
-                                    <div
-                                      className="DAT_ProjectMobile_Content_Bottom_Right_Item"
-                                      id={item.id_}
-                                      // onClick={(e) => handleEdit(e)}
-                                    >
-                                      <FiEdit size={14} />
-                                    </div>
-                                  ) : (
-                                    <div></div>
-                                  )} */}
-                                  {item.type_ !== "master" ? (
-                                    <div
-                                      className="DAT_ProjectMobile_Content_Bottom_Right_Item"
-                                      id={item.id_}
-                                      onClick={(e) => handleDeleteUser(e)}
-                                    >
-                                      <IoTrashOutline size={16} />
-                                    </div>
-                                  ) : (
-                                    <div></div>
-                                  )}
+                                  {item.type_ !== "master" 
+                                    ?ruleInfor.value.setting.rule.modify
+                                      ?<div
+                                        className="DAT_ProjectMobile_Content_Bottom_Right_Item"
+                                        id={item.id_}
+                                        onClick={(e) => handleEdit(e)}
+                                      >
+                                        <FiEdit size={14} />
+                                      </div>
+                                      : <></>
+                                    : <></>
+                                  }
+                                  {item.type_ !== "master"  
+                                    ?ruleInfor.value.setting.rule.modify
+                                      ? <div
+                                        className="DAT_ProjectMobile_Content_Bottom_Right_Item"
+                                        id={item.id_}
+                                        onClick={(e) => handleDeleteUser(e)}
+                                      >
+                                        <IoTrashOutline size={16} />
+                                      </div>
+                                      : <></>
+                                  :<></>}
                                 </div>
                               </div>
                             </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import './Log.scss';
 
-import { Empty } from '../Project/Project';
+import { Empty } from "../../App";
 import { useIntl } from 'react-intl';
 import DataTable from "react-data-table-component";
 

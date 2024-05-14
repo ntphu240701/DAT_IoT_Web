@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Role.scss";
 
 import DataTable from "react-data-table-component";
-import { Empty } from "../Project/Project";
+import { Empty } from "../../App";
 import { signal } from "@preact/signals-react";
 import CreateRole from "./CreateRole";
 import RolePopup from "./RolePopup";

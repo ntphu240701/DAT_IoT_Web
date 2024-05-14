@@ -2,17 +2,17 @@ import { current } from "@reduxjs/toolkit";
 
 /* eslint eqeqeq: 0 */
 const INITIAL_STATE = {
-    whatdevice: '',
-    listdevice: [],
-    listdevice2: [],
+    // whatdevice: '',
+    // listdevice: [],
+    // listdevice2: [],
     screen: [],
     currentID: '',
     currentSN: '',
     currentName: '',
-    currentState: 0,
+    // currentState: 0,
     lasttab: 0,
     defaulttab:0,
-    sttdata: false,
+    // sttdata: false,
 
 };
 
@@ -22,16 +22,11 @@ const SettingReducer = (state, action) => {
 
         case "RESET":
             return {
-                whatdevice: '',
-                listdevice2: [],
-                listdevice: [],
                 screen: [],
                 currentID: '',
                 currentSN: '',
                 currentName: '',
-                currentState: 0,
                 lasttab: 0,
-                sttdata: false,
 
             };
 
@@ -39,13 +34,6 @@ const SettingReducer = (state, action) => {
             return {
                 ...state,
                 currentState: action.payload
-
-            };
-
-        case "LOAD_STATE":
-            return {
-                ...state,
-                sttdata: action.payload
 
             };
 
@@ -69,7 +57,7 @@ const SettingReducer = (state, action) => {
                 currentSN: action.payload.currentSN,
                 currentName: action.payload.currentName,
                 screen: action.payload.screen,
-                // sttdata: action.payload.sttdata
+  
 
             };
 
@@ -91,33 +79,6 @@ const SettingReducer = (state, action) => {
                 ...state,
                 screen: action.payload
             }
-        case "LOAD_LISTDEVICE":
-            return {
-                ...state,
-                listdevice: action.payload
-
-            };
-        case "LOAD_LISTDEVICE2":
-            return {
-                ...state,
-                listdevice2: action.payload
-
-            };
-        case "WHAT_DEVICE":
-
-
-            return {
-                ...state,
-                whatdevice: action.payload,
-            };
-
-        case "RESET_WHAT_DEVICE":
-
-
-            return {
-                ...state,
-                whatdevice: '',
-            };
 
         case "REMOVE_CURRENTID":
 

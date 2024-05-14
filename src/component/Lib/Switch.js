@@ -9,6 +9,9 @@ import { useIntl } from "react-intl";
 import axios from "axios";
 import { host } from "../Lang/Contant";
 import { useSelector } from "react-redux";
+import { Token } from "../../App";
+import { callApi } from "../Api/Api";
+import { alertDispatch } from "../Alert/Alert";
 
 
 
@@ -105,19 +108,17 @@ export default function Switch(props) {
 
         
         
-        const res = await remotecloud('{"deviceCode": "' + switchArray[0] + '","address":"' + setting[switchArray[2]].register + '","value":"' + parseInt(eval(setting[switchArray[2]].cal)) + '"}', token);
+        const res = await remotecloud('{"deviceCode": "' + props.sn + '","address":"' + setting[switchArray[2]].register + '","value":"' + parseInt(eval(setting[switchArray[2]].cal)) + '"}', Token.value.token);
 
         console.log(res)
         if(res.ret === 0){
             // alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_5" }), show: 'block' }))
-            axios.post(host.DEVICE + "/setRegisterDevice", { id: switchArray[0], data: JSON.stringify(setting), tab: switchArray[1] }, { secure: true, reconnect: true }).then(
-                function (res) {
-                    if (res.data) {
-                        console.log("save dat true")
-                    } else {
-                        console.log("save dat false")
-                    }
-                })
+            let res = await callApi('post', host.DATA + "/updateRegisterScreen", { id: switchArray[0], setting: setting, tab: switchArray[1] })
+            // console.log(res)
+            if (res.status) {
+                // console.log("save dat true")
+                alertDispatch(dataLang.formatMessage({ id: "alert_6" }))
+            }
         }else{
             // alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_3" }), show: 'block' }))
         }

@@ -71,11 +71,11 @@ export default function EditProject(props) {
           phone: projectData.value.phone,
           partnerid: userInfor.value.partnerid,
           usrtype: userInfor.value.type,
-          img: projectData.value?.img
+          img: projectData.value.img
             ? projectData.value.img
-            : "/dat_picture/solar_panel.png",
+            : `/dat_picture/${props.bu}/.jpg`,
         });
- 
+        console.log(d);
         if (d.status === true) {
           alertDispatch(dataLang.formatMessage({ id: "alert_30" }));
          
@@ -108,6 +108,7 @@ export default function EditProject(props) {
   };
 
   useEffect(() => {
+    console.log(props.data)
     projectData.value = {
       name:props.data.name_,
       phone:props.data.phone_,
@@ -122,7 +123,26 @@ export default function EditProject(props) {
       plantid:props.data.plantid_,
       img:props.data.img
     };
-  },[])
+
+    return  () => {
+      projectData.value = {
+        name:"",
+        phone:"",
+        addr:"",
+        company:"",
+        contact:"",
+        createdate:"",
+        lastupdate:"",
+        lat:"16",
+        long:"106",
+        type:"",
+        plantid:"",
+        img:""
+      };
+    }
+
+    
+  },[props.data])
 
   return (
     <div className="DAT_EditProject">
@@ -162,6 +182,7 @@ export default function EditProject(props) {
       />
 
       <ImgInfo
+        bu={props.bu}
         tit={dataLang.formatMessage({ id: "imgInfo" })}
         height={isMobile ? "260px" : "260px"}
       />
@@ -284,7 +305,7 @@ const BasicInfo = (props) => {
       parseFloat(projectData.value.lat),
       parseFloat(projectData.value.long)
     );
-  }, []);
+  }, [projectData.value]);
 
   const handleMap = (e) => {
     const addr = document.getElementById("addr");
@@ -539,11 +560,13 @@ const OwnerInfo = (props) => {
 const ImgInfo = (props) => {
   const dataLang = useIntl();
   const [state, setState] = useState(true);
-  const [ava, setAva] = useState(
-    projectData.value.img
-      ? projectData.value.img
-      : "/dat_picture/solar_panel.png"
-  );
+  const [ava, setAva] = useState( `/dat_picture/${props.bu}.jpg`);
+
+  useEffect(() => {
+      setAva(projectData.value.img);
+  },[projectData.value])
+
+
   const resizeFilAvatar = (file) =>
     new Promise((resolve) => {
       Resizer.imageFileResizer(

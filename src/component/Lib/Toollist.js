@@ -11,7 +11,7 @@ import { io } from "socket.io-client";
 import { host } from "../Lang/Contant";
 import { signal } from "@preact/signals-react";
 import { PacmanLoader } from "react-spinners";
-import { IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowDown, IoIosCloseCircle } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import { FaFileExport } from "react-icons/fa6";
 import { BiSolidMessageError } from "react-icons/bi";
@@ -22,13 +22,16 @@ import axios from "axios";
 // import { AlertContext } from "../Context/AlertContext";
 import { useIntl } from "react-intl";
 // import { action } from "../Control/Action";
-import { view } from "../../App";
-import { useMobileOrientation } from 'react-device-detect';
+import { ruleInfor, view } from "../../App";
+import { isBrowser, useMobileOrientation } from 'react-device-detect';
 import { IoPhoneLandscapeOutline } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
 import { plantState } from "../Control/Signal";
 import { callApi } from "../Api/Api";
 import { alertDispatch } from "../Alert/Alert";
+import { toolState } from "../Home/Home";
+import { LuContact2, LuMailWarning } from "react-icons/lu";
+import { PiExport } from "react-icons/pi";
 const length = signal(0);
 export const _tab = signal();
 
@@ -45,7 +48,17 @@ export default function Toollist(props) {
     //const user = useSelector((state) => state.admin.user)
     const { isLandscape } = useMobileOrientation()
 
+    const popup_state = {
+        pre: { transform: "rotate(0deg)", transition: "0.5s", color: "rgba(11, 25, 103)" },
+        new: { transform: "rotate(90deg)", transition: "0.5s", color: "rgba(11, 25, 103)" }
+    }
 
+    const handlePopup = (state) => {
+        const popup = document.getElementById("Popup-")
+        popup.style.transform = popup_state[state].transform;
+        popup.style.transition = popup_state[state].transition;
+        popup.style.color = popup_state[state].color;
+    }
 
 
 
@@ -96,7 +109,13 @@ export default function Toollist(props) {
         toolDispatch({ type: "RESET_TOOL", payload: [] })
         settingDispatch({ type: "REMOVE_CURRENTID", payload: '' })
 
-        plantState.value = "info"
+        if (toolState.value) {
+            toolState.value = false
+            plantState.value = "default"
+        } else {
+            plantState.value = "info"
+        }
+
     }
 
     const handleAdd = async (event) => {
@@ -131,17 +150,106 @@ export default function Toollist(props) {
 
 
 
+            {isBrowser
+
+                ? (length.value > 5)
+                    ?
+                    <div className="DAT_Tool_Tab_Mobile">
 
 
-            {(length.value > 5)
-                ?
-                <div className="DAT_Tool_Tab_Mobile">
+                        <button className="DAT_Tool_Tab_Mobile_content" onClick={() => setStatetab(!statetab)} > <span> {name[tab]}</span>  {(statetab) ? <IoIosArrowDown /> : <IoIosArrowForward />} </button>
+                        {(statetab)
+                            ? <div className="DAT_Tool_Tab_Mobile_list" >
+                                {ruleInfor.value.setting.screen.add
+                                    ? <div className="DAT_Tool_Tab_Mobile_list_item" onClick={() => handleAdd()} >Thêm màn hình</div>
+                                    : <></>}
+                                {Object.keys(name).map((keyName, i) => {
+                                    return (
+                                        <div className="DAT_Tool_Tab_Mobile_list_item" key={i} id={keyName} onClick={(e) => handleTabMobile(e)} >{i + 1}: {name[keyName]}</div>
+                                    )
+                                })}
 
+
+
+                            </div>
+                            : <></>
+                        }
+                        {props.bu === 'energy'
+                            ?
+                            <div className="DAT_Tool_Tab-warn">
+
+                                <Link to="/Log" style={{ textDecoration: "none" }} >
+                                    <div className="DAT_Tool_Tab-warn-item"  ><LuMailWarning size={20} style={{ color: "gray" }} /></div>
+                                </Link>
+                                <Link to="/Report" style={{ textDecoration: "none" }} >
+                                    <div className="DAT_Tool_Tab-warn-item"  ><PiExport size={20} style={{ color: "gray" }} /></div>
+                                </Link>
+                                <Link to="/Contact" style={{ textDecoration: "none" }} >
+                                    <div className="DAT_Tool_Tab-warn-item"  ><LuContact2 size={20} style={{ color: "gray" }} /></div>
+                                </Link>
+
+                            </div>
+                            : <></>}
+                        <div className="DAT_Tool_Tab-close"
+                            onClick={handleTabclose}
+                            id="Popup-"
+                            onMouseEnter={(e) => handlePopup("new")}
+                            onMouseLeave={(e) => handlePopup("pre")}
+                        >
+                            <IoMdClose size={20} />
+
+
+                        </div>
+
+
+                    </div>
+                    :
+                    <div className="DAT_Tool_Tab">
+                        {Object.keys(name).map((keyName, i) => {
+                            return (
+                                (keyName === tab)
+                                    ? <div key={i} className="DAT_Tool_Tab_main">
+                                        <p className="DAT_Tool_Tab_main_left"></p>
+                                        <span className="DAT_Tool_Tab_main_content1" id={keyName} style={{ backgroundColor: "White", color: "black", borderRadius: "10px 10px 0 0" }} onClick={(e) => handleTab(e)}>{name[keyName]}</span>
+                                        <p className="DAT_Tool_Tab_main_right"></p>
+                                    </div>
+                                    : <span className="DAT_Tool_Tab_main_content2" key={i} id={keyName} style={{ backgroundColor: "#dadada" }} onClick={(e) => handleTab(e)}>{name[keyName]}</span>
+                            )
+
+                        })}
+                        {ruleInfor.value.setting.screen.add
+                            ? <span className="DAT_Tool_Tab_main_content2" style={{ backgroundColor: "#dadada" }} onClick={() => handleAdd()} >+</span>
+                            : <></>}
+                        {props.bu === 'energy'
+                            ?
+                            <div className="DAT_Tool_Tab-warn">
+
+                                <Link to="/Log" style={{ textDecoration: "none" }} >
+                                    <div className="DAT_Tool_Tab-warn-item"  ><LuMailWarning size={20} style={{ color: "gray" }} /></div>
+                                </Link>
+                                <Link to="/Report" style={{ textDecoration: "none" }} >
+                                    <div className="DAT_Tool_Tab-warn-item"  ><PiExport size={20} style={{ color: "gray" }} /></div>
+                                </Link>
+                                <Link to="/Contact" style={{ textDecoration: "none" }} >
+                                    <div className="DAT_Tool_Tab-warn-item"  ><LuContact2 size={20} style={{ color: "gray" }} /></div>
+                                </Link>
+
+                            </div>
+                            : <></>}
+
+                        <div className="DAT_Tool_Tab-close"
+                            onClick={handleTabclose}
+                            id="Popup-"
+                            onMouseEnter={(e) => handlePopup("new")}
+                            onMouseLeave={(e) => handlePopup("pre")}
+                        ><IoMdClose size={20} /></div>
+                    </div>
+                : <div className="DAT_Tool_Tab_Mobile">
 
                     <button className="DAT_Tool_Tab_Mobile_content" onClick={() => setStatetab(!statetab)} > <span> {name[tab]}</span>  {(statetab) ? <IoIosArrowDown /> : <IoIosArrowForward />} </button>
                     {(statetab)
                         ? <div className="DAT_Tool_Tab_Mobile_list" >
-                            <div className="DAT_Tool_Tab_Mobile_list_item" onClick={() => handleAdd()} >Thêm màn hình</div>
+                            {/* <div className="DAT_Tool_Tab_Mobile_list_item" onClick={() => handleAdd()} >Thêm màn hình</div> */}
                             {Object.keys(name).map((keyName, i) => {
                                 return (
                                     <div className="DAT_Tool_Tab_Mobile_list_item" key={i} id={keyName} onClick={(e) => handleTabMobile(e)} >{i + 1}: {name[keyName]}</div>
@@ -153,57 +261,33 @@ export default function Toollist(props) {
                         </div>
                         : <></>
                     }
-                    <div className="DAT_Tool_Tab-warn">
-                        <Link to="/Log" style={{ textDecoration: "none" }} >
-                            <div className="DAT_Tool_Tab-warn-item"  ><BiSolidMessageError style={{ color: "red" }} /></div>
-                        </Link>
-                        <Link to="/Report" style={{ textDecoration: "none" }} >
-                            <div className="DAT_Tool_Tab-warn-item"  ><FaFileExport style={{ color: "green" }} /></div>
-                        </Link>
-                        <Link to="/Contact" style={{ textDecoration: "none" }} >
-                            <div className="DAT_Tool_Tab-warn-item"  ><MdContactPhone size={20} style={{ color: "blue" }} /></div>
-                        </Link>
-                    </div>
-                    <div className="DAT_Tool_Tab-close" onClick={handleTabclose}><IoMdClose size={20} /></div>
+                    {props.bu === 'energy'
+                        ?
+                        <div className="DAT_Tool_Tab-warn">
+                            <Link to="/Log" style={{ textDecoration: "none" }} >
+                                <div className="DAT_Tool_Tab-warn-item"  ><LuMailWarning size={20} style={{ color: "gray" }} /></div>
+                            </Link>
+                            <Link to="/Report" style={{ textDecoration: "none" }} >
+                                <div className="DAT_Tool_Tab-warn-item"  ><PiExport size={20} style={{ color: "gray" }} /></div>
+                            </Link>
+                            <Link to="/Contact" style={{ textDecoration: "none" }} >
+                                <div className="DAT_Tool_Tab-warn-item"  ><LuContact2 size={20} style={{ color: "gray" }} /></div>
+                            </Link>
+                        </div>
+                        : <></>}
+                    <div className="DAT_Tool_Tab-close"
+                        onClick={handleTabclose}
+                        id="Popup-"
+                        onMouseEnter={(e) => handlePopup("new")}
+                        onMouseLeave={(e) => handlePopup("pre")} l
+                    ><IoMdClose size={20} /></div>
 
 
                 </div>
-                :
-                <div className="DAT_Tool_Tab">
-                    {Object.keys(name).map((keyName, i) => {
-                        return (
-                            (keyName === tab)
-                                ? <div key={i} className="DAT_Tool_Tab_main">
-                                    <p className="DAT_Tool_Tab_main_left"></p>
-                                    <span className="DAT_Tool_Tab_main_content1" id={keyName} style={{ backgroundColor: "White", color: "black", borderRadius: "10px 10px 0 0" }} onClick={(e) => handleTab(e)}>{name[keyName]}</span>
-                                    <p className="DAT_Tool_Tab_main_right"></p>
-                                </div>
-                                : <span className="DAT_Tool_Tab_main_content2" key={i} id={keyName} style={{ backgroundColor: "#dadada" }} onClick={(e) => handleTab(e)}>{name[keyName]}</span>
-                        )
-
-                    })}
-
-                    <span className="DAT_Tool_Tab_main_content2" style={{ backgroundColor: "#dadada" }} onClick={() => handleAdd()} >+</span>
-
-                    <div className="DAT_Tool_Tab-warn">
-                        <Link to="/Log" style={{ textDecoration: "none" }} >
-                            <div className="DAT_Tool_Tab-warn-item"  ><BiSolidMessageError size={20} style={{ color: "red" }} /></div>
-                        </Link>
-                        <Link to="/Report" style={{ textDecoration: "none" }} >
-                            <div className="DAT_Tool_Tab-warn-item"  ><FaFileExport size={20} style={{ color: "green" }} /></div>
-                        </Link>
-                        <Link to="/Contact" style={{ textDecoration: "none" }} >
-                            <div className="DAT_Tool_Tab-warn-item"  ><MdContactPhone size={20} style={{ color: "blue" }} /></div>
-                        </Link>
-                    </div>
-
-                    <div className="DAT_Tool_Tab-close" onClick={handleTabclose}><IoMdClose size={20} /></div>
-                </div>
-
             }
 
 
-            <div className="DAT_Tool_Content" style={{ padding: "10px" }}>
+            <div className="DAT_Tool_Content" style={{ padding: "10px" }} onClick={(e) => { setStatetab(false) }}>
 
                 {(config[tab] !== undefined)
 
@@ -226,18 +310,22 @@ export default function Toollist(props) {
 
             </div>
 
-            {/* {isLandscape
-                ? <></>
-                : <div className="DAT_Landscape" >
 
-                    <div className="DAT_Landscape_tit">Embody</div>
-                    <div className="DAT_Landscape_ver">Phiên bản: 3.0</div>
-                    <div className="DAT_Landscape_note">Bạn vui lòng chuyển sang chế độ Landscape bằng cách xoay <span><IoPhoneLandscapeOutline size={25} color="Black" /></span> thiết bị của bạn</div>
-                    <div className="DAT_Landscape_cancel" onClick={handleTabclose}><div >Thoát</div></div>
+            {isLandscape
+                ? <></>
+                :
+                <div className="DAT_Landscape" >
+                    <div className="DAT_Landscape_cancel" onClick={(e) => { handleTabclose(e) }} ><div className="DAT_Landscape_cancel_icon"  ><span>Thoát</span></div></div>
+                    <div className="DAT_Landscape_content" >
+                        <div className="DAT_Landscape_content_tit">Embody</div>
+                        <div className="DAT_Landscape_content_ver">Phiên bản: {process.env.REACT_APP_VER}</div>
+                        <div className="DAT_Landscape_content_note">Bạn vui lòng chuyển sang chế độ Landscape bằng cách xoay ngang thiết bị của bạn</div>
+                    </div>
+
 
                 </div>
 
-            } */}
+            }
 
 
 

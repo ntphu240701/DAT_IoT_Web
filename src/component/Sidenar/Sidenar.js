@@ -3,7 +3,7 @@ import "./Sidenar.scss";
 
 import { signal } from "@preact/signals-react";
 import { Link } from "react-router-dom";
-import { userInfor } from "../../App";
+import { ruleInfor, userInfor } from "../../App";
 import { useIntl } from "react-intl";
 import { isMobile } from "../Navigation/Navigation";
 
@@ -22,18 +22,24 @@ export const sidenar = signal(true);
 export const sidebartab = signal("Dashboard");
 export const sidebartabli = signal("none");
 
+const sys = signal([])
+
 export default function Sidenar(props) {
   //Datalang
   const dataLang = useIntl();
 
-  const data = {
-    Dashboard: { icon: <VscDashboard />, link: "/", li: [
-     
-      { link: "/Auto", name: dataLang.formatMessage({ id: "auto" }) },
-      { link: "/Elev", name: dataLang.formatMessage({ id: "elev" }) },
-      { link: "/Energy", name: dataLang.formatMessage({ id: "energy" }) }
 
-    ] },
+
+  const data = {
+    Dashboard: { icon: <VscDashboard />, link: "/", li: sys.value },
+
+    // { link: "/Auto", name: dataLang.formatMessage({ id: "auto" }) },
+
+
+    // { link: "/Elev", name: dataLang.formatMessage({ id: "elev" }) },
+    // { link: "/Energy", name: dataLang.formatMessage({ id: "energy" }) }
+
+
     Notif: { icon: <IoIosNotificationsOutline />, link: "/Notif", li: [] },
     Monitor: {
       icon: <SiDatabricks />,
@@ -134,7 +140,44 @@ export default function Sidenar(props) {
 
   useEffect(function () {
     isMobile.value ? (sidenar.value = false) : (sidenar.value = true);
+
+
+
   }, []);
+
+
+  useEffect(() => {
+
+    const which = {
+      auto: "Auto",
+      energy: "Energy",
+      elev: "Elev",
+    }
+
+
+    const which_ = [
+      'energy',
+      'auto',
+      'elev',
+    ]
+    Object.keys(ruleInfor.value.setting.system).map((key) => {
+      if (ruleInfor.value.setting.system[key] === false) {
+        which_.splice(which_.indexOf(key), 1)
+      }
+    })
+    console.log(which_)
+    if (which_.length > 1) {
+      which_.map((key) => {
+        sys.value = [
+          ...sys.value,
+          { link: `/${which[key]}`, name: dataLang.formatMessage({ id: key }) },
+        ]
+      })
+    }
+
+  }, [ruleInfor.value])
+
+
 
   const handleMenu = (e) => {
     const ID = e.currentTarget.id;

@@ -8,6 +8,8 @@ export const host = {
 
 export const messages = {
   en: {
+    system:"System",
+    screen:"Display",
     auto: "Auto",
     elev: "Elevator",
     energy: "Energy",
@@ -692,7 +694,7 @@ export const messages = {
     maxkWp: "Max kWp",
     minkWp: "Min kWp",
     enterLocation: "Enter location",
-    sologon: "Energy solution platform",
+    sologon: "Industrial monitoring platform",
     version: "Version",
     previous: "Back",
     unknown: "--",
@@ -912,6 +914,8 @@ export const messages = {
     // A_48_17: "Unknown",
   },
   vi: {
+    screen:"Giao diện",
+    system:"Hệ sinh thái",
     auto: "Tự động hóa",
     elev: "Thang máy",
     energy: "Năng lượng",
@@ -1595,7 +1599,7 @@ export const messages = {
     minkWp: "Tối thiểu kWp",
     enterLocation: "Nhập vị trí...",
     version: "Phiên bản",
-    sologon: "Nền tảng giải pháp năng lượng",
+    sologon: "Nền tảng giám sát công nghiệp",
     previous: "Quay lại",
     unknown: "--",
     active: "Phân quyền cấp thấp",
