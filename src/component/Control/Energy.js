@@ -93,7 +93,7 @@ export default function Energy(props) {
   const bu = 'energy'
   const { screen } = useContext(SettingContext)
   const { toolDispatch } = useContext(ToolContext)
-  const {overview_visual, overviewDispatch } = useContext(OverviewContext)
+  const { overview_visual, overviewDispatch } = useContext(OverviewContext)
 
 
   const [datafilter, setDatafilter] = useState([]);
@@ -310,12 +310,12 @@ export default function Energy(props) {
       payload: newPlant.data_.id,
     })
 
-   
+
     overviewDispatch({
       type: "SET_ID",
       payload: sn,
     })
-    
+
 
     // console.log(overview_visual);
     deviceData.value = [];
@@ -1817,7 +1817,7 @@ export default function Energy(props) {
                 );
               })}
 
-              <div
+              {/* <div
                 className="DAT_Project_Filter"
                 onClick={(e) => setDisplay(!display)}
               >
@@ -1828,7 +1828,7 @@ export default function Energy(props) {
                     transition: "0.5s",
                   }}
                 />
-              </div>
+              </div> */}
             </div >
 
             <div className="DAT_Project_Content">

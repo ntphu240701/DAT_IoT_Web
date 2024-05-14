@@ -22,7 +22,7 @@
         justify-content: center;
         align-items: center;
         position: absolute;
-        top:0;
+        top: 0;
         left: 0;
         // top: 0;
         // left: 0;
@@ -210,27 +210,30 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+
         &_name {
             color: white;
         }
+
         &_close {
             cursor: pointer;
             color: white;
         }
     }
+
     &_titlesub {
         // background-color: rgba(11, 25, 103);
         padding: 10px;
         box-sizing: border-box;
         display: flex;
         align-items: center;
-       justify-content: space-between;
-       
+        justify-content: space-between;
+
     }
 
 
     &_list {
-       
+
         padding: 10px;
         box-sizing: border-box;
         height: 180px;
@@ -278,7 +281,7 @@
             padding: 10px;
             border-radius: 5px;
             box-sizing: border-box;
-            
+
 
             &_index {
                 width: 30px;
@@ -292,13 +295,14 @@
         }
     }
 
-    &_data{
+    &_data {
         width: 220px;
         margin: auto;
         // background-color: #555;
         padding: 10px;
         box-sizing: border-box;
-        &_sn{
+
+        &_sn {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -310,14 +314,17 @@
             color: #888;
             font-size: 15px;
         }
-        &_screen{
+
+        &_screen {
             display: flex;
-            &_name{
+
+            &_name {
                 margin-top: 20px;
                 display: flex;
                 align-items: center;
                 gap: 5px;
-                &_config{
+
+                &_config {
                     font-size: 15px;
                     padding: 5px;
                     box-sizing: border-box;
@@ -326,8 +333,9 @@
                     display: flex;
                     align-items: center;
                     border-radius: 5px;
-                    gap:10px;
-                    &_name{
+                    gap: 10px;
+
+                    &_name {
                         width: 120px;
                         overflow: hidden;
                         text-overflow: ellipsis;
@@ -340,7 +348,8 @@
             }
         }
     }
-    &_status{
+
+    &_status {
         width: 220px;
         margin: auto;
         display: flex;
@@ -350,14 +359,14 @@
         box-sizing: border-box;
     }
 
-    &_btn{
+    &_btn {
         display: flex;
         align-items: center;
         justify-content: flex-end;
         padding: 10px;
         box-sizing: border-box;
 
-        & button{
+        & button {
             background-color: rgba(11, 25, 103);
             color: white;
             width: 80px;
@@ -506,7 +515,7 @@
 
     }
 
-    .DAT_WidgetContainer{
+    .DAT_WidgetContainer {
         width: 600px;
     }
 

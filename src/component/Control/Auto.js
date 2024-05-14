@@ -93,7 +93,7 @@ export default function Auto(props) {
   const bu = 'auto'
   const { screen } = useContext(SettingContext)
   const { toolDispatch } = useContext(ToolContext)
-  const {overview_visual, overviewDispatch } = useContext(OverviewContext)
+  const { overview_visual, overviewDispatch } = useContext(OverviewContext)
 
 
   const [datafilter, setDatafilter] = useState([]);
@@ -294,7 +294,7 @@ export default function Auto(props) {
       })
     }
 
-    plantobj.value = newPlant; 
+    plantobj.value = newPlant;
     // setPlantobj(newPlant);
     overviewDispatch({
       type: "LOAD_DEVICE",
@@ -311,12 +311,12 @@ export default function Auto(props) {
       payload: newPlant.data_.id,
     })
 
-   
+
     overviewDispatch({
       type: "SET_ID",
       payload: sn,
     })
-    
+
 
     // console.log(overview_visual);
     deviceData.value = [];
@@ -325,12 +325,12 @@ export default function Auto(props) {
   };
 
   const handleEdit = (e) => {
-  
+
     let newPlant = plantData.value.find(
       (item) => item.plantid_ == e.currentTarget.id
     );
     console.log(newPlant);
-    plantobj.value = {...newPlant}; 
+    plantobj.value = { ...newPlant };
     plantState.value = "edit";
     // setPlantobj(newPlant);
   };
@@ -340,7 +340,7 @@ export default function Auto(props) {
     const newPlant = plantData.value.find(
       (item) => item.plantid_ == e.currentTarget.id
     );
-    plantobj.value = newPlant; 
+    plantobj.value = newPlant;
     // setPlantobj(newPlant);
   };
 
@@ -349,7 +349,7 @@ export default function Auto(props) {
     const newPlant = plantData.value.find(
       (item) => item.plantid_ == e.currentTarget.id
     );
-    plantobj.value = newPlant; 
+    plantobj.value = newPlant;
     // setPlantobj(newPlant);
   };
 
@@ -1823,7 +1823,7 @@ export default function Auto(props) {
                 );
               })}
 
-              <div
+              {/* <div
                 className="DAT_Project_Filter"
                 onClick={(e) => setDisplay(!display)}
               >
@@ -1834,7 +1834,7 @@ export default function Auto(props) {
                     transition: "0.5s",
                   }}
                 />
-              </div>
+              </div> */}
             </div >
 
             <div className="DAT_Project_Content">

@@ -22,6 +22,7 @@ import { plantState, projectwarnfilter } from "../Project/Project";
 import { IoLogInOutline } from "react-icons/io5";
 import { PiUserCircle } from "react-icons/pi";
 import { BiMessageAltX, BiMessageCheck } from "react-icons/bi";
+import { isBrowser } from "react-device-detect";
 
 const userNav = signal(false);
 const langNav = signal(false);
@@ -169,16 +170,19 @@ export default function Navigation(props) {
       <div className="DAT_Navigation"
         onClick={() => (plantState.value = "default")}
       >
-        <div className="DAT_Navigation-menu">
-          <button
-            id="DAT_menuaction"
-            onClick={(event) => {
-              handleMenu(event);
-            }}
-          >
-            <BsFillMenuButtonWideFill color="gray" size={22} />
-          </button>
-        </div>
+        {isBrowser
+          ?
+          <div className="DAT_Navigation-menu">
+            <button
+              id="DAT_menuaction"
+              onClick={(event) => {
+                handleMenu(event);
+              }}
+            >
+              <BsFillMenuButtonWideFill color="gray" size={22} />
+            </button>
+          </div>
+          : <></>}
 
         <div className="DAT_Navigation_left">
           <div className="DAT_Navigation_left-logo">

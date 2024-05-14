@@ -19,15 +19,15 @@ function Widget(props) {
     const dataLang = useIntl();
     const user = useSelector((state) => state.admin.usr)
     const [config, setConfig] = useState('default');
-    const [widget,setWidget] = useState({
+    const [widget, setWidget] = useState({
         loggerdataid_: "",
         screenstate_: 0,
         sn_: "",
         usr_: user,
     });
-    const [screenview,setScreenview] = useState({});
+    const [screenview, setScreenview] = useState({});
 
-    const [myselect,setMyselect] = useState('0_0');
+    const [myselect, setMyselect] = useState('0_0');
 
     const [deviceData, setDeviceData] = useState([]);
     const popup_state = {
@@ -37,13 +37,13 @@ function Widget(props) {
 
     useEffect(() => {
         console.log(props.loggerdata, props.widget);
-        if(props.widget){
+        if (props.widget) {
             setWidget(props.widget)
         }
-        if(props.loggerdata){
+        if (props.loggerdata) {
             setScreenview(props.loggerdata)
         }
-      
+
     }, [props.loggerdata, props.widget])
 
 
@@ -54,11 +54,11 @@ function Widget(props) {
         popup.style.color = popup_state[state].color;
     }
 
-    const handleDevice  = async(e) => {
+    const handleDevice = async (e) => {
         let arr = e.currentTarget.id.split("_");
-       
+
         let newwidget = widget
-        newwidget={
+        newwidget = {
             ...newwidget,
             sn_: arr[1],
         }
@@ -67,10 +67,10 @@ function Widget(props) {
 
         setMyselect(e.currentTarget.id)
         setConfig('default');
-        
+
     }
 
-    const handleScreen = async(e) => {
+    const handleScreen = async (e) => {
         console.log(myselect);
         let arr = myselect.split("_");
         let res = await callApi("post", host.DATA + "/getLoggerData", {
@@ -86,12 +86,12 @@ function Widget(props) {
         }
     }
 
-    const  handleSetScreen = async(e) => {
+    const handleSetScreen = async (e) => {
         let arr = e.currentTarget.id.split("_");
         console.log(arr);
-       
 
-        let newwidget ={
+
+        let newwidget = {
             ...widget,
             loggerdataid_: arr[0],
         }
@@ -99,8 +99,8 @@ function Widget(props) {
         console.log(newwidget);
         setWidget(newwidget)
         let res = await callApi("post", host.DATA + "/getLoggerDataUnit", {
-            loggerdataid:newwidget.loggerdataid_,
-            sn:  newwidget.sn_,
+            loggerdataid: newwidget.loggerdataid_,
+            sn: newwidget.sn_,
         });
         console.log(res);
         if (res.status) {
@@ -111,10 +111,10 @@ function Widget(props) {
         setConfig('default');
     }
 
-    const handleSave = async(e) => {
-       
-        if(widget.loggerdataid_ && widget.sn_){
-            console.log(widget,screenview);
+    const handleSave = async (e) => {
+
+        if (widget.loggerdataid_ && widget.sn_) {
+            console.log(widget, screenview);
 
             let res = await callApi("post", host.DATA + "/updateWidget", {
                 usr: widget.usr_,
@@ -123,17 +123,17 @@ function Widget(props) {
                 screenstate: widget.screenstate_,
             })
             console.log(res);
-            if(res.status){
+            if (res.status) {
                 alertDispatch(dataLang.formatMessage({ id: "alert_6" }));
                 props.handleClose(); setConfig('default')
             }
 
-        }else{
+        } else {
             alertDispatch(dataLang.formatMessage({ id: "alert_22" }));
         }
     }
 
-    
+
 
 
     // useEffect(() => {
@@ -143,10 +143,10 @@ function Widget(props) {
     return (
         <div className='DAT_WidgetContainer'>
             <div className='DAT_WidgetContainer_title' >
-                <div className="DAT_WidgetContainer_title_name">Tiện ích  </div>
+                <div className="DAT_WidgetContainer_title_name">{dataLang.formatMessage({ id: "utilities" })}</div>
 
                 <div className="DAT_WidgetContainer_title_close"
-                    onClick={() => {props.handleClose(); setConfig('default')}}
+                    onClick={() => { props.handleClose(); setConfig('default') }}
                     id="Popup-"
                     onMouseEnter={(e) => handlePopup("new")}
                     onMouseLeave={(e) => handlePopup("pre")}
@@ -159,7 +159,7 @@ function Widget(props) {
                 switch (config) {
                     case "device":
                         return <>
-                            <div className='DAT_WidgetContainer_titlesub'><span>Danh sách thiết bị</span> <HiArrowUturnLeft style={{ cursor: "pointer" }} onClick={() => setConfig('default')} /></div>
+                            <div className='DAT_WidgetContainer_titlesub'><span>{dataLang.formatMessage({ id: 'devicelist' })}</span> <HiArrowUturnLeft style={{ cursor: "pointer" }} onClick={() => setConfig('default')} /></div>
                             <div className='DAT_WidgetContainer_list'>
                                 {props.logger.map((data, index) => {
                                     return (
@@ -174,7 +174,7 @@ function Widget(props) {
                         </>
                     case "screen":
                         return <>
-                            <div className='DAT_WidgetContainer_titlesub' >Danh sách màn hình <HiArrowUturnLeft style={{ cursor: "pointer" }} onClick={() => setConfig('default')} /></div>
+                            <div className='DAT_WidgetContainer_titlesub' >{dataLang.formatMessage({ id: 'monitorlist' })} <HiArrowUturnLeft style={{ cursor: "pointer" }} onClick={() => setConfig('default')} /></div>
                             <div className='DAT_WidgetContainer_list'>
                                 {deviceData.map((data, index) => {
                                     return (
@@ -194,21 +194,31 @@ function Widget(props) {
                                     <div className='DAT_WidgetContainer_data_screen_arrow' ><PiArrowElbowDownRightFill size={50} color='rgba(11, 25, 103' /></div>
                                     <div className='DAT_WidgetContainer_data_screen_name'>
                                         <MdScreenshotMonitor size={60} color='rgba(11, 25, 103)' />
-                                        <div className='DAT_WidgetContainer_data_screen_name_config' > <div className='DAT_WidgetContainer_data_screen_name_config_name'>{screenview.name_}</div><CiEdit size={20} color='gray' style={{ cursor: 'pointer' }} onClick={(e) => handleScreen(e) }/></div>
+                                        <div className='DAT_WidgetContainer_data_screen_name_config' > <div className='DAT_WidgetContainer_data_screen_name_config_name'>{screenview.name_}</div><CiEdit size={20} color='gray' style={{ cursor: 'pointer' }} onClick={(e) => handleScreen(e)} /></div>
                                     </div>
                                 </div>
 
                             </div>
-                            <div className='DAT_WidgetContainer_status'><input type='checkbox' style={{cursor:'pointer'}} checked={widget.screenstate_ === 1 ? true : false} onChange={() => setWidget({ ...widget, screenstate_: widget.screenstate_ === 1 ? 0: 1 })} /> {widget.screenstate_ === 1 ? <span style={{color:'green'}} >ON</span> : <span style={{color:'red'}} >OFF</span>}</div>
+                            <div className='DAT_WidgetContainer_status'>
+                                <input
+                                    type='checkbox'
+                                    style={{ cursor: 'pointer' }}
+                                    checked={widget.screenstate_ === 1 ? true : false}
+                                    onChange={() => setWidget({ ...widget, screenstate_: widget.screenstate_ === 1 ? 0 : 1 })}
+                                />
+                                {widget.screenstate_ === 1
+                                    ? <span style={{ color: 'green' }} >{dataLang.formatMessage({ id: "on" })}</span>
+                                    : <span style={{ color: 'red' }} >{dataLang.formatMessage({ id: "off" })}</span>}
+                            </div>
                         </>
                 }
             })()}
 
             {config === 'default'
-            ?<div className='DAT_WidgetContainer_btn'>
-                <button  onClick={ ()=> handleSave()} >Lưu</button>
-            </div>
-            :<></>}
+                ? <div className='DAT_WidgetContainer_btn'>
+                    <button onClick={() => handleSave()} >{dataLang.formatMessage({ id: "save" })}</button>
+                </div>
+                : <></>}
         </div>
     );
 }

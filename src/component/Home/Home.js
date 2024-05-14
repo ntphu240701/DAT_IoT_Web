@@ -320,7 +320,7 @@ export default function Home(props) {
                                                 <div className="DAT_viewIOT-3D-Item-Icon" >
                                                         <SiPowerapps size={60} color="white" onPointerUp={() => setWidgetState(true)} />
                                                 </div>
-                                                <label style={{ color: (s.value === 5) ? "white" : "gray", transition: "1s" }}>Tiện ích</label>
+                                                <label style={{ color: (s.value === 5) ? "white" : "gray", transition: "1s" }}>{dataLang.formatMessage({ id: "utilities" })}</label>
                                         </span>
 
                                         {which.value.map((data, index) => {

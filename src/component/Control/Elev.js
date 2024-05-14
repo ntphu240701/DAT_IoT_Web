@@ -93,7 +93,7 @@ export default function Elev(props) {
   const bu = 'elev'
   const { screen } = useContext(SettingContext)
   const { toolDispatch } = useContext(ToolContext)
-  const {overview_visual, overviewDispatch } = useContext(OverviewContext)
+  const { overview_visual, overviewDispatch } = useContext(OverviewContext)
 
 
   const [datafilter, setDatafilter] = useState([]);
@@ -310,12 +310,12 @@ export default function Elev(props) {
       payload: newPlant.data_.id,
     })
 
-   
+
     overviewDispatch({
       type: "SET_ID",
       payload: sn,
     })
-    
+
 
     // console.log(overview_visual);
     deviceData.value = [];
@@ -1817,7 +1817,7 @@ export default function Elev(props) {
                 );
               })}
 
-              <div
+              {/* <div
                 className="DAT_Project_Filter"
                 onClick={(e) => setDisplay(!display)}
               >
@@ -1828,7 +1828,7 @@ export default function Elev(props) {
                     transition: "0.5s",
                   }}
                 />
-              </div>
+              </div> */}
             </div >
 
             <div className="DAT_Project_Content">
@@ -1934,7 +1934,7 @@ export default function Elev(props) {
             case "edit":
               return <EditProject usr={user} bu={bu} data={plantobj} />;
             case "add":
-              return <AddProject usr={user}  type={bu} />;
+              return <AddProject usr={user} type={bu} />;
             case "drop":
               return <Popup name={plantobj.name_} type={'plant'} usr={user} plantid={plantobj.plantid_} />;
             case 'share':
