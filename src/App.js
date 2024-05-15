@@ -44,7 +44,6 @@ const Language = React.lazy(() => import("./component/Language/Language"));
 const Contact = React.lazy(() => import("./component/Contact/Contact"));
 const Rule = React.lazy(() => import("./component/Rule/Rule"));
 
-
 export const view = signal(false);
 export const socket = signal(io.connect(process.env.REACT_APP_SOLAR));
 export const phuhosting = signal("http://192.168.68.6:3001");
@@ -95,7 +94,6 @@ export const partnerInfor = signal({
   logo: "",
 });
 
-
 export const Empty = (props) => {
   const dataLang = useIntl();
 
@@ -124,7 +122,6 @@ export const Empty = (props) => {
     </div>
   );
 };
-
 
 export const COLOR = signal({
   PrimaryColor: "rgba(11, 25, 103)",
@@ -251,7 +248,7 @@ export default function App() {
       }
     };
 
-    const checkApi = async () => { };
+    const checkApi = async () => {};
     checkAuth();
 
     if (status) {
@@ -334,7 +331,7 @@ export default function App() {
         <Alert />
         {loading ? (
           window.location.pathname === "/Verify" ||
-            window.location.pathname === "/VerifyRegister" ? (
+          window.location.pathname === "/VerifyRegister" ? (
             <Verify path={window.location.pathname} />
           ) : (
             <div className="DAT_Loading">
@@ -343,74 +340,599 @@ export default function App() {
           )
         ) : (
           <>
-            {status ? 
-              (<>
-              { plantState.value === "toollist" || mode.value === 'dashboard' || toolState.value ? <></> :  <Navigation />}
-              <div className="DAT_App">
-                <Sidenar />
-              <div className="DAT_App_Content">
-                <Routes>
-                  {userInfor.value.type === "master" ? (
-                    <>
-                      <Route path="/Role" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><Role /></Suspense>} />
-                      <Route path="/GroupRole" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><GroupRole /></Suspense>} />
-                      <Route path="/User" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><User /></Suspense>} />
-                      <Route path="/Contact" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><Contact /></Suspense>} />
-                      <Route path="/ErrorSetting" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><ErrorSetting /></Suspense>} />
-                      <Route path="/RegisterSetting" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><RegisterSetting /></Suspense>} />
-                      <Route path="/Rule" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><Rule /></Suspense>} />
-                    </>
-                  ) : (<></>)}
+            {status ? (
+              <>
+                {plantState.value === "toollist" ||
+                mode.value === "dashboard" ||
+                toolState.value ? (
+                  <></>
+                ) : (
+                  <Navigation />
+                )}
+                <div className="DAT_App">
+                  <Sidenar />
+                  <div className="DAT_App_Content">
+                    <Routes>
+                      {userInfor.value.type === "master" ? (
+                        <>
+                          <Route
+                            path="/Role"
+                            element={
+                              <Suspense
+                                fallback={
+                                  <div className="DAT_Loading">
+                                    <ClockLoader
+                                      color="#007bff"
+                                      size={50}
+                                      loading={loading}
+                                    />
+                                  </div>
+                                }
+                              >
+                                <Role />
+                              </Suspense>
+                            }
+                          />
+                          <Route
+                            path="/GroupRole"
+                            element={
+                              <Suspense
+                                fallback={
+                                  <div className="DAT_Loading">
+                                    <ClockLoader
+                                      color="#007bff"
+                                      size={50}
+                                      loading={loading}
+                                    />
+                                  </div>
+                                }
+                              >
+                                <GroupRole />
+                              </Suspense>
+                            }
+                          />
+                          <Route
+                            path="/User"
+                            element={
+                              <Suspense
+                                fallback={
+                                  <div className="DAT_Loading">
+                                    <ClockLoader
+                                      color="#007bff"
+                                      size={50}
+                                      loading={loading}
+                                    />
+                                  </div>
+                                }
+                              >
+                                <User />
+                              </Suspense>
+                            }
+                          />
+                          <Route
+                            path="/Contact"
+                            element={
+                              <Suspense
+                                fallback={
+                                  <div className="DAT_Loading">
+                                    <ClockLoader
+                                      color="#007bff"
+                                      size={50}
+                                      loading={loading}
+                                    />
+                                  </div>
+                                }
+                              >
+                                <Contact />
+                              </Suspense>
+                            }
+                          />
+                          <Route
+                            path="/ErrorSetting"
+                            element={
+                              <Suspense
+                                fallback={
+                                  <div className="DAT_Loading">
+                                    <ClockLoader
+                                      color="#007bff"
+                                      size={50}
+                                      loading={loading}
+                                    />
+                                  </div>
+                                }
+                              >
+                                <ErrorSetting />
+                              </Suspense>
+                            }
+                          />
+                          <Route
+                            path="/RegisterSetting"
+                            element={
+                              <Suspense
+                                fallback={
+                                  <div className="DAT_Loading">
+                                    <ClockLoader
+                                      color="#007bff"
+                                      size={50}
+                                      loading={loading}
+                                    />
+                                  </div>
+                                }
+                              >
+                                <RegisterSetting />
+                              </Suspense>
+                            }
+                          />
+                          <Route
+                            path="/Rule"
+                            element={
+                              <Suspense
+                                fallback={
+                                  <div className="DAT_Loading">
+                                    <ClockLoader
+                                      color="#007bff"
+                                      size={50}
+                                      loading={loading}
+                                    />
+                                  </div>
+                                }
+                              >
+                                <Rule />
+                              </Suspense>
+                            }
+                          />
+                        </>
+                      ) : (
+                        <></>
+                      )}
 
-                  {userInfor.value.type === "mainadmin" || userInfor.value.type === "admin" ? (
-                    <>
-                      <Route path="/Role" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><Role /></Suspense>} />
-                      <Route path="/GroupRole" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><NotfoundErr /></Suspense>} />
-                      <Route path="/User" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><User /></Suspense>} />
-                      <Route path="/Contact" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><Contact /></Suspense>} />
-                      <Route path="/ErrorSetting" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><ErrorSetting /></Suspense>} />
-                      <Route path="/RegisterSetting" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><RegisterSetting /></Suspense>} />
-                      <Route path="/Rule" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><Rule /></Suspense>} />
-                    </>
-                  ) : (<></>)}
+                      {userInfor.value.type === "mainadmin" ||
+                      userInfor.value.type === "admin" ? (
+                        <>
+                          <Route
+                            path="/Role"
+                            element={
+                              <Suspense
+                                fallback={
+                                  <div className="DAT_Loading">
+                                    <ClockLoader
+                                      color="#007bff"
+                                      size={50}
+                                      loading={loading}
+                                    />
+                                  </div>
+                                }
+                              >
+                                <Role />
+                              </Suspense>
+                            }
+                          />
+                          <Route
+                            path="/GroupRole"
+                            element={
+                              <Suspense
+                                fallback={
+                                  <div className="DAT_Loading">
+                                    <ClockLoader
+                                      color="#007bff"
+                                      size={50}
+                                      loading={loading}
+                                    />
+                                  </div>
+                                }
+                              >
+                                <NotfoundErr />
+                              </Suspense>
+                            }
+                          />
+                          <Route
+                            path="/User"
+                            element={
+                              <Suspense
+                                fallback={
+                                  <div className="DAT_Loading">
+                                    <ClockLoader
+                                      color="#007bff"
+                                      size={50}
+                                      loading={loading}
+                                    />
+                                  </div>
+                                }
+                              >
+                                <User />
+                              </Suspense>
+                            }
+                          />
+                          <Route
+                            path="/Contact"
+                            element={
+                              <Suspense
+                                fallback={
+                                  <div className="DAT_Loading">
+                                    <ClockLoader
+                                      color="#007bff"
+                                      size={50}
+                                      loading={loading}
+                                    />
+                                  </div>
+                                }
+                              >
+                                <Contact />
+                              </Suspense>
+                            }
+                          />
+                          <Route
+                            path="/ErrorSetting"
+                            element={
+                              <Suspense
+                                fallback={
+                                  <div className="DAT_Loading">
+                                    <ClockLoader
+                                      color="#007bff"
+                                      size={50}
+                                      loading={loading}
+                                    />
+                                  </div>
+                                }
+                              >
+                                <ErrorSetting />
+                              </Suspense>
+                            }
+                          />
+                          <Route
+                            path="/RegisterSetting"
+                            element={
+                              <Suspense
+                                fallback={
+                                  <div className="DAT_Loading">
+                                    <ClockLoader
+                                      color="#007bff"
+                                      size={50}
+                                      loading={loading}
+                                    />
+                                  </div>
+                                }
+                              >
+                                <RegisterSetting />
+                              </Suspense>
+                            }
+                          />
+                          <Route
+                            path="/Rule"
+                            element={
+                              <Suspense
+                                fallback={
+                                  <div className="DAT_Loading">
+                                    <ClockLoader
+                                      color="#007bff"
+                                      size={50}
+                                      loading={loading}
+                                    />
+                                  </div>
+                                }
+                              >
+                                <Rule />
+                              </Suspense>
+                            }
+                          />
+                        </>
+                      ) : (
+                        <></>
+                      )}
 
-                  {userInfor.value.type === "user" ? (
-                    <>
-                      <Route path="/Role" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><NotfoundErr /></Suspense>} />
-                      <Route path="/GroupRole" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><NotfoundErr /></Suspense>} />
-                      <Route path="/User" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><User /></Suspense>} />
-                      <Route path="/Contact" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><Contact /></Suspense>} />
-                      <Route path="/ErrorSetting" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><NotfoundErr /></Suspense>} />
-                      <Route path="/RegisterSetting" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><NotfoundErr /></Suspense>} />
-                      <Route path="/Rule" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><NotfoundErr /></Suspense>} />
-                    </>
-                  ) : (<></>)}
+                      {userInfor.value.type === "user" ? (
+                        <>
+                          <Route
+                            path="/Role"
+                            element={
+                              <Suspense
+                                fallback={
+                                  <div className="DAT_Loading">
+                                    <ClockLoader
+                                      color="#007bff"
+                                      size={50}
+                                      loading={loading}
+                                    />
+                                  </div>
+                                }
+                              >
+                                <NotfoundErr />
+                              </Suspense>
+                            }
+                          />
+                          <Route
+                            path="/GroupRole"
+                            element={
+                              <Suspense
+                                fallback={
+                                  <div className="DAT_Loading">
+                                    <ClockLoader
+                                      color="#007bff"
+                                      size={50}
+                                      loading={loading}
+                                    />
+                                  </div>
+                                }
+                              >
+                                <NotfoundErr />
+                              </Suspense>
+                            }
+                          />
+                          <Route
+                            path="/User"
+                            element={
+                              <Suspense
+                                fallback={
+                                  <div className="DAT_Loading">
+                                    <ClockLoader
+                                      color="#007bff"
+                                      size={50}
+                                      loading={loading}
+                                    />
+                                  </div>
+                                }
+                              >
+                                <User />
+                              </Suspense>
+                            }
+                          />
+                          <Route
+                            path="/Contact"
+                            element={
+                              <Suspense
+                                fallback={
+                                  <div className="DAT_Loading">
+                                    <ClockLoader
+                                      color="#007bff"
+                                      size={50}
+                                      loading={loading}
+                                    />
+                                  </div>
+                                }
+                              >
+                                <Contact />
+                              </Suspense>
+                            }
+                          />
+                          <Route
+                            path="/ErrorSetting"
+                            element={
+                              <Suspense
+                                fallback={
+                                  <div className="DAT_Loading">
+                                    <ClockLoader
+                                      color="#007bff"
+                                      size={50}
+                                      loading={loading}
+                                    />
+                                  </div>
+                                }
+                              >
+                                <NotfoundErr />
+                              </Suspense>
+                            }
+                          />
+                          <Route
+                            path="/RegisterSetting"
+                            element={
+                              <Suspense
+                                fallback={
+                                  <div className="DAT_Loading">
+                                    <ClockLoader
+                                      color="#007bff"
+                                      size={50}
+                                      loading={loading}
+                                    />
+                                  </div>
+                                }
+                              >
+                                <NotfoundErr />
+                              </Suspense>
+                            }
+                          />
+                          <Route
+                            path="/Rule"
+                            element={
+                              <Suspense
+                                fallback={
+                                  <div className="DAT_Loading">
+                                    <ClockLoader
+                                      color="#007bff"
+                                      size={50}
+                                      loading={loading}
+                                    />
+                                  </div>
+                                }
+                              >
+                                <NotfoundErr />
+                              </Suspense>
+                            }
+                          />
+                        </>
+                      ) : (
+                        <></>
+                      )}
 
-
-                  <Route exact path="/" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><Home /></Suspense>} />
-                  <Route path="/Auto" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><Auto /></Suspense>} />
-                  <Route path="/Elev" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><Elev /></Suspense>} />
-                  <Route path="/Energy" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><Energy /></Suspense>} />
-                  {/* <Route path="/Device" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><Device /></Suspense>} /> */}
-                  <Route path="/Warn" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><Warn /></Suspense>} />
-                  <Route path="/Report" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><Report /></Suspense>} />
-                  <Route path="/Analytics" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><Analytics /></Suspense>} />
-                  <Route path="/Log" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><Log /></Suspense>} />
-                  <Route path="/Language" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><Language /></Suspense>} />
-                  <Route path="/Login" element={<Navigate to="/" />} />
-                  <Route path="/Logout" element={<Navigate to="/Login" />} />
-                  <Route path="*" element={<NotfoundErr />} />
-
-                </Routes>
-              </div>
-            </div>
-            </>
+                      <Route
+                        exact
+                        path="/"
+                        element={
+                          <Suspense
+                            fallback={
+                              <div className="DAT_Loading">
+                                <ClockLoader
+                                  color="#007bff"
+                                  size={50}
+                                  loading={loading}
+                                />
+                              </div>
+                            }
+                          >
+                            <Home />
+                          </Suspense>
+                        }
+                      />
+                      <Route
+                        path="/Auto"
+                        element={
+                          <Suspense
+                            fallback={
+                              <div className="DAT_Loading">
+                                <ClockLoader
+                                  color="#007bff"
+                                  size={50}
+                                  loading={loading}
+                                />
+                              </div>
+                            }
+                          >
+                            <Auto />
+                          </Suspense>
+                        }
+                      />
+                      <Route
+                        path="/Elev"
+                        element={
+                          <Suspense
+                            fallback={
+                              <div className="DAT_Loading">
+                                <ClockLoader
+                                  color="#007bff"
+                                  size={50}
+                                  loading={loading}
+                                />
+                              </div>
+                            }
+                          >
+                            <Elev />
+                          </Suspense>
+                        }
+                      />
+                      <Route
+                        path="/Energy"
+                        element={
+                          <Suspense
+                            fallback={
+                              <div className="DAT_Loading">
+                                <ClockLoader
+                                  color="#007bff"
+                                  size={50}
+                                  loading={loading}
+                                />
+                              </div>
+                            }
+                          >
+                            <Energy />
+                          </Suspense>
+                        }
+                      />
+                      {/* <Route path="/Device" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><Device /></Suspense>} /> */}
+                      <Route
+                        path="/Warn"
+                        element={
+                          <Suspense
+                            fallback={
+                              <div className="DAT_Loading">
+                                <ClockLoader
+                                  color="#007bff"
+                                  size={50}
+                                  loading={loading}
+                                />
+                              </div>
+                            }
+                          >
+                            <Warn />
+                          </Suspense>
+                        }
+                      />
+                      <Route
+                        path="/Report"
+                        element={
+                          <Suspense
+                            fallback={
+                              <div className="DAT_Loading">
+                                <ClockLoader
+                                  color="#007bff"
+                                  size={50}
+                                  loading={loading}
+                                />
+                              </div>
+                            }
+                          >
+                            <Report />
+                          </Suspense>
+                        }
+                      />
+                      <Route
+                        path="/Analytics"
+                        element={
+                          <Suspense
+                            fallback={
+                              <div className="DAT_Loading">
+                                <ClockLoader
+                                  color="#007bff"
+                                  size={50}
+                                  loading={loading}
+                                />
+                              </div>
+                            }
+                          >
+                            <Analytics />
+                          </Suspense>
+                        }
+                      />
+                      <Route
+                        path="/Log"
+                        element={
+                          <Suspense
+                            fallback={
+                              <div className="DAT_Loading">
+                                <ClockLoader
+                                  color="#007bff"
+                                  size={50}
+                                  loading={loading}
+                                />
+                              </div>
+                            }
+                          >
+                            <Log />
+                          </Suspense>
+                        }
+                      />
+                      <Route
+                        path="/Language"
+                        element={
+                          <Suspense
+                            fallback={
+                              <div className="DAT_Loading">
+                                <ClockLoader
+                                  color="#007bff"
+                                  size={50}
+                                  loading={loading}
+                                />
+                              </div>
+                            }
+                          >
+                            <Language />
+                          </Suspense>
+                        }
+                      />
+                      <Route path="/Login" element={<Navigate to="/" />} />
+                      <Route
+                        path="/Logout"
+                        element={<Navigate to="/Login" />}
+                      />
+                      <Route path="*" element={<NotfoundErr />} />
+                    </Routes>
+                  </div>
+                </div>
+              </>
             ) : (
               <Login />
             )}
           </>
         )}
-      </Router >
+      </Router>
     </>
   );
 }

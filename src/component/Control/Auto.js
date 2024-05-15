@@ -12,7 +12,15 @@ import { sidebartab, sidebartabli } from "../Sidenar/Sidenar";
 import { callApi } from "../Api/Api";
 import { host } from "../Lang/Contant";
 import { alertDispatch } from "../Alert/Alert";
-import { ruleInfor, Token, partnerInfor, userInfor, convertUnit, showUnitk, showUnit, } from "../../App";
+import {
+  ruleInfor,
+  Token,
+  partnerInfor,
+  userInfor,
+  convertUnit,
+  showUnitk,
+  showUnit,
+} from "../../App";
 import { useSelector } from "react-redux";
 import { signal } from "@preact/signals-react";
 import { useIntl } from "react-intl";
@@ -25,13 +33,18 @@ import { FaCheckCircle, FaRegFileAlt, FaStar } from "react-icons/fa";
 import { MdOutlineError, MdAddchart } from "react-icons/md";
 import { CiSearch } from "react-icons/ci";
 import { GoProject } from "react-icons/go";
-import { IoIosArrowDown, IoIosArrowForward, IoIosArrowUp, IoMdMore } from "react-icons/io";
+import {
+  IoIosArrowDown,
+  IoIosArrowForward,
+  IoIosArrowUp,
+  IoMdMore,
+} from "react-icons/io";
 import { IoAddOutline, IoTrashOutline } from "react-icons/io5";
 import { FiEdit, FiFilter } from "react-icons/fi";
 import { RiShareForwardLine } from "react-icons/ri";
 import PopupState, { bindToggle, bindMenu } from "material-ui-popup-state";
-import Menu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import { isBrowser, isMobile } from "react-device-detect";
 import EditProject from "./EditProject";
 import AddProject from "./AddProject";
@@ -44,13 +57,11 @@ import { ToolContext } from "../Context/ToolContext";
 import { deviceData } from "./Device";
 import { OverviewContext } from "../Context/OverviewContext";
 
-
 const online = signal([]);
 const offline = signal([]);
 const warn = signal([]);
 const demo = signal([]);
 const care = signal([]);
-
 
 export const plantobj = signal({});
 
@@ -88,13 +99,12 @@ export default function Auto(props) {
   const user = useSelector((state) => state.admin.usr);
   const [tab, setTab] = useState("total");
   const [tabMobile, setTabMobile] = useState("total");
-  const [tabState, setTabState] = useState(false)
+  const [tabState, setTabState] = useState(false);
   // const [plantobj, setPlantobj] = useState({})
-  const bu = 'auto'
-  const { screen } = useContext(SettingContext)
-  const { toolDispatch } = useContext(ToolContext)
-  const {overview_visual, overviewDispatch } = useContext(OverviewContext)
-
+  const bu = "auto";
+  const { screen } = useContext(SettingContext);
+  const { toolDispatch } = useContext(ToolContext);
+  const { overview_visual, overviewDispatch } = useContext(OverviewContext);
 
   const [datafilter, setDatafilter] = useState([]);
   const [display, setDisplay] = useState(false);
@@ -118,7 +128,8 @@ export default function Auto(props) {
     {
       name: dataLang.formatMessage({ id: "name" }),
       selector: (row) => (
-        <div className="DAT_Table"
+        <div
+          className="DAT_Table"
           id={row.plantid_}
           style={{ cursor: "pointer" }}
           onClick={(e) => handlePlant(e)}
@@ -188,8 +199,7 @@ export default function Auto(props) {
       sortable: true,
       style: {
         justifyContent: "left !important",
-      }
-
+      },
     },
     {
       name: dataLang.formatMessage({ id: "createdate" }),
@@ -207,38 +217,64 @@ export default function Auto(props) {
             alignItems: "center",
           }}
         >
-          {ruleInfor.value.setting.project.modify == true || ruleInfor.value.setting.project.remove == true
-            ?
-            row.shared == 1
-              ? <></>
-              :
+          {ruleInfor.value.setting.project.modify == true ||
+          ruleInfor.value.setting.project.remove == true ? (
+            row.shared == 1 ? (
+              <></>
+            ) : (
               <PopupState variant="popper" popupId="demo-popup-popper">
-                {(popupState) => (<div className="DAT_TableEdit">
-                  <IoMdMore size={20}   {...bindToggle(popupState)} />
-                  <Menu {...bindMenu(popupState)}>
-                    {ruleInfor.value.setting.project.modify === true ?
-                      <MenuItem id={row.plantid_} onClick={(e) => { handleEdit(e); popupState.close() }}>
-                        <FiEdit size={14} />&nbsp;
-                        {dataLang.formatMessage({ id: "change" })}
-                      </MenuItem>
-                      : <></>
-                    }
-                    {ruleInfor.value.setting.project.remove === true ?
-                      <MenuItem id={row.plantid_} onClick={(e) => { handleDelete(e); popupState.close() }}>
-                        <IoTrashOutline size={16} />
-                        &nbsp;
-                        {dataLang.formatMessage({ id: "delete" })}
-                      </MenuItem>
-                      : <></>}
+                {(popupState) => (
+                  <div className="DAT_TableEdit">
+                    <IoMdMore size={20} {...bindToggle(popupState)} />
+                    <Menu {...bindMenu(popupState)}>
+                      {ruleInfor.value.setting.project.modify === true ? (
+                        <MenuItem
+                          id={row.plantid_}
+                          onClick={(e) => {
+                            handleEdit(e);
+                            popupState.close();
+                          }}
+                        >
+                          <FiEdit size={14} />
+                          &nbsp;
+                          {dataLang.formatMessage({ id: "change" })}
+                        </MenuItem>
+                      ) : (
+                        <></>
+                      )}
+                      {ruleInfor.value.setting.project.remove === true ? (
+                        <MenuItem
+                          id={row.plantid_}
+                          onClick={(e) => {
+                            handleDelete(e);
+                            popupState.close();
+                          }}
+                        >
+                          <IoTrashOutline size={16} />
+                          &nbsp;
+                          {dataLang.formatMessage({ id: "delete" })}
+                        </MenuItem>
+                      ) : (
+                        <></>
+                      )}
 
-                    <MenuItem id={row.plantid_} onClick={(e) => { handleShare(e); popupState.close() }}>
-                      <RiShareForwardLine size={16} />
-                      &nbsp;
-                      {dataLang.formatMessage({ id: "share" })}
-                    </MenuItem>
-                  </Menu>
-                </div>)}
+                      <MenuItem
+                        id={row.plantid_}
+                        onClick={(e) => {
+                          handleShare(e);
+                          popupState.close();
+                        }}
+                      >
+                        <RiShareForwardLine size={16} />
+                        &nbsp;
+                        {dataLang.formatMessage({ id: "share" })}
+                      </MenuItem>
+                    </Menu>
+                  </div>
+                )}
               </PopupState>
+            )
+          ) : (
             // <div className="DAT_TableEdit">
             //   <span
             //     id={row.plantid_ + "_MORE"}
@@ -247,8 +283,8 @@ export default function Auto(props) {
             //     <IoMdMore size={20} />
             //   </span>
             // </div>
-            : <div></div>
-          }
+            <div></div>
+          )}
 
           <div className="DAT_TableMark">
             <FaStar
@@ -269,8 +305,6 @@ export default function Auto(props) {
     },
   ];
 
-
-
   const handlePlant = async (e) => {
     plantState.value = "info";
     const newPlant = plantData.value.find(
@@ -278,23 +312,20 @@ export default function Auto(props) {
     );
     console.log(newPlant);
 
-
-
-    let sn = [0,]
+    let sn = [0];
     let res = await callApi("post", host.DATA + "/getLogger", {
       plantid: newPlant.plantid_,
-
-    })
+    });
     // console.log(res)
     if (res.status) {
       // setDevice(res.data)
-      listDevice.value = res.data
+      listDevice.value = res.data;
       res.data.map((data, index) => {
-        sn.push(data.sn_)
-      })
+        sn.push(data.sn_);
+      });
     }
 
-    plantobj.value = newPlant; 
+    plantobj.value = newPlant;
     // setPlantobj(newPlant);
     overviewDispatch({
       type: "LOAD_DEVICE",
@@ -309,28 +340,23 @@ export default function Auto(props) {
     overviewDispatch({
       type: "SET_LASTID",
       payload: newPlant.data_.id,
-    })
+    });
 
-   
     overviewDispatch({
       type: "SET_ID",
       payload: sn,
-    })
-    
+    });
 
     // console.log(overview_visual);
     deviceData.value = [];
-
-
   };
 
   const handleEdit = (e) => {
-  
     let newPlant = plantData.value.find(
       (item) => item.plantid_ == e.currentTarget.id
     );
     console.log(newPlant);
-    plantobj.value = {...newPlant}; 
+    plantobj.value = { ...newPlant };
     plantState.value = "edit";
     // setPlantobj(newPlant);
   };
@@ -340,16 +366,16 @@ export default function Auto(props) {
     const newPlant = plantData.value.find(
       (item) => item.plantid_ == e.currentTarget.id
     );
-    plantobj.value = newPlant; 
+    plantobj.value = newPlant;
     // setPlantobj(newPlant);
   };
 
   const handleShare = (e) => {
-    plantState.value = 'share';
+    plantState.value = "share";
     const newPlant = plantData.value.find(
       (item) => item.plantid_ == e.currentTarget.id
     );
-    plantobj.value = newPlant; 
+    plantobj.value = newPlant;
     // setPlantobj(newPlant);
   };
 
@@ -406,12 +432,10 @@ export default function Auto(props) {
     } else {
       const t = lowercasedata(e.target.value);
       const db = plantData.value.filter((row) => {
-
         return (
           lowercasedata(row.name_).includes(t) ||
           lowercasedata(row.name_).includes(t)
         );
-
       });
       setDatafilter(db);
     }
@@ -511,7 +535,6 @@ export default function Auto(props) {
   //     filter3 = [...filter3, ...t];
   //   }
 
-
   //   const set1 = new Set(filter1.map((obj) => Object.values(obj)[0]));
   //   const set2 = new Set(filter2.map((obj) => Object.values(obj)[0]));
   //   const set3 = new Set(filter3.map((obj) => Object.values(obj)[0]));
@@ -546,7 +569,7 @@ export default function Auto(props) {
         usr: user,
         partnerid: userInfor.value.partnerid,
         type: userInfor.value.type,
-        system: bu
+        system: bu,
       });
       // console.log(d);
       if (d.status === true) {
@@ -560,9 +583,7 @@ export default function Auto(props) {
     };
   }, []);
 
-
   useEffect(() => {
-
     screen.map((data, index) => {
       toolDispatch({
         type: "LOAD_DEVICE",
@@ -573,10 +594,10 @@ export default function Auto(props) {
           name: data.name_,
           lastid: data.data_.id,
         },
-      })
-    })
+      });
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [screen])
+  }, [screen]);
 
   return (
     <>
@@ -618,7 +639,7 @@ export default function Auto(props) {
             <div className="DAT_Toollist_Tab_Mobile">
               <button
                 className="DAT_Toollist_Tab_Mobile_content"
-                onClick={() => (setTabState(!tabState))}
+                onClick={() => setTabState(!tabState)}
               >
                 <span>{dataLang.formatMessage({ id: tabMobile })}</span>
                 <div className="DAT_Toollist_Tab_Mobile_content_Icon">
@@ -706,7 +727,10 @@ export default function Auto(props) {
                                   <div className="DAT_ProjectMobile_Content_Top_Info_State_Item">
                                     {item.state_ ? (
                                       <>
-                                        <FaCheckCircle size={14} color="green" />
+                                        <FaCheckCircle
+                                          size={14}
+                                          color="green"
+                                        />
                                         <span>
                                           {dataLang.formatMessage({
                                             id: "online",
@@ -727,7 +751,10 @@ export default function Auto(props) {
                                   <div className="DAT_ProjectMobile_Content_Top_Info_State_Item">
                                     {item.warn_ ? (
                                       <>
-                                        <FaCheckCircle size={14} color="green" />
+                                        <FaCheckCircle
+                                          size={14}
+                                          color="green"
+                                        />
                                         <span>
                                           {dataLang.formatMessage({
                                             id: "noAlert",
@@ -833,7 +860,8 @@ export default function Auto(props) {
                             <div className="DAT_ProjectMobile_Content_Bottom">
                               <div className="DAT_ProjectMobile_Content_Bottom_Left">
                                 <span>
-                                  {dataLang.formatMessage({ id: "createdate" })}:
+                                  {dataLang.formatMessage({ id: "createdate" })}
+                                  :
                                 </span>
                                 &nbsp;
                                 <span>{item.createdate_}</span>
@@ -848,7 +876,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                  true ? (
+                                true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -860,7 +888,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                  true ? (
+                                true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -927,7 +955,10 @@ export default function Auto(props) {
                                   <div className="DAT_ProjectMobile_Content_Top_Info_State_Item">
                                     {item.state_ ? (
                                       <>
-                                        <FaCheckCircle size={14} color="green" />
+                                        <FaCheckCircle
+                                          size={14}
+                                          color="green"
+                                        />
                                         <span>
                                           {dataLang.formatMessage({
                                             id: "online",
@@ -948,7 +979,10 @@ export default function Auto(props) {
                                   <div className="DAT_ProjectMobile_Content_Top_Info_State_Item">
                                     {item.warn_ ? (
                                       <>
-                                        <FaCheckCircle size={14} color="green" />
+                                        <FaCheckCircle
+                                          size={14}
+                                          color="green"
+                                        />
                                         <span>
                                           {dataLang.formatMessage({
                                             id: "noAlert",
@@ -1007,7 +1041,8 @@ export default function Auto(props) {
                             <div className="DAT_ProjectMobile_Content_Bottom">
                               <div className="DAT_ProjectMobile_Content_Bottom_Left">
                                 <span>
-                                  {dataLang.formatMessage({ id: "createdate" })}:
+                                  {dataLang.formatMessage({ id: "createdate" })}
+                                  :
                                 </span>
                                 &nbsp;
                                 <span>{item.createdate_}</span>
@@ -1022,7 +1057,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                  true ? (
+                                true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1034,7 +1069,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                  true ? (
+                                true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1101,7 +1136,10 @@ export default function Auto(props) {
                                   <div className="DAT_ProjectMobile_Content_Top_Info_State_Item">
                                     {item.state_ ? (
                                       <>
-                                        <FaCheckCircle size={14} color="green" />
+                                        <FaCheckCircle
+                                          size={14}
+                                          color="green"
+                                        />
                                         <span>
                                           {dataLang.formatMessage({
                                             id: "online",
@@ -1122,7 +1160,10 @@ export default function Auto(props) {
                                   <div className="DAT_ProjectMobile_Content_Top_Info_State_Item">
                                     {item.warn_ ? (
                                       <>
-                                        <FaCheckCircle size={14} color="green" />
+                                        <FaCheckCircle
+                                          size={14}
+                                          color="green"
+                                        />
                                         <span>
                                           {dataLang.formatMessage({
                                             id: "noAlert",
@@ -1181,7 +1222,8 @@ export default function Auto(props) {
                             <div className="DAT_ProjectMobile_Content_Bottom">
                               <div className="DAT_ProjectMobile_Content_Bottom_Left">
                                 <span>
-                                  {dataLang.formatMessage({ id: "createdate" })}:
+                                  {dataLang.formatMessage({ id: "createdate" })}
+                                  :
                                 </span>
                                 &nbsp;
                                 <span>{item.createdate_}</span>
@@ -1196,7 +1238,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                  true ? (
+                                true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1208,7 +1250,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                  true ? (
+                                true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1275,7 +1317,10 @@ export default function Auto(props) {
                                   <div className="DAT_ProjectMobile_Content_Top_Info_State_Item">
                                     {item.state_ ? (
                                       <>
-                                        <FaCheckCircle size={14} color="green" />
+                                        <FaCheckCircle
+                                          size={14}
+                                          color="green"
+                                        />
                                         <span>
                                           {dataLang.formatMessage({
                                             id: "online",
@@ -1296,7 +1341,10 @@ export default function Auto(props) {
                                   <div className="DAT_ProjectMobile_Content_Top_Info_State_Item">
                                     {item.warn_ ? (
                                       <>
-                                        <FaCheckCircle size={14} color="green" />
+                                        <FaCheckCircle
+                                          size={14}
+                                          color="green"
+                                        />
                                         <span>
                                           {dataLang.formatMessage({
                                             id: "noAlert",
@@ -1355,7 +1403,8 @@ export default function Auto(props) {
                             <div className="DAT_ProjectMobile_Content_Bottom">
                               <div className="DAT_ProjectMobile_Content_Bottom_Left">
                                 <span>
-                                  {dataLang.formatMessage({ id: "createdate" })}:
+                                  {dataLang.formatMessage({ id: "createdate" })}
+                                  :
                                 </span>
                                 &nbsp;
                                 <span>{item.createdate_}</span>
@@ -1370,7 +1419,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                  true ? (
+                                true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1382,7 +1431,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                  true ? (
+                                true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1449,7 +1498,10 @@ export default function Auto(props) {
                                   <div className="DAT_ProjectMobile_Content_Top_Info_State_Item">
                                     {item.state_ ? (
                                       <>
-                                        <FaCheckCircle size={14} color="green" />
+                                        <FaCheckCircle
+                                          size={14}
+                                          color="green"
+                                        />
                                         <span>
                                           {dataLang.formatMessage({
                                             id: "online",
@@ -1470,7 +1522,10 @@ export default function Auto(props) {
                                   <div className="DAT_ProjectMobile_Content_Top_Info_State_Item">
                                     {item.warn_ ? (
                                       <>
-                                        <FaCheckCircle size={14} color="green" />
+                                        <FaCheckCircle
+                                          size={14}
+                                          color="green"
+                                        />
                                         <span>
                                           {dataLang.formatMessage({
                                             id: "noAlert",
@@ -1529,7 +1584,8 @@ export default function Auto(props) {
                             <div className="DAT_ProjectMobile_Content_Bottom">
                               <div className="DAT_ProjectMobile_Content_Bottom_Left">
                                 <span>
-                                  {dataLang.formatMessage({ id: "createdate" })}:
+                                  {dataLang.formatMessage({ id: "createdate" })}
+                                  :
                                 </span>
                                 &nbsp;
                                 <span>{item.createdate_}</span>
@@ -1544,7 +1600,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                  true ? (
+                                true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1556,7 +1612,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                  true ? (
+                                true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1623,7 +1679,10 @@ export default function Auto(props) {
                                   <div className="DAT_ProjectMobile_Content_Top_Info_State_Item">
                                     {item.state_ ? (
                                       <>
-                                        <FaCheckCircle size={14} color="green" />
+                                        <FaCheckCircle
+                                          size={14}
+                                          color="green"
+                                        />
                                         <span>
                                           {dataLang.formatMessage({
                                             id: "online",
@@ -1644,7 +1703,10 @@ export default function Auto(props) {
                                   <div className="DAT_ProjectMobile_Content_Top_Info_State_Item">
                                     {item.warn_ ? (
                                       <>
-                                        <FaCheckCircle size={14} color="green" />
+                                        <FaCheckCircle
+                                          size={14}
+                                          color="green"
+                                        />
                                         <span>
                                           {dataLang.formatMessage({
                                             id: "noAlert",
@@ -1703,7 +1765,8 @@ export default function Auto(props) {
                             <div className="DAT_ProjectMobile_Content_Bottom">
                               <div className="DAT_ProjectMobile_Content_Bottom_Left">
                                 <span>
-                                  {dataLang.formatMessage({ id: "createdate" })}:
+                                  {dataLang.formatMessage({ id: "createdate" })}
+                                  :
                                 </span>
                                 &nbsp;
                                 <span>{item.createdate_}</span>
@@ -1718,7 +1781,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                  true ? (
+                                true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1730,7 +1793,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                  true ? (
+                                true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1823,7 +1886,7 @@ export default function Auto(props) {
                 );
               })}
 
-              <div
+              {/* <div
                 className="DAT_Project_Filter"
                 onClick={(e) => setDisplay(!display)}
               >
@@ -1834,8 +1897,8 @@ export default function Auto(props) {
                     transition: "0.5s",
                   }}
                 />
-              </div>
-            </div >
+              </div> */}
+            </div>
 
             <div className="DAT_Project_Content">
               {(() => {
@@ -1926,13 +1989,17 @@ export default function Auto(props) {
               data={saveDataInputFilter}
             /> */}
             </div>
-          </div >
+          </div>
         </>
       )}
 
-
-
-      <div className="DAT_ProjectInfor" style={{ height: plantState.value === "default" ? "0px" : "100vh", transition: "0.5s", }}>
+      <div
+        className="DAT_ProjectInfor"
+        style={{
+          height: plantState.value === "default" ? "0px" : "100vh",
+          transition: "0.5s",
+        }}
+      >
         {(() => {
           switch (plantState.value) {
             case "info":
@@ -1942,24 +2009,29 @@ export default function Auto(props) {
             case "add":
               return <AddProject usr={user} type={bu} />;
             case "drop":
-              return <Popup name={plantobj.value.name_} type={'plant'} usr={user} plantid={plantobj.value.plantid_} />;
-            case 'share':
-              return <ShareBox plantid={plantobj.value.plantid_} usr={user} />
+              return (
+                <Popup
+                  name={plantobj.value.name_}
+                  type={"plant"}
+                  usr={user}
+                  plantid={plantobj.value.plantid_}
+                />
+              );
+            case "share":
+              return <ShareBox plantid={plantobj.value.plantid_} usr={user} />;
             case "toollist":
-              return <div className="DAT_Toollist">
-                <div
-                  className="DAT_Toollist-card"
-                  id="CARD"
-                >
-                  <Toollist bu={bu} ></Toollist>
+              return (
+                <div className="DAT_Toollist">
+                  <div className="DAT_Toollist-card" id="CARD">
+                    <Toollist bu={bu}></Toollist>
+                  </div>
                 </div>
-              </div>;
+              );
             default:
               return <></>;
           }
         })()}
       </div>
-
     </>
   );
 }

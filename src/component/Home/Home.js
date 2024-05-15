@@ -298,7 +298,7 @@ export default function Home(props) {
                 transition: "1s",
               }}
             >
-              Tiện ích
+              {dataLang.formatMessage({ id: "utilities" })}
             </label>
           </span>
 

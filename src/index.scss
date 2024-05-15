@@ -75,6 +75,44 @@ iframe {
   }
 }
 
+.DAT_AppMobile {
+  position: fixed;
+  // display: flex;
+  background-color: #ebebeb;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  /* Firefox */
+  &::-webkit-scrollbar {
+    display: none;
+    /* Safari and Chrome */
+  }
+
+  &_Content {
+    //background-color: green;
+    flex: 8.5;
+    top: 0;
+    left: 0;
+    // height: 100%;
+    overflow-x: hidden;
+    overflow: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    /* Firefox */
+    &::-webkit-scrollbar {
+      display: none;
+      /* Safari and Chrome */
+    }
+  }
+}
+
 .DAT_Table_Container {
   overflow-x: auto !important;
   overflow-y: auto !important;
@@ -222,12 +260,11 @@ iframe {
   }
 }
 
-
 .DAT_TableGroup {
   cursor: pointer;
   width: 100%;
   display: flex;
-  
+
   //gap: 10px;
   //padding: 5px;
   border-left: solid 1px rgb(219, 219, 219);
@@ -270,7 +307,6 @@ iframe {
     //margin-right: solid 1px rgb(219, 219, 219);
   }
 }
-
 
 .rdt_Table {
   position: relative;
@@ -329,7 +365,6 @@ iframe {
       // top: 0;
       // z-index: 20;
     }
-
   }
 
   //1 cột ở bên trong TableRow  thuộc Body
@@ -350,7 +385,6 @@ iframe {
       overflow: hidden !important;
       text-overflow: ellipsis !important;
     }
-
   }
 
   &Col:first-child {
@@ -363,9 +397,6 @@ iframe {
     border-right: solid 1px rgb(213, 213, 213);
     // box-shadow: 3px 3px 6px rgb(213, 213, 213);
     // background-color: #03045e;
-
-
-
   }
 
   &Col:last-child {
@@ -378,11 +409,7 @@ iframe {
     z-index: 20;
     // box-shadow: 3px 3px 6px rgb(213, 213, 213);
     // background-color: #03045e;
-
-
   }
-
-
 
   //Body
   &Body {
@@ -401,9 +428,6 @@ iframe {
     &:hover {
       background-color: rgba(0, 0, 0, 0.05);
     }
-
-
-
   }
 
   // &Cell:last-child{
@@ -423,8 +447,6 @@ iframe {
     display: flex;
     align-items: center;
     justify-content: center;
-
-
   }
 
   &Cell:first-child {
@@ -439,7 +461,6 @@ iframe {
     &:hover {
       background-color: rgba(231, 231, 231);
     }
-
   }
 
   &Cell:last-child {
@@ -451,8 +472,6 @@ iframe {
     border-right: solid 1px rgb(213, 213, 213);
     // box-shadow: 3px 3px 5px rgb(213, 213, 213,0.5);
     //  box-shadow: 3px 3px 6px rgb(213, 213, 213);
-
-
   }
 
   //     // &Header{
@@ -624,7 +643,7 @@ iframe {
   margin-top: 10px;
   margin-bottom: 10px;
   position: relative;
- 
+
   background-color: #ececec;
   //  padding: 5px;
   border-radius: 5px 5px 0 0;
@@ -720,6 +739,7 @@ iframe {
     background-color: white;
     border-radius: 5px;
     overflow: hidden;
+
     // box-shadow: 0 0 4px 4px rgba(193, 193, 193, 0.5);
     // background-color: #56c1f7;
     &_item {
@@ -1133,7 +1153,7 @@ iframe {
 .DAT_Landscape {
   position: fixed;
   z-index: 25;
-  background-image: url('../public/dat_picture/smarttech.png');
+  background-image: url("../public/dat_picture/smarttech.png");
   background-size: cover;
   // overflow-y: scroll;
   // background-position: center bottom !important;
@@ -1141,74 +1161,68 @@ iframe {
   left: 0;
   width: 100%;
   height: 100vh;
- 
+
   z-index: 30;
 
   // background-color: rgba(255, 255, 255);
-  
+
   &_content {
-      width: 80%;
+    width: 80%;
+    margin: auto;
+    margin-top: 200px;
+    border-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: rgb(0, 0, 0, 0.5);
+    box-shadow: 0 0 10px rgb(0, 0, 0, 0.5);
+
+    &_tit {
+      width: 200px;
       margin: auto;
-      margin-top: 200px;
-      border-radius: 5px;
-      padding: 10px;
-      box-sizing: border-box;
-      background-color: rgb(0, 0, 0,.5);
-      box-shadow: 0 0 10px rgb(0, 0, 0,0.5);
-      &_tit {
-  
-          width: 200px;
-          margin: auto;
-          font-family: Montserrat-Semibold;
-          font-size: 40px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #ffffff;
-      }
-      &_ver {
-          width: 170px;
-          margin: auto;
-          font-size: 16px;
-          display: flex;
-          align-items: center;
-          justify-content: flex-end;
-          color: #ff0000;
-      }
-  
-      &_note {
-          width: 100%;
-          margin: auto;
-          // text-align: justify;
-          margin-top: 30px;
-          color: rgb(232, 232, 232);
-  
-  
-      }
-  
-  }
-  &_cancel {
-      width: 90%;
+      font-family: Montserrat-Semibold;
+      font-size: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+    }
+
+    &_ver {
+      width: 170px;
       margin: auto;
+      font-size: 16px;
       display: flex;
       align-items: center;
       justify-content: flex-end;
+      color: #ff0000;
+    }
+
+    &_note {
+      width: 100%;
+      margin: auto;
+      // text-align: justify;
       margin-top: 30px;
-      font-family: Montserrat-Semibold;
-      color: rgb(147, 44, 44);
-
-      &_icon {
-         display: flex;
-         align-items: center;
-         justify-content: center;
-         
-      }
-
-
+      color: rgb(232, 232, 232);
+    }
   }
 
-}
+  &_cancel {
+    width: 90%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 30px;
+    font-family: Montserrat-Semibold;
+    color: rgb(147, 44, 44);
 
+    &_icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
 
 @media (max-width: 900px) {
   .DAT_Table_Container {

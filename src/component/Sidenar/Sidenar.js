@@ -16,6 +16,8 @@ import { TbReportAnalytics } from "react-icons/tb";
 import { SiDatabricks } from "react-icons/si";
 import { RiSettingsLine } from "react-icons/ri";
 import { VscDashboard } from "react-icons/vsc";
+import { useDispatch, useSelector } from "react-redux";
+import { isBrowser } from "react-device-detect";
 
 export const sidenar = signal(true);
 
@@ -27,6 +29,7 @@ const sys = signal([]);
 export default function Sidenar(props) {
   //Datalang
   const dataLang = useIntl();
+  const lang = useSelector((state) => state.admin.lang);
 
   const data = {
     Dashboard: { icon: <VscDashboard />, link: "/", li: sys.value },
@@ -151,6 +154,7 @@ export default function Sidenar(props) {
   }, []);
 
   useEffect(() => {
+    sys.value = [];
     const which = {
       auto: "Auto",
       energy: "Energy",
@@ -172,7 +176,7 @@ export default function Sidenar(props) {
         ];
       });
     }
-  }, [ruleInfor.value]);
+  }, [ruleInfor.value, lang]);
 
   const handleMenu = (e) => {
     const ID = e.currentTarget.id;
@@ -289,56 +293,158 @@ export default function Sidenar(props) {
 
   return (
     <>
-      <div
-        className="DAT_Sidenar"
-        style={sidenar.value ? { width: "200px" } : { width: "0px" }}
-      >
-        <div style={sidenar.value ? { display: "block" } : { display: "none" }}>
-          {Menu("Dashboard", dataLang.formatMessage({ id: "dashboard" }))}
-          {sidebartab.value === "Dashboard" ? (
-            <>{MenuLi("Dashboard")}</>
-          ) : (
-            <></>
-          )}
+      {isBrowser ? (
+        <>
+          <div
+            className="DAT_Sidenar"
+            style={sidenar.value ? { width: "200px" } : { width: "0px" }}
+          >
+            <div
+              style={sidenar.value ? { display: "block" } : { display: "none" }}
+            >
+              {Menu("Dashboard", dataLang.formatMessage({ id: "dashboard" }))}
+              {sidebartab.value === "Dashboard" ? (
+                <>{MenuLi("Dashboard")}</>
+              ) : (
+                <></>
+              )}
 
-          {/* {Menu("Monitor", dataLang.formatMessage({ id: "monitor" }))}
+              {/* {Menu("Monitor", dataLang.formatMessage({ id: "monitor" }))}
           {sidebartab.value === "Monitor" ? <>{MenuLi("Monitor")}</> : <></>} */}
 
-          {Menu("Analytics", dataLang.formatMessage({ id: "maintain" }))}
-          {sidebartab.value === "Analytics" ? (
-            <>{MenuLi("Analytics")}</>
-          ) : (
-            <></>
-          )}
+              {Menu("Analytics", dataLang.formatMessage({ id: "maintain" }))}
+              {sidebartab.value === "Analytics" ? (
+                <>{MenuLi("Analytics")}</>
+              ) : (
+                <></>
+              )}
 
-          {Menu("Setting", dataLang.formatMessage({ id: "setting" }))}
-          {sidebartab.value === "Setting" ? <>{MenuLi("Setting")}</> : <></>}
-        </div>
-      </div>
-
-      <div
-        className="DAT_User"
-        style={sidenar.value ? { width: "200px" } : { width: "0px" }}
-      >
-        <div
-          className="DAT_User-group"
-          style={sidenar.value ? { display: "block" } : { display: "none" }}
-        >
-          <div className="DAT_User-group-Tit">
-            {dataLang.formatMessage({ id: "loginWith" })}
+              {Menu("Setting", dataLang.formatMessage({ id: "setting" }))}
+              {sidebartab.value === "Setting" ? (
+                <>{MenuLi("Setting")}</>
+              ) : (
+                <></>
+              )}
+            </div>
           </div>
-          <div className="DAT_User-group-ID">{userInfor.value.name}</div>
-        </div>
-      </div>
 
-      <div
-        className="DAT_Shadow"
-        id="DAT_Shadow"
-        style={sidenar.value ? { display: "block" } : { display: "none" }}
-        onClick={(event) => {
-          handleShadow(event);
-        }}
-      ></div>
+          <div
+            className="DAT_User"
+            style={sidenar.value ? { width: "200px" } : { width: "0px" }}
+          >
+            <div
+              className="DAT_User-group"
+              style={sidenar.value ? { display: "block" } : { display: "none" }}
+            >
+              <div className="DAT_User-group-Tit">
+                {dataLang.formatMessage({ id: "loginWith" })}
+              </div>
+              <div className="DAT_User-group-ID">{userInfor.value.name}</div>
+            </div>
+          </div>
+
+          <div
+            className="DAT_Shadow"
+            id="DAT_Shadow"
+            style={sidenar.value ? { display: "block" } : { display: "none" }}
+            onClick={(event) => {
+              handleShadow(event);
+            }}
+          ></div>
+        </>
+      ) : (
+        <>
+          <div className="DAT_SidenarMobile">
+            {data["Dashboard"].link === "none" ? (
+              <div
+                className="DAT_SidenarMobile_Item"
+                id="Dashboard"
+                onClick={(e) => handleMenu(e)}
+                style={{
+                  color:
+                    sidebartab.value === "Dashboard"
+                      ? dataColor.cur.color
+                      : dataColor.pre.color,
+                }}
+              >
+                <div className="DAT_SidenarMobile_Item_Icon">
+                  {sidebartab.value === "Dashboard" ? (
+                    <ion-icon name="home"></ion-icon>
+                  ) : (
+                    <ion-icon name="home-outline"></ion-icon>
+                  )}
+                </div>
+                <span>{dataLang.formatMessage({ id: "dashboard" })}</span>
+              </div>
+            ) : (
+              <Link
+                className="DAT_SidenarMobile_Item"
+                to={data["Dashboard"].link}
+                id="Dashboard"
+                onClick={(e) => handleMenu(e)}
+                style={{
+                  textDecoration: "none",
+                  color:
+                    sidebartab.value === "Dashboard"
+                      ? dataColor.cur.color
+                      : dataColor.pre.color,
+                }}
+              >
+                <div className="DAT_SidenarMobile_Item_Icon">
+                  {sidebartab.value === "Dashboard" ? (
+                    <ion-icon name="home"></ion-icon>
+                  ) : (
+                    <ion-icon name="home-outline"></ion-icon>
+                  )}
+                </div>
+                <span>{dataLang.formatMessage({ id: "dashboard" })}</span>
+              </Link>
+            )}
+
+            <div
+              className="DAT_SidenarMobile_Item"
+              id="Analytics"
+              onClick={(e) => handleMenu(e)}
+              style={{
+                color:
+                  sidebartab.value === "Analytics"
+                    ? dataColor.cur.color
+                    : dataColor.pre.color,
+              }}
+            >
+              <div className="DAT_SidenarMobile_Item_Icon">
+                {sidebartab.value === "Analytics" ? (
+                  <ion-icon name="document-text"></ion-icon>
+                ) : (
+                  <ion-icon name="document-text-outline"></ion-icon>
+                )}
+              </div>
+              <span>{dataLang.formatMessage({ id: "maintain" })}</span>
+            </div>
+
+            <div
+              className="DAT_SidenarMobile_Item"
+              id="Setting"
+              onClick={(e) => handleMenu(e)}
+              style={{
+                color:
+                  sidebartab.value === "Setting"
+                    ? dataColor.cur.color
+                    : dataColor.pre.color,
+              }}
+            >
+              <div className="DAT_SidenarMobile_Item_Icon">
+                {sidebartab.value === "Setting" ? (
+                  <ion-icon name="settings"></ion-icon>
+                ) : (
+                  <ion-icon name="settings-outline"></ion-icon>
+                )}
+              </div>
+              <span>{dataLang.formatMessage({ id: "setting" })}</span>
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 }

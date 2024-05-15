@@ -152,105 +152,150 @@ export default function Role(props) {
                       <></>
                     ) : (
                       <PopupState variant="popper" popupId="demo-popup-popper">
-                        {(popupState) => (<div className="DAT_TableEdit">
-                          <IoMdMore size={20}   {...bindToggle(popupState)} />
-                          <Menu {...bindMenu(popupState)}>
+                        {(popupState) => (
+                          <div className="DAT_TableEdit">
+                            <IoMdMore size={20} {...bindToggle(popupState)} />
+                            <Menu {...bindMenu(popupState)}>
+                              <MenuItem
+                                id={row.id_}
+                                onClick={(e) => {
+                                  handleEdit(e);
+                                  popupState.close();
+                                }}
+                              >
+                                <FiEdit size={14} />
+                                &nbsp;
+                                {dataLang.formatMessage({ id: "change" })}
+                              </MenuItem>
 
-                            <MenuItem id={row.id_} onClick={(e) => { handleEdit(e); popupState.close() }}>
-                              <FiEdit size={14} />&nbsp;
-                              {dataLang.formatMessage({ id: "change" })}
-                            </MenuItem>
-
-
-                            <MenuItem id={row.usr_} onClick={(e) => { handleDelete_(e); popupState.close() }}>
-                              <IoTrashOutline size={16} />
-                              &nbsp;
-                              {dataLang.formatMessage({ id: "delete" })}
-                            </MenuItem>
-                          </Menu>
-                        </div>)}
+                              <MenuItem
+                                id={row.usr_}
+                                onClick={(e) => {
+                                  handleDelete_(e);
+                                  popupState.close();
+                                }}
+                              >
+                                <IoTrashOutline size={16} />
+                                &nbsp;
+                                {dataLang.formatMessage({ id: "delete" })}
+                              </MenuItem>
+                            </Menu>
+                          </div>
+                        )}
                       </PopupState>
                     )}
                   </>
-                )
+                );
               case "mainadmin":
                 return (
                   <>
                     {row.type_ === "master" || row.type_ === "mainadmin" ? (
                       <></>
-                    ) : (
-                      ruleInfor.value.setting.user.modify || ruleInfor.value.setting.user.remove ? (
-                        <PopupState variant="popper" popupId="demo-popup-popper">
-                          {(popupState) => (<div className="DAT_TableEdit">
-                            <IoMdMore size={20}   {...bindToggle(popupState)} />
+                    ) : ruleInfor.value.setting.user.modify ||
+                      ruleInfor.value.setting.user.remove ? (
+                      <PopupState variant="popper" popupId="demo-popup-popper">
+                        {(popupState) => (
+                          <div className="DAT_TableEdit">
+                            <IoMdMore size={20} {...bindToggle(popupState)} />
                             <Menu {...bindMenu(popupState)}>
                               {ruleInfor.value.setting.user.modify ? (
-                                <MenuItem id={row.id_} onClick={(e) => { handleEdit(e); popupState.close() }}>
-                                  <FiEdit size={14} />&nbsp;
+                                <MenuItem
+                                  id={row.id_}
+                                  onClick={(e) => {
+                                    handleEdit(e);
+                                    popupState.close();
+                                  }}
+                                >
+                                  <FiEdit size={14} />
+                                  &nbsp;
                                   {dataLang.formatMessage({ id: "change" })}
                                 </MenuItem>
-                              ) : (<></>)}
+                              ) : (
+                                <></>
+                              )}
 
                               {ruleInfor.value.setting.user.remove ? (
-                                <MenuItem id={row.usr_} onClick={(e) => { handleDelete_(e); popupState.close() }}>
+                                <MenuItem
+                                  id={row.usr_}
+                                  onClick={(e) => {
+                                    handleDelete_(e);
+                                    popupState.close();
+                                  }}
+                                >
                                   <IoTrashOutline size={16} />
                                   &nbsp;
                                   {dataLang.formatMessage({ id: "delete" })}
                                 </MenuItem>
-                              ) : (<></>)}
-
+                              ) : (
+                                <></>
+                              )}
                             </Menu>
-                          </div>)}
-                        </PopupState>
-                      ) : (
-                        <></>
-                      )
+                          </div>
+                        )}
+                      </PopupState>
+                    ) : (
+                      <></>
                     )}
                   </>
-                )
+                );
               case "admin":
                 return (
                   <>
-                    {row.type_ === "master" || row.type_ === "mainadmin" || row.type_ === "admin" ? (
+                    {row.type_ === "master" ||
+                    row.type_ === "mainadmin" ||
+                    row.type_ === "admin" ? (
                       <></>
-                    ) : (
-                      ruleInfor.value.setting.user.modify || ruleInfor.value.setting.user.remove ? (
-                        <PopupState variant="popper" popupId="demo-popup-popper">
-                          {(popupState) => (<div className="DAT_TableEdit">
-                            <IoMdMore size={20}   {...bindToggle(popupState)} />
+                    ) : ruleInfor.value.setting.user.modify ||
+                      ruleInfor.value.setting.user.remove ? (
+                      <PopupState variant="popper" popupId="demo-popup-popper">
+                        {(popupState) => (
+                          <div className="DAT_TableEdit">
+                            <IoMdMore size={20} {...bindToggle(popupState)} />
                             <Menu {...bindMenu(popupState)}>
                               {ruleInfor.value.setting.user.modify ? (
-                                <MenuItem id={row.id_} onClick={(e) => { handleEdit(e); popupState.close() }}>
-                                  <FiEdit size={14} />&nbsp;
+                                <MenuItem
+                                  id={row.id_}
+                                  onClick={(e) => {
+                                    handleEdit(e);
+                                    popupState.close();
+                                  }}
+                                >
+                                  <FiEdit size={14} />
+                                  &nbsp;
                                   {dataLang.formatMessage({ id: "change" })}
                                 </MenuItem>
-                              ) : (<></>)}
+                              ) : (
+                                <></>
+                              )}
 
                               {ruleInfor.value.setting.user.remove ? (
-                                <MenuItem id={row.usr_} onClick={(e) => { handleDelete_(e); popupState.close() }}>
+                                <MenuItem
+                                  id={row.usr_}
+                                  onClick={(e) => {
+                                    handleDelete_(e);
+                                    popupState.close();
+                                  }}
+                                >
                                   <IoTrashOutline size={16} />
                                   &nbsp;
                                   {dataLang.formatMessage({ id: "delete" })}
                                 </MenuItem>
-                              ) : (<></>)}
-
+                              ) : (
+                                <></>
+                              )}
                             </Menu>
-                          </div>)}
-                        </PopupState>
-                      ) : (
-                        <></>
-                      )
+                          </div>
+                        )}
+                      </PopupState>
+                    ) : (
+                      <></>
                     )}
                   </>
-                )
+                );
               default:
-                return (<></>)
+                return <></>;
             }
           })()}
-
-
-
-
         </>
       ),
       width: "110px",
@@ -362,8 +407,9 @@ export default function Role(props) {
               >
                 <IoAddOutline color="white" size={20} />
               </button>
-            ) : (<></>)}
-
+            ) : (
+              <></>
+            )}
           </div>
 
           <div
@@ -470,13 +516,13 @@ export default function Role(props) {
               );
             })}
           </div> */}
-          <div className="DAT_ProjectMobile">
+          <div className="DAT_RoleMobile">
             {datafilter?.map((item, i) => {
               return (
-                <div key={i} className="DAT_ProjectMobile_Content">
-                  <div className="DAT_ProjectMobile_Content_Top">
+                <div key={i} className="DAT_RoleMobile_Content">
+                  <div className="DAT_RoleMobile_Content_Top">
                     <div
-                      className="DAT_ProjectMobile_Content_Top_Avatar"
+                      className="DAT_RoleMobile_Content_Top_Avatar"
                       style={{
                         minWidth: "40px",
                         minHeight: "40px",
@@ -496,10 +542,10 @@ export default function Role(props) {
                         }
                       />
                     </div>
-                    <div className="DAT_ProjectMobile_Content_Top_Info">
-                      <div className="DAT_ProjectMobile_Content_Top_Info_Name">
+                    <div className="DAT_RoleMobile_Content_Top_Info">
+                      <div className="DAT_RoleMobile_Content_Top_Info_Name">
                         <div
-                          className="DAT_ProjectMobile_Content_Top_Info_Name_Left"
+                          className="DAT_RoleMobile_Content_Top_Info_Name_Left"
                           id={item.id_}
                           style={{ cursor: "pointer", fontSize: "17px" }}
                         >
@@ -508,11 +554,11 @@ export default function Role(props) {
                       </div>
 
                       <div
-                        className="DAT_ProjectMobile_Content_Top_Info_Data"
+                        className="DAT_RoleMobile_Content_Top_Info_Data"
                         style={{ color: "rgba(95, 95, 98)", fontSize: "12px" }}
                       >
-                        <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
-                          <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name"></div>
+                        <div className="DAT_RoleMobile_Content_Top_Info_Data_Item">
+                          <div className="DAT_RoleMobile_Content_Top_Info_Data_Item_Name"></div>
                           <div>
                             {dataLang.formatMessage({ id: "phone" })}:{" "}
                             {item.phone_}
@@ -521,11 +567,11 @@ export default function Role(props) {
                       </div>
 
                       <div
-                        className="DAT_ProjectMobile_Content_Top_Info_Data"
+                        className="DAT_RoleMobile_Content_Top_Info_Data"
                         style={{ color: "rgba(95, 95, 98)", fontSize: "12px" }}
                       >
-                        <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
-                          <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name"></div>
+                        <div className="DAT_RoleMobile_Content_Top_Info_Data_Item">
+                          <div className="DAT_RoleMobile_Content_Top_Info_Data_Item_Name"></div>
                           <div>
                             {dataLang.formatMessage({ id: "email" })}:{" "}
                             {item.mail_}
@@ -534,11 +580,11 @@ export default function Role(props) {
                       </div>
 
                       <div
-                        className="DAT_ProjectMobile_Content_Top_Info_Data"
+                        className="DAT_RoleMobile_Content_Top_Info_Data"
                         style={{ color: "rgba(95, 95, 98)", fontSize: "12px" }}
                       >
-                        <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
-                          <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name"></div>
+                        <div className="DAT_RoleMobile_Content_Top_Info_Data_Item">
+                          <div className="DAT_RoleMobile_Content_Top_Info_Data_Item_Name"></div>
                           <div>
                             {dataLang.formatMessage({ id: "account" })}:{" "}
                             <span style={{ fontFamily: "Montserrat-Bold" }}>
@@ -550,17 +596,17 @@ export default function Role(props) {
                     </div>
                   </div>
 
-                  <div className="DAT_ProjectMobile_Content_Bottom">
-                    <div className="DAT_ProjectMobile_Content_Bottom_Left">
+                  <div className="DAT_RoleMobile_Content_Bottom">
+                    <div className="DAT_RoleMobile_Content_Bottom_Left">
                       <span>{dataLang.formatMessage({ id: "rule" })}:</span>
                       &nbsp;
                       <span>{item.rulename_}</span>
                     </div>
 
-                    <div className="DAT_ProjectMobile_Content_Bottom_Right">
+                    <div className="DAT_RoleMobile_Content_Bottom_Right">
                       {ruleInfor.value.setting.user.modify === true ? (
                         <div
-                          className="DAT_ProjectMobile_Content_Bottom_Right_Item"
+                          className="DAT_RoleMobile_Content_Bottom_Right_Item"
                           id={item.id_}
                           onClick={(e) => handleEdit(e)}
                         >
@@ -571,7 +617,7 @@ export default function Role(props) {
                       )}
                       {ruleInfor.value.setting.user.remove === true ? (
                         <div
-                          className="DAT_ProjectMobile_Content_Bottom_Right_Item"
+                          className="DAT_RoleMobile_Content_Bottom_Right_Item"
                           id={item.id_}
                           onClick={(e) => handleDelete_(e)}
                         >
@@ -615,7 +661,8 @@ export default function Role(props) {
         </>
       )}
 
-      <div className="DAT_ViewPopup"
+      <div
+        className="DAT_ViewPopup"
         style={{
           height: roleState === "default" ? "0px" : "100vh",
           transition: "0.5s",
@@ -631,11 +678,13 @@ export default function Role(props) {
         })()}
       </div>
 
-      {popupState ?
+      {popupState ? (
         <div className="DAT_PopupBG">
           <RolePopup user={temp} type={type} handleClose={handleClosePopup} />
         </div>
-        : <></>}
+      ) : (
+        <></>
+      )}
     </>
   );
 }

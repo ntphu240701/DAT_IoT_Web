@@ -29,7 +29,7 @@ export default function Dashboard(props) {
   const [chart, setChart] = useState("year");
 
   const datalang = useIntl();
-  const v = "Dữ liệu tháng";
+  const v = datalang.formatMessage({ id: "monthOutput" });
   const data = [
     {
       name: "1",
@@ -97,9 +97,6 @@ export default function Dashboard(props) {
     );
   };
 
-
-
-
   const defaultProps = {
     center: {
       lat: 16.0544068,
@@ -141,8 +138,7 @@ export default function Dashboard(props) {
   };
 
   useEffect(() => {
-  
-    if(props.data){
+    if (props.data) {
       initMap(props.data);
 
       const getGateway = async () => {
@@ -154,14 +150,9 @@ export default function Dashboard(props) {
           setDevicedata(res.data);
         }
       };
-  
+
       getGateway();
-
-
     }
-
-
-
   }, [props.data]);
 
   return (
@@ -223,7 +214,7 @@ export default function Dashboard(props) {
                 className="DAT_MainInfo_Status_Item_Header"
                 style={{ color: "rgba(209, 118, 0, 0.9)" }}
               >
-                <span>Bảo trì</span>
+                <span>{datalang.formatMessage({ id: "maintenance" })}</span>
                 <LuInfo />
               </div>
               <div
@@ -356,7 +347,10 @@ export default function Dashboard(props) {
             <div className="DAT_MainInfo_Graph_Group">
               {/* <div className="DAT_MainInfo_Graph_Group_Unit">Unit</div> */}
               <div className="DAT_MainInfo_Graph_Group_Label">
-                Dữ liệu theo năm: 0 kW
+                {chart === "year"
+                  ? datalang.formatMessage({ id: "yearOutput" })
+                  : datalang.formatMessage({ id: "monthOutput" })}
+                : 0 kWh
               </div>
             </div>
             <div style={{ width: "100%", height: "250px" }}>

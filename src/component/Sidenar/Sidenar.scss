@@ -82,13 +82,41 @@
     }
 }
 
+.DAT_SidenarMobile {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    // height: 80px;
+    width: 100%;
+    z-index: 35;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background-color: white;
+    border-top: solid 1px rgba(198, 197, 197, 0.5);
+
+    &_Item {
+        width: 125px;
+        font-size: 14px;
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        &_Icon {
+            font-size: 25px;
+        }
+    }
+}
+
 .DAT_User {
     position: fixed;
     bottom: 0;
     left: 0;
     height: 80px;
     width: 240px;
-    z-index:35;
+    z-index: 35;
     display: flex;
     align-items: center;
     background-color: rgba(216, 215, 215, 0.8);
@@ -117,9 +145,6 @@
 @media (max-width: 900px) {
     .DAT_Sidenar {
         position: fixed;
-
-
-
     }
 
     .DAT_Shadow {
@@ -142,5 +167,4 @@
             /* Safari and Chrome */
         }
     }
-
 }

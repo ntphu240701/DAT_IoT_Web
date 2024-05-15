@@ -8,6 +8,9 @@ export const host = {
 
 export const messages = {
   en: {
+    on: "On",
+    off: "Off",
+    utilities: "Utilities",
     system: "System",
     screen: "Display",
     auto: "Auto",
@@ -39,6 +42,7 @@ export const messages = {
     projname: "Project name",
     phone: "Phone number",
     notification: "Notification",
+    maintainance: "Maintenance",
     maintain: "Analytics",
     analytic: "Analytic",
     analyticsList: "List of Analytics",
@@ -917,6 +921,9 @@ export const messages = {
     // A_48_17: "Unknown",
   },
   vi: {
+    on: "Bật",
+    off: "Tắt",
+    utilities: "Tiện ích",
     screen: "Giao diện",
     system: "Hệ sinh thái",
     auto: "Tự động hóa",
@@ -949,6 +956,7 @@ export const messages = {
     phone: "Số điện thoại",
     notification: "Thông báo",
     dashboard: "Bảng điều khiển",
+    maintainance: "Bảo trì",
     maintain: "Vận hành-Bảo trì",
     analytic: "Phân tích",
     analyticsList: "Danh sách mẫu phân tích",
