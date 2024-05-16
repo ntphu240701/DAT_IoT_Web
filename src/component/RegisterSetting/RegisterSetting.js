@@ -17,36 +17,18 @@ import { host } from "../Lang/Contant";
 import PopupState, { bindMenu, bindToggle } from "material-ui-popup-state";
 import { Menu, MenuItem } from "@mui/material";
 import DataTable from "react-data-table-component";
+import Popup from "./Popup";
 
 export const groupRegID = signal("");
+export const configEdit = signal("");
 
 export default function RegisterSetting() {
   const [dataGateway, setDataGateway] = useState([]);
   const [dataRegister, setDataRegister] = useState([]);
+  const [popup, setPopup] = useState(false);
+  const [statePopup, setStatePopup] = useState("");
 
   const dataLang = useIntl();
-
-  //   const handleAddItem = (e) => {
-  //     //console.log(e.currentTarget.id)
-  //     const arr = e.currentTarget.id.split("_");
-  //     const newData = register.value;
-  //     const i = newData.data.findIndex((data) => data.id == arr[1]);
-  //     newData.data[i].register = [
-  //       ...newData.data[i].register,
-  //       {
-  //         id: parseInt(newData.data[i].register.length) + 1,
-  //         addr:
-  //           parseInt(newData.data[i].register.length + 1) +
-  //           "-" +
-  //           newData.data[i].id,
-  //         val: "1",
-  //       },
-  //     ];
-  //     // console.log(newData.data[i].register);
-  //     register.value = {
-  //       ...newData,
-  //     };
-  //   };
 
   const columnGroupRole = [
     {
@@ -74,13 +56,13 @@ export default function RegisterSetting() {
       name: dataLang.formatMessage({ id: "config" }),
       selector: (row) => {
         let cause = row.register.sort((a, b) => a.id - b.id);
-        console.log(cause);
+        // console.log(cause);
         return (
           <div style={{ height: "auto" }}>
             {cause.map((err, index) => {
               return (
                 <div
-                  key={err.id}
+                  key={index}
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -101,21 +83,32 @@ export default function RegisterSetting() {
                     <FiEdit
                       size={16}
                       style={{ cursor: "pointer" }}
-                      id={`${row.boxid_}-${err.id}-EDITCAUSE`}
-                      //   onClick={(e) => handleEdit(e)}
+                      id={`${row.id}_${err.id}_EDIT`}
+                      onClick={(e) => {
+                        changePopupstate();
+                        setStatePopup("editConfig");
+                        handleSetConfig(e);
+                      }}
                     />
                     <IoTrashOutline
                       size={16}
                       style={{ cursor: "pointer" }}
-                      id={`${row.boxid_}_${err.id}_REMOVECAUSE`}
-                      //   onClick={(e) => handleDelete(e)}
+                      id={`${row.id}_${err.id}_REMOVE`}
+                      onClick={(e) => {
+                        changePopupstate();
+                        setStatePopup("removeConfig");
+                        handleSetConfig(e);
+                      }}
                     />
                     {parseInt(index) === cause.length - 1 ? (
                       <IoIosAddCircleOutline
                         size={16}
                         style={{ cursor: "pointer" }}
-                        id={`${row.boxid_}-ADDCAUSE`}
-                        // onClick={(e) => handleAdd(e)}
+                        id={`${row.id}_ADD`}
+                        onClick={(e) => {
+                          handleAddConfig(e);
+                          handleSetConfig(e);
+                        }}
                       />
                     ) : (
                       <></>
@@ -134,93 +127,45 @@ export default function RegisterSetting() {
       },
     },
     {
-      name: "Email",
-      selector: (user) => user.mail_,
-      sortable: true,
-      width: "250px",
+      name: dataLang.formatMessage({ id: "setting" }),
+      selector: (row) => (
+        <>
+          {row.type_ === "master" ? (
+            <></>
+          ) : (
+            <PopupState variant="popper" popupId="demo-popup-popper">
+              {(popupState) => (
+                <div className="DAT_TableEdit">
+                  <IoMdMore size={20} {...bindToggle(popupState)} />
+                  <Menu {...bindMenu(popupState)}>
+                    <MenuItem
+                      id={row.id}
+                      onClick={(e) => {
+                        changePopupstate();
+                        setStatePopup("removeError");
+                        configEdit.value = e.currentTarget.id;
+                        console.log(configEdit.value);
+                      }}
+                    >
+                      <IoTrashOutline size={16} />
+                      &nbsp;
+                      {dataLang.formatMessage({ id: "delete" })}
+                    </MenuItem>
+                  </Menu>
+                </div>
+              )}
+            </PopupState>
+          )}
+        </>
+      ),
+      width: "80px",
       style: {
-        justifyContent: "left !important",
+        height: "auto !important",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
       },
     },
-    // {
-    //   name: dataLang.formatMessage({ id: "phone" }),
-    //   selector: (user) => user.phone_,
-    //   sortable: true,
-    //   minwidth: "200px",
-    //   style: {
-    //     justifyContent: "left !important",
-    //   },
-    // },
-    // {
-    //   name: dataLang.formatMessage({ id: "account" }),
-    //   selector: (user) => dataLang.formatMessage({ id: user.type_ }),
-    //   sortable: true,
-    //   // width: "150px",
-    //   style: {
-    //     justifyContent: "left !important",
-    //   },
-    // },
-    // {
-    //   name: dataLang.formatMessage({ id: "role" }),
-    //   selector: (user) => (
-    //     <div
-    //       style={{ cursor: "pointer" }}
-    //       id={user.id_}
-    //       //   onClick={(e) => handleEdit(e)}
-    //     >
-    //       {user.rulename_}
-    //     </div>
-    //   ),
-    //   sortable: true,
-    //   // width: "150px",
-    //   style: {
-    //     justifyContent: "left !important",
-    //   },
-    // },
-    // {
-    //   name: dataLang.formatMessage({ id: "setting" }),
-    //   selector: (user) => (
-    //     <>
-    //       {user.type_ === "master" ? (
-    //         <></>
-    //       ) : (
-    //         <PopupState variant="popper" popupId="demo-popup-popper">
-    //           {(popupState) => (
-    //             <div className="DAT_TableEdit">
-    //               <IoMdMore size={20} {...bindToggle(popupState)} />
-    //               <Menu {...bindMenu(popupState)}>
-    //                 <MenuItem
-    //                   id={user.id_}
-    //                   //   onClick={(e) => {
-    //                   //     handleEdit(e);
-    //                   //     popupState.close();
-    //                   //   }}
-    //                 >
-    //                   <FiEdit size={14} />
-    //                   &nbsp;
-    //                   {dataLang.formatMessage({ id: "change" })}
-    //                 </MenuItem>
-
-    //                 <MenuItem
-    //                   id={user.id_}
-    //                   onClick={(e) => {
-    //                     // handleDeleteUser(e);
-    //                     // popupState.close();
-    //                   }}
-    //                 >
-    //                   <IoTrashOutline size={16} />
-    //                   &nbsp;
-    //                   {dataLang.formatMessage({ id: "delete" })}
-    //                 </MenuItem>
-    //               </Menu>
-    //             </div>
-    //           )}
-    //         </PopupState>
-    //       )}
-    //     </>
-    //   ),
-    //   width: "110px",
-    // },
   ];
 
   const paginationComponentOptions = {
@@ -232,6 +177,11 @@ export default function RegisterSetting() {
 
   const usr = useSelector((state) => state.admin.usr);
 
+  const handleSetConfig = (e) => {
+    configEdit.value = e.currentTarget.id;
+    console.log(e.currentTarget.id);
+  };
+
   const handleChangeGroup = (e) => {
     groupRegID.value = e.currentTarget.id;
     console.log(groupRegID.value);
@@ -239,10 +189,131 @@ export default function RegisterSetting() {
       let inf = await callApi("post", host.DATA + "/getRegister", {
         sn: sn,
       });
-      console.log(inf.data);
-      setDataRegister(inf.data[0].setting_);
+      // console.log(inf);
+      if (inf.status === true) {
+        if (inf.data.length > 0) {
+          setDataRegister(inf.data[0].setting_);
+        } else {
+          setDataRegister([]);
+        }
+      }
     };
+    console.log(dataRegister);
     getRegister(e.currentTarget.id);
+  };
+
+  const changePopupstate = (e) => {
+    setPopup(!popup);
+  };
+
+  //FUNCTION POPUP
+
+  const handleSubmitAddNewReg = (errAdd1, errAdd2) => {
+    console.log(errAdd1, errAdd2);
+    let temp = [...dataRegister];
+    temp = [
+      ...temp,
+      {
+        id: parseInt(temp.length) + 1,
+        addrcode: `${errAdd1}-${errAdd2}`,
+        register: [
+          {
+            id: 1,
+            addr: `${errAdd1}-${errAdd2}`,
+            val: "1",
+          },
+        ],
+      },
+    ];
+    console.log(temp, groupRegID.value);
+    const upReg = async () => {
+      let req = await callApi("post", `${host.DATA}/updateRegister`, {
+        sn: groupRegID.value,
+        data: JSON.stringify(temp),
+      });
+      console.log(req);
+      setDataRegister([...temp]);
+    };
+    upReg();
+  };
+
+  const handleEditConfig = (editVal) => {
+    const temp = configEdit.value.split("_");
+    const i = dataRegister.findIndex((data) => data.id == temp[0]);
+    const j = dataRegister[i].register.findIndex((data) => data.id == temp[1]);
+    let t = dataRegister;
+    t[i].register[j].val = editVal;
+    const upReg = async () => {
+      let req = await callApi("post", `${host.DATA}/updateRegister`, {
+        sn: groupRegID.value,
+        data: JSON.stringify(t),
+      });
+      console.log(req);
+      setDataRegister([...t]);
+    };
+    upReg();
+    console.log(t);
+  };
+
+  const handleRemoveConfig = () => {
+    const temp = configEdit.value.split("_");
+    const i = dataRegister.findIndex((data) => data.id == temp[0]);
+    const j = dataRegister[i].register.findIndex((data) => data.id == temp[1]);
+    const t = dataRegister;
+    dataRegister[i].register.splice(j, 1);
+    setDataRegister([...dataRegister]);
+    const upReg = async () => {
+      let req = await callApi("post", `${host.DATA}/updateRegister`, {
+        sn: groupRegID.value,
+        data: JSON.stringify(t),
+      });
+      console.log(req);
+      setDataRegister([...t]);
+    };
+    upReg();
+    console.log(t);
+  };
+
+  const handleAddConfig = (e) => {
+    const temp = e.currentTarget.id.split("_");
+    const i = dataRegister.findIndex((data) => data.id == temp[0]);
+    // console.log(dataRegister[i].register.length);
+    // console.log(
+    //   dataRegister[i].register[dataRegister[i].register.length - 1].id
+    // );
+    const t = dataRegister;
+    t[i].register.push({
+      id: t[i].register[t[i].register.length - 1].id + 1,
+      addr: t[i].register[t[i].register.length - 1].addr,
+      val: parseInt(t[i].register[t[i].register.length - 1].val) + 1,
+    });
+    const upReg = async () => {
+      let req = await callApi("post", `${host.DATA}/updateRegister`, {
+        sn: groupRegID.value,
+        data: JSON.stringify(t),
+      });
+      console.log(req);
+      setDataRegister([...t]);
+    };
+    upReg();
+    console.log(t);
+  };
+
+  const handleDelErr = (e) => {
+    const temp = configEdit.value;
+    const i = dataRegister.findIndex((data) => data.id == temp);
+    const t = dataRegister;
+    t.splice(i, 1);
+    const upReg = async () => {
+      let req = await callApi("post", `${host.DATA}/updateRegister`, {
+        sn: groupRegID.value,
+        data: JSON.stringify(t),
+      });
+      console.log(req);
+      setDataRegister([...t]);
+    };
+    upReg();
+    console.log(t);
   };
 
   useEffect(() => {
@@ -252,10 +323,9 @@ export default function RegisterSetting() {
         partnerid: id,
         type: type,
       });
-      console.log(res);
       if (res.status) {
         setDataGateway([...res.data]);
-        console.log(res.data);
+        // console.log(res.data);
       }
     };
 
@@ -295,16 +365,19 @@ export default function RegisterSetting() {
           )}
           <CiSearch color="gray" size={20} />
         </div>
-        <button
+        {/* <button
           className="DAT_GRHeader_New"
-          //   onClick={() => setCreateState(true)}
+          onClick={() => {
+            changePopupstate();
+            setStatePopup("addNewReg");
+          }}
         >
           <span>
             <AiOutlineUsergroupAdd color="white" size={20} />
             &nbsp;
             {dataLang.formatMessage({ id: "createNewGroup" })}
           </span>
-        </button>
+        </button> */}
       </div>
 
       <div className="DAT_GR">
@@ -357,7 +430,10 @@ export default function RegisterSetting() {
                     <div
                       className="DAT_GR_Content_DevideTable_Left_ItemList_Item_Shortcut"
                       //   id={item.id_ + "_dot"}
-                      //   onClick={(e) => handleShowFunction(e)}
+                      onClick={() => {
+                        changePopupstate();
+                        setStatePopup("addNewReg");
+                      }}
                     >
                       <IoMdAdd size={20} color="grey" />
                     </div>
@@ -401,7 +477,7 @@ export default function RegisterSetting() {
             </div>
             <div className="DAT_GR_Content_DevideTable_Right">
               <div className="DAT_GR_Content_DevideTable_Right_ItemList">
-                {groupRegID.value === 0 ? (
+                {dataRegister === undefined ? (
                   <Empty />
                 ) : (
                   <DataTable
@@ -419,6 +495,22 @@ export default function RegisterSetting() {
           </div>
         </div>
       </div>
+
+      {popup ? (
+        <div className="DAT_PopupBG">
+          <Popup
+            closeopen={changePopupstate}
+            type={statePopup}
+            data={dataRegister}
+            handleSubmitAddNewReg={handleSubmitAddNewReg}
+            handleEditConfig={handleEditConfig}
+            handleRemoveConfig={handleRemoveConfig}
+            handleDelErr={handleDelErr}
+          />
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

@@ -4,7 +4,7 @@ import "./Role.scss";
 import { roleState } from "./Role";
 import { useIntl } from "react-intl";
 import { alertDispatch } from "../Alert/Alert";
-import { partnerInfor } from "../../App";
+import { partnerInfor, userInfor } from "../../App";
 import { callApi } from "../Api/Api";
 import { host } from "../Lang/Contant";
 
@@ -22,7 +22,7 @@ export default function CreateRole(props) {
   const dataLang = useIntl();
 
   const handleSave = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
 
     if (pwd.current.value === authpwd.current.value) {
       let res = await callApi("post", host.AUTH + "/CheckUser", {
@@ -30,6 +30,7 @@ export default function CreateRole(props) {
         mail: mail.current.value,
         code: partnerInfor.value.code,
       });
+      // console.log(res)
       if (res.status) {
         let register = await callApi("post", host.AUTH + "/Register", {
           usr: username.current.value,
@@ -42,6 +43,7 @@ export default function CreateRole(props) {
           code: partnerInfor.value.code,
           host: window.location.host,
         });
+        // console.log(register)
         if (register.status) {
           props.handleClose();
           alertDispatch(datalang.formatMessage({ id: "alert_6" }));
@@ -89,14 +91,14 @@ export default function CreateRole(props) {
   }, []);
 
   return (
-    <form className="DAT_CreateRole" onSubmit={handleSave}>
+    <div className="DAT_CreateRole"  >
       <div className="DAT_CreateRole_Header">
         <div className="DAT_CreateRole_Header_Left">
           {dataLang.formatMessage({ id: "createAccount" })}
         </div>
 
         <div className="DAT_CreateRole_Header_Right">
-          <div className="DAT_CreateRole_Header_Right_Save">
+          <div className="DAT_CreateRole_Header_Right_Save" onClick={() => handleSave()} >
             <IoSaveOutline size={20} color="white" />
             <span>{dataLang.formatMessage({ id: "save" })}</span>
           </div>
@@ -208,12 +210,49 @@ export default function CreateRole(props) {
                 </span>
               </div>
               <select ref={role}>
-                <option value="admin">
-                  {dataLang.formatMessage({ id: "admin" })}
-                </option>
-                <option value="user">
-                  {dataLang.formatMessage({ id: "user" })}
-                </option>
+
+                {(() => {
+                  switch (userInfor.value.type) {
+                    case "master":
+                      return <>
+                        <option value="mainadmin">
+                          {dataLang.formatMessage({ id: "mainadmin" })}
+                        </option>
+                        <option value="admin">
+                          {dataLang.formatMessage({ id: "admin" })}
+                        </option>
+                        <option value="user">
+                          {dataLang.formatMessage({ id: "user" })}
+                        </option>
+                      </>
+
+
+                    case "mainadmin":
+                      return <>
+                         <option value="admin">
+                          {dataLang.formatMessage({ id: "admin" })}
+                        </option>
+                        <option value="user">
+                          {dataLang.formatMessage({ id: "user" })}
+                        </option>
+                      </>
+
+
+                    case "admin":
+                      return <>
+                         <option value="user">
+                          {dataLang.formatMessage({ id: "user" })}
+                        </option>
+                      </>
+
+
+                    default:
+                      return <></>
+
+
+                  }
+                })()}
+               
                 {/* {datarule.value
                   .filter((item, key) => item.ruleid_ !== 1)
                   .map((item, key) => (
@@ -228,6 +267,6 @@ export default function CreateRole(props) {
           <div className="DAT_CreateRole_Body_Row2_Right"></div>
         </div>
       </div>
-    </form>
+    </div>
   );
 }

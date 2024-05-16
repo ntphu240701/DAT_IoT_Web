@@ -39,6 +39,8 @@ function Project(props) {
     }, [viewNav.value]);
 
 
+
+
     const handleOutsideView = (e) => {
         setTimeout(() => {
             if (viewStateNav.value[1] == false) {

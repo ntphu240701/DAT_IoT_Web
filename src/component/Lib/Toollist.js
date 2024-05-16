@@ -17,7 +17,7 @@ import { FaFileExport } from "react-icons/fa6";
 import { BiSolidMessageError } from "react-icons/bi";
 import { SiPagespeedinsights } from "react-icons/si";
 import { MdContactPhone } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 // import { AlertContext } from "../Context/AlertContext";
 import { useIntl } from "react-intl";
@@ -41,10 +41,10 @@ export default function Toollist(props) {
     const { lasttab, defaulttab, currentID, currentSN, screen, settingDispatch } = useContext(SettingContext)
     const [tab, setTab] = useState(String(defaulttab))
     const [searchmoblile, setSearchmoblile] = useState(false)
-    const rootDispatch = useDispatch()
     const lang = useIntl();
     const [statetab, setStatetab] = useState(false)
     const type = useSelector((state) => state.admin.type)
+    const navigate = useNavigate()
     //const user = useSelector((state) => state.admin.user)
     const { isLandscape } = useMobileOrientation()
 
@@ -142,6 +142,12 @@ export default function Toollist(props) {
 
     }
 
+    const handleDirect = (link) => {
+        toolState.value = false
+        plantState.value = "default"
+        navigate(link)
+    }
+
     return (
         <>
 
@@ -177,17 +183,9 @@ export default function Toollist(props) {
                         {props.bu === 'energy'
                             ?
                             <div className="DAT_Tool_Tab-warn">
-
-                                <Link to="/Log" style={{ textDecoration: "none" }} >
-                                    <div className="DAT_Tool_Tab-warn-item"  ><LuMailWarning size={20} style={{ color: "gray" }} /></div>
-                                </Link>
-                                <Link to="/Report" style={{ textDecoration: "none" }} >
-                                    <div className="DAT_Tool_Tab-warn-item"  ><PiExport size={20} style={{ color: "gray" }} /></div>
-                                </Link>
-                                <Link to="/Contact" style={{ textDecoration: "none" }} >
-                                    <div className="DAT_Tool_Tab-warn-item"  ><LuContact2 size={20} style={{ color: "gray" }} /></div>
-                                </Link>
-
+                                    <div className="DAT_Tool_Tab-warn-item" onClick={() => handleDirect('/Log')} ><LuMailWarning size={20} style={{ color: "gray" }} /></div>
+                                    <div className="DAT_Tool_Tab-warn-item" onClick={() => handleDirect('/Report')} ><PiExport size={20} style={{ color: "gray" }} /></div>
+                                    <div className="DAT_Tool_Tab-warn-item" onClick={() => handleDirect('/Contact')} ><LuContact2 size={20} style={{ color: "gray" }} /></div>
                             </div>
                             : <></>}
                         <div className="DAT_Tool_Tab-close"
@@ -224,15 +222,11 @@ export default function Toollist(props) {
                             ?
                             <div className="DAT_Tool_Tab-warn">
 
-                                <Link to="/Log" style={{ textDecoration: "none" }} >
-                                    <div className="DAT_Tool_Tab-warn-item"  ><LuMailWarning size={20} style={{ color: "gray" }} /></div>
-                                </Link>
-                                <Link to="/Report" style={{ textDecoration: "none" }} >
-                                    <div className="DAT_Tool_Tab-warn-item"  ><PiExport size={20} style={{ color: "gray" }} /></div>
-                                </Link>
-                                <Link to="/Contact" style={{ textDecoration: "none" }} >
-                                    <div className="DAT_Tool_Tab-warn-item"  ><LuContact2 size={20} style={{ color: "gray" }} /></div>
-                                </Link>
+                                
+                                    <div className="DAT_Tool_Tab-warn-item" onClick={() => handleDirect('/Log')} ><LuMailWarning size={20} style={{ color: "gray" }} /></div>
+                                    <div className="DAT_Tool_Tab-warn-item"  onClick={() => handleDirect('/Report')}  ><PiExport size={20} style={{ color: "gray" }} /></div>
+                                    <div className="DAT_Tool_Tab-warn-item"  onClick={() => handleDirect('/Contact')} ><LuContact2 size={20} style={{ color: "gray" }} /></div>
+                               
 
                             </div>
                             : <></>}
@@ -264,15 +258,11 @@ export default function Toollist(props) {
                     {props.bu === 'energy'
                         ?
                         <div className="DAT_Tool_Tab-warn">
-                            <Link to="/Log" style={{ textDecoration: "none" }} >
-                                <div className="DAT_Tool_Tab-warn-item"  ><LuMailWarning size={20} style={{ color: "gray" }} /></div>
-                            </Link>
-                            <Link to="/Report" style={{ textDecoration: "none" }} >
-                                <div className="DAT_Tool_Tab-warn-item"  ><PiExport size={20} style={{ color: "gray" }} /></div>
-                            </Link>
-                            <Link to="/Contact" style={{ textDecoration: "none" }} >
-                                <div className="DAT_Tool_Tab-warn-item"  ><LuContact2 size={20} style={{ color: "gray" }} /></div>
-                            </Link>
+                          
+                                <div className="DAT_Tool_Tab-warn-item"  onClick={() => handleDirect('/Log')}  ><LuMailWarning size={20} style={{ color: "gray" }} /></div>
+                                <div className="DAT_Tool_Tab-warn-item"  onClick={() => handleDirect('/Report')} ><PiExport size={20} style={{ color: "gray" }} /></div>
+                                <div className="DAT_Tool_Tab-warn-item"  onClick={() => handleDirect('/Contact')} ><LuContact2 size={20} style={{ color: "gray" }} /></div>
+                     
                         </div>
                         : <></>}
                     <div className="DAT_Tool_Tab-close"
