@@ -26,7 +26,7 @@ import NotfoundErr from "./NotfoundErr";
 import { mode, plantState } from "./component/Control/Signal";
 import { FaRegFileAlt } from "react-icons/fa";
 import { toolState } from "./component/Home/Home";
-import { isBrowser } from "react-device-detect";
+import moment from "moment-timezone";
 
 const Home = React.lazy(() => import("./component/Home/Home"));
 const Auto = React.lazy(() => import("./component/Control/Auto"));
@@ -181,6 +181,7 @@ export default function App() {
   const rootDispatch = useDispatch();
 
   useEffect(() => {
+
     const checkAuth = async () => {
       if (
         window.location.pathname !== "/Verify" &&
@@ -262,42 +263,90 @@ export default function App() {
     checkApi();
   }, [status]);
 
+
+
   useEffect(() => {
-    // const getwarn = async (usr, partnerid, type) => {
-    //   const warn = await callApi("post", host.DATA + "/getWarn", {
-    //     usr: usr,
-    //     partnerid: partnerid,
-    //     type: type,
-    //   });
-    //   console.log(warn);
-    //   if (warn.status) {
-    //     let newdb = warn.data.sort(
-    //       (a, b) => new Date(b.opentime_) - new Date(a.opentime_)
-    //     );
-    //     newdb.map((item, index) => {
-    //       dataWarn.value = [
-    //         ...dataWarn.value,
-    //         {
-    //           boxid: item.boxid_,
-    //           warnid: item.warnid_,
-    //           plant: item.plantname_,
-    //           device: item.sn_,
-    //           status: item.status_,
-    //           opentime: item.opentime_,
-    //           closedtime: item.closedtime_,
-    //           level: item.level_,
-    //           state: item.state_, // 1:false, 0:true
-    //           plantid: item.plantid_,
-    //         },
-    //       ];
-    //     });
-    //     open.value = dataWarn.value.filter((item) => item.status == "open");
-    //     closed.value = dataWarn.value.filter((item) => item.status == "closed");
-    //   }
-    // };
-    // if (userInfor.value.type && partnerInfor.value.partnerid && usr) {
-    //   getwarn(usr, partnerInfor.value.partnerid, userInfor.value.type);
-    // }
+    const getwarn = async (usr, partnerid, type) => {
+      const warn = await callApi("post", host.DATA + "/getWarn", {
+        usr: usr,
+        partnerid: partnerid,
+        type: type,
+      });
+      console.log(warn);
+      if (warn.status) {
+        let newdb = warn.data.sort(
+          (a, b) => new Date(b.opentime_) - new Date(a.opentime_)
+        );
+        newdb.map((item, index) => {
+          dataWarn.value = [
+            ...dataWarn.value,
+            {
+              boxid: item.boxid_,
+              warnid: item.warnid_,
+              plant: item.name_,
+              device: item.sn_,
+              opentime: item.opentime_,
+              state: item.state_, // 1:false, 0:true
+              level: item.level_,
+              plantid: item.plantid_,
+            },
+          ];
+        });
+        // open.value = dataWarn.value.filter((item) => item.status == "open");
+        // closed.value = dataWarn.value.filter((item) => item.status == "closed");
+      }
+    };
+    const getAllLogger = async (usr, id, type) => {
+
+      let res = await callApi("post", host.DATA + "/getAllLogger", {
+        usr: usr,
+        partnerid: id,
+        type: type,
+      })
+      console.log(res)
+      if (res.status) {
+        res.data.map((item, index) => {
+          socket.value.on("Server/notice/" + item.sn_, function (data) {
+            console.log('Notice socket', item.sn_, data)
+            if (data.type === 'add') {
+              dataWarn.value = [
+                ...dataWarn.value,
+                {
+                  boxid: data.boxid_,
+                  warnid: data.warnid_,
+                  plant: data.name_,
+                  device: data.sn_,
+                  opentime: data.opentime_,
+                  state: data.state_, // 1:false, 0:true
+                  level: 'wanrn',
+                  plantid: data.plantid_,
+                },
+              ];
+            }else{
+                let index = dataWarn.value.findIndex((item) => item.warnid == data.warnid_);
+                let newWarn = dataWarn.value
+                console.log(newWarn[index])
+                newWarn[index]={
+                    ...newWarn[index],
+                    state: data.state_,
+                    opentime: data.opentime_,
+                }
+
+                dataWarn.value = [...newWarn]
+            }
+
+          })
+
+        })
+      }
+
+    }
+
+
+    if (userInfor.value.type && partnerInfor.value.partnerid && usr) {
+      getwarn(usr, partnerInfor.value.partnerid, userInfor.value.type);
+      getAllLogger(usr, partnerInfor.value.partnerid, userInfor.value.type)
+    }
   }, [userInfor.value.type, partnerInfor.value.partnerid, usr]);
   const handleOut = () => {
     localStorage.clear();
@@ -346,9 +395,9 @@ export default function App() {
             {status ?
               (<>
                 {plantState.value === "toollist" || mode.value === 'dashboard' || toolState.value ? <></> : <Navigation />}
-
                 <div className="DAT_App">
-                  <Sidenar />
+                  
+                  {plantState.value === "toollist" || mode.value === 'dashboard' || toolState.value ? <></> : <Sidenar />}
                   <div className="DAT_App_Content">
                     <Routes>
                       {userInfor.value.type === "master" ? (

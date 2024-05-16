@@ -22,7 +22,7 @@ import { plantState, projectwarnfilter } from "../Project/Project";
 import { IoLogInOutline } from "react-icons/io5";
 import { PiUserCircle } from "react-icons/pi";
 import { BiMessageAltX, BiMessageCheck } from "react-icons/bi";
-import { isBrowser } from "react-device-detect";
+import { isBrowser, useMobileOrientation } from "react-device-detect";
 
 const userNav = signal(false);
 const langNav = signal(false);
@@ -35,6 +35,7 @@ export const isMobile = signal(false);
 export const notifNav = signal(false);
 
 export default function Navigation(props) {
+  const { isLandscape } = useMobileOrientation()
   const dataLang = useIntl();
   const navigate = useNavigate();
   const user_icon = useRef();
@@ -170,7 +171,7 @@ export default function Navigation(props) {
       <div className="DAT_Navigation"
         onClick={() => (plantState.value = "default")}
       >
-        {isBrowser
+        {isBrowser || isLandscape
           ?
           <div className="DAT_Navigation-menu">
             <button
@@ -182,7 +183,8 @@ export default function Navigation(props) {
               <BsFillMenuButtonWideFill color="gray" size={22} />
             </button>
           </div>
-          : <></>}
+          : <></>
+        }
 
         <div className="DAT_Navigation_left">
           <div className="DAT_Navigation_left-logo">
@@ -356,7 +358,7 @@ export default function Navigation(props) {
                               // textTransform: "capitalize",
                             }}
                           >
-                            {dataLang.formatMessage({ id: item.level })}
+                            {dataLang.formatMessage({ id: item.level, defaultMessage: item.level })}
                           </span>
                         </div>
                         <div className="DAT_NavNotif-content-main-group-content-status">
