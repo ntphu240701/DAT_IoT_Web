@@ -75,44 +75,6 @@ iframe {
   }
 }
 
-.DAT_AppMobile {
-  position: fixed;
-  // display: flex;
-  background-color: #ebebeb;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-
-  /* Firefox */
-  &::-webkit-scrollbar {
-    display: none;
-    /* Safari and Chrome */
-  }
-
-  &_Content {
-    //background-color: green;
-    flex: 8.5;
-    top: 0;
-    left: 0;
-    // height: 100%;
-    overflow-x: hidden;
-    overflow: scroll;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-
-    /* Firefox */
-    &::-webkit-scrollbar {
-      display: none;
-      /* Safari and Chrome */
-    }
-  }
-}
-
 .DAT_Table_Container {
   overflow-x: auto !important;
   overflow-y: auto !important;
@@ -739,7 +701,6 @@ iframe {
     background-color: white;
     border-radius: 5px;
     overflow: hidden;
-
     // box-shadow: 0 0 4px 4px rgba(193, 193, 193, 0.5);
     // background-color: #56c1f7;
     &_item {
@@ -1152,7 +1113,7 @@ iframe {
 
 .DAT_Landscape {
   position: fixed;
-  z-index: 25;
+  // z-index: 25;
   background-image: url("../public/dat_picture/smarttech.png");
   background-size: cover;
   // overflow-y: scroll;
@@ -1175,7 +1136,6 @@ iframe {
     box-sizing: border-box;
     background-color: rgb(0, 0, 0, 0.5);
     box-shadow: 0 0 10px rgb(0, 0, 0, 0.5);
-
     &_tit {
       width: 200px;
       margin: auto;
@@ -1186,7 +1146,6 @@ iframe {
       justify-content: center;
       color: #ffffff;
     }
-
     &_ver {
       width: 170px;
       margin: auto;
@@ -1205,7 +1164,6 @@ iframe {
       color: rgb(232, 232, 232);
     }
   }
-
   &_cancel {
     width: 90%;
     margin: auto;

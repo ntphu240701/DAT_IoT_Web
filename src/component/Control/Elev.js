@@ -100,9 +100,9 @@ export default function Elev(props) {
   const [tabState, setTabState] = useState(false);
   const [plantobj, setPlantobj] = useState({});
   const bu = "elev";
-  const { screen } = useContext(SettingContext);
+  const { screen, currentSN, settingDispatch } = useContext(SettingContext);
   const { toolDispatch } = useContext(ToolContext);
-  const { overview_visual, overviewDispatch } = useContext(OverviewContext);
+  const { overviewDispatch } = useContext(OverviewContext);
 
   const [datafilter, setDatafilter] = useState([]);
   const [display, setDisplay] = useState(false);
@@ -577,18 +577,36 @@ export default function Elev(props) {
   }, []);
 
   useEffect(() => {
-    screen.map((data, index) => {
-      toolDispatch({
-        type: "LOAD_DEVICE",
-        payload: {
-          tab: data.tab_,
-          visual: data.data_.data,
-          setting: data.setting_,
-          name: data.name_,
-          lastid: data.data_.id,
-        },
+    const setScreen = async () => {
+      console.log(currentSN);
+      let d = await callApi("post", host.DATA + "/resetLoggerData", {
+        sn: currentSN,
       });
-    });
+
+      console.log(d);
+      if (d.status) {
+        settingDispatch({ type: "LOAD_LASTTAB", payload: 0 });
+        settingDispatch({ type: "LOAD_DEFAULT", payload: 0 });
+      }
+    };
+    if (plantState.value === "toollist") {
+      console.log(screen.length);
+      screen.map((data, index) => {
+        toolDispatch({
+          type: "LOAD_DEVICE",
+          payload: {
+            tab: data.tab_,
+            visual: data.data_.data,
+            setting: data.setting_,
+            name: data.name_,
+            lastid: data.data_.id,
+          },
+        });
+      });
+      if (screen.length === 0) {
+        setScreen();
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [screen]);
 

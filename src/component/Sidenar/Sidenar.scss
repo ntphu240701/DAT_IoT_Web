@@ -94,6 +94,7 @@
     justify-content: space-around;
     background-color: white;
     border-top: solid 1px rgba(198, 197, 197, 0.5);
+    padding-bottom: 16px;
 
     &_Item {
         width: 125px;
@@ -107,6 +108,50 @@
         &_Icon {
             font-size: 25px;
         }
+    }
+}
+
+.DAT_AnalyticsMenu {
+    position: fixed;
+    z-index: 35;
+    bottom: 90px;
+    left: 130px;
+    width: 160px;
+    margin: auto;
+    border-radius: 5px;
+    box-shadow:
+        3px 3px 5px rgba(198, 197, 197, 0.4),
+        -3px -3px 5px rgba(198, 197, 197, 0.4);
+    overflow: hidden;
+    background-color: white;
+
+    &_Item {
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+    }
+}
+
+.DAT_SettingMenu {
+    position: fixed;
+    z-index: 35;
+    bottom: 90px;
+    right: 8px;
+    width: 160px;
+    margin: auto;
+    border-radius: 5px;
+    box-shadow:
+        3px 3px 5px rgba(198, 197, 197, 0.4),
+        -3px -3px 5px rgba(198, 197, 197, 0.4);
+    overflow: hidden;
+    background-color: white;
+
+    &_Item {
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
     }
 }
 

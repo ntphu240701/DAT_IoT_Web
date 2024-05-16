@@ -54,8 +54,8 @@ export default function Warn(props) {
 
   const listTab = [
     { id: "all", name: dataLang.formatMessage({ id: "total" }) },
-    { id: "open", name: dataLang.formatMessage({ id: "unresolvewarn" }) },
-    { id: "closed", name: dataLang.formatMessage({ id: "resolve" }) },
+    // { id: "open", name: dataLang.formatMessage({ id: "unresolvewarn" }) },
+    // { id: "closed", name: dataLang.formatMessage({ id: "resolve" }) },
   ];
 
   const paginationComponentOptions = {
@@ -135,12 +135,12 @@ export default function Warn(props) {
       sortable: true,
       width: "180px",
     },
-    {
-      name: dataLang.formatMessage({ id: "closeWarnTime" }),
-      selector: (row) => row.closedtime,
-      sortable: true,
-      width: "180px",
-    },
+    // {
+    //   name: dataLang.formatMessage({ id: "closeWarnTime" }),
+    //   selector: (row) => row.closedtime,
+    //   sortable: true,
+    //   width: "180px",
+    // },
     {
       name: dataLang.formatMessage({ id: "edits" }),
       selector: (row) => (
@@ -555,10 +555,10 @@ export default function Warn(props) {
                                 {dataLang.formatMessage({ id: "openWarnTime" })}:{" "}
                                 {item.opentime}
                               </div>
-                              <div className="DAT_WarnMobile_Content_Bottom_Left_Close">
+                              {/* <div className="DAT_WarnMobile_Content_Bottom_Left_Close">
                                 {dataLang.formatMessage({ id: "closeWarnTime" })}:{" "}
                                 {item.closedtime}
-                              </div>
+                              </div> */}
                             </div>
                             <div className="DAT_WarnMobile_Content_Bottom_Right">
                               <div
@@ -627,10 +627,10 @@ export default function Warn(props) {
                                 {dataLang.formatMessage({ id: "openWarnTime" })}:{" "}
                                 {item.opentime}
                               </div>
-                              <div className="DAT_WarnMobile_Content_Bottom_Left_Close">
+                              {/* <div className="DAT_WarnMobile_Content_Bottom_Left_Close">
                                 {dataLang.formatMessage({ id: "closeWarnTime" })}:{" "}
                                 {item.closedtime}
-                              </div>
+                              </div> */}
                             </div>
                             <div className="DAT_WarnMobile_Content_Bottom_Right">
                               <div
@@ -699,10 +699,10 @@ export default function Warn(props) {
                                 {dataLang.formatMessage({ id: "openWarnTime" })}:{" "}
                                 {item.opentime}
                               </div>
-                              <div className="DAT_WarnMobile_Content_Bottom_Left_Close">
+                              {/* <div className="DAT_WarnMobile_Content_Bottom_Left_Close">
                                 {dataLang.formatMessage({ id: "closeWarnTime" })}:{" "}
                                 {item.closedtime}
-                              </div>
+                              </div> */}
                             </div>
                             <div className="DAT_WarnMobile_Content_Bottom_Right">
                               <div
