@@ -194,6 +194,266 @@
     }
 }
 
+.DAT_GRMobile {
+    &_Content {
+        height: calc(100vh - 280px);
+        // margin-bottom: 60px;
+        -webkit-box-sizing: border-box;
+        /* Safari/Chrome, other WebKit */
+        -moz-box-sizing: border-box;
+        /* Firefox, other Gecko */
+        box-sizing: border-box;
+        background-color: rgb(207, 207, 207, 0.3);
+        width: 100%;
+
+        &_DevideTable {
+            width: 100%;
+            display: flex;
+
+            &_Left {
+                // width: 300px;
+                border-right: solid 1px rgba(198, 197, 197, 0.5);
+
+                &_Head {
+                    height: 52px;
+                    font-size: 14px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: COLOR.$Primary-color;
+                    color: white;
+                    font-family: Montserrat-SemiBold;
+                }
+
+                &_ItemList {
+                    width: 100%;
+                    height: calc(100vh - 330px);
+                    background-color: white;
+                    cursor: pointer;
+                    overflow-y: scroll;
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+
+                    &::-webkit-scrollbar {
+                        display: none;
+                        /* Safari and Chrome */
+                    }
+
+                    &_Item {
+                        height: 65px;
+                        padding: 8px;
+                        box-sizing: border-box;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        border-bottom: solid 1px rgba(198, 198, 198, 0.5);
+
+                        &:hover {
+                            background-color: rgba(198, 198, 198, 0.5);
+                        }
+
+                        &_More {
+                            background-color: #e1e1e1;
+                            padding: 5px;
+                            box-sizing: border-box;
+                            border-radius: 5px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            gap: 5px;
+                            box-shadow: 3px 3px 5px rgba(226, 226, 226, 0.5);
+                        }
+                    }
+                }
+            }
+
+            &_Right {
+                width: 100%;
+                overflow-y: auto;
+                overflow-x: auto;
+
+                &_Head {
+                    height: 52px;
+                    font-size: 14px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: COLOR.$Primary-color;
+                    color: white;
+                    font-family: Montserrat-SemiBold;
+                }
+
+                &_ItemList {
+                    height: calc(100vh - 330px);
+                    padding-top: 10px;
+                    // margin-top: 10px;
+                    overflow-y: scroll;
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+
+                    &::-webkit-scrollbar {
+                        display: none;
+                        /* Safari and Chrome */
+                    }
+                }
+            }
+        }
+    }
+}
+
+.DAT_RegSetMobile {
+    width: 98%;
+    margin: auto;
+    margin-bottom: 100px;
+
+    &_Content {
+        background-color: white;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: solid 1px rgba(198, 197, 197, 0.5);
+
+        &_Top {
+            display: flex;
+            gap: 10px;
+            border-bottom: solid 1px rgba(198, 197, 197, 0.5);
+            padding: 10px;
+            box-sizing: border-box;
+
+            &_Type {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                width: 80px;
+                height: 80px;
+                border-radius: 5px;
+                overflow: hidden;
+                background-color: COLOR.$Primary-color;
+                font-size: 12px;
+            }
+
+            &_Info {
+                // width: 100%;
+                max-height: 160px;
+                overflow-y: scroll;
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+
+                & span {
+                    color: black;
+                    font-size: 13px;
+                    display: flex;
+                    margin-bottom: 4px;
+                    font-family: Montserrat-SemiBold;
+                }
+
+                &_Cause {
+                    font-size: 12px;
+                    color: gray;
+                    margin-bottom: 5px;
+
+                    &_Row1 {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+
+                        &_Vi {
+                            width: 100px;
+                        }
+
+                        &_En {
+                            width: 100px;
+                        }
+                    }
+
+                    &_Row2 {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        margin-bottom: 5px;
+
+                        &_Vi {
+                            width: 100px;
+                            white-space: nowrap !important;
+                            overflow: hidden !important;
+                            text-overflow: ellipsis !important;
+                        }
+
+                        &_En {
+                            width: 100px;
+                            white-space: nowrap !important;
+                            overflow: hidden !important;
+                            text-overflow: ellipsis !important;
+                        }
+
+                        &_Func {
+                            display: flex;
+                            align-items: center;
+                            justify-content: flex-end;
+                            gap: 6px;
+                        }
+                    }
+                }
+
+                &_Solution {
+                    font-size: 12px;
+                    color: gray;
+                    margin-bottom: 5px;
+
+                    &_Row1 {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+
+                        &_Vi {
+                            width: 100px;
+                        }
+
+                        &_En {
+                            width: 100px;
+                        }
+                    }
+
+                    &_Row2 {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        margin-bottom: 5px;
+
+                        &_Vi {
+                            width: 100px;
+                            white-space: nowrap !important;
+                            overflow: hidden !important;
+                            text-overflow: ellipsis !important;
+                        }
+
+                        &_En {
+                            width: 100px;
+                            white-space: nowrap !important;
+                            overflow: hidden !important;
+                            text-overflow: ellipsis !important;
+                        }
+
+                        &_Func {
+                            display: flex;
+                            align-items: center;
+                            justify-content: flex-end;
+                            gap: 6px;
+                        }
+                    }
+                }
+            }
+        }
+
+        &_Bottom {
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+    }
+}
+
 .DAT_CreateErrSetting {
     position: relative;
     width: 400px;
