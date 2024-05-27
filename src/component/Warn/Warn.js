@@ -224,7 +224,7 @@ export default function Warn(props) {
     });
     console.log(req);
     if (req.status) {
-    
+
       setType("info");
       setBoxid(temp[0]);
       setLevel(temp[1]);
@@ -234,7 +234,7 @@ export default function Warn(props) {
       setSolution(req.data.solution_);
       setPopupState(true);
     } else {
-      
+
       setType("info");
       setBoxid(temp[0]);
       setLevel(temp[1]);

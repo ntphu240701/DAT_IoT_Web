@@ -3244,6 +3244,7 @@
 }
 
 .DAT_DevicePopup {
+    position: relative;
     height: 100vh;
     width: 100%;
     margin: auto;
@@ -4093,11 +4094,13 @@
         gap: 10px;
         background-color: rgba(255, 255, 255);
         border-bottom: solid 1px rgb(199, 199, 199);
-        &_icon{
+
+        &_icon {
             display: flex;
             align-items: center;
             justify-content: center;
         }
+
         // color: white;
         // border-top-left-radius: 5px;
         // border-top-right-radius: 5px;
@@ -4106,29 +4109,30 @@
     &_main {
         overflow-y: scroll;
         height: calc(100vh - 220px);
-       
+
         background-color: rgb(241, 241, 241);
         box-shadow:
             2px 2px 5px rgba(128, 128, 128, 0.1),
             -2px -2px 5px rgba(128, 128, 128, 0.1);
+
         // border-radius: 5px;
         // border: solid 1px rgb(199, 199, 199);
-        &_item{
+        &_item {
             border-radius: 7px;
             background-color: white;
             margin-top: 10px;
 
             border: solid 1px rgb(199, 199, 199);
-           
-            &_top{
+
+            &_top {
                 padding: 10px;
                 box-sizing: border-box;
                 display: flex;
                 align-items: flex-start;
                 gap: 10px;
-                
-           
-                &_avatar{
+
+
+                &_avatar {
                     width: 80px;
                     height: 80px;
                     border-radius: 10px;
@@ -4138,43 +4142,47 @@
                     justify-content: center;
                     color: white;
                     font-size: 20px
-
                 }
 
-                &_content{
-                        &_name{
-                            font-size: 16px;
-                            // font-family: Montserrat-SemiBold;
-                            margin-bottom: 10px
-                        }
-                        &_sn{
-                            font-size: 14px;
-                            color: gray;
-                        }
-                        &_state{
-                            font-size: 14px;
-                            color: gray;
+                &_content {
+                    &_name {
+                        font-size: 16px;
+                        // font-family: Montserrat-SemiBold;
+                        margin-bottom: 10px
+                    }
+
+                    &_sn {
+                        font-size: 14px;
+                        color: gray;
+                    }
+
+                    &_state {
+                        font-size: 14px;
+                        color: gray;
+                        display: flex;
+                        align-items: center;
+                        gap: 20px;
+
+                        &_status {
                             display: flex;
                             align-items: center;
-                            gap: 20px;
-                            &_status{
-                                display: flex;
-                                align-items: center;
-                                gap: 5px;
-                            }
+                            gap: 5px;
                         }
+                    }
                 }
             }
-            &_bottom{
+
+            &_bottom {
                 border-top: solid 1px rgb(199, 199, 199);
                 padding: 10px;
                 box-sizing: border-box;
                 display: flex;
                 align-items: center;
                 justify-content: flex-end;
-                gap : 10px;
+                gap: 10px;
             }
         }
+
         // &_item {
         //     // border-radius: 5px;
         //     display: flex;
@@ -4235,12 +4243,12 @@
     &_sub {
         // flex: 4;
         // padding: 10px;
-        
+
         box-sizing: border-box;
         // position: relative;
         // border-radius: 5px;
         background-color: rgb(241, 241, 241);
-    
+
         // box-shadow:
         //     2px 2px 5px rgba(128, 128, 128, 0.1),
         //     -2px -2px 5px rgba(128, 128, 128, 0.1);

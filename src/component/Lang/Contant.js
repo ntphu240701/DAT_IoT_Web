@@ -10,7 +10,7 @@ export const host = {
 
 export const messages = {
   en: {
-
+    erroraddress: "Error code",
     date:"Date",
     registersetting: "Register Setting",
     export:'Export',
@@ -925,6 +925,7 @@ export const messages = {
     // A_48_17: "Unknown",
   },
   vi: {
+    erroraddress: "Mã lỗi",
     date: "Ngày",
     registersetting: "Cài đặt thanh ghi",
     export:'Xuất báo cáo',

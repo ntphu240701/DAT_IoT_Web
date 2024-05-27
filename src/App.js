@@ -18,15 +18,13 @@ import { host } from "./component/Lang/Contant";
 import adminslice from "./component/Redux/adminslice";
 import { callApi } from "./component/Api/Api";
 import { signal } from "@preact/signals-react";
-import { closed, dataWarn, open } from "./component/Warn/Warn";
+import { dataWarn } from "./component/Warn/Warn";
 import { useIntl } from "react-intl";
-// import ErrorSetting from "./component/ErrorSetting/ErrorSetting";
 import { io } from "socket.io-client";
 import NotfoundErr from "./NotfoundErr";
 import { mode, plantState } from "./component/Control/Signal";
 import { FaRegFileAlt } from "react-icons/fa";
 import { toolState } from "./component/Home/Home";
-import moment from "moment-timezone";
 
 const Home = React.lazy(() => import("./component/Home/Home"));
 const Auto = React.lazy(() => import("./component/Control/Auto"));
@@ -97,13 +95,11 @@ export const partnerInfor = signal({
   logo: "",
 });
 
-
 export const Empty = (props) => {
   const dataLang = useIntl();
 
   return (
-    <div
-      className="DAT_TableEmpty"
+    <div className="DAT_TableEmpty"
       style={{
         backgroundColor: props.backgroundColor
           ? props.backgroundColor
@@ -126,7 +122,6 @@ export const Empty = (props) => {
     </div>
   );
 };
-
 
 export const COLOR = signal({
   PrimaryColor: "rgba(11, 25, 103)",
@@ -183,7 +178,6 @@ export default function App() {
   const rootDispatch = useDispatch();
 
   useEffect(() => {
-
     const checkAuth = async () => {
       if (
         window.location.pathname !== "/Verify" &&
@@ -265,8 +259,6 @@ export default function App() {
     checkApi();
   }, [status]);
 
-
-
   useEffect(() => {
     const getwarn = async (usr, partnerid, type) => {
       const warn = await callApi("post", host.DATA + "/getWarn", {
@@ -298,8 +290,8 @@ export default function App() {
         // closed.value = dataWarn.value.filter((item) => item.status == "closed");
       }
     };
-    const getAllLogger = async (usr, id, type) => {
 
+    const getAllLogger = async (usr, id, type) => {
       let res = await callApi("post", host.DATA + "/getAllLogger", {
         usr: usr,
         partnerid: id,
@@ -344,12 +336,12 @@ export default function App() {
 
     }
 
-
     if (userInfor.value.type && partnerInfor.value.partnerid && usr) {
       getwarn(usr, partnerInfor.value.partnerid, userInfor.value.type);
       getAllLogger(usr, partnerInfor.value.partnerid, userInfor.value.type)
     }
   }, [userInfor.value.type, partnerInfor.value.partnerid, usr]);
+
   const handleOut = () => {
     localStorage.clear();
     sessionStorage.clear();
@@ -381,6 +373,7 @@ export default function App() {
       ) : (
         <></>
       )}
+
       <Router>
         <Alert />
         {loading ? (
@@ -398,7 +391,6 @@ export default function App() {
               (<>
                 {plantState.value === "toollist" || mode.value === 'dashboard' || toolState.value ? <></> : <Navigation />}
                 <div className="DAT_App">
-
                   {plantState.value === "toollist" || mode.value === 'dashboard' || toolState.value ? <></> : <Sidenar />}
                   <div className="DAT_App_Content">
                     <Routes>
@@ -438,7 +430,6 @@ export default function App() {
                         </>
                       ) : (<></>)}
 
-
                       <Route exact path="/" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><Home /></Suspense>} />
                       <Route path="/Auto" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><Auto /></Suspense>} />
                       <Route path="/Elev" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><Elev /></Suspense>} />
@@ -453,7 +444,6 @@ export default function App() {
                       <Route path="/Login" element={<Navigate to="/" />} />
                       <Route path="/Logout" element={<Navigate to="/Login" />} />
                       <Route path="*" element={<NotfoundErr />} />
-
                     </Routes>
                   </div>
                 </div>
