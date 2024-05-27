@@ -18,7 +18,9 @@ export default function Contact(props) {
   };
 
   return (
-    <>
+    <div
+      style={{ position: 'relative', top: '0', left: '0', width: '100%', height: '100vh' }}
+    >
       <div className="DAT_ContactHeader">
         <div className="DAT_ContactHeader_Title">
           <MdOutlineContactPhone color="gray" size={25} />
@@ -131,6 +133,6 @@ export default function Contact(props) {
           }
         })()}
       </div>
-    </>
+    </div>
   );
 }

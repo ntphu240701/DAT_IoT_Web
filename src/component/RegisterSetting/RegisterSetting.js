@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./RegisterSetting.scss";
-import { isBrowser, isMobile } from "react-device-detect";
+import { isBrowser } from "react-device-detect";
 import { signal } from "@preact/signals-react";
 import { useIntl } from "react-intl";
 import { IoIosAddCircleOutline, IoMdAdd, IoMdMore } from "react-icons/io";
 import { Empty } from "../Project/Project";
 import { FiEdit } from "react-icons/fi";
-import { AiOutlineUserAdd, AiOutlineUsergroupAdd } from "react-icons/ai";
+import { AiOutlineUserAdd } from "react-icons/ai";
 import {
   IoAddOutline,
   IoCaretBackOutline,
@@ -15,7 +15,7 @@ import {
 import { PiUsersFour } from "react-icons/pi";
 import { CiSearch } from "react-icons/ci";
 import { useSelector } from "react-redux";
-import { partnerInfor, ruleInfor, userInfor } from "../../App";
+import { partnerInfor, userInfor } from "../../App";
 import { callApi } from "../Api/Api";
 import { host } from "../Lang/Contant";
 import PopupState, { bindMenu, bindToggle } from "material-ui-popup-state";
@@ -23,7 +23,6 @@ import { Menu, MenuItem } from "@mui/material";
 import DataTable from "react-data-table-component";
 import Popup from "./Popup";
 import { lowercasedata } from "../ErrorSetting/ErrorSetting";
-import { MdOutlineManageHistory } from "react-icons/md";
 
 export const groupRegID = signal("");
 export const configEdit = signal("");
@@ -374,7 +373,9 @@ export default function RegisterSetting() {
   });
 
   return (
-    <div>
+    <div
+      style={{ position: 'relative', top: '0', left: '0', width: '100%', height: '100vh' }}
+    >
       {isBrowser ? (
         <>
           <div className="DAT_GRHeader">
@@ -406,6 +407,7 @@ export default function RegisterSetting() {
               )}
               <CiSearch color="gray" size={20} />
             </div>
+            <div></div>
             {/* <button
           className="DAT_GRHeader_New"
           onClick={() => {

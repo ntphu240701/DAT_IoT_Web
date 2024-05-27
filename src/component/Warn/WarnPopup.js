@@ -57,7 +57,7 @@ export default function WarnPopup(props) {
     }, []);
 
     return (
-        <>
+        <div className="DAT_WarnPopupBG">
             {props.type === "info"
                 ?
                 <div className="DAT_PopupReportInfo_Box">
@@ -162,6 +162,6 @@ export default function WarnPopup(props) {
                     </div>
                 </div>
             }
-        </>
+        </div>
     );
 }
