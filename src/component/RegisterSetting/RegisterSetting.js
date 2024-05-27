@@ -336,8 +336,8 @@ export default function RegisterSetting() {
     } else {
       let temp = t.filter((data) => {
         return (
-          data.sn_.toLowerCase().includes(input) ||
-          data.name_.toLowerCase().includes(input)
+          lowercasedata(data.sn_).includes(input) ||
+          lowercasedata(data.name_).includes(input)
         );
       });
 
@@ -368,10 +368,10 @@ export default function RegisterSetting() {
     return <> </>;
   };
 
-  useEffect(() => {
-    console.log(regList);
-    console.log(dataRegister);
-  });
+  // useEffect(() => {
+  //   console.log(regList);
+  //   console.log(dataRegister);
+  // });
 
   return (
     <div>
@@ -380,7 +380,7 @@ export default function RegisterSetting() {
           <div className="DAT_GRHeader">
             <div className="DAT_GRHeader_Title">
               <PiUsersFour color="gray" size={25} />
-              <span>{dataLang.formatMessage({ id: "roleList" })}</span>
+              <span>{dataLang.formatMessage({ id: "RegisterSetting" })}</span>
             </div>
             <div
               className="DAT_GRHeader_Filter"
@@ -696,7 +696,7 @@ export default function RegisterSetting() {
               style={{ width: "100% !important", height: "100%" }}
             >
               <div className="DAT_GRMobile_Content_DevideTable_Left_Head">
-                {dataLang.formatMessage({ id: "grouprole" })}
+                {dataLang.formatMessage({ id: "RegisterSetting" })}
               </div>
 
               <div className="DAT_GRMobile_Content_DevideTable_Left_ItemList">

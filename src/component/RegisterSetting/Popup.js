@@ -138,9 +138,14 @@ export default function Popup(props) {
                       <input
                         type="text"
                         value={
-                          props.data.find(
-                            (item) => item.id == configEdit.value.split("_")[0]
-                          ).addrcode
+                          props.data
+                            .find(
+                              (item) =>
+                                item.id == configEdit.value.split("_")[0]
+                            )
+                            .register.find(
+                              (con) => con.id == configEdit.value.split("_")[1]
+                            ).addr
                         }
                         disabled
                         required

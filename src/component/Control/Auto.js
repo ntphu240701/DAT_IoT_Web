@@ -8,7 +8,7 @@ import "./Control.scss";
 import Popup from "./Popup";
 // import ShareBox from "./ShareBox";
 import { warnfilter } from "../Navigation/Navigation";
-import { sidebartab, sidebartabli } from "../Sidenar/Sidenar";
+import { sidebartab, sidebartabli, sidenar } from "../Sidenar/Sidenar";
 import { callApi } from "../Api/Api";
 import { host } from "../Lang/Contant";
 import { alertDispatch } from "../Alert/Alert";
@@ -133,7 +133,10 @@ export default function Auto(props) {
           className="DAT_Table"
           id={row.plantid_}
           style={{ cursor: "pointer" }}
-          onClick={(e) => handlePlant(e)}
+          onClick={(e) => {
+            handlePlant(e);
+            sidenar.value = false;
+          }}
         >
           <img src={row.img ? row.img : `/dat_picture/${bu}.jpg`} alt="" />
 

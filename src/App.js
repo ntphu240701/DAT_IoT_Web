@@ -267,7 +267,7 @@ export default function App() {
         partnerid: partnerid,
         type: type,
       });
-      console.log(warn);
+      // console.log(warn);
       if (warn.status) {
         let newdb = warn.data.sort(
           (a, b) => new Date(b.opentime_) - new Date(a.opentime_)
@@ -297,7 +297,7 @@ export default function App() {
         partnerid: id,
         type: type,
       });
-      console.log(res);
+      // console.log(res);
       if (res.status) {
         res.data.map((item, index) => {
           socket.value.on("Server/notice/" + item.sn_, function (data) {
