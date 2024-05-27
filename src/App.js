@@ -18,15 +18,13 @@ import { host } from "./component/Lang/Contant";
 import adminslice from "./component/Redux/adminslice";
 import { callApi } from "./component/Api/Api";
 import { signal } from "@preact/signals-react";
-import { closed, dataWarn, open } from "./component/Warn/Warn";
+import { dataWarn } from "./component/Warn/Warn";
 import { useIntl } from "react-intl";
-// import ErrorSetting from "./component/ErrorSetting/ErrorSetting";
 import { io } from "socket.io-client";
 import NotfoundErr from "./NotfoundErr";
 import { mode, plantState } from "./component/Control/Signal";
 import { FaRegFileAlt } from "react-icons/fa";
 import { toolState } from "./component/Home/Home";
-import moment from "moment-timezone";
 
 const Home = React.lazy(() => import("./component/Home/Home"));
 const Auto = React.lazy(() => import("./component/Control/Auto"));
@@ -299,6 +297,7 @@ export default function App() {
         // closed.value = dataWarn.value.filter((item) => item.status == "closed");
       }
     };
+
     const getAllLogger = async (usr, id, type) => {
       let res = await callApi("post", host.DATA + "/getAllLogger", {
         usr: usr,
@@ -348,6 +347,7 @@ export default function App() {
       getAllLogger(usr, partnerInfor.value.partnerid, userInfor.value.type);
     }
   }, [userInfor.value.type, partnerInfor.value.partnerid, usr]);
+
   const handleOut = () => {
     localStorage.clear();
     sessionStorage.clear();
@@ -379,6 +379,7 @@ export default function App() {
       ) : (
         <></>
       )}
+
       <Router>
         <Alert />
         {loading ? (
