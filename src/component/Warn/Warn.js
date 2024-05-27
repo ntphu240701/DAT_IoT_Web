@@ -135,6 +135,12 @@ export default function Warn(props) {
       sortable: true,
       width: "180px",
     },
+    {
+      name: dataLang.formatMessage({ id: "date" }),
+      selector: (row) => row.opendate,
+      sortable: true,
+      width: "180px",
+    },
     // {
     //   name: dataLang.formatMessage({ id: "closeWarnTime" }),
     //   selector: (row) => row.closedtime,
@@ -209,30 +215,34 @@ export default function Warn(props) {
 
   const handleInfo = async (e) => {
     const temp = e.currentTarget.id.split("_");
-
-    const id = `${temp[0]}_${temp[1]}_${temp[2]}`;
+    console.log(temp);
+    // const id = `${temp[0]}_${temp[1]}_${temp[2]}`;
 
     let req = await callApi("post", `${host.DATA}/getWarninf`, {
-      boxid: id,
+      boxid: temp[0],
+      sn: temp[3],
     });
+    console.log(req);
     if (req.status) {
-      setPopupState(true);
+    
       setType("info");
-      setBoxid(id);
-      setLevel(temp[3]);
-      setPlant(temp[4]);
-      setDevice(temp[5]);
+      setBoxid(temp[0]);
+      setLevel(temp[1]);
+      setPlant(temp[2]);
+      setDevice(temp[3]);
       setCause(req.data.cause_);
       setSolution(req.data.solution_);
-    } else {
       setPopupState(true);
+    } else {
+      
       setType("info");
-      setBoxid(id);
-      setLevel(temp[3]);
-      setPlant(temp[4]);
-      setDevice(temp[5]);
+      setBoxid(temp[0]);
+      setLevel(temp[1]);
+      setPlant(temp[2]);
+      setDevice(temp[3]);
       setCause([]);
       setSolution([]);
+      setPopupState(true);
     }
   };
 
@@ -555,10 +565,10 @@ export default function Warn(props) {
                                 {dataLang.formatMessage({ id: "openWarnTime" })}:{" "}
                                 {item.opentime}
                               </div>
-                              {/* <div className="DAT_WarnMobile_Content_Bottom_Left_Close">
+                              <div className="DAT_WarnMobile_Content_Bottom_Left_Close">
                                 {dataLang.formatMessage({ id: "closeWarnTime" })}:{" "}
                                 {item.closedtime}
-                              </div> */}
+                              </div>
                             </div>
                             <div className="DAT_WarnMobile_Content_Bottom_Right">
                               <div
@@ -627,10 +637,10 @@ export default function Warn(props) {
                                 {dataLang.formatMessage({ id: "openWarnTime" })}:{" "}
                                 {item.opentime}
                               </div>
-                              {/* <div className="DAT_WarnMobile_Content_Bottom_Left_Close">
+                              <div className="DAT_WarnMobile_Content_Bottom_Left_Close">
                                 {dataLang.formatMessage({ id: "closeWarnTime" })}:{" "}
                                 {item.closedtime}
-                              </div> */}
+                              </div>
                             </div>
                             <div className="DAT_WarnMobile_Content_Bottom_Right">
                               <div
@@ -699,10 +709,10 @@ export default function Warn(props) {
                                 {dataLang.formatMessage({ id: "openWarnTime" })}:{" "}
                                 {item.opentime}
                               </div>
-                              {/* <div className="DAT_WarnMobile_Content_Bottom_Left_Close">
+                              <div className="DAT_WarnMobile_Content_Bottom_Left_Close">
                                 {dataLang.formatMessage({ id: "closeWarnTime" })}:{" "}
                                 {item.closedtime}
-                              </div> */}
+                              </div>
                             </div>
                             <div className="DAT_WarnMobile_Content_Bottom_Right">
                               <div

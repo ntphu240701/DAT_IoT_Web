@@ -97,6 +97,9 @@ export default function Dashboard(props) {
     );
   };
 
+
+
+
   const defaultProps = {
     center: {
       lat: 16.0544068,
@@ -138,6 +141,7 @@ export default function Dashboard(props) {
   };
 
   useEffect(() => {
+
     if (props.data) {
       initMap(props.data);
 
@@ -152,7 +156,12 @@ export default function Dashboard(props) {
       };
 
       getGateway();
+
+
     }
+
+
+
   }, [props.data]);
 
   return (
@@ -349,7 +358,8 @@ export default function Dashboard(props) {
               <div className="DAT_MainInfo_Graph_Group_Label">
                 {chart === "year"
                   ? datalang.formatMessage({ id: "yearOutput" })
-                  : datalang.formatMessage({ id: "monthOutput" })}
+                  : datalang.formatMessage({ id: "monthOutput" })
+                }
                 : 0 kWh
               </div>
             </div>

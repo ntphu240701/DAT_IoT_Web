@@ -323,7 +323,7 @@
                         font-family: Montserrat-Regular;
                     }
 
-                    input [type="number"] & input::-webkit-outer-spin-button,
+                    input [type=number] & input::-webkit-outer-spin-button,
                     input::-webkit-inner-spin-button {
                         -webkit-appearance: none;
                         margin: 0;
@@ -519,10 +519,12 @@
 
                 &_Left {
                     padding: 16px;
+
                 }
 
                 &_Right {
                     padding: 16px;
+
                 }
             }
         }

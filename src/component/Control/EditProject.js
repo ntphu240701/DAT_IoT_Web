@@ -78,13 +78,13 @@ export default function EditProject(props) {
         console.log(d);
         if (d.status === true) {
           alertDispatch(dataLang.formatMessage({ id: "alert_30" }));
-         
+
           let index = plantData.value.findIndex(
-            
+
             (item) => item.plantid_ == projectData.value.plantid
           )
-         
-          let newPlant  = [...plantData.value]
+
+          let newPlant = [...plantData.value]
 
           newPlant[index] = {
             ...newPlant[index],
@@ -110,39 +110,39 @@ export default function EditProject(props) {
   useEffect(() => {
     console.log(props.data)
     projectData.value = {
-      name:props.data.name_,
-      phone:props.data.phone_,
-      addr:props.data.addr_,
-      company:props.data.company_,
-      contact:props.data.contact_,
-      createdate:props.data.createdate_,
-      lastupdate:props.data.lastupdate_,
-      lat:props.data.lat_,
-      long:props.data.long_,
-      type:props.data.type_,
-      plantid:props.data.plantid_,
-      img:props.data.img
+      name: props.data.name_,
+      phone: props.data.phone_,
+      addr: props.data.addr_,
+      company: props.data.company_,
+      contact: props.data.contact_,
+      createdate: props.data.createdate_,
+      lastupdate: props.data.lastupdate_,
+      lat: parseFloat(props.data.lat_),
+      long: parseFloat(props.data.long_),
+      type: props.data.type_,
+      plantid: props.data.plantid_,
+      img: props.data.img
     };
 
-    return  () => {
+    return () => {
       projectData.value = {
-        name:"",
-        phone:"",
-        addr:"",
-        company:"",
-        contact:"",
-        createdate:"",
-        lastupdate:"",
-        lat:"16",
-        long:"106",
-        type:"",
-        plantid:"",
-        img:""
+        name: "",
+        phone: "",
+        addr: "",
+        company: "",
+        contact: "",
+        createdate: "",
+        lastupdate: "",
+        lat: "16",
+        long: "106",
+        type: "",
+        plantid: "",
+        img: ""
       };
     }
 
-    
-  },[props.data])
+
+  }, [props.data])
 
   return (
     <div className="DAT_EditProject">
@@ -172,6 +172,7 @@ export default function EditProject(props) {
       </div>
 
       <BasicInfo
+
         tit={dataLang.formatMessage({ id: "basicInfo" })}
         height={isMobile ? "580px" : "300px"}
       />
@@ -300,6 +301,11 @@ const BasicInfo = (props) => {
   };
 
   useEffect(() => {
+    console.log(projectData.value);
+    var long_ = document.getElementById("long");
+    var lat_ = document.getElementById("lat");
+    long_.value = projectData.value.long;
+    lat_.value = projectData.value.lat;
     initMap(
       projectData.value.name,
       parseFloat(projectData.value.lat),
@@ -309,6 +315,9 @@ const BasicInfo = (props) => {
 
   const handleMap = (e) => {
     const addr = document.getElementById("addr");
+
+    console.log(projectData.value);
+
     setKey(process.env.REACT_APP_GGKEY);
     geocode(RequestType.ADDRESS, addr.value)
       .then((response) => {
@@ -322,7 +331,7 @@ const BasicInfo = (props) => {
           long: response.results[0].geometry.location.lng,
         };
         initMap(
-          projectData.value.name_,
+          projectData.value.name,
           response.results[0].geometry.location.lat,
           response.results[0].geometry.location.lng
         );
@@ -411,7 +420,7 @@ const BasicInfo = (props) => {
                     <input
                       id="long"
                       type="text"
-                      defaultValue={projectData.value.long}
+                      // defaultValue={projectData.value.long}
                       disabled
                     // onChange={(e) => handleBasic(e)}
                     // onClick={(e) => handleMap(e)}
@@ -424,7 +433,7 @@ const BasicInfo = (props) => {
                     <input
                       id="lat"
                       type="text"
-                      defaultValue={projectData.value.lat}
+                      // defaultValue={projectData.value.lat}
                       disabled
                     // onChange={(e) => handleBasic(e)}
                     // onClick={(e) => handleMap(e)}
@@ -560,11 +569,11 @@ const OwnerInfo = (props) => {
 const ImgInfo = (props) => {
   const dataLang = useIntl();
   const [state, setState] = useState(true);
-  const [ava, setAva] = useState( `/dat_picture/${props.bu}.jpg`);
+  const [ava, setAva] = useState(`/dat_picture/${props.bu}.jpg`);
 
   useEffect(() => {
-      setAva(projectData.value.img);
-  },[projectData.value])
+    setAva(projectData.value.img);
+  }, [projectData.value])
 
 
   const resizeFilAvatar = (file) =>

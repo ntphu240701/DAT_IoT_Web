@@ -152,150 +152,105 @@ export default function Role(props) {
                       <></>
                     ) : (
                       <PopupState variant="popper" popupId="demo-popup-popper">
-                        {(popupState) => (
-                          <div className="DAT_TableEdit">
-                            <IoMdMore size={20} {...bindToggle(popupState)} />
-                            <Menu {...bindMenu(popupState)}>
-                              <MenuItem
-                                id={row.id_}
-                                onClick={(e) => {
-                                  handleEdit(e);
-                                  popupState.close();
-                                }}
-                              >
-                                <FiEdit size={14} />
-                                &nbsp;
-                                {dataLang.formatMessage({ id: "change" })}
-                              </MenuItem>
+                        {(popupState) => (<div className="DAT_TableEdit">
+                          <IoMdMore size={20}   {...bindToggle(popupState)} />
+                          <Menu {...bindMenu(popupState)}>
 
-                              <MenuItem
-                                id={row.usr_}
-                                onClick={(e) => {
-                                  handleDelete_(e);
-                                  popupState.close();
-                                }}
-                              >
-                                <IoTrashOutline size={16} />
-                                &nbsp;
-                                {dataLang.formatMessage({ id: "delete" })}
-                              </MenuItem>
-                            </Menu>
-                          </div>
-                        )}
+                            <MenuItem id={row.id_} onClick={(e) => { handleEdit(e); popupState.close() }}>
+                              <FiEdit size={14} />&nbsp;
+                              {dataLang.formatMessage({ id: "change" })}
+                            </MenuItem>
+
+
+                            <MenuItem id={row.usr_} onClick={(e) => { handleDelete_(e); popupState.close() }}>
+                              <IoTrashOutline size={16} />
+                              &nbsp;
+                              {dataLang.formatMessage({ id: "delete" })}
+                            </MenuItem>
+                          </Menu>
+                        </div>)}
                       </PopupState>
                     )}
                   </>
-                );
+                )
               case "mainadmin":
                 return (
                   <>
                     {row.type_ === "master" || row.type_ === "mainadmin" ? (
                       <></>
-                    ) : ruleInfor.value.setting.user.modify ||
-                      ruleInfor.value.setting.user.remove ? (
-                      <PopupState variant="popper" popupId="demo-popup-popper">
-                        {(popupState) => (
-                          <div className="DAT_TableEdit">
-                            <IoMdMore size={20} {...bindToggle(popupState)} />
+                    ) : (
+                      ruleInfor.value.setting.user.modify || ruleInfor.value.setting.user.remove ? (
+                        <PopupState variant="popper" popupId="demo-popup-popper">
+                          {(popupState) => (<div className="DAT_TableEdit">
+                            <IoMdMore size={20}   {...bindToggle(popupState)} />
                             <Menu {...bindMenu(popupState)}>
                               {ruleInfor.value.setting.user.modify ? (
-                                <MenuItem
-                                  id={row.id_}
-                                  onClick={(e) => {
-                                    handleEdit(e);
-                                    popupState.close();
-                                  }}
-                                >
-                                  <FiEdit size={14} />
-                                  &nbsp;
+                                <MenuItem id={row.id_} onClick={(e) => { handleEdit(e); popupState.close() }}>
+                                  <FiEdit size={14} />&nbsp;
                                   {dataLang.formatMessage({ id: "change" })}
                                 </MenuItem>
-                              ) : (
-                                <></>
-                              )}
+                              ) : (<></>)}
 
                               {ruleInfor.value.setting.user.remove ? (
-                                <MenuItem
-                                  id={row.usr_}
-                                  onClick={(e) => {
-                                    handleDelete_(e);
-                                    popupState.close();
-                                  }}
-                                >
+                                <MenuItem id={row.usr_} onClick={(e) => { handleDelete_(e); popupState.close() }}>
                                   <IoTrashOutline size={16} />
                                   &nbsp;
                                   {dataLang.formatMessage({ id: "delete" })}
                                 </MenuItem>
-                              ) : (
-                                <></>
-                              )}
+                              ) : (<></>)}
+
                             </Menu>
-                          </div>
-                        )}
-                      </PopupState>
-                    ) : (
-                      <></>
+                          </div>)}
+                        </PopupState>
+                      ) : (
+                        <></>
+                      )
                     )}
                   </>
-                );
+                )
               case "admin":
                 return (
                   <>
-                    {row.type_ === "master" ||
-                    row.type_ === "mainadmin" ||
-                    row.type_ === "admin" ? (
+                    {row.type_ === "master" || row.type_ === "mainadmin" || row.type_ === "admin" ? (
                       <></>
-                    ) : ruleInfor.value.setting.user.modify ||
-                      ruleInfor.value.setting.user.remove ? (
-                      <PopupState variant="popper" popupId="demo-popup-popper">
-                        {(popupState) => (
-                          <div className="DAT_TableEdit">
-                            <IoMdMore size={20} {...bindToggle(popupState)} />
+                    ) : (
+                      ruleInfor.value.setting.user.modify || ruleInfor.value.setting.user.remove ? (
+                        <PopupState variant="popper" popupId="demo-popup-popper">
+                          {(popupState) => (<div className="DAT_TableEdit">
+                            <IoMdMore size={20}   {...bindToggle(popupState)} />
                             <Menu {...bindMenu(popupState)}>
                               {ruleInfor.value.setting.user.modify ? (
-                                <MenuItem
-                                  id={row.id_}
-                                  onClick={(e) => {
-                                    handleEdit(e);
-                                    popupState.close();
-                                  }}
-                                >
-                                  <FiEdit size={14} />
-                                  &nbsp;
+                                <MenuItem id={row.id_} onClick={(e) => { handleEdit(e); popupState.close() }}>
+                                  <FiEdit size={14} />&nbsp;
                                   {dataLang.formatMessage({ id: "change" })}
                                 </MenuItem>
-                              ) : (
-                                <></>
-                              )}
+                              ) : (<></>)}
 
                               {ruleInfor.value.setting.user.remove ? (
-                                <MenuItem
-                                  id={row.usr_}
-                                  onClick={(e) => {
-                                    handleDelete_(e);
-                                    popupState.close();
-                                  }}
-                                >
+                                <MenuItem id={row.usr_} onClick={(e) => { handleDelete_(e); popupState.close() }}>
                                   <IoTrashOutline size={16} />
                                   &nbsp;
                                   {dataLang.formatMessage({ id: "delete" })}
                                 </MenuItem>
-                              ) : (
-                                <></>
-                              )}
+                              ) : (<></>)}
+
                             </Menu>
-                          </div>
-                        )}
-                      </PopupState>
-                    ) : (
-                      <></>
+                          </div>)}
+                        </PopupState>
+                      ) : (
+                        <></>
+                      )
                     )}
                   </>
-                );
+                )
               default:
-                return <></>;
+                return (<></>)
             }
           })()}
+
+
+
+
         </>
       ),
       width: "110px",
@@ -407,9 +362,8 @@ export default function Role(props) {
               >
                 <IoAddOutline color="white" size={20} />
               </button>
-            ) : (
-              <></>
-            )}
+            ) : (<></>)}
+
           </div>
 
           <div
@@ -661,8 +615,7 @@ export default function Role(props) {
         </>
       )}
 
-      <div
-        className="DAT_ViewPopup"
+      <div className="DAT_ViewPopup"
         style={{
           height: roleState === "default" ? "0px" : "100vh",
           transition: "0.5s",
@@ -678,13 +631,11 @@ export default function Role(props) {
         })()}
       </div>
 
-      {popupState ? (
+      {popupState ?
         <div className="DAT_PopupBG">
           <RolePopup user={temp} type={type} handleClose={handleClosePopup} />
         </div>
-      ) : (
-        <></>
-      )}
+        : <></>}
     </>
   );
 }

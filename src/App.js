@@ -20,14 +20,13 @@ import { callApi } from "./component/Api/Api";
 import { signal } from "@preact/signals-react";
 import { closed, dataWarn, open } from "./component/Warn/Warn";
 import { useIntl } from "react-intl";
-import ErrorSetting from "./component/ErrorSetting/ErrorSetting";
+// import ErrorSetting from "./component/ErrorSetting/ErrorSetting";
 import { io } from "socket.io-client";
 import NotfoundErr from "./NotfoundErr";
 import { mode, plantState } from "./component/Control/Signal";
 import { FaRegFileAlt } from "react-icons/fa";
 import { toolState } from "./component/Home/Home";
 import moment from "moment-timezone";
-import RegisterSetting from "./component/RegisterSetting/RegisterSetting";
 
 const Home = React.lazy(() => import("./component/Home/Home"));
 const Auto = React.lazy(() => import("./component/Control/Auto"));
@@ -44,6 +43,15 @@ const Log = React.lazy(() => import("./component/Log/Log"));
 const Language = React.lazy(() => import("./component/Language/Language"));
 const Contact = React.lazy(() => import("./component/Contact/Contact"));
 const Rule = React.lazy(() => import("./component/Rule/Rule"));
+const ErrorSetting = React.lazy(() =>
+  import("./component/ErrorSetting/ErrorSetting")
+);
+const RegisterSetting = React.lazy(() =>
+  import("./component/RegisterSetting/RegisterSetting")
+);
+const ExportEnergy = React.lazy(() =>
+  import("./component/ExportEnergy/ExportEnergy")
+);
 
 export const view = signal(false);
 export const socket = signal(io.connect(process.env.REACT_APP_SOLAR));
@@ -964,6 +972,24 @@ export default function App() {
                             }
                           >
                             <Language />
+                          </Suspense>
+                        }
+                      />
+                      <Route
+                        path="/ExportEnergy"
+                        element={
+                          <Suspense
+                            fallback={
+                              <div className="DAT_Loading">
+                                <ClockLoader
+                                  color="#007bff"
+                                  size={50}
+                                  loading={loading}
+                                />
+                              </div>
+                            }
+                          >
+                            <ExportEnergy />
                           </Suspense>
                         }
                       />
