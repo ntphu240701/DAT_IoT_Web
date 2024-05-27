@@ -8,7 +8,12 @@ export default function Popup(props) {
   const dataLang = useIntl();
   const errAddRef1 = useRef();
   const errAddRef2 = useRef();
-  const [editVal, setEditVal] = useState(0);
+  const configAddRef1 = useRef();
+  const configAddRef2 = useRef();
+  const configAddRef3 = useRef();
+  const editValRef1 = useRef();
+  const editValRef2 = useRef();
+  const editValRef3 = useRef();
 
   const popup_state = {
     pre: { transform: "rotate(0deg)", transition: "0.5s", color: "white" },
@@ -26,10 +31,24 @@ export default function Popup(props) {
       const t = props.data.find(
         (item) => item.id == configEdit.value.split("_")[0]
       ).register;
+      console.log(props.data);
+      console.log(t.find((item) => item.id == configEdit.value.split("_")[1]));
+      editValRef1.current.value = t
+        .find((item) => item.id == configEdit.value.split("_")[1])
+        .addr.split("-")[0];
+      editValRef2.current.value = t
+        .find((item) => item.id == configEdit.value.split("_")[1])
+        .addr.split("-")[1];
+      editValRef3.current.value = t.find(
+        (item) => item.id == configEdit.value.split("_")[1]
+      ).val;
       console.log(
-        t.find((con) => con.id == configEdit.value.split("_")[1]).val
+        editValRef1.current.value,
+        editValRef2.current.value,
+        editValRef3.current.value
       );
     }
+    console.log(props.type);
   }, []);
 
   //addNewReg,
@@ -39,17 +58,7 @@ export default function Popup(props) {
         switch (props.type) {
           case "addNewReg":
             return (
-              <form
-                className="DAT_CreateErrSetting"
-                //   onSubmit={(e) => {
-                //     props.handleConfirm(
-                //       e,
-                //       codeRef1.current.value,
-                //       codeRef2.current.value,
-                //       codeRef3.current.value
-                //     );
-                //   }}
-              >
+              <form className="DAT_CreateErrSetting">
                 <div className="DAT_CreateErrSetting_Head">
                   <div className="DAT_CreateErrSetting_Head_Left">
                     {dataLang.formatMessage({ id: "createNew" })}
@@ -68,19 +77,24 @@ export default function Popup(props) {
                 </div>
 
                 <div className="DAT_CreateErrSetting_Body">
-                  <span>{dataLang.formatMessage({ id: "errcode" })}:</span>
-                  <input type="number" ref={errAddRef1} /> -
-                  <input type="number" ref={errAddRef2} />
+                  <span style={{ width: "48px" }}>
+                    {dataLang.formatMessage({ id: "errcode" })}:
+                  </span>
+                  <input
+                    type="number"
+                    ref={errAddRef1}
+                    style={{ width: "65px" }}
+                  />{" "}
+                  -
+                  <input
+                    type="number"
+                    ref={errAddRef2}
+                    style={{ width: "65px" }}
+                  />
                 </div>
-                <div className="DAT_CreateErrSetting_Foot">
-                  <div className="DAT_CreateErrSetting_Foot_Left">
-                    {/* <span style={{ color: "red" }}>*</span>
-                    <div className="DAT_CreateErrSetting_Foot_Left_Item">
-                      <span>A: {dataLang.formatMessage({ id: "notice" })}</span>
-                      <span>E: {dataLang.formatMessage({ id: "alert" })}</span>
-                    </div> */}
-                  </div>
 
+                <div className="DAT_CreateErrSetting_Foot">
+                  <div className="DAT_CreateErrSetting_Foot_Left"></div>
                   <div className="DAT_CreateErrSetting_Foot_Right">
                     <button
                       style={{
@@ -88,7 +102,7 @@ export default function Popup(props) {
                         color: "white",
                       }}
                       onClick={(e) => {
-                        props.closeopen();
+                        e.preventDefault();
                         props.handleSubmitAddNewReg(
                           errAddRef1.current.value,
                           errAddRef2.current.value
@@ -133,8 +147,6 @@ export default function Popup(props) {
                   </div>
                   <div className="DAT_EditErr_Body_Content">
                     <div className="DAT_EditErr_Body_Content_Item">
-                      {/* <span>En</span> */}
-                      {/* <textarea /> */}
                       <input
                         type="text"
                         defaultValue={
@@ -143,12 +155,24 @@ export default function Popup(props) {
                               (item) =>
                                 item.id == configEdit.value.split("_")[0]
                             )
-                            .register.find(
-                              (con) => con.id == configEdit.value.split("_")[1]
-                            ).addr
+                            .addrcode.split("-")[0]
                         }
-                        // disabled
                         required
+                        ref={editValRef1}
+                      />{" "}
+                      -
+                      <input
+                        type="text"
+                        defaultValue={
+                          props.data
+                            .find(
+                              (item) =>
+                                item.id == configEdit.value.split("_")[0]
+                            )
+                            .addrcode.split("-")[1]
+                        }
+                        required
+                        ref={editValRef2}
                       />{" "}
                       :
                       <input
@@ -163,9 +187,8 @@ export default function Popup(props) {
                               (con) => con.id == configEdit.value.split("_")[1]
                             ).val
                         }
-                        onChange={(e) => {
-                          setEditVal(e.target.value);
-                        }}
+                        required
+                        ref={editValRef3}
                       />
                     </div>
                   </div>
@@ -178,14 +201,71 @@ export default function Popup(props) {
                       color: "white",
                     }}
                     onClick={(e) => {
-                      props.closeopen();
-                      props.handleEditConfig(editVal);
+                      e.preventDefault();
+                      props.handleEditConfig(
+                        editValRef1.current.value,
+                        editValRef2.current.value,
+                        editValRef3.current.value
+                      );
                     }}
                   >
                     {dataLang.formatMessage({ id: "confirm" })}
                   </button>
                 </div>
               </div>
+            );
+          case "addNewConfig":
+            return (
+              <form className="DAT_CreateErrSetting">
+                <div className="DAT_CreateErrSetting_Head">
+                  <div className="DAT_CreateErrSetting_Head_Left">
+                    {dataLang.formatMessage({ id: "createNew" })}
+                  </div>
+                  <div className="DAT_CreateErrSetting_Head_Right">
+                    <div
+                      className="DAT_CreateErrSetting_Head_Right_Icon"
+                      id="Popup"
+                      onClick={() => props.closeopen()}
+                      onMouseEnter={(e) => handlePopup("new")}
+                      onMouseLeave={(e) => handlePopup("pre")}
+                    >
+                      <IoClose size={25} />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="DAT_CreateErrSetting_Body">
+                  <span style={{ width: "70px" }}>
+                    {dataLang.formatMessage({ id: "config" })}:
+                  </span>
+                  <input type="number" ref={configAddRef1} /> -
+                  <input type="number" ref={configAddRef2} />:
+                  <input type="number" ref={configAddRef3} />
+                </div>
+
+                <div className="DAT_CreateErrSetting_Foot">
+                  <div className="DAT_CreateErrSetting_Foot_Left"></div>
+
+                  <div className="DAT_CreateErrSetting_Foot_Right">
+                    <button
+                      style={{
+                        backgroundColor: COLOR.value.PrimaryColor,
+                        color: "white",
+                      }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        props.handleAddConfig(
+                          configAddRef1.current.value,
+                          configAddRef2.current.value,
+                          configAddRef3.current.value
+                        );
+                      }}
+                    >
+                      {dataLang.formatMessage({ id: "confirm" })}
+                    </button>
+                  </div>
+                </div>
+              </form>
             );
           case "removeConfig":
             return (

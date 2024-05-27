@@ -24,6 +24,7 @@ import DataTable from "react-data-table-component";
 import Popup from "./Popup";
 import { lowercasedata } from "../ErrorSetting/ErrorSetting";
 import { MdOutlineManageHistory } from "react-icons/md";
+import { alertDispatch } from "../Alert/Alert";
 
 export const groupRegID = signal("");
 export const configEdit = signal("");
@@ -114,8 +115,10 @@ export default function RegisterSetting() {
                         style={{ cursor: "pointer" }}
                         id={`${row.id}_ADD`}
                         onClick={(e) => {
-                          handleAddConfig(e);
+                          // handleAddConfig(e);
                           handleSetConfig(e);
+                          changePopupstate();
+                          setStatePopup("addNewConfig");
                         }}
                       />
                     ) : (
@@ -188,6 +191,7 @@ export default function RegisterSetting() {
   const handleSetConfig = (e) => {
     configEdit.value = e.currentTarget.id;
     console.log(e.currentTarget.id);
+    console.log(dataRegister);
   };
 
   const handleChangeGroup = (e) => {
@@ -220,48 +224,80 @@ export default function RegisterSetting() {
   const handleSubmitAddNewReg = (errAdd1, errAdd2) => {
     console.log(errAdd1, errAdd2);
     let temp = [...dataRegister];
-    temp = [
-      ...temp,
-      {
-        id: parseInt(temp.length) + 1,
-        addrcode: `${errAdd1}-${errAdd2}`,
-        register: [
+    if (errAdd1 === "" || errAdd2 === "") {
+      alertDispatch(dataLang.formatMessage({ id: "alert_22" }));
+    } else {
+      if (
+        temp.filter((data) => data.addrcode === `${errAdd1}-${errAdd2}`)
+          .length > 0
+      ) {
+        alertDispatch(dataLang.formatMessage({ id: "alert_49" }));
+      } else {
+        temp = [
+          ...temp,
           {
-            id: 1,
-            addr: `${errAdd1}-${errAdd2}`,
-            val: "1",
+            id:
+              parseInt(temp.length) === 0
+                ? 1
+                : temp[parseInt(temp.length) - 1].id + 1,
+            // id: parseInt(temp.length) + 1,
+            addrcode: `${errAdd1}-${errAdd2}`,
+            register: [
+              {
+                id: 1,
+                addr: `${errAdd1}-${errAdd2}`,
+                val: "1",
+              },
+            ],
           },
-        ],
-      },
-    ];
-    console.log(temp, groupRegID.value);
-    const upReg = async () => {
-      let req = await callApi("post", `${host.DATA}/updateRegister`, {
-        sn: groupRegID.value,
-        data: JSON.stringify(temp),
-      });
-      console.log(req);
-      setDataRegister([...temp]);
-    };
-    upReg();
+        ];
+        const upReg = async () => {
+          let req = await callApi("post", `${host.DATA}/updateRegister`, {
+            sn: groupRegID.value,
+            data: JSON.stringify(temp),
+          });
+          console.log(req);
+          if (req.status === true) {
+            setDataRegister([...temp]);
+            changePopupstate();
+          }
+        };
+        upReg();
+      }
+    }
   };
 
-  const handleEditConfig = (editVal) => {
+  const handleEditConfig = (editVal1, editVal2, editVal3) => {
     const temp = configEdit.value.split("_");
     const i = dataRegister.findIndex((data) => data.id == temp[0]);
     const j = dataRegister[i].register.findIndex((data) => data.id == temp[1]);
     let t = dataRegister;
-    t[i].register[j].val = editVal;
-    const upReg = async () => {
-      let req = await callApi("post", `${host.DATA}/updateRegister`, {
-        sn: groupRegID.value,
-        data: JSON.stringify(t),
-      });
-      console.log(req);
-      setDataRegister([...t]);
-    };
-    upReg();
-    console.log(t);
+    if (editVal1 === "" || editVal2 === "" || editVal3 === "") {
+      alertDispatch(dataLang.formatMessage({ id: "alert_22" }));
+    } else {
+      if (
+        t[i].register.filter((data) => data.addr === `${editVal1}-${editVal2}`)
+          .length > 0 &&
+        t[i].register.filter((data) => data.val === editVal3).length > 0
+      ) {
+        alertDispatch(dataLang.formatMessage({ id: "alert_49" }));
+      } else {
+        t[i].register[j].val = editVal3;
+        t[i].register[j].addr = `${editVal1}-${editVal2}`;
+        console.log(t[i].register[j].addr);
+        console.log(`${editVal1}-${editVal2}`);
+        const upReg = async () => {
+          let req = await callApi("post", `${host.DATA}/updateRegister`, {
+            sn: groupRegID.value,
+            data: JSON.stringify(t),
+          });
+          console.log(req);
+          setDataRegister([...t]);
+        };
+        upReg();
+        changePopupstate();
+      }
+    }
   };
 
   const handleRemoveConfig = () => {
@@ -269,43 +305,55 @@ export default function RegisterSetting() {
     const i = dataRegister.findIndex((data) => data.id == temp[0]);
     const j = dataRegister[i].register.findIndex((data) => data.id == temp[1]);
     const t = dataRegister;
-    dataRegister[i].register.splice(j, 1);
-    setDataRegister([...dataRegister]);
-    const upReg = async () => {
-      let req = await callApi("post", `${host.DATA}/updateRegister`, {
-        sn: groupRegID.value,
-        data: JSON.stringify(t),
-      });
-      console.log(req);
-      setDataRegister([...t]);
-    };
-    upReg();
-    console.log(t);
+    if (dataRegister[i].register.length === 1) {
+      alertDispatch(dataLang.formatMessage({ id: "alert_63" }));
+    } else {
+      dataRegister[i].register.splice(j, 1);
+      setDataRegister([...dataRegister]);
+      const upReg = async () => {
+        let req = await callApi("post", `${host.DATA}/updateRegister`, {
+          sn: groupRegID.value,
+          data: JSON.stringify(t),
+        });
+        console.log(req);
+        setDataRegister([...t]);
+      };
+      upReg();
+      console.log(t);
+      changePopupstate();
+    }
   };
 
-  const handleAddConfig = (e) => {
-    const temp = e.currentTarget.id.split("_");
+  const handleAddConfig = (addr1, addr2, val) => {
+    const temp = configEdit.value.split("_");
     const i = dataRegister.findIndex((data) => data.id == temp[0]);
-    // console.log(dataRegister[i].register.length);
-    // console.log(
-    //   dataRegister[i].register[dataRegister[i].register.length - 1].id
-    // );
     const t = dataRegister;
-    t[i].register.push({
-      id: t[i].register[t[i].register.length - 1].id + 1,
-      addr: t[i].register[t[i].register.length - 1].addr,
-      val: parseInt(t[i].register[t[i].register.length - 1].val) + 1,
-    });
-    const upReg = async () => {
-      let req = await callApi("post", `${host.DATA}/updateRegister`, {
-        sn: groupRegID.value,
-        data: JSON.stringify(t),
-      });
-      console.log(req);
-      setDataRegister([...t]);
-    };
-    upReg();
-    console.log(t);
+    if (addr1 === "" || addr2 === "" || val === "") {
+      alertDispatch(dataLang.formatMessage({ id: "alert_22" }));
+    } else {
+      if (
+        t[i].register[t[i].register.length - 1].addr === `${addr1}-${addr2}`
+      ) {
+        alertDispatch(dataLang.formatMessage({ id: "alert_49" }));
+      } else {
+        t[i].register.push({
+          id: t[i].register[t[i].register.length - 1].id + 1,
+          addr: `${addr1}-${addr2}`,
+          val: val,
+        });
+        const upReg = async () => {
+          let req = await callApi("post", `${host.DATA}/updateRegister`, {
+            sn: groupRegID.value,
+            data: JSON.stringify(t),
+          });
+          console.log(req);
+          setDataRegister([...t]);
+        };
+        upReg();
+        console.log(t);
+        changePopupstate();
+      }
+    }
   };
 
   const handleDelErr = (e) => {
@@ -380,7 +428,7 @@ export default function RegisterSetting() {
           <div className="DAT_GRHeader">
             <div className="DAT_GRHeader_Title">
               <PiUsersFour color="gray" size={25} />
-              <span>{dataLang.formatMessage({ id: "RegisterSetting" })}</span>
+              <span>{dataLang.formatMessage({ id: "registersetting" })}</span>
             </div>
             <div
               className="DAT_GRHeader_Filter"
@@ -483,15 +531,15 @@ export default function RegisterSetting() {
                           className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More"
                           //   id={item.id_ + "_function"}
                           style={{ display: "none" }}
-                        //   onMouseLeave={(e) => handleShowFunction(e)}
+                          //   onMouseLeave={(e) => handleShowFunction(e)}
                         >
                           {/* {item.id_ === 1 ? (
                         <></>
                       ) : ( */}
                           <div
                             className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More_Delete"
-                          //   id={item.id_}
-                          //   onClick={() => props.groupDelState()}
+                            //   id={item.id_}
+                            //   onClick={() => props.groupDelState()}
                           >
                             <IoTrashOutline size={18} />
                           </div>
@@ -499,15 +547,15 @@ export default function RegisterSetting() {
                           <div
                             className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More_Edit"
                             style={{ right: "40px" }}
-                          // id={item.id_}
-                          // onClick={(e) => handleEditGroup(e)}
+                            // id={item.id_}
+                            // onClick={(e) => handleEditGroup(e)}
                           >
                             <FiEdit size={18} />
                           </div>
 
                           <div
                             className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More_Add"
-                          // onClick={() => props.addState()}
+                            // onClick={() => props.addState()}
                           >
                             <AiOutlineUserAdd size={18} />
                           </div>
@@ -647,7 +695,7 @@ export default function RegisterSetting() {
                                             }}
                                           />
                                           {parseInt(i) ===
-                                            item.register.length - 1 ? (
+                                          item.register.length - 1 ? (
                                             <IoIosAddCircleOutline
                                               size={16}
                                               style={{ cursor: "pointer" }}
@@ -749,7 +797,7 @@ export default function RegisterSetting() {
                       className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More"
                       // id={item.id_ + "_function"}
                       style={{ display: "none" }}
-                    // onMouseLeave={(e) => handleShowFunction(e)}
+                      // onMouseLeave={(e) => handleShowFunction(e)}
                     >
                       {item.id_ === 1 ? (
                         <></>
@@ -757,7 +805,7 @@ export default function RegisterSetting() {
                         <div
                           className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More_Delete"
                           id={item.sn_}
-                        // onClick={() => props.groupDelState()}
+                          // onClick={() => props.groupDelState()}
                         >
                           <IoTrashOutline size={18} />
                         </div>
@@ -766,14 +814,14 @@ export default function RegisterSetting() {
                         className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More_Edit"
                         style={{ right: "40px" }}
                         id={item.sn_}
-                      // onClick={(e) => handleEditGroup(e)}
+                        // onClick={(e) => handleEditGroup(e)}
                       >
                         <FiEdit size={18} />
                       </div>
 
                       <div
                         className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More_Add"
-                      // onClick={() => props.addState()}
+                        // onClick={() => props.addState()}
                       >
                         <AiOutlineUserAdd size={18} />
                       </div>
@@ -796,6 +844,7 @@ export default function RegisterSetting() {
             handleEditConfig={handleEditConfig}
             handleRemoveConfig={handleRemoveConfig}
             handleDelErr={handleDelErr}
+            handleAddConfig={handleAddConfig}
           />
         </div>
       ) : (

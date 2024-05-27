@@ -912,7 +912,7 @@ export default function ErrorSetting(props) {
                   style={{ width: "300px" }}
                 >
                   <div className="DAT_GR_Content_DevideTable_Left_Head">
-                    {dataLang.formatMessage({ id: "Gateway" })}
+                    {dataLang.formatMessage({ id: "devicelist" })}
                   </div>
 
                   <div className="DAT_GR_Content_DevideTable_Left_ItemList">
