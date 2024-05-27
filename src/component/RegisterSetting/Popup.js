@@ -137,7 +137,7 @@ export default function Popup(props) {
                       {/* <textarea /> */}
                       <input
                         type="text"
-                        value={
+                        defaultValue={
                           props.data
                             .find(
                               (item) =>
@@ -147,7 +147,7 @@ export default function Popup(props) {
                               (con) => con.id == configEdit.value.split("_")[1]
                             ).addr
                         }
-                        disabled
+                        // disabled
                         required
                       />{" "}
                       :
