@@ -8,10 +8,8 @@ import EditErr from "./EditErr";
 
 import { IoMdMore, IoIosAddCircleOutline, IoMdAdd } from "react-icons/io";
 import { CiSearch } from "react-icons/ci";
-import { MdOutlineManageHistory } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import {
-  IoAddOutline,
   IoCaretBackOutline,
   IoTrashOutline,
 } from "react-icons/io5";
@@ -19,7 +17,6 @@ import RemoveErr from "./RemoveErr";
 import { alertDispatch } from "../Alert/Alert";
 import { callApi } from "../Api/Api";
 import { host } from "../Lang/Contant";
-import { isMobile } from "../Navigation/Navigation";
 import PopupState, { bindMenu, bindToggle } from "material-ui-popup-state";
 import { Menu, MenuItem } from "@mui/material";
 import { Empty, partnerInfor, userInfor } from "../../App";
@@ -72,7 +69,7 @@ export default function ErrorSetting(props) {
   const [editVi, setEditVi] = useState("");
   const [editEn, setEditEn] = useState("");
   const [editarray, setEditarray] = useState();
-  const filterRef = useRef();
+  // const filterRef = useRef();
   const [dataGateway, setDataGateway] = useState([]);
   const [dataGatewaySub, setDataGatewaySub] = useState([]);
   const [dataErr, setDataErr] = useState([]);
@@ -565,12 +562,10 @@ export default function ErrorSetting(props) {
           ...bigdata[index].solution_,
           {
             id: bigdata[index].solution_[solutionlength - 1].id + 1,
-            vi: `Giải pháp ${
-              bigdata[index].solution_[solutionlength - 1].id + 1
-            }`,
-            en: `Solution ${
-              bigdata[index].solution_[solutionlength - 1].id + 1
-            }`,
+            vi: `Giải pháp ${bigdata[index].solution_[solutionlength - 1].id + 1
+              }`,
+            en: `Solution ${bigdata[index].solution_[solutionlength - 1].id + 1
+              }`,
           },
         ];
         setDataErr([...bigdata]);
@@ -650,7 +645,9 @@ export default function ErrorSetting(props) {
   }, [partnerInfor.value]);
 
   return (
-    <>
+    <div
+      style={{ position: 'relative', top: '0', left: '0', width: '100%', height: '100vh' }}
+    >
       {/* BẢN CŨ CHƯA UPDATE */}
       {/* {isMobile.value
         ?
@@ -899,6 +896,7 @@ export default function ErrorSetting(props) {
               )}
               <CiSearch color="gray" size={20} />
             </div>
+            <div></div>
           </div>
 
           <div className="DAT_GR">
@@ -960,15 +958,15 @@ export default function ErrorSetting(props) {
                           className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More"
                           //   id={item.id_ + "_function"}
                           style={{ display: "none" }}
-                          //   onMouseLeave={(e) => handleShowFunction(e)}
+                        //   onMouseLeave={(e) => handleShowFunction(e)}
                         >
                           {/* {item.id_ === 1 ? (
                         <></>
                       ) : ( */}
                           <div
                             className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More_Delete"
-                            //   id={item.id_}
-                            //   onClick={() => props.groupDelState()}
+                          //   id={item.id_}
+                          //   onClick={() => props.groupDelState()}
                           >
                             <IoTrashOutline size={18} />
                           </div>
@@ -976,15 +974,15 @@ export default function ErrorSetting(props) {
                           <div
                             className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More_Edit"
                             style={{ right: "40px" }}
-                            // id={item.id_}
-                            // onClick={(e) => handleEditGroup(e)}
+                          // id={item.id_}
+                          // onClick={(e) => handleEditGroup(e)}
                           >
                             <FiEdit size={18} />
                           </div>
 
                           <div
                             className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More_Add"
-                            // onClick={() => props.addState()}
+                          // onClick={() => props.addState()}
                           >
                             <AiOutlineUserAdd size={18} />
                           </div>
@@ -1019,9 +1017,9 @@ export default function ErrorSetting(props) {
             <div className="DAT_ProjectHeaderMobile_Top">
               <div
                 className="DAT_ProjectHeaderMobile_Top_Filter"
-                // style={{
-                //   backgroundColor: regList ? "rgb(235, 235, 228)" : "white",
-                // }}
+              // style={{
+              //   backgroundColor: regList ? "rgb(235, 235, 228)" : "white",
+              // }}
               >
                 <CiSearch color="gray" size={20} />
                 <input
@@ -1062,10 +1060,10 @@ export default function ErrorSetting(props) {
                 style={{ cursor: "pointer" }}
                 size={20}
                 color="white"
-                // onClick={() => {
-                //   setRegList(false);
-                //   groupErrSN.value = 0;
-                // }}
+              // onClick={() => {
+              //   setRegList(false);
+              //   groupErrSN.value = 0;
+              // }}
               />
               <div>{dataLang.formatMessage({ id: "roleList" })}</div>
             </div>
@@ -1180,23 +1178,23 @@ export default function ErrorSetting(props) {
               {/* {dataGateway.map((item, index) => ( */}
               <div
                 className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item"
-                // key={index}
-                // style={{
-                //   backgroundColor:
-                //     groupErrSN.value === item.sn_
-                //       ? "rgb(207, 207, 207, 0.4)"
-                //       : "",
-                // }}
+              // key={index}
+              // style={{
+              //   backgroundColor:
+              //     groupErrSN.value === item.sn_
+              //       ? "rgb(207, 207, 207, 0.4)"
+              //       : "",
+              // }}
               >
                 <div>
                   <div
                     className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_Name"
                     style={{ fontSize: "16px" }}
-                    // id={item.sn_}
-                    // onClick={(e) => {
-                    //   handleChangeGroup(e);
-                    //   setRegList(true);
-                    // }}
+                  // id={item.sn_}
+                  // onClick={(e) => {
+                  //   handleChangeGroup(e);
+                  //   setRegList(true);
+                  // }}
                   >
                     {/* {item.sn_} */}hi
                   </div>
@@ -1214,10 +1212,10 @@ export default function ErrorSetting(props) {
                 </div>
                 <div
                   className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_Shortcut"
-                  // id={item.sn_ + "_dot"}
-                  // onClick={(e) => {
-                  //   groupErrSN.value = item.sn_;
-                  // }}
+                // id={item.sn_ + "_dot"}
+                // onClick={(e) => {
+                //   groupErrSN.value = item.sn_;
+                // }}
                 >
                   <IoMdMore size={20} color="grey" />
                 </div>
@@ -1226,15 +1224,15 @@ export default function ErrorSetting(props) {
                   className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More"
                   // id={item.id_ + "_function"}
                   style={{ display: "none" }}
-                  // onMouseLeave={(e) => handleShowFunction(e)}
+                // onMouseLeave={(e) => handleShowFunction(e)}
                 >
                   {/* {item.id_ === 1 ? (
                       <></>
                     ) : ( */}
                   <div
                     className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More_Delete"
-                    // id={item.sn_}
-                    // onClick={() => props.groupDelState()}
+                  // id={item.sn_}
+                  // onClick={() => props.groupDelState()}
                   >
                     <IoTrashOutline size={18} />
                   </div>
@@ -1242,15 +1240,15 @@ export default function ErrorSetting(props) {
                   <div
                     className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More_Edit"
                     style={{ right: "40px" }}
-                    // id={item.sn_}
-                    // onClick={(e) => handleEditGroup(e)}
+                  // id={item.sn_}
+                  // onClick={(e) => handleEditGroup(e)}
                   >
                     <FiEdit size={18} />
                   </div>
 
                   <div
                     className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More_Add"
-                    // onClick={() => props.addState()}
+                  // onClick={() => props.addState()}
                   >
                     <AiOutlineUserAdd size={18} />
                   </div>
@@ -1300,6 +1298,6 @@ export default function ErrorSetting(props) {
       ) : (
         <></>
       )}
-    </>
+    </div>
   );
 }

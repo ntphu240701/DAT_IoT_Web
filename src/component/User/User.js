@@ -17,7 +17,9 @@ export default function User(props) {
   };
 
   return (
-    <>
+    <div
+      style={{ position: 'relative', top: '0', left: '0', width: '100%', height: '100vh' }}
+    >
       <div className="DAT_UsrHeader">
         <div className="DAT_UsrHeader_Title">
           <VscAccount color="gray" size={25} />
@@ -127,6 +129,6 @@ export default function User(props) {
       ) : (
         <></>
       )}
-    </>
+    </div>
   );
 }

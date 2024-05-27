@@ -250,7 +250,9 @@ export default function Rule() {
   };
 
   return (
-    <>
+    <div
+      style={{ position: 'relative', top: '0', left: '0', width: '100%', height: '100vh' }}
+    >
       {isMobile.value ? (
         <div className="DAT_RuleHeaderMobile">
           <div className="DAT_RuleHeaderMobile_Top">
@@ -394,6 +396,6 @@ export default function Rule() {
       ) : (
         <></>
       )}
-    </>
+    </div>
   );
 }
