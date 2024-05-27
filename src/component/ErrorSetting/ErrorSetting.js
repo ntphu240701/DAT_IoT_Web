@@ -1,17 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./ErrorSetting.scss";
 
-
 import { useIntl } from "react-intl";
 import DataTable from "react-data-table-component";
 import CreateErrSetting from "./CreateErrSetting";
 import EditErr from "./EditErr";
 
-import { IoMdMore, IoIosAddCircleOutline } from "react-icons/io";
+import { IoMdMore, IoIosAddCircleOutline, IoMdAdd } from "react-icons/io";
 import { CiSearch } from "react-icons/ci";
 import { MdOutlineManageHistory } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
-import { IoAddOutline, IoTrashOutline } from "react-icons/io5";
+import {
+  IoAddOutline,
+  IoCaretBackOutline,
+  IoTrashOutline,
+} from "react-icons/io5";
 import RemoveErr from "./RemoveErr";
 import { alertDispatch } from "../Alert/Alert";
 import { callApi } from "../Api/Api";
@@ -19,7 +22,14 @@ import { host } from "../Lang/Contant";
 import { isMobile } from "../Navigation/Navigation";
 import PopupState, { bindMenu, bindToggle } from "material-ui-popup-state";
 import { Menu, MenuItem } from "@mui/material";
-import { Empty } from "../../App";
+import { Empty, partnerInfor, userInfor } from "../../App";
+import { isBrowser } from "react-device-detect";
+import { PiUsersFour } from "react-icons/pi";
+import { signal } from "@preact/signals-react";
+import { AiOutlineUserAdd } from "react-icons/ai";
+import { useSelector } from "react-redux";
+
+export const groupErrSN = signal("");
 
 export const lowercasedata = (str) => {
   return str
@@ -63,6 +73,9 @@ export default function ErrorSetting(props) {
   const [editEn, setEditEn] = useState("");
   const [editarray, setEditarray] = useState();
   const filterRef = useRef();
+  const [dataGateway, setDataGateway] = useState([]);
+  const [dataGatewaySub, setDataGatewaySub] = useState([]);
+  const [dataErr, setDataErr] = useState([]);
 
   const paginationComponentOptions = {
     rowsPerPageText: dataLang.formatMessage({ id: "row" }),
@@ -96,7 +109,9 @@ export default function ErrorSetting(props) {
     {
       name: dataLang.formatMessage({ id: "causeViEn" }),
       selector: (row) => {
-        let cause = row.cause_.sort((a, b) => a.id - b.id);
+        // let cause = row.cause_.sort((a, b) => a.id - b.id);
+        // console.log(dataErr, row);
+        let cause = row.cause_;
         return (
           <div style={{ height: "auto" }}>
             {cause.map((err, index) => {
@@ -233,20 +248,24 @@ export default function ErrorSetting(props) {
             //   </span>
             // </div>
             <PopupState variant="popper" popupId="demo-popup-popper">
-              {(popupState) => (<div className="DAT_TableEdit">
-                <IoMdMore size={20}   {...bindToggle(popupState)} />
-                <Menu {...bindMenu(popupState)}>
-
-                  <MenuItem id={row.boxid_} onClick={(e) => { handleDelete(e); popupState.close() }}>
-                    <IoTrashOutline size={16} />
-                    &nbsp;
-                    {dataLang.formatMessage({ id: "delete" })}
-                  </MenuItem>
-
-
-
-                </Menu>
-              </div>)}
+              {(popupState) => (
+                <div className="DAT_TableEdit">
+                  <IoMdMore size={20} {...bindToggle(popupState)} />
+                  <Menu {...bindMenu(popupState)}>
+                    <MenuItem
+                      id={row.boxid_}
+                      onClick={(e) => {
+                        handleDelete(e);
+                        popupState.close();
+                      }}
+                    >
+                      <IoTrashOutline size={16} />
+                      &nbsp;
+                      {dataLang.formatMessage({ id: "delete" })}
+                    </MenuItem>
+                  </Menu>
+                </div>
+              )}
             </PopupState>
           )}
           {/* <div
@@ -284,6 +303,27 @@ export default function ErrorSetting(props) {
   //   const mod = document.getElementById(arr[0] + "_Modify");
   //   mod.style.display = type;
   // };
+  const handleChangeGroup = (e) => {
+    groupErrSN.value = e.currentTarget.id;
+    console.log(groupErrSN.value);
+    const getRegister = async (sn) => {
+      let inf = await callApi("post", host.DATA + "/getWarnBox", {
+        sn: sn,
+      });
+      console.log(inf);
+      if (inf.status === true) {
+        if (inf.data.length > 0) {
+          setDataErr(inf.data);
+          setDataApi(inf.data);
+          console.log(inf.data);
+        } else {
+          setDataErr([]);
+        }
+      }
+    };
+    console.log(dataErr);
+    getRegister(e.currentTarget.id);
+  };
 
   const handleCloseCreate = () => {
     setCreateState(false);
@@ -291,15 +331,16 @@ export default function ErrorSetting(props) {
 
   const handleConfirmCreate = async (e, code, num1, num2) => {
     e.preventDefault();
-    if (num1 === "" || num2 === "") {
+    if (code === "") {
       alertDispatch(dataLang.formatMessage({ id: "alert_17" }));
     } else {
-      const t = data.find((item) => item.boxid_ === `${code}_${num1}_${num2}`);
+      const t = dataErr.find((item) => item.boxid_ === code);
       if (t !== undefined) {
         alertDispatch(dataLang.formatMessage({ id: "alert_49" }));
       } else {
-        let req = await callApi("post", `${host.DATA}/addWarnBox`, {
-          boxid: `${code}_${num1}_${num2}`,
+        let req = await callApi("post", `${host.DATA}/updateWarnBox`, {
+          sn: groupErrSN.value,
+          boxid: code,
           cause: JSON.stringify([
             { id: 1, vi: "Nguyên nhân 1", en: "Cause 1" },
           ]),
@@ -307,12 +348,19 @@ export default function ErrorSetting(props) {
             { id: 1, vi: "Giải pháp 1", en: "Solution 1" },
           ]),
         });
+        console.log(req);
         if (req.status) {
-          const newdata = req.data;
-          setData([...data, newdata]);
+          const newdata = dataErr;
+          newdata.push({
+            boxid_: code,
+            cause_: [{ id: 1, vi: "Nguyên nhân 1", en: "Cause 1" }],
+            solution_: [{ id: 1, vi: "Giải pháp 1", en: "Solution 1" }],
+          });
+          setDataErr([...newdata]);
+          console.log(dataErr);
           setCreateState(false);
         }
-        alertDispatch(dataLang.formatMessage({ id: "alert_59" }));
+        // alertDispatch(dataLang.formatMessage({ id: "alert_59" }));
       }
     }
   };
@@ -322,18 +370,26 @@ export default function ErrorSetting(props) {
     setEditarray(arr);
     switch (arr[2]) {
       case "EDITCAUSE":
-        const index = data
+        const index = dataErr
           .find((item) => item.boxid_ === arr[0])
           .cause_.findIndex((item) => item.id === parseInt(arr[1]));
-        setEditVi(data.find((item) => item.boxid_ === arr[0]).cause_[index].vi);
-        setEditEn(data.find((item) => item.boxid_ === arr[0]).cause_[index].en);
+        setEditVi(
+          dataErr.find((item) => item.boxid_ === arr[0]).cause_[index].vi
+        );
+        setEditEn(
+          dataErr.find((item) => item.boxid_ === arr[0]).cause_[index].en
+        );
         break;
       case "EDITSOLUTION":
-        const i = data
+        const i = dataErr
           .find((item) => item.boxid_ === arr[0])
           .solution_.findIndex((item) => item.id === parseInt(arr[1]));
-        setEditVi(data.find((item) => item.boxid_ === arr[0]).solution_[i].vi);
-        setEditEn(data.find((item) => item.boxid_ === arr[0]).solution_[i].en);
+        setEditVi(
+          dataErr.find((item) => item.boxid_ === arr[0]).solution_[i].vi
+        );
+        setEditEn(
+          dataErr.find((item) => item.boxid_ === arr[0]).solution_[i].en
+        );
         break;
       default:
         break;
@@ -350,30 +406,31 @@ export default function ErrorSetting(props) {
         const index = data
           .find((item) => item.boxid_ === editarray[0])
           .cause_.findIndex((item) => item.id === parseInt(editarray[1]));
-        data.find((item) => item.boxid_ === editarray[0]).cause_[index].vi =
+        dataErr.find((item) => item.boxid_ === editarray[0]).cause_[index].vi =
           editvi;
-        data.find((item) => item.boxid_ === editarray[0]).cause_[index].en =
+        dataErr.find((item) => item.boxid_ === editarray[0]).cause_[index].en =
           editen;
         break;
       case "EDITSOLUTION":
         const i = data
           .find((item) => item.boxid_ === editarray[0])
           .solution_.findIndex((item) => item.id === parseInt(editarray[1]));
-        data.find((item) => item.boxid_ === editarray[0]).solution_[i].vi =
+        dataErr.find((item) => item.boxid_ === editarray[0]).solution_[i].vi =
           editvi;
-        data.find((item) => item.boxid_ === editarray[0]).solution_[i].en =
+        dataErr.find((item) => item.boxid_ === editarray[0]).solution_[i].en =
           editen;
         break;
       default:
         break;
     }
     let req = await callApi("post", `${host.DATA}/updateWarnBox`, {
+      sn: groupErrSN.value,
       boxid: editarray[0],
       cause: JSON.stringify(
-        data.find((item) => item.boxid_ === editarray[0]).cause_
+        dataErr.find((item) => item.boxid_ === editarray[0]).cause_
       ),
       solution: JSON.stringify(
-        data.find((item) => item.boxid_ === editarray[0]).solution_
+        dataErr.find((item) => item.boxid_ === editarray[0]).solution_
       ),
     });
 
@@ -405,65 +462,73 @@ export default function ErrorSetting(props) {
 
   const confirmDelete = async (e) => {
     e.preventDefault();
-
-    const boxid = `${arrayData[0]}_${arrayData[1]}_${arrayData[2]}`;
-    switch (arrayData[4]) {
+    const boxid = `${arrayData[0]}`;
+    console.log(boxid);
+    console.log(arrayData);
+    // console.log(arrayData[2]);
+    switch (arrayData[2]) {
       case "REMOVECAUSE":
-        let tremovecause = data.find((item) => item.boxid_ === boxid);
-        let indexcause = data.findIndex((item) => item.boxid_ === boxid);
+        let tremovecause = dataErr.find((item) => item.boxid_ === boxid);
+        // let indexcause = dataErr.findIndex((item) => item.boxid_ === boxid);
         if (tremovecause.cause_.length === 1) {
           alertDispatch(dataLang.formatMessage({ id: "alert_50" }));
         } else {
           const temp = tremovecause.cause_.filter(
-            (item) => item.id !== parseInt(arrayData[3])
+            (item) => item.id !== parseInt(arrayData[1])
           );
           tremovecause.cause_ = temp;
-          data[indexcause] = tremovecause;
-        }
-        let req1 = await callApi("post", `${host.DATA}/updateWarnBox`, {
-          boxid: boxid,
-          cause: JSON.stringify(
-            data.find((item) => item.boxid_ === boxid).cause_
-          ),
-          solution: JSON.stringify(
-            data.find((item) => item.boxid_ === boxid).solution_
-          ),
-        });
-        if (req1.status) {
-          setRemoveState(false);
+          // data[indexcause] = tremovecause;
+          let req1 = await callApi("post", `${host.DATA}/updateWarnBox`, {
+            sn: groupErrSN.value,
+            boxid: boxid,
+            cause: JSON.stringify(
+              dataErr.find((item) => item.boxid_ === boxid).cause_
+            ),
+            solution: JSON.stringify(
+              dataErr.find((item) => item.boxid_ === boxid).solution_
+            ),
+          });
+          // console.log(req1);
+          if (req1.status) {
+            setRemoveState(false);
+          }
         }
         break;
       case "REMOVESOLUTION":
-        let tremovesolution = data.find((item) => item.boxid_ === boxid);
-        let indexsolution = data.findIndex((item) => item.boxid_ === boxid);
+        let tremovesolution = dataErr.find((item) => item.boxid_ === boxid);
+        let indexsolution = dataErr.findIndex((item) => item.boxid_ === boxid);
         if (tremovesolution.solution_.length === 1) {
           alertDispatch(dataLang.formatMessage({ id: "alert_51" }));
         } else {
           const temp = tremovesolution.solution_.filter(
-            (item) => item.id !== parseInt(arrayData[3])
+            (item) => item.id !== parseInt(arrayData[1])
           );
           tremovesolution.solution_ = temp;
           data[indexsolution] = tremovesolution;
         }
         let req2 = await callApi("post", `${host.DATA}/updateWarnBox`, {
+          sn: groupErrSN.value,
           boxid: boxid,
           cause: JSON.stringify(
-            data.find((item) => item.boxid_ === boxid).cause_
+            dataErr.find((item) => item.boxid_ === boxid).cause_
           ),
           solution: JSON.stringify(
-            data.find((item) => item.boxid_ === boxid).solution_
+            dataErr.find((item) => item.boxid_ === boxid).solution_
           ),
         });
+        console.log(req2);
         if (req2.status) {
           setRemoveState(false);
         }
         break;
       default:
         let req = await callApi("post", `${host.DATA}/removeWarnBox`, {
+          sn: groupErrSN.value,
           boxid: boxid,
         });
+        console.log(req);
         if (req.status) {
-          setData(data.filter((item) => item.boxid_ !== boxid));
+          setDataErr(dataErr.filter((item) => item.boxid_ !== boxid));
           setRemoveState(false);
           alertDispatch(dataLang.formatMessage({ id: "alert_60" }));
         } else {
@@ -479,7 +544,7 @@ export default function ErrorSetting(props) {
 
   const handleAdd = async (e) => {
     const arr = e.currentTarget.id.split("-");
-    const bigdata = data;
+    const bigdata = dataErr;
     const index = bigdata.findIndex((item) => item.boxid_ === arr[0]);
     switch (arr[1]) {
       case "ADDCAUSE":
@@ -492,8 +557,7 @@ export default function ErrorSetting(props) {
             en: `Cause ${bigdata[index].cause_[causelength - 1].id + 1}`,
           },
         ];
-        setData([...bigdata]);
-
+        setDataErr([...bigdata]);
         break;
       case "ADDSOLUTION":
         const solutionlength = bigdata[index].solution_.length;
@@ -501,64 +565,94 @@ export default function ErrorSetting(props) {
           ...bigdata[index].solution_,
           {
             id: bigdata[index].solution_[solutionlength - 1].id + 1,
-            vi: `Giải pháp ${bigdata[index].solution_[solutionlength - 1].id + 1
-              }`,
-            en: `Solution ${bigdata[index].solution_[solutionlength - 1].id + 1
-              }`,
+            vi: `Giải pháp ${
+              bigdata[index].solution_[solutionlength - 1].id + 1
+            }`,
+            en: `Solution ${
+              bigdata[index].solution_[solutionlength - 1].id + 1
+            }`,
           },
         ];
-        setData([...bigdata]);
+        setDataErr([...bigdata]);
         break;
       default:
         break;
     }
     await callApi("post", `${host.DATA}/updateWarnBox`, {
+      sn: groupErrSN.value,
       boxid: arr[0],
-      cause: JSON.stringify(data.find((item) => item.boxid_ === arr[0]).cause_),
+      cause: JSON.stringify(
+        dataErr.find((item) => item.boxid_ === arr[0]).cause_
+      ),
       solution: JSON.stringify(
-        data.find((item) => item.boxid_ === arr[0]).solution_
+        dataErr.find((item) => item.boxid_ === arr[0]).solution_
       ),
     });
   };
 
   const handleFilter = (e) => {
     const input = lowercasedata(e.currentTarget.value);
-    const temp = dataApi.filter((item) => {
-      return (
-        lowercasedata(item.boxid_).includes(input) ||
-        item.cause_.some(
-          (cause) =>
-            lowercasedata(cause.vi).includes(input) ||
-            lowercasedata(cause.en).includes(input)
-        ) ||
-        item.solution_.some(
-          (solution) =>
-            lowercasedata(solution.vi).includes(input) ||
-            lowercasedata(solution.en).includes(input)
-        )
-      );
-    });
-    setData(temp);
-  };
+    const t = dataGatewaySub;
+    if (input == "") {
+      setDataGateway([...t]);
+    } else {
+      let temp = t.filter((data) => {
+        return (
+          lowercasedata(data.sn_).includes(input) ||
+          lowercasedata(data.name_).includes(input)
+        );
+      });
 
-  useEffect(() => {
-    const getWarnBox = async () => {
-      let req = await callApi("get", `${host.DATA}/getWarnBox`, "");
-      if (req.status) {
-        let newData = req.data.sort((a, b) => a.warnid_ - b.warnid_);
-        setDataApi(newData);
-      }
-    };
-    getWarnBox();
-  }, []);
+      setDataGateway([...temp]);
+    }
+
+    // const temp = dataErr.filter((item) => {
+    // return (
+    // lowercasedata(item.boxid_).includes(input) ||
+    // item.cause_.some(
+    //   (cause) =>
+    //     lowercasedata(cause.vi).includes(input) ||
+    //     lowercasedata(cause.en).includes(input)
+    // ) ||
+    // item.solution_.some(
+    //   (solution) =>
+    //     lowercasedata(solution.vi).includes(input) ||
+    //     lowercasedata(solution.en).includes(input)
+    // )
+    //     lowercasedata(data.sn_).includes(input) ||
+    //     lowercasedata(data.name_).includes(input)
+    //   );
+    // });
+  };
 
   useEffect(() => {
     setData(dataApi);
   }, [dataApi]);
 
+  const usr = useSelector((state) => state.admin.usr);
+  useEffect(() => {
+    const getAllLogger = async (usr, id, type) => {
+      let res = await callApi("post", host.DATA + "/getAllLogger", {
+        usr: usr,
+        partnerid: id,
+        type: type,
+      });
+      if (res.status) {
+        setDataGateway([...res.data]);
+        setDataGatewaySub([...res.data]);
+        // console.log(res.data);
+      }
+    };
+
+    if (partnerInfor.value) {
+      getAllLogger(usr, partnerInfor.value.partnerid, userInfor.value.type);
+    }
+  }, [partnerInfor.value]);
+
   return (
     <>
-      {isMobile.value
+      {/* BẢN CŨ CHƯA UPDATE */}
+      {/* {isMobile.value
         ?
         <>
           <div className="DAT_ErrSettingHeaderMobile">
@@ -771,7 +865,403 @@ export default function ErrorSetting(props) {
             </div>
           </div>
         </>
-      }
+      } */}
+
+      {/* BẢN MỚI ĐANG UPDATE */}
+      {isBrowser ? (
+        <>
+          <div className="DAT_GRHeader">
+            <div className="DAT_GRHeader_Title">
+              <PiUsersFour color="gray" size={25} />
+              <span>{dataLang.formatMessage({ id: "errorsetting" })}</span>
+            </div>
+            <div
+              className="DAT_GRHeader_Filter"
+              style={{
+                backgroundColor:
+                  groupErrSN.value === 0 ? "rgba(233, 233, 233, 0.5)" : "white",
+              }}
+            >
+              {groupErrSN.value === 0 ? (
+                <input
+                  disabled
+                  type="text"
+                  autoComplete="off"
+                  placeholder={dataLang.formatMessage({ id: "enterInfo" })}
+                />
+              ) : (
+                <input
+                  type="text"
+                  autoComplete="on"
+                  placeholder={dataLang.formatMessage({ id: "enterInfo" })}
+                  onChange={(e) => handleFilter(e)}
+                />
+              )}
+              <CiSearch color="gray" size={20} />
+            </div>
+          </div>
+
+          <div className="DAT_GR">
+            <div className="DAT_GR_Header">
+              {dataLang.formatMessage({ id: "errorsetting" })}
+            </div>
+            <div className="DAT_GR_Content">
+              <div className="DAT_GR_Content_DevideTable">
+                <div
+                  className="DAT_GR_Content_DevideTable_Left"
+                  style={{ width: "300px" }}
+                >
+                  <div className="DAT_GR_Content_DevideTable_Left_Head">
+                    {dataLang.formatMessage({ id: "device" })}
+                  </div>
+
+                  <div className="DAT_GR_Content_DevideTable_Left_ItemList">
+                    {dataGateway.map((item, index) => (
+                      <div
+                        className="DAT_GR_Content_DevideTable_Left_ItemList_Item"
+                        key={index}
+                        id={item.sn_}
+                        style={{
+                          backgroundColor:
+                            groupErrSN.value === item.sn_
+                              ? "rgb(207, 207, 207, 0.4)"
+                              : "",
+                        }}
+                        onClick={(e) => handleChangeGroup(e)}
+                      >
+                        <div>
+                          <div
+                            className="DAT_GR_Content_DevideTable_Left_ItemList_Item_Name"
+                            style={{ fontSize: "15px" }}
+                          >
+                            {item.sn_}
+                          </div>
+
+                          <div
+                            className="DAT_GR_Content_DevideTable_Left_ItemList_Item_Info"
+                            style={{
+                              fontSize: "13px",
+                              color: "grey",
+                              maxWidth: "200px",
+                            }}
+                          >
+                            {item.name_}
+                          </div>
+                        </div>
+                        <div
+                          className="DAT_GR_Content_DevideTable_Left_ItemList_Item_Shortcut"
+                          //   id={item.id_ + "_dot"}
+                          onClick={() => setCreateState(true)}
+                        >
+                          <IoMdAdd size={20} color="grey" />
+                        </div>
+
+                        <div
+                          className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More"
+                          //   id={item.id_ + "_function"}
+                          style={{ display: "none" }}
+                          //   onMouseLeave={(e) => handleShowFunction(e)}
+                        >
+                          {/* {item.id_ === 1 ? (
+                        <></>
+                      ) : ( */}
+                          <div
+                            className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More_Delete"
+                            //   id={item.id_}
+                            //   onClick={() => props.groupDelState()}
+                          >
+                            <IoTrashOutline size={18} />
+                          </div>
+                          {/* )} */}
+                          <div
+                            className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More_Edit"
+                            style={{ right: "40px" }}
+                            // id={item.id_}
+                            // onClick={(e) => handleEditGroup(e)}
+                          >
+                            <FiEdit size={18} />
+                          </div>
+
+                          <div
+                            className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More_Add"
+                            // onClick={() => props.addState()}
+                          >
+                            <AiOutlineUserAdd size={18} />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="DAT_GR_Content_DevideTable_Right">
+                  <div className="DAT_GR_Content_DevideTable_Right_ItemList">
+                    {dataErr === undefined ? (
+                      <Empty />
+                    ) : (
+                      <DataTable
+                        className="DAT_Table_GroupRole"
+                        columns={columnLog}
+                        data={dataErr}
+                        pagination
+                        paginationComponentOptions={paginationComponentOptions}
+                        noDataComponent={<Empty />}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="DAT_ProjectHeaderMobile">
+            <div className="DAT_ProjectHeaderMobile_Top">
+              <div
+                className="DAT_ProjectHeaderMobile_Top_Filter"
+                // style={{
+                //   backgroundColor: regList ? "rgb(235, 235, 228)" : "white",
+                // }}
+              >
+                <CiSearch color="gray" size={20} />
+                <input
+                  // disabled={regList ? true : false}
+                  type="text"
+                  placeholder={dataLang.formatMessage({ id: "enterInfo" })}
+                  onChange={(e) => handleFilter(e)}
+                />
+              </div>
+              {/* {regList ? (
+                <button
+                  className="DAT_ProjectHeaderMobile_Top_New"
+                  // onClick={() => {
+                  //   changePopupstate();
+                  //   setStatePopup("addNewReg");
+                  // }}
+                >
+                  <IoAddOutline color="white" size={20} />
+                </button>
+              ) : (
+                <></>
+              )} */}
+            </div>
+
+            <div
+              className="DAT_ProjectHeaderMobile_Title"
+              style={{ marginBottom: "10px" }}
+            >
+              <PiUsersFour color="gray" size={25} />
+              <span>{dataLang.formatMessage({ id: "roleList" })}</span>
+            </div>
+          </div>
+
+          {/* {regList ? ( */}
+          <div className="DAT_GRMobile_Content_DevideTable_Right">
+            <div className="DAT_GRMobile_Content_DevideTable_Right_Head">
+              <IoCaretBackOutline
+                style={{ cursor: "pointer" }}
+                size={20}
+                color="white"
+                // onClick={() => {
+                //   setRegList(false);
+                //   groupErrSN.value = 0;
+                // }}
+              />
+              <div>{dataLang.formatMessage({ id: "roleList" })}</div>
+            </div>
+            <div className="DAT_GRMobile_Content_DevideTable_Right_ItemList">
+              {groupErrSN.value === 0 ? (
+                <Empty />
+              ) : (
+                // <div className="DAT_RegSetMobile">
+                //   {dataRegister.map((item, index) => {
+                //     return (
+                //       <div key={index} className="DAT_RegSetMobile_Content">
+                //         <div className="DAT_RegSetMobile_Content_Top">
+                //           <div className="DAT_RegSetMobile_Content_Top_Type">
+                //             {/* {item.addrcode} */}hi
+                //           </div>
+                //           <div className="DAT_RegSetMobile_Content_Top_Info">
+                //             <div className="DAT_RegSetMobile_Content_Top_Info_Cause">
+                //               <span>
+                //                 {dataLang.formatMessage({ id: "config" })}
+                //               </span>
+                //               <div className="DAT_RegSetMobile_Content_Top_Info_Cause_Row1">
+                //                 {/* <div className="DAT_RegSetMobile_Content_Top_Info_Cause_Row1_En">
+                //                   en:
+                //                 </div> */}
+                //               </div>
+
+                //               <div>
+                //                 {/* {item.register.map((cause, i) => {
+                //                   return (
+                //                     <div
+                //                       key={i}
+                //                       className="DAT_RegSetMobile_Content_Top_Info_Cause_Row2"
+                //                     >
+                //                       <div className="DAT_RegSetMobile_Content_Top_Info_Cause_Row2_Vi">
+                //                         {i + 1}.{" "}
+                //                         {`${cause.addr}: ${cause.val}`}
+                //                       </div>
+                //                       <div className="DAT_RegSetMobile_Content_Top_Info_Cause_Row2_Func">
+                //                         <FiEdit
+                //                           size={14}
+                //                           id={`${item.id}_${cause.id}_EDIT`}
+                //                           // onClick={(e) => {
+                //                           //   changePopupstate();
+                //                           //   setStatePopup("editConfig");
+                //                           //   handleSetConfig(e);
+                //                           // }}
+                //                         />
+                //                         <IoTrashOutline
+                //                           size={16}
+                //                           id={`${item.id}_${cause.id}_REMOVE`}
+                //                           // onClick={(e) => {
+                //                           //   changePopupstate();
+                //                           //   setStatePopup("removeConfig");
+                //                           //   handleSetConfig(e);
+                //                           // }}
+                //                         />
+                //                         {parseInt(i) ===
+                //                         item.register.length - 1 ? (
+                //                           <IoIosAddCircleOutline
+                //                             size={16}
+                //                             style={{ cursor: "pointer" }}
+                //                             id={`${item.id}_ADD`}
+                //                             onClick={(e) => {
+                //                               handleAddConfig(e);
+                //                               handleSetConfig(e);
+                //                             }}
+                //                           />
+                //                         ) : (
+                //                           <></>
+                //                         )}
+                //                       </div>
+                //                     </div>
+                //                   );
+                //                 })} */}
+                //               </div>
+                //             </div>
+                //           </div>
+                //         </div>
+
+                //         <div className="DAT_RegSetMobile_Content_Bottom">
+                //           <div
+                //             className="DAT_RegSetMobile_Content_Bottom_Item"
+                //             // id={item.id}
+                //             // onClick={(e) => {
+                //             //   changePopupstate();
+                //             //   setStatePopup("removeError");
+                //             //   configEdit.value = e.currentTarget.id;
+                //             //   console.log(configEdit.value);
+                //             // }}
+                //           >
+                //             <IoTrashOutline size={16} />
+                //           </div>
+                //         </div>
+                //       </div>
+                //     );
+                //   })}
+                // </div>
+                <></>
+              )}
+            </div>
+          </div>
+          {/* ) : ( */}
+          <div
+            className="DAT_GRMobile_Content_DevideTable_Left"
+            style={{ width: "100% !important", height: "100%" }}
+          >
+            <div className="DAT_GRMobile_Content_DevideTable_Left_Head">
+              {dataLang.formatMessage({ id: "RegisterSetting" })}
+            </div>
+
+            <div className="DAT_GRMobile_Content_DevideTable_Left_ItemList">
+              {/* {dataGateway.map((item, index) => ( */}
+              <div
+                className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item"
+                // key={index}
+                // style={{
+                //   backgroundColor:
+                //     groupErrSN.value === item.sn_
+                //       ? "rgb(207, 207, 207, 0.4)"
+                //       : "",
+                // }}
+              >
+                <div>
+                  <div
+                    className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_Name"
+                    style={{ fontSize: "16px" }}
+                    // id={item.sn_}
+                    // onClick={(e) => {
+                    //   handleChangeGroup(e);
+                    //   setRegList(true);
+                    // }}
+                  >
+                    {/* {item.sn_} */}hi
+                  </div>
+
+                  <div
+                    className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_Info"
+                    style={{
+                      fontSize: "14px",
+                      color: "grey",
+                      maxWidth: "100px",
+                    }}
+                  >
+                    {/* {item.nam_} */}he
+                  </div>
+                </div>
+                <div
+                  className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_Shortcut"
+                  // id={item.sn_ + "_dot"}
+                  // onClick={(e) => {
+                  //   groupErrSN.value = item.sn_;
+                  // }}
+                >
+                  <IoMdMore size={20} color="grey" />
+                </div>
+
+                <div
+                  className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More"
+                  // id={item.id_ + "_function"}
+                  style={{ display: "none" }}
+                  // onMouseLeave={(e) => handleShowFunction(e)}
+                >
+                  {/* {item.id_ === 1 ? (
+                      <></>
+                    ) : ( */}
+                  <div
+                    className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More_Delete"
+                    // id={item.sn_}
+                    // onClick={() => props.groupDelState()}
+                  >
+                    <IoTrashOutline size={18} />
+                  </div>
+                  {/* )} */}
+                  <div
+                    className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More_Edit"
+                    style={{ right: "40px" }}
+                    // id={item.sn_}
+                    // onClick={(e) => handleEditGroup(e)}
+                  >
+                    <FiEdit size={18} />
+                  </div>
+
+                  <div
+                    className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More_Add"
+                    // onClick={() => props.addState()}
+                  >
+                    <AiOutlineUserAdd size={18} />
+                  </div>
+                </div>
+              </div>
+              {/* ))} */}
+            </div>
+          </div>
+          {/* )} */}
+        </>
+      )}
 
       {createState ? (
         <div className="DAT_PopupBG">

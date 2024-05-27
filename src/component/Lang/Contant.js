@@ -1,3 +1,5 @@
+import RegisterSetting from "../RegisterSetting/RegisterSetting";
+
 export const host = {
   AUTH: process.env.REACT_APP_SOLAR + "/auth",
   DATA: process.env.REACT_APP_SOLAR + "/data",
@@ -8,6 +10,11 @@ export const host = {
 
 export const messages = {
   en: {
+
+    date:"Date",
+    registersetting: "Register Setting",
+    export:'Export',
+    map: "Map",
     on: "On",
     off: "Off",
     utilities: "Utilities",
@@ -99,7 +106,6 @@ export const messages = {
     logList: "Log List",
     errlist: "Error list",
     erroccur: "Error occur",
-    erroraddress: "Error address",
     maintenance: "Maintenance",
     address: "Address",
     coord: "Coordinates",
@@ -592,7 +598,6 @@ export const messages = {
     enterRight: "Enter right...",
     enterDev: " Enter device info...",
     enterError: " Enter error information...",
-    Gateway: "Gateway",
     enterLogger: " Enter logger info...",
     enterInverter: " Enter inverter info...",
     enterType: "Enter device type...",
@@ -618,7 +623,6 @@ export const messages = {
     delCause: "Are you sure want to delete this cause?",
     delSolution: "Are you sure want to delete this solution?",
     delErrorInfo: "Are you sure want to delete this error?",
-    delErrorConfig: "Are you sure want to delete this error configuration?",
     delWarnmess: "Are you sure want to delete this warning?",
     delreportmess: "Are you sure want to delete this report?",
     delaccountmess: "Are you sure want to delete this account?",
@@ -715,7 +719,6 @@ export const messages = {
     kWhonkWp: "kWh/kWp",
     totalall: "Total Production",
     errorsetting: "Error setting",
-    RegisterSetting: "Register setting",
     timeoutInfo:
       "System will automatically consider it as a failure if no command feedback is received after timeout. Please try again.",
     environment1:
@@ -922,6 +925,10 @@ export const messages = {
     // A_48_17: "Unknown",
   },
   vi: {
+    date: "Ngày",
+    registersetting: "Cài đặt thanh ghi",
+    export:'Xuất báo cáo',
+    map: "Bản đồ",
     on: "Bật",
     off: "Tắt",
     utilities: "Tiện ích",
@@ -963,7 +970,7 @@ export const messages = {
     analyticsList: "Danh sách mẫu phân tích",
     devicelist: "Danh sách thiết bị",
     monitorlist: "Danh sách màn hình",
-    view: "Tổng quan",
+    view: 'Tổng quan',
     overview: "Tổng quan dữ liệu phát điện",
     history: "Lịch sử phát điện",
     historyInverter: "Lịch sử biến tần",
@@ -1012,7 +1019,6 @@ export const messages = {
     logList: "Danh sách nhật ký",
     errlist: "Danh sách lỗi",
     erroccur: "Đang có lỗi",
-    erroraddress: "Địa chỉ mã lỗi",
     maintenance: "Bảo trì",
     address: "Địa chỉ",
     coord: "Tọa độ",
@@ -1505,7 +1511,6 @@ export const messages = {
     enterRight: "Nhập tên quyền...",
     enterDev: " Nhập thông tin thiết bị...",
     enterError: " Nhập thông tin lỗi",
-    Gateway: "Gateway",
     enterLogger: " Nhập thông tin logger...",
     enterInverter: " Nhập thông tin inverter...",
     enterType: "Nhập loại thiết bị...",
@@ -1531,7 +1536,6 @@ export const messages = {
     delCause: "Bạn có chắc muốn xóa nguyên nhân này không?",
     delSolution: "Bạn có chắc muốn xóa biện pháp này không?",
     delErrorInfo: "Bạn có chắc muốn xóa thông tin mã lỗi này không?",
-    delErrorAddr: "Bạn có chắc muốn xóa cấu hình mã lỗi này không?",
     delWarnmess: "Bạn có chắc muốn xóa mẫu cảnh báo này không?",
     delreportmess: "Bạn có chắc muốn xóa mẫu báo cáo này không?",
     delDevicemess: "Bạn có chắc muốn xóa thiết bị:",
@@ -1553,7 +1557,7 @@ export const messages = {
     alert_6: "Thiết lập thành công!",
     alert_7: "Thiết lập không thành công, vui lòng thử lại!",
     alert_8: "Bạn vui lòng truy cập vào Email của bạn và xác nhận!",
-    alert_9: "Dăng ký thành công!",
+    alert_9: "Đăng ký thành công!",
     alert_10: "Tài khoản hoặc email đã được sử dụng!",
     alert_11: "Email này đã tồn tại!",
     alert_12: "Mã OTP không đúng!",
@@ -1627,7 +1631,6 @@ export const messages = {
     kWhonkWp: "kWh/kWp",
     totalall: "Tổng sản lượng điện",
     errorsetting: "Cài đặt lỗi",
-    RegisterSetting: "Cài đặt thanh ghi",
     timeoutInfo:
       "Hệ thống sẽ tự động coi nó là một sự cố nếu không nhận được phản hồi lệnh sau khi thời gian chờ kết thúc. Vui lòng thử lại sau.",
     environment1:

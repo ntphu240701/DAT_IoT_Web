@@ -380,7 +380,7 @@ export default function RegisterSetting() {
           <div className="DAT_GRHeader">
             <div className="DAT_GRHeader_Title">
               <PiUsersFour color="gray" size={25} />
-              <span>{dataLang.formatMessage({ id: "roleList" })}</span>
+              <span>{dataLang.formatMessage({ id: "registersetting" })}</span>
             </div>
             <div
               className="DAT_GRHeader_Filter"
@@ -432,7 +432,7 @@ export default function RegisterSetting() {
                   style={{ width: "300px" }}
                 >
                   <div className="DAT_GR_Content_DevideTable_Left_Head">
-                    {dataLang.formatMessage({ id: "Gateway" })}
+                    {dataLang.formatMessage({ id: "device" })}
                   </div>
 
                   <div className="DAT_GR_Content_DevideTable_Left_ItemList">
