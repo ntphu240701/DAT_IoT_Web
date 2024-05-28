@@ -1024,6 +1024,44 @@ export default function ErrorSetting(props) {
               </div>
             </div>
           </div>
+
+          {createState ? (
+            <div className="DAT_PopupBG">
+              <CreateErrSetting
+                handleClose={handleCloseCreate}
+                handleConfirm={handleConfirmCreate}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {editState ? (
+            <div className="DAT_PopupBG">
+              <EditErr
+                type={editType}
+                handleClose={handleCloseEdit}
+                editVi={editVi}
+                editEn={editEn}
+                confirmEdit={confirmEdit}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {removeState ? (
+            <div className="DAT_PopupBG">
+              <RemoveErr
+                type={removeType}
+                handleClose={handleCloseRemove}
+                handleDel={handleDelete}
+                confirmDel={confirmDelete}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
         </>
       ) : (
         <>
@@ -1185,32 +1223,21 @@ export default function ErrorSetting(props) {
                                         <div className="DAT_RegSetMobile_Content_Top_Info_Solution_Row2_Func">
                                           <FiEdit
                                             size={14}
-                                            id={`${item.id}_${solution.id}_EDIT`}
-                                            onClick={(e) => {
-                                              // changePopupstate();
-                                              // setStatePopup("editConfig");
-                                              // handleSetConfig(e);
-                                            }}
+                                            id={`${item.boxid_}-${solution.id}-EDITSOLUTION`}
+                                            onClick={(e) => handleEdit(e)}
                                           />
                                           <IoTrashOutline
                                             size={16}
-                                            id={`${item.id}_${solution.id}_REMOVE`}
-                                            onClick={(e) => {
-                                              // changePopupstate();
-                                              // setStatePopup("removeConfig");
-                                              // handleSetConfig(e);
-                                            }}
+                                            id={`${item.boxid_}_${solution.id}_REMOVESOLUTION`}
+                                            onClick={(e) => handleDelete(e)}
                                           />
                                           {parseInt(i) ===
                                           item.solution_.length - 1 ? (
                                             <IoIosAddCircleOutline
                                               size={16}
                                               style={{ cursor: "pointer" }}
-                                              id={`${item.id}_ADD`}
-                                              onClick={(e) => {
-                                                // handleAddConfig(e);
-                                                // handleSetConfig(e);
-                                              }}
+                                              id={`${item.boxid_}-ADDSOLUTION`}
+                                              onClick={(e) => handleAdd(e)}
                                             />
                                           ) : (
                                             <></>
@@ -1343,45 +1370,45 @@ export default function ErrorSetting(props) {
               </div>
             </div>
           )}
+
+          {createState ? (
+            <div className="DAT_PopupBGMobile">
+              <CreateErrSetting
+                handleClose={handleCloseCreate}
+                handleConfirm={handleConfirmCreate}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {editState ? (
+            <div className="DAT_PopupBGMobile">
+              <EditErr
+                type={editType}
+                handleClose={handleCloseEdit}
+                editVi={editVi}
+                editEn={editEn}
+                confirmEdit={confirmEdit}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {removeState ? (
+            <div className="DAT_PopupBGMobile">
+              <RemoveErr
+                type={removeType}
+                handleClose={handleCloseRemove}
+                handleDel={handleDelete}
+                confirmDel={confirmDelete}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
         </>
-      )}
-
-      {createState ? (
-        <div className="DAT_PopupBG">
-          <CreateErrSetting
-            handleClose={handleCloseCreate}
-            handleConfirm={handleConfirmCreate}
-          />
-        </div>
-      ) : (
-        <></>
-      )}
-
-      {editState ? (
-        <div className="DAT_PopupBG">
-          <EditErr
-            type={editType}
-            handleClose={handleCloseEdit}
-            editVi={editVi}
-            editEn={editEn}
-            confirmEdit={confirmEdit}
-          />
-        </div>
-      ) : (
-        <></>
-      )}
-
-      {removeState ? (
-        <div className="DAT_PopupBG">
-          <RemoveErr
-            type={removeType}
-            handleClose={handleCloseRemove}
-            handleDel={handleDelete}
-            confirmDel={confirmDelete}
-          />
-        </div>
-      ) : (
-        <></>
       )}
     </div>
   );

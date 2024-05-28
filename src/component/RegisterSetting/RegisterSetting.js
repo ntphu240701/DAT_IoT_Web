@@ -504,7 +504,10 @@ export default function RegisterSetting() {
                               ? "rgb(207, 207, 207, 0.4)"
                               : "",
                         }}
-                        onClick={(e) => handleChangeGroup(e)}
+                        onClick={(e) => {
+                          handleChangeGroup(e);
+                          setRegList(true);
+                        }}
                       >
                         <div>
                           <div
@@ -598,6 +601,15 @@ export default function RegisterSetting() {
         <>
           <div className="DAT_ProjectHeaderMobile">
             <div className="DAT_ProjectHeaderMobile_Top">
+              {regList ? (
+                <IoCaretBackOutline
+                  size={40}
+                  color="#0B1967"
+                  onClick={() => setRegList(false)}
+                />
+              ) : (
+                <></>
+              )}
               <div
                 className="DAT_ProjectHeaderMobile_Top_Filter"
                 style={{
@@ -638,7 +650,7 @@ export default function RegisterSetting() {
 
           {regList ? (
             <div className="DAT_RSMobile_Content_DevideTable_Right">
-              <div className="DAT_RSMobile_Content_DevideTable_Right_Head">
+              {/* <div className="DAT_RSMobile_Content_DevideTable_Right_Head">
                 <IoCaretBackOutline
                   style={{ cursor: "pointer" }}
                   size={20}
@@ -649,7 +661,7 @@ export default function RegisterSetting() {
                   }}
                 />
                 <div>{dataLang.formatMessage({ id: "registerList" })}</div>
-              </div>
+              </div> */}
               <div className="DAT_RSMobile_Content_DevideTable_Right_ItemList">
                 {groupRegID.value === 0 ? (
                   <Empty />
@@ -753,44 +765,49 @@ export default function RegisterSetting() {
               className="DAT_RSMobile_Content_DevideTable_Left"
               style={{ width: "100% !important", height: "100%" }}
             >
-              <div className="DAT_RSMobile_Content_DevideTable_Left_Head">
+              {/* <div className="DAT_RSMobile_Content_DevideTable_Left_Head">
                 {dataLang.formatMessage({ id: "registersetting" })}
-              </div>
+              </div> */}
 
               <div className="DAT_RSMobile_Content_DevideTable_Left_ItemList">
                 {dataGateway.map((item, index) => (
                   <div
                     className="DAT_RSMobile_Content_DevideTable_Left_ItemList_Item"
                     key={index}
+                    id={item.sn_}
                     style={{
                       backgroundColor:
                         groupRegID.value === item.sn_
                           ? "rgb(207, 207, 207, 0.4)"
                           : "",
                     }}
+                    onClick={(e) => {
+                      handleChangeGroup(e);
+                      setRegList(true);
+                    }}
                   >
-                    <div>
-                      <div
-                        className="DAT_RSMobile_Content_DevideTable_Left_ItemList_Item_Name"
-                        style={{ fontSize: "16px" }}
-                        id={item.sn_}
-                        onClick={(e) => {
-                          handleChangeGroup(e);
-                          setRegList(true);
-                        }}
-                      >
-                        {item.sn_}
+                    <div style={{ display: "flex" }}>
+                      <div className="DAT_RSMobile_Content_DevideTable_Left_ItemList_Item_ID">
+                        {item.id_}
                       </div>
-
-                      <div
-                        className="DAT_RSMobile_Content_DevideTable_Left_ItemList_Item_Info"
-                        style={{
-                          fontSize: "14px",
-                          color: "grey",
-                          minWidth: "100px",
-                        }}
-                      >
-                        {item.name_}
+                      <div className="DAT_RSMobile_Content_DevideTable_Left_ItemList_Item_Container">
+                        <div
+                          className="DAT_RSMobile_Content_DevideTable_Left_ItemList_Item_Container_Name"
+                          style={{ fontSize: "16px" }}
+                          id={item.sn_}
+                        >
+                          {item.sn_}
+                        </div>
+                        <div
+                          className="DAT_RSMobile_Content_DevideTable_Left_ItemList_Item_Container_Info"
+                          style={{
+                            fontSize: "14px",
+                            color: "grey",
+                            minWidth: "100px",
+                          }}
+                        >
+                          {item.name_}
+                        </div>
                       </div>
                     </div>
                     {/* <div
