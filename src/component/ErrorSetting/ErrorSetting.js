@@ -26,6 +26,7 @@ import { PiUsersFour } from "react-icons/pi";
 import { signal } from "@preact/signals-react";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { useSelector } from "react-redux";
+import { MdOutlineManageHistory } from "react-icons/md";
 
 export const groupErrSN = signal("");
 
@@ -877,6 +878,37 @@ export default function ErrorSetting(props) {
       {/* BẢN MỚI ĐANG UPDATE */}
       {isBrowser ? (
         <>
+          {/* <div className="DAT_ErrSettingHeaderMobile">
+            <div className="DAT_ErrSettingHeaderMobile_Top">
+              <div className="DAT_ErrSettingHeaderMobile_Top_Filter">
+                <CiSearch color="gray" size={20} />
+                <input
+                  type="text"
+                  placeholder={
+                    dataLang.formatMessage({ id: "enterError" }) + "..."
+                  }
+                  // ref={filterRef}
+                  onChange={(e) => {
+                    handleFilter(e);
+                  }}
+                />
+              </div>
+              <button
+                className="DAT_ErrSettingHeaderMobile_Top_New"
+                onClick={() => setCreateState(true)}
+              >
+                <IoAddOutline color="white" size={20} />
+              </button>
+            </div>
+
+            <div
+              className="DAT_ErrSettingHeaderMobile_Title"
+              style={{ marginBottom: "10px" }}
+            >
+              <MdOutlineManageHistory color="gray" size={25} />
+              <span>{dataLang.formatMessage({ id: "errorsetting" })}</span>
+            </div>
+          </div> */}
           <div className="DAT_ESHeader">
             <div className="DAT_ESHeader_Title">
               <PiUsersFour color="gray" size={25} />
