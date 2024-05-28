@@ -878,37 +878,6 @@ export default function ErrorSetting(props) {
       {/* BẢN MỚI ĐANG UPDATE */}
       {isBrowser ? (
         <>
-          {/* <div className="DAT_ErrSettingHeaderMobile">
-            <div className="DAT_ErrSettingHeaderMobile_Top">
-              <div className="DAT_ErrSettingHeaderMobile_Top_Filter">
-                <CiSearch color="gray" size={20} />
-                <input
-                  type="text"
-                  placeholder={
-                    dataLang.formatMessage({ id: "enterError" }) + "..."
-                  }
-                  // ref={filterRef}
-                  onChange={(e) => {
-                    handleFilter(e);
-                  }}
-                />
-              </div>
-              <button
-                className="DAT_ErrSettingHeaderMobile_Top_New"
-                onClick={() => setCreateState(true)}
-              >
-                <IoAddOutline color="white" size={20} />
-              </button>
-            </div>
-
-            <div
-              className="DAT_ErrSettingHeaderMobile_Title"
-              style={{ marginBottom: "10px" }}
-            >
-              <MdOutlineManageHistory color="gray" size={25} />
-              <span>{dataLang.formatMessage({ id: "errorsetting" })}</span>
-            </div>
-          </div> */}
           <div className="DAT_ESHeader">
             <div className="DAT_ESHeader_Title">
               <PiUsersFour color="gray" size={25} />
@@ -1106,17 +1075,19 @@ export default function ErrorSetting(props) {
                     groupErrSN.value = "";
                   }}
                 />
-                <div>{dataLang.formatMessage({ id: "roleList" })}</div>
+                <div>{dataLang.formatMessage({ id: "errconfiglist" })}</div>
               </div>
               <div className="DAT_ESMobile_Content_DevideTable_Right_ItemList">
-                {dataErr ? (
+                {dataErr === undefined ? (
+                  <Empty />
+                ) : (
                   <div className="DAT_RegSetMobile">
                     {dataErr.map((item, index) => {
                       return (
                         <div key={index} className="DAT_RegSetMobile_Content">
                           <div className="DAT_RegSetMobile_Content_Top">
                             <div className="DAT_RegSetMobile_Content_Top_Type">
-                              {item.addrcode}
+                              {item.boxid_}
                             </div>
                             <div className="DAT_RegSetMobile_Content_Top_Info">
                               <div className="DAT_RegSetMobile_Content_Top_Info_Cause">
@@ -1261,8 +1232,6 @@ export default function ErrorSetting(props) {
                       );
                     })}
                   </div>
-                ) : (
-                  <Empty />
                 )}
               </div>
             </div>

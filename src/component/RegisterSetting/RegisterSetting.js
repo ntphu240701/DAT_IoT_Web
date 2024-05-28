@@ -489,7 +489,7 @@ export default function RegisterSetting() {
                   style={{ width: "300px" }}
                 >
                   <div className="DAT_RS_Content_DevideTable_Left_Head">
-                    {dataLang.formatMessage({ id: "device" })}
+                    {dataLang.formatMessage({ id: "devicelist" })}
                   </div>
 
                   <div className="DAT_RS_Content_DevideTable_Left_ItemList">
@@ -632,7 +632,7 @@ export default function RegisterSetting() {
               style={{ marginBottom: "10px" }}
             >
               <PiUsersFour color="gray" size={25} />
-              <span>{dataLang.formatMessage({ id: "roleList" })}</span>
+              <span>{dataLang.formatMessage({ id: "registerList" })}</span>
             </div>
           </div>
 
@@ -648,7 +648,7 @@ export default function RegisterSetting() {
                     groupRegID.value = 0;
                   }}
                 />
-                <div>{dataLang.formatMessage({ id: "roleList" })}</div>
+                <div>{dataLang.formatMessage({ id: "registerList" })}</div>
               </div>
               <div className="DAT_RSMobile_Content_DevideTable_Right_ItemList">
                 {groupRegID.value === 0 ? (
@@ -710,8 +710,9 @@ export default function RegisterSetting() {
                                               style={{ cursor: "pointer" }}
                                               id={`${item.id}_ADD`}
                                               onClick={(e) => {
-                                                handleAddConfig(e);
                                                 handleSetConfig(e);
+                                                changePopupstate();
+                                                setStatePopup("addNewConfig");
                                               }}
                                             />
                                           ) : (
@@ -792,7 +793,7 @@ export default function RegisterSetting() {
                         {item.name_}
                       </div>
                     </div>
-                    <div
+                    {/* <div
                       className="DAT_RSMobile_Content_DevideTable_Left_ItemList_Item_Shortcut"
                       // id={item.sn_ + "_dot"}
                       onClick={(e) => {
@@ -800,7 +801,7 @@ export default function RegisterSetting() {
                       }}
                     >
                       <IoMdMore size={20} color="grey" />
-                    </div>
+                    </div> */}
 
                     <div
                       className="DAT_RSMobile_Content_DevideTable_Left_ItemList_Item_More"
