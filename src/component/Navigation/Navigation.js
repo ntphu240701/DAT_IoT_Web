@@ -311,7 +311,7 @@ export default function Navigation(props) {
                 {dataWarn.value.map((item, index) => (
                   <div className="DAT_NavNotif-content-main-group" key={index}>
                     <div className="DAT_NavNotif-content-main-group-datetime">
-                      {item.opentime}
+                      {item.opentime + " " + item.opendate}
                     </div>
                     <Link
                       to="/Warn"

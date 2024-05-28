@@ -113,7 +113,7 @@ export default function GroupRole(props) {
         name: dataLang.formatMessage({ id: "phone" }),
         selector: (user) => user.phone_,
         sortable: true,
-        minWidth: "150px",
+        minwidth: "200px",
         style: {
           justifyContent: "left !important",
         },
@@ -122,7 +122,7 @@ export default function GroupRole(props) {
         name: dataLang.formatMessage({ id: "account" }),
         selector: (user) => dataLang.formatMessage({ id: user.type_ }),
         sortable: true,
-        minWidth: "150px",
+        // width: "150px",
         style: {
           justifyContent: "left !important",
         },
@@ -148,9 +148,17 @@ export default function GroupRole(props) {
         name: dataLang.formatMessage({ id: "setting" }),
         selector: (user) => (
           <>
-            {user.type_ === "master"
-              ? <></>
-              :
+            {user.type_ === "master" ? (
+              <></>
+            ) : (
+              // <div className="DAT_TableEdit">
+              //   <span
+              //     id={user.id_ + "_MORE"}
+              //     onClick={(e) => handleModify(e, "block")}
+              //   >
+              //     <IoMdMore size={20} />
+              //   </span>
+              // </div>
               <PopupState variant="popper" popupId="demo-popup-popper">
                 {(popupState) => (<div className="DAT_TableEdit">
                   <IoMdMore size={20}   {...bindToggle(popupState)} />
@@ -172,10 +180,35 @@ export default function GroupRole(props) {
                   </Menu>
                 </div>)}
               </PopupState>
-            }
+            )}
+            {/* <div
+              className="DAT_ModifyBox"
+              id={user.id_ + "_Modify"}
+              style={{ display: "none", marginRight: "4px", marginTop: "2px" }}
+              onMouseLeave={(e) => handleModify(e, "none")}
+            >
+              <div
+                className="DAT_ModifyBox_Fix"
+                id={user.id_}
+                onClick={(e) => handleEdit(e)}
+              >
+                <FiEdit size={14} />
+                &nbsp;
+                {dataLang.formatMessage({ id: "change" })}
+              </div>
+              <div
+                className="DAT_ModifyBox_Remove"
+                id={user.id_}
+                onClick={(e) => handleDeleteUser(e)}
+              >
+                <IoTrashOutline size={16} />
+                &nbsp;
+                {dataLang.formatMessage({ id: "remove" })}
+              </div>
+            </div> */}
           </>
         ),
-        width: "100px",
+        width: "110px",
       },
     ];
 
@@ -198,6 +231,10 @@ export default function GroupRole(props) {
       };
       checkApi();
     };
+
+    useEffect(() => {
+      datafilter.value = groupUser.value.sort((a, b) => a.id_ - b.id_);
+    }, [groupUser.value]);
 
     const handleDeleteUser = (e) => {
       props.delState();
@@ -226,110 +263,117 @@ export default function GroupRole(props) {
       }
     };
 
-    useEffect(() => {
-      datafilter.value = groupUser.value.sort((a, b) => a.id_ - b.id_);
-    }, [groupUser.value]);
-
     return (
-      <div>
+      <>
         {isBrowser
           ?
-          <div className="DAT_GR_Content_DevideTable">
-            <div className="DAT_GR_Content_DevideTable_Left"
-              style={{ width: "300px" }}
-            >
-              <div className="DAT_GR_Content_DevideTable_Left_Head">
-                {dataLang.formatMessage({ id: "grouprole" })}
-              </div>
+          <>
+            <div className="DAT_GR_Content_DevideTable">
+              <div
+                className="DAT_GR_Content_DevideTable_Left"
+                style={{ width: "300px" }}
+              >
+                <div className="DAT_GR_Content_DevideTable_Left_Head">
+                  {dataLang.formatMessage({ id: "grouprole" })}
+                </div>
 
-              <div className="DAT_GR_Content_DevideTable_Left_ItemList">
-                {group.value.map((item, index) => (
-                  <div className="DAT_GR_Content_DevideTable_Left_ItemList_Item"
-                    key={index}
-                    id={item.id_}
-                    style={{
-                      backgroundColor:
-                        groupID.value === item.id_
-                          ? "rgb(207, 207, 207, 0.4)"
-                          : "",
-                    }}
-                    onClick={(e) => handleChangeGroup(e)}
-                  >
-                    <div>
-                      <div className="DAT_GR_Content_DevideTable_Left_ItemList_Item_Name"
-                        style={{ fontSize: "15px" }}
-                      >
-                        {item.name_}
-                      </div>
-
-                      <div className="DAT_GR_Content_DevideTable_Left_ItemList_Item_Info"
-                        style={{
-                          fontSize: "13px",
-                          color: "grey",
-                          maxWidth: "100px",
-                        }}
-                      >
-                        {item.code_}
-                      </div>
-                    </div>
-                    <div className="DAT_GR_Content_DevideTable_Left_ItemList_Item_Shortcut"
-                      id={item.id_ + "_dot"}
-                      onClick={(e) => handleShowFunction(e)}
+                <div className="DAT_GR_Content_DevideTable_Left_ItemList">
+                  {group.value.map((item, index) => (
+                    <div
+                      className="DAT_GR_Content_DevideTable_Left_ItemList_Item"
+                      key={index}
+                      id={item.id_}
+                      style={{
+                        backgroundColor:
+                          groupID.value === item.id_
+                            ? "rgb(207, 207, 207, 0.4)"
+                            : "",
+                      }}
+                      onClick={(e) => handleChangeGroup(e)}
                     >
-                      <IoMdMore size={20} color="grey" />
-                    </div>
-
-                    <div className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More"
-                      id={item.id_ + "_function"}
-                      style={{ display: "none" }}
-                      onMouseLeave={(e) => handleShowFunction(e)}
-                    >
-                      {item.id_ === 1 ? (
-                        <></>
-                      ) : (
-                        <div className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More_Delete"
-                          id={item.id_}
-                          onClick={() => props.groupDelState()}
+                      <div>
+                        <div
+                          className="DAT_GR_Content_DevideTable_Left_ItemList_Item_Name"
+                          style={{ fontSize: "15px" }}
                         >
-                          <IoTrashOutline size={18} />
+                          {item.name_}
                         </div>
-                      )}
-                      <div className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More_Edit"
-                        style={{ right: "40px" }}
-                        id={item.id_}
-                        onClick={(e) => handleEditGroup(e)}
+
+                        <div
+                          className="DAT_GR_Content_DevideTable_Left_ItemList_Item_Info"
+                          style={{
+                            fontSize: "13px",
+                            color: "grey",
+                            maxWidth: "100px",
+                          }}
+                        >
+                          {item.code_}
+                        </div>
+                      </div>
+                      <div
+                        className="DAT_GR_Content_DevideTable_Left_ItemList_Item_Shortcut"
+                        id={item.id_ + "_dot"}
+                        onClick={(e) => handleShowFunction(e)}
                       >
-                        <FiEdit size={18} />
+                        <IoMdMore size={20} color="grey" />
                       </div>
 
-                      <div className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More_Add"
-                        onClick={() => props.addState()}
+                      <div
+                        className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More"
+                        id={item.id_ + "_function"}
+                        style={{ display: "none" }}
+                        onMouseLeave={(e) => handleShowFunction(e)}
                       >
-                        <AiOutlineUserAdd size={18} />
+                        {item.id_ === 1 ? (
+                          <></>
+                        ) : (
+                          <div
+                            className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More_Delete"
+                            id={item.id_}
+                            onClick={() => props.groupDelState()}
+                          >
+                            <IoTrashOutline size={18} />
+                          </div>
+                        )}
+                        <div
+                          className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More_Edit"
+                          style={{ right: "40px" }}
+                          id={item.id_}
+                          onClick={(e) => handleEditGroup(e)}
+                        >
+                          <FiEdit size={18} />
+                        </div>
+
+                        <div
+                          className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More_Add"
+                          onClick={() => props.addState()}
+                        >
+                          <AiOutlineUserAdd size={18} />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+              </div>
+              <div className="DAT_GR_Content_DevideTable_Right">
+                <div className="DAT_GR_Content_DevideTable_Right_ItemList">
+                  {groupID.value === 0 ? (
+                    <Empty />
+                  ) : (
+                    <DataTable
+                      className="DAT_Table_GroupRole"
+                      columns={columnGroupRole}
+                      data={datafilter.value}
+                      pagination
+                      paginationComponentOptions={paginationComponentOptions}
+                      // fixedHeader={true}
+                      noDataComponent={<Empty />}
+                    />
+                  )}
+                </div>
               </div>
             </div>
-            <div className="DAT_GR_Content_DevideTable_Right">
-              <div className="DAT_GR_Content_DevideTable_Right_ItemList">
-                {groupID.value === 0 ? (
-                  <Empty />
-                ) : (
-                  <DataTable
-                    className="DAT_Table_GroupRole"
-                    columns={columnGroupRole}
-                    data={datafilter.value}
-                    pagination
-                    paginationComponentOptions={paginationComponentOptions}
-                    // fixedHeader={true}
-                    noDataComponent={<Empty />}
-                  />
-                )}
-              </div>
-            </div>
-          </div>
+          </>
           :
           <>
             {userList
@@ -549,7 +593,7 @@ export default function GroupRole(props) {
             }
           </>
         }
-      </div>
+      </>
     );
   };
 
@@ -621,7 +665,9 @@ export default function GroupRole(props) {
     <>
       {isBrowser
         ?
-        <>
+        <div
+          style={{ position: 'relative', top: '0', left: '0', width: '100%', height: '100vh' }}
+        >
           <div className="DAT_GRHeader">
             <div className="DAT_GRHeader_Title">
               <PiUsersFour color="gray" size={25} />
@@ -676,7 +722,55 @@ export default function GroupRole(props) {
               />
             </div>
           </div>
-        </>
+
+          {createState ? (
+            <div className="DAT_PopupBG">
+              <CreateGroupRole handleClose={handleCloseCreate} />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {popupState ? (
+            <div className="DAT_PopupBG">
+              <Popup handleClose={handleCloseDel} />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {addState ? (
+            <div className="DAT_PopupBG">
+              <AddUsers handleClose={handleCloseAdd} />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {groupDelState ? (
+            <div className="DAT_PopupBG">
+              <ConfirmDeleteGroup handleClose={handleCloseGroupDel} />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {editState ? (
+            <div className="DAT_PopupBG">
+              <EditGroup handleClose={handleCloseEdit} />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {editrole ? (
+            <div className="DAT_PopupBG">
+              <EditRole handleClose={handleCloseEditRole} />
+            </div>
+          ) : (
+            <></>
+          )}
+        </div>
         :
         <>
           <div className="DAT_ProjectHeaderMobile">
@@ -710,7 +804,7 @@ export default function GroupRole(props) {
             </div>
           </div>
 
-          <div className="DAT_GR">
+          <div className="DAT_GRMobile">
             <div className="DAT_GRMobile_Content">
               <GroupUsers
                 addState={handleAddState}
@@ -720,56 +814,56 @@ export default function GroupRole(props) {
               />
             </div>
           </div>
+
+          {createState ? (
+            <div className="DAT_PopupBGMobile">
+              <CreateGroupRole handleClose={handleCloseCreate} />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {popupState ? (
+            <div className="DAT_PopupBGMobile">
+              <Popup handleClose={handleCloseDel} />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {addState ? (
+            <div className="DAT_PopupBGMobile">
+              <AddUsers handleClose={handleCloseAdd} />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {groupDelState ? (
+            <div className="DAT_PopupBGMobile">
+              <ConfirmDeleteGroup handleClose={handleCloseGroupDel} />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {editState ? (
+            <div className="DAT_PopupBGMobile">
+              <EditGroup handleClose={handleCloseEdit} />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {editrole ? (
+            <div className="DAT_PopupBGMobile">
+              <EditRole handleClose={handleCloseEditRole} />
+            </div>
+          ) : (
+            <></>
+          )}
         </>
       }
-
-      {createState ? (
-        <div className="DAT_PopupBG">
-          <CreateGroupRole handleClose={handleCloseCreate} />
-        </div>
-      ) : (
-        <></>
-      )}
-
-      {popupState ? (
-        <div className="DAT_PopupBG">
-          <Popup handleClose={handleCloseDel} />
-        </div>
-      ) : (
-        <></>
-      )}
-
-      {addState ? (
-        <div className="DAT_PopupBG">
-          <AddUsers handleClose={handleCloseAdd} />
-        </div>
-      ) : (
-        <></>
-      )}
-
-      {groupDelState ? (
-        <div className="DAT_PopupBG">
-          <ConfirmDeleteGroup handleClose={handleCloseGroupDel} />
-        </div>
-      ) : (
-        <></>
-      )}
-
-      {editState ? (
-        <div className="DAT_PopupBG">
-          <EditGroup handleClose={handleCloseEdit} />
-        </div>
-      ) : (
-        <></>
-      )}
-
-      {editrole ? (
-        <div className="DAT_PopupBG">
-          <EditRole handleClose={handleCloseEditRole} />
-        </div>
-      ) : (
-        <></>
-      )}
     </>
   );
 }

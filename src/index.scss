@@ -227,7 +227,7 @@ iframe {
   cursor: pointer;
   width: 100%;
   display: flex;
-  
+
   //gap: 10px;
   //padding: 5px;
   border-left: solid 1px rgb(219, 219, 219);
@@ -624,7 +624,7 @@ iframe {
   margin-top: 10px;
   margin-bottom: 10px;
   position: relative;
- 
+
   background-color: #ececec;
   //  padding: 5px;
   border-radius: 5px 5px 0 0;
@@ -720,6 +720,7 @@ iframe {
     background-color: white;
     border-radius: 5px;
     overflow: hidden;
+
     // box-shadow: 0 0 4px 4px rgba(193, 193, 193, 0.5);
     // background-color: #56c1f7;
     &_item {
@@ -949,6 +950,38 @@ iframe {
 .DAT_PopupBG {
   height: 100vh;
   width: 100%;
+  position: absolute;
+  background-color: rgb(188, 188, 188, 0.7);
+  top: 0;
+  right: 0;
+  z-index: 25;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.DAT_ViewPopup {
+  height: 100vh;
+  width: 100%;
+  position: absolute;
+  background-color: rgb(188, 188, 188, 0.7);
+  top: 0px;
+  right: 0;
+  z-index: 30;
+  overflow: hidden;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.DAT_PopupBGMobile {
+  height: 100vh;
+  width: 100%;
   position: fixed;
   background-color: rgb(128, 128, 128, 0.7);
   top: 0;
@@ -959,7 +992,7 @@ iframe {
   align-items: center;
 }
 
-.DAT_ViewPopup {
+.DAT_ViewPopupMobile {
   height: 100vh;
   width: 100%;
   position: fixed;
@@ -1141,68 +1174,71 @@ iframe {
   left: 0;
   width: 100%;
   height: 100vh;
- 
+
   z-index: 30;
 
   // background-color: rgba(255, 255, 255);
-  
+
   &_content {
-      width: 80%;
+    width: 80%;
+    margin: auto;
+    margin-top: 200px;
+    border-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: rgb(0, 0, 0, .5);
+    box-shadow: 0 0 10px rgb(0, 0, 0, 0.5);
+
+    &_tit {
+
+      width: 200px;
       margin: auto;
-      margin-top: 200px;
-      border-radius: 5px;
-      padding: 10px;
-      box-sizing: border-box;
-      background-color: rgb(0, 0, 0,.5);
-      box-shadow: 0 0 10px rgb(0, 0, 0,0.5);
-      &_tit {
-  
-          width: 200px;
-          margin: auto;
-          font-family: Montserrat-Semibold;
-          font-size: 40px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #ffffff;
-      }
-      &_ver {
-          width: 170px;
-          margin: auto;
-          font-size: 16px;
-          display: flex;
-          align-items: center;
-          justify-content: flex-end;
-          color: #ff0000;
-      }
-  
-      &_note {
-          width: 100%;
-          margin: auto;
-          // text-align: justify;
-          margin-top: 30px;
-          color: rgb(232, 232, 232);
-  
-  
-      }
-  
-  }
-  &_cancel {
-      width: 90%;
+      font-family: Montserrat-Semibold;
+      font-size: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+    }
+
+    &_ver {
+      width: 170px;
       margin: auto;
+      font-size: 16px;
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      margin-top: 30px;
-      font-family: Montserrat-Semibold;
-      color: rgb(147, 44, 44);
+      color: #ff0000;
+    }
 
-      &_icon {
-         display: flex;
-         align-items: center;
-         justify-content: center;
-         
-      }
+    &_note {
+      width: 100%;
+      margin: auto;
+      // text-align: justify;
+      margin-top: 30px;
+      color: rgb(232, 232, 232);
+
+
+    }
+
+  }
+
+  &_cancel {
+    width: 90%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 30px;
+    font-family: Montserrat-Semibold;
+    color: rgb(147, 44, 44);
+
+    &_icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+    }
 
 
   }

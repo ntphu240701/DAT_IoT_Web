@@ -8,7 +8,7 @@ import "./Control.scss";
 import Popup from "./Popup";
 // import ShareBox from "./ShareBox";
 import { warnfilter } from "../Navigation/Navigation";
-import { sidebartab, sidebartabli } from "../Sidenar/Sidenar";
+import { sidebartab, sidebartabli, sidenar } from "../Sidenar/Sidenar";
 import { callApi } from "../Api/Api";
 import { host } from "../Lang/Contant";
 import { alertDispatch } from "../Alert/Alert";
@@ -52,7 +52,7 @@ const demo = signal([]);
 const care = signal([]);
 
 
-export const plantobj = signal({});
+export const plantobjauto = signal({});
 
 export const Empty = (props) => {
   const dataLang = useIntl();
@@ -89,9 +89,9 @@ export default function Auto(props) {
   const [tab, setTab] = useState("total");
   const [tabMobile, setTabMobile] = useState("total");
   const [tabState, setTabState] = useState(false)
-  // const [plantobj, setPlantobj] = useState({})
+  // const [plantobjauto, setplantobjauto] = useState({})
   const bu = 'auto'
-  const { screen, currentID,currentSN, settingDispatch } = useContext(SettingContext)
+  const { screen, currentID, currentSN, settingDispatch } = useContext(SettingContext)
   const { toolDispatch } = useContext(ToolContext)
   const { overviewDispatch } = useContext(OverviewContext)
 
@@ -121,7 +121,10 @@ export default function Auto(props) {
         <div className="DAT_Table"
           id={row.plantid_}
           style={{ cursor: "pointer" }}
-          onClick={(e) => handlePlant(e)}
+          onClick={(e) => {
+            handlePlant(e);
+            sidenar.value = false;
+          }}
         >
           <img src={row.img ? row.img : `/dat_picture/${bu}.jpg`} alt="" />
 
@@ -294,8 +297,8 @@ export default function Auto(props) {
       })
     }
 
-    plantobj.value = newPlant;
-    // setPlantobj(newPlant);
+    plantobjauto.value = newPlant;
+    // setplantobjauto(newPlant);
     overviewDispatch({
       type: "LOAD_DEVICE",
       payload: {
@@ -330,9 +333,9 @@ export default function Auto(props) {
       (item) => item.plantid_ == e.currentTarget.id
     );
     console.log(newPlant);
-    plantobj.value = { ...newPlant };
+    plantobjauto.value = { ...newPlant };
     plantState.value = "edit";
-    // setPlantobj(newPlant);
+    // setplantobjauto(newPlant);
   };
 
   const handleDelete = (e) => {
@@ -340,8 +343,8 @@ export default function Auto(props) {
     const newPlant = plantData.value.find(
       (item) => item.plantid_ == e.currentTarget.id
     );
-    plantobj.value = newPlant;
-    // setPlantobj(newPlant);
+    plantobjauto.value = newPlant;
+    // setplantobjauto(newPlant);
   };
 
   const handleShare = (e) => {
@@ -349,8 +352,8 @@ export default function Auto(props) {
     const newPlant = plantData.value.find(
       (item) => item.plantid_ == e.currentTarget.id
     );
-    plantobj.value = newPlant;
-    // setPlantobj(newPlant);
+    plantobjauto.value = newPlant;
+    // setplantobjauto(newPlant);
   };
 
   const handleLike = async (e) => {
@@ -598,7 +601,211 @@ export default function Auto(props) {
 
   return (
     <>
-      {isMobile ? (
+      {isBrowser
+        ?
+        <div style={{ position: 'relative', top: '0', left: '0', width: '100%', height: '100vh' }}>
+          <div className="DAT_ProjectHeader">
+            <div className="DAT_ProjectHeader_Title">
+              <GoProject color="gray" size={25} />
+              <span>{dataLang.formatMessage({ id: bu })}</span>
+            </div>
+
+            <div className="DAT_ProjectHeader_Filter">
+              <input
+                id="search"
+                type="text"
+                placeholder={
+                  dataLang.formatMessage({ id: "enter" }) +
+                  dataLang.formatMessage({ id: "project" })
+                }
+                autoComplete="off"
+                onChange={(e) => handleSearch(e)}
+              />
+              <CiSearch color="gray" size={20} />
+            </div>
+            {ruleInfor.value.setting.project.add === true ? (
+              <button
+                className="DAT_ProjectHeader_New"
+                onClick={() => (plantState.value = "add")}
+              >
+                <span value={"createdate"}>
+                  <MdAddchart color="white" size={20} />
+                  &nbsp;
+                  {dataLang.formatMessage({ id: "createNew" })}
+                </span>
+              </button>
+            ) : (
+              <div></div>
+            )}
+          </div>
+
+          <div className="DAT_Project">
+            <div className="DAT_Toollist_Tab">
+              {listTab.map((item, i) => {
+                return tab === item.id ? (
+                  <div key={"tab_" + i} className="DAT_Toollist_Tab_main">
+                    <p className="DAT_Toollist_Tab_main_left"></p>
+                    <span
+                      className="DAT_Toollist_Tab_main_content1"
+                      id={item.id}
+                      style={{
+                        backgroundColor: "White",
+                        color: "black",
+                        borderRadius: "10px 10px 0 0",
+                      }}
+                      onClick={() => setTab(item.id)}
+                    >
+                      {item.name}
+                    </span>
+                    <p className="DAT_Toollist_Tab_main_right"></p>
+                  </div>
+                ) : (
+                  <span
+                    className="DAT_Toollist_Tab_main_content2"
+                    key={"tab_" + i}
+                    id={item.id}
+                    style={{ backgroundColor: "#dadada" }}
+                    onClick={() => setTab(item.id)}
+                  >
+                    {item.name}
+                  </span>
+                );
+              })}
+
+              {/* <div
+                className="DAT_Project_Filter"
+                onClick={(e) => setDisplay(!display)}
+              >
+                <FiFilter />
+                <IoIosArrowUp
+                  style={{
+                    transform: display ? "rotate(180deg)" : "rotate(0deg)",
+                    transition: "0.5s",
+                  }}
+                />
+              </div> */}
+            </div >
+
+            <div className="DAT_Project_Content">
+              {(() => {
+                switch (tab) {
+                  case "total":
+                    return (
+                      <DataTable
+                        className="DAT_Table_Container"
+                        columns={columnproject}
+                        data={datafilter}
+                        pagination
+                        paginationComponentOptions={paginationComponentOptions}
+                        // fixedHeader={true}
+                        noDataComponent={<Empty />}
+                      />
+                    );
+                  case "online":
+                    return (
+                      <DataTable
+                        className="DAT_Table_Container"
+                        columns={columnproject}
+                        data={online.value}
+                        pagination
+                        paginationComponentOptions={paginationComponentOptions}
+                        fixedHeader={true}
+                        noDataComponent={<Empty />}
+                      />
+                    );
+                  case "offline":
+                    return (
+                      <DataTable
+                        className="DAT_Table_Container"
+                        columns={columnproject}
+                        data={offline.value}
+                        pagination
+                        paginationComponentOptions={paginationComponentOptions}
+                        fixedHeader={true}
+                        noDataComponent={<Empty />}
+                      />
+                    );
+                  case "demo":
+                    return (
+                      <DataTable
+                        className="DAT_Table_Container"
+                        columns={columnproject}
+                        data={demo.value}
+                        pagination
+                        paginationComponentOptions={paginationComponentOptions}
+                        fixedHeader={true}
+                        noDataComponent={<Empty />}
+                      />
+                    );
+                  case "warn":
+                    return (
+                      <DataTable
+                        className="DAT_Table_Container"
+                        columns={columnproject}
+                        data={warn.value}
+                        pagination
+                        paginationComponentOptions={paginationComponentOptions}
+                        fixedHeader={true}
+                        noDataComponent={<Empty />}
+                      />
+                    );
+                  case "care":
+                    return (
+                      <DataTable
+                        className="DAT_Table_Container"
+                        columns={columnproject}
+                        data={care.value}
+                        pagination
+                        paginationComponentOptions={paginationComponentOptions}
+                        fixedHeader={true}
+                        noDataComponent={<Empty />}
+                      />
+                    );
+                  default:
+                    return <></>;
+                }
+              })()}
+
+              {/* <Filter
+              type="project"
+              display={display}
+              handleClose={handleApproveFilter}
+              handleReset={handleResetFilter}
+              handleCancel={closeFilter}
+              data={saveDataInputFilter}
+            /> */}
+            </div>
+          </div>
+
+          <div className="DAT_ProjectInfor" style={{ height: plantState.value === "default" ? "0px" : "100vh", transition: "0.5s", }}>
+            {(() => {
+              switch (plantState.value) {
+                case "info":
+                  return <Project usr={user} bu={bu} data={plantobjauto.value} />;
+                case "edit":
+                  return <EditProject usr={user} bu={bu} data={plantobjauto.value} />;
+                case "add":
+                  return <AddProject usr={user} type={bu} />;
+                case "drop":
+                  return <Popup name={plantobjauto.value.name_} type={'plant'} usr={user} plantid={plantobjauto.value.plantid_} />;
+                case 'share':
+                  return <ShareBox plantid={plantobjauto.value.plantid_} usr={user} />
+                case "toollist":
+                  return <div className="DAT_Toollist">
+                    <div
+                      className="DAT_Toollist-card"
+                      id="CARD"
+                    >
+                      <Toollist bu={bu} ></Toollist>
+                    </div>
+                  </div>;
+                default:
+                  return <></>;
+              }
+            })()}
+          </div>
+        </div>
+        :
         <>
           <div className="DAT_ProjectHeaderMobile">
             <div className="DAT_ProjectHeaderMobile_Top">
@@ -632,6 +839,7 @@ export default function Auto(props) {
               <span>{dataLang.formatMessage({ id: bu })}</span>
             </div>
           </div>
+
           <div className="DAT_ProjectMobile">
             <div className="DAT_Toollist_Tab_Mobile">
               <button
@@ -1771,213 +1979,36 @@ export default function Auto(props) {
               }
             })()}
           </div>
-        </>
-      ) : (
-        <>
-          <div className="DAT_ProjectHeader">
-            <div className="DAT_ProjectHeader_Title">
-              <GoProject color="gray" size={25} />
-              <span>{dataLang.formatMessage({ id: bu })}</span>
-            </div>
 
-            <div className="DAT_ProjectHeader_Filter">
-              <input
-                id="search"
-                type="text"
-                placeholder={
-                  dataLang.formatMessage({ id: "enter" }) +
-                  dataLang.formatMessage({ id: "project" })
-                }
-                autoComplete="off"
-                onChange={(e) => handleSearch(e)}
-              />
-              <CiSearch color="gray" size={20} />
-            </div>
-            {ruleInfor.value.setting.project.add === true ? (
-              <button
-                className="DAT_ProjectHeader_New"
-                onClick={() => (plantState.value = "add")}
-              >
-                <span value={"createdate"}>
-                  <MdAddchart color="white" size={20} />
-                  &nbsp;
-                  {dataLang.formatMessage({ id: "createNew" })}
-                </span>
-              </button>
-            ) : (
-              <div></div>
-            )}
-          </div>
-          <div className="DAT_Project">
-            <div className="DAT_Toollist_Tab">
-              {listTab.map((item, i) => {
-                return tab === item.id ? (
-                  <div key={"tab_" + i} className="DAT_Toollist_Tab_main">
-                    <p className="DAT_Toollist_Tab_main_left"></p>
-                    <span
-                      className="DAT_Toollist_Tab_main_content1"
-                      id={item.id}
-                      style={{
-                        backgroundColor: "White",
-                        color: "black",
-                        borderRadius: "10px 10px 0 0",
-                      }}
-                      onClick={() => setTab(item.id)}
+          <div className="DAT_ProjectInfor" style={{ height: plantState.value === "default" ? "0px" : "100vh", transition: "0.5s", }}>
+            {(() => {
+              switch (plantState.value) {
+                case "info":
+                  return <Project usr={user} bu={bu} data={plantobjauto.value} />;
+                case "edit":
+                  return <EditProject usr={user} bu={bu} data={plantobjauto.value} />;
+                case "add":
+                  return <AddProject usr={user} type={bu} />;
+                case "drop":
+                  return <Popup name={plantobjauto.value.name_} type={'plant'} usr={user} plantid={plantobjauto.value.plantid_} />;
+                case 'share':
+                  return <ShareBox plantid={plantobjauto.value.plantid_} usr={user} />
+                case "toollist":
+                  return <div className="DAT_Toollist">
+                    <div
+                      className="DAT_Toollist-card"
+                      id="CARD"
                     >
-                      {item.name}
-                    </span>
-                    <p className="DAT_Toollist_Tab_main_right"></p>
-                  </div>
-                ) : (
-                  <span
-                    className="DAT_Toollist_Tab_main_content2"
-                    key={"tab_" + i}
-                    id={item.id}
-                    style={{ backgroundColor: "#dadada" }}
-                    onClick={() => setTab(item.id)}
-                  >
-                    {item.name}
-                  </span>
-                );
-              })}
-
-              {/* <div
-                className="DAT_Project_Filter"
-                onClick={(e) => setDisplay(!display)}
-              >
-                <FiFilter />
-                <IoIosArrowUp
-                  style={{
-                    transform: display ? "rotate(180deg)" : "rotate(0deg)",
-                    transition: "0.5s",
-                  }}
-                />
-              </div> */}
-            </div >
-
-            <div className="DAT_Project_Content">
-              {(() => {
-                switch (tab) {
-                  case "total":
-                    return (
-                      <DataTable
-                        className="DAT_Table_Container"
-                        columns={columnproject}
-                        data={datafilter}
-                        pagination
-                        paginationComponentOptions={paginationComponentOptions}
-                        // fixedHeader={true}
-                        noDataComponent={<Empty />}
-                      />
-                    );
-                  case "online":
-                    return (
-                      <DataTable
-                        className="DAT_Table_Container"
-                        columns={columnproject}
-                        data={online.value}
-                        pagination
-                        paginationComponentOptions={paginationComponentOptions}
-                        fixedHeader={true}
-                        noDataComponent={<Empty />}
-                      />
-                    );
-                  case "offline":
-                    return (
-                      <DataTable
-                        className="DAT_Table_Container"
-                        columns={columnproject}
-                        data={offline.value}
-                        pagination
-                        paginationComponentOptions={paginationComponentOptions}
-                        fixedHeader={true}
-                        noDataComponent={<Empty />}
-                      />
-                    );
-                  case "demo":
-                    return (
-                      <DataTable
-                        className="DAT_Table_Container"
-                        columns={columnproject}
-                        data={demo.value}
-                        pagination
-                        paginationComponentOptions={paginationComponentOptions}
-                        fixedHeader={true}
-                        noDataComponent={<Empty />}
-                      />
-                    );
-                  case "warn":
-                    return (
-                      <DataTable
-                        className="DAT_Table_Container"
-                        columns={columnproject}
-                        data={warn.value}
-                        pagination
-                        paginationComponentOptions={paginationComponentOptions}
-                        fixedHeader={true}
-                        noDataComponent={<Empty />}
-                      />
-                    );
-                  case "care":
-                    return (
-                      <DataTable
-                        className="DAT_Table_Container"
-                        columns={columnproject}
-                        data={care.value}
-                        pagination
-                        paginationComponentOptions={paginationComponentOptions}
-                        fixedHeader={true}
-                        noDataComponent={<Empty />}
-                      />
-                    );
-                  default:
-                    return <></>;
-                }
-              })()}
-
-              {/* <Filter
-              type="project"
-              display={display}
-              handleClose={handleApproveFilter}
-              handleReset={handleResetFilter}
-              handleCancel={closeFilter}
-              data={saveDataInputFilter}
-            /> */}
-            </div>
-          </div >
+                      <Toollist bu={bu} ></Toollist>
+                    </div>
+                  </div>;
+                default:
+                  return <></>;
+              }
+            })()}
+          </div>
         </>
-      )}
-
-
-
-      <div className="DAT_ProjectInfor" style={{ height: plantState.value === "default" ? "0px" : "100vh", transition: "0.5s", }}>
-        {(() => {
-          switch (plantState.value) {
-            case "info":
-              return <Project usr={user} bu={bu} data={plantobj.value} />;
-            case "edit":
-              return <EditProject usr={user} bu={bu} data={plantobj.value} />;
-            case "add":
-              return <AddProject usr={user} type={bu} />;
-            case "drop":
-              return <Popup name={plantobj.value.name_} type={'plant'} usr={user} plantid={plantobj.value.plantid_} />;
-            case 'share':
-              return <ShareBox plantid={plantobj.value.plantid_} usr={user} />
-            case "toollist":
-              return <div className="DAT_Toollist">
-                <div
-                  className="DAT_Toollist-card"
-                  id="CARD"
-                >
-                  <Toollist bu={bu} ></Toollist>
-                </div>
-              </div>;
-            default:
-              return <></>;
-          }
-        })()}
-      </div>
-
+      }
     </>
   );
 }

@@ -19,12 +19,16 @@ import Widget from "./Widget";
 import { ToolContext } from "../Context/ToolContext";
 import { SettingContext } from "../Context/SettingContext";
 import Toollist from "../Lib/Toollist";
+import { FaMapLocation } from "react-icons/fa6";
+import Map from "./Map";
+import { plantState } from "../Control/Signal";
+import Project from "../Control/Project";
 // import MenuTop from "../MenuTop/MenuTop";
 
 
 
-const x = signal(108);
-const s = signal(6);
+const x = signal(150);
+const s = signal(5);
 const movestart = signal(0);
 const which = signal([
         'auto',
@@ -47,14 +51,17 @@ export default function Home(props) {
         const [step, setStep] = useState(0);
 
         const [widgetState, setWidgetState] = useState(false);
+        const [mapState, setMapState] = useState(false);
         const { toolDispatch } = useContext(ToolContext);
         const { screen, currentID, currentSN, currentName, lasttab, defaulttab, settingDispatch } = useContext(SettingContext);
 
 
 
         const [widget, setWidget] = useState(0);
+        const [plant, setPlant] = useState([])
         const [logger, setLogger] = useState([]);
         const [loggerdata, setLoggerdata] = useState({});
+        const [plantobj, setPlantobj] = useState({});
 
 
         const startDragging = (e, type) => {
@@ -69,7 +76,7 @@ export default function Home(props) {
                 const x_ = type === 'mouse' ? e.clientX - boxRef.current.offsetLeft : e.changedTouches[0].clientX - boxRef.current.offsetLeft;
                 const scrollLeft = x_ - startX;
                 if (scrollLeft > 0) {
-                        if (x.value < 150) {
+                        if (x.value < 192) {
                                 x.value += 42
                                 setIsDragging(false);
                         }
@@ -81,7 +88,7 @@ export default function Home(props) {
                         }
                 }
                 s.value = parseInt((360 - x.value) / 42);
-                // console.log(x.value, s.value)
+                console.log(x.value, s.value)
 
 
         };
@@ -95,8 +102,11 @@ export default function Home(props) {
                 setWidgetState(false)
         }
 
-        const handlePage = (page) => {
+        const handleCloseMap = () => {
+                setMapState(false)
+        }
 
+        const handlePage = (page) => {
                 const page_ = {
                         auto: 'Auto',
                         energy: 'Energy',
@@ -104,7 +114,7 @@ export default function Home(props) {
 
                 }
                 // console.log(new Date().getTime() - movestart.value)
-                console.log(new Date().getTime() - movestart.value)
+                // console.log(new Date().getTime() - movestart.value)
                 if ((new Date().getTime() - movestart.value) < 120) {
                         // console.log(page)
                         movestart.value = 0
@@ -113,8 +123,41 @@ export default function Home(props) {
 
         }
 
-        useEffect(() => {
 
+        const handleWiget = () => {
+               
+                if ((new Date().getTime() - movestart.value) < 120) {
+                        // console.log(page)
+                        movestart.value = 0
+                        setWidgetState(true)
+                }
+
+        }
+
+        const handleMap = () => {
+               
+                if ((new Date().getTime() - movestart.value) < 120) {
+                        // console.log(page)
+                        movestart.value = 0
+                        setMapState(true)
+                }
+
+        }
+
+        useEffect(() => {
+                const getAllPlant = async (usr, id, type) => {
+
+                        let res = await callApi("post", host.DATA + "/getAllPlant", {
+                                usr: usr,
+                                partnerid: id,
+                                type: type,
+                        })
+                        console.log(res)
+                        if (res.status) {
+                                // setLogger(res.data)
+                                setPlant(res.data)
+                        }
+                }
                 const getAllLogger = async (usr, id, type) => {
 
                         let res = await callApi("post", host.DATA + "/getAllLogger", {
@@ -134,7 +177,7 @@ export default function Home(props) {
                                 usr: usr,
 
                         })
-                        // console.log(d)
+                        console.log(d)
                         if (d.status) {
                                 setWidget(d.data)
                                 setStep(1)
@@ -212,6 +255,7 @@ export default function Home(props) {
                 if (step === 0) {
                         getWidget(user)
                         getAllLogger(user, userInfor.value.partnerid, userInfor.value.type)
+                        getAllPlant(user, userInfor.value.partnerid, userInfor.value.type)
                 }
 
                 if (step === 1) {
@@ -224,7 +268,7 @@ export default function Home(props) {
                 if (step === 3) {
                         console.log('Load Tool')
                         if (widget.screenstate_) {
-                                // toolState.value = true;
+                                toolState.value = true;
                         }
                 }
 
@@ -260,6 +304,11 @@ export default function Home(props) {
                 // console.log(which_)
                 which.value = [...which_]
         }, [ruleInfor.value])
+
+
+        const handleProject = (data) => {
+                setPlantobj(data)
+        }
 
         // useEffect(() => {
         //         if (type === 'user') {
@@ -315,12 +364,17 @@ export default function Home(props) {
                                         <span style={{ "--i": 3 }} className="DAT_viewIOT-3D-Item">
                                         </span>
                                         <span style={{ "--i": 4 }} className="DAT_viewIOT-3D-Item">
+                                                <div className="DAT_viewIOT-3D-Item-Icon" >
+                                                        <SiPowerapps size={60} color="white" onPointerUp={() => handleWiget()} />
+                                                </div>
+                                                <label style={{ color: (s.value === 4) ? "white" : "gray", transition: "1s" }}>{dataLang.formatMessage({ id: "utilities" })}</label>
                                         </span>
                                         <span style={{ "--i": 5 }} className="DAT_viewIOT-3D-Item">
                                                 <div className="DAT_viewIOT-3D-Item-Icon" >
-                                                        <SiPowerapps size={60} color="white" onPointerUp={() => setWidgetState(true)} />
+                                                        <FaMapLocation size={60} color="white" onPointerUp={() => handleMap()} />
                                                 </div>
-                                                <label style={{ color: (s.value === 5) ? "white" : "gray", transition: "1s" }}>{dataLang.formatMessage({ id: "utilities" })}</label>
+                                                <label style={{ color: (s.value === 5) ? "white" : "gray", transition: "1s" }}>{dataLang.formatMessage({ id: "map" })}</label>
+
                                         </span>
 
                                         {which.value.map((data, index) => {
@@ -351,12 +405,22 @@ export default function Home(props) {
                                 <div></div>
                                 {/* <div className="DAT_viewIOT-Arrow" style={{ visibility: (s.value !== 8) ? "visible" : "hidden" }} id="next" onClick={(e) => { handeAction(e) }}><ion-icon name="chevron-forward-outline"></ion-icon></div> */}
 
-                        </div >
-
-
                         <div className="DAT_viewIOT-Widget" style={{ height: widgetState ? "100vh" : "0", transition: "0.5s" }}>
                                 <Widget logger={logger} widget={widget} loggerdata={loggerdata} handleClose={handleClose} />
                         </div>
+
+
+
+                        <div className="DAT_viewIOT-Widget" style={{ height: mapState ? "100vh" : "0", transition: "0.5s" }}>
+                                <Map plant={plant} handleClose={handleCloseMap} handleProject={handleProject} />
+                        </div>
+                        </div >
+
+
+                        {/* <div className="DAT_viewIOT-Plant" style={{ height: plantState.value === "info" ? "100vh" : "0", transition: "0.5s" }}>
+                                <Project usr={user} bu={plantobj.bu_} data={plantobj} />
+                        </div> */}
+
 
                         {toolState.value
                                 ? <div className="DAT_Toollist" style={{ zIndex: 35 }}>
@@ -364,11 +428,17 @@ export default function Home(props) {
                                                 className="DAT_Toollist-card"
                                                 id="CARD"
                                         >
-                                                <Toollist bu={'energy'} ></Toollist>
+                                                <Toollist bu={widget.bu_} ></Toollist>
                                         </div>
                                 </div>
                                 : <></>
                         }
+
+                        {/* {plantState.value === "info"
+                                ? <Project usr={user} bu={plantobj.bu_} data={plantobj} />
+                                : <></>
+
+                        } */}
 
 
                 </>

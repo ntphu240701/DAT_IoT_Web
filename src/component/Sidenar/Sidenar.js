@@ -17,7 +17,7 @@ import { SiDatabricks } from "react-icons/si";
 import { RiSettingsLine } from "react-icons/ri";
 import { VscDashboard } from "react-icons/vsc";
 import { useSelector } from "react-redux";
-import { isBrowser, isMobile, useMobileOrientation } from "react-device-detect";
+import { isBrowser,isMobile,useMobileOrientation } from "react-device-detect";
 
 export const sidenar = signal(true);
 export const sidebartab = signal("Dashboard");
@@ -61,7 +61,8 @@ export default function Sidenar(props) {
       icon: <TbReportAnalytics />, iconmobile: <ion-icon name="grid-outline" />, iconmobilefull: <ion-icon name="grid" />,
       link: "none",
       li: [
-        { link: "/Report", name: dataLang.formatMessage({ id: "report" }) },
+        { link: "/ExportEnergy", name: dataLang.formatMessage({ id: "export" }) },
+        // { link: "/Report", name: dataLang.formatMessage({ id: "report" }) },
         { link: "/Warn", name: dataLang.formatMessage({ id: "warn" }) }
       ],
     },
@@ -88,6 +89,10 @@ export default function Sidenar(props) {
               link: "/ErrorSetting",
               name: dataLang.formatMessage({ id: "errorsetting" }),
             },
+            {
+              link: "/RegisterSetting",
+              name: dataLang.formatMessage({ id: "registersetting" }),
+            },
             { link: "/Rule", name: dataLang.formatMessage({ id: "rule" }) },
           ]
           : userInfor.value.type === "mainadmin"
@@ -106,6 +111,10 @@ export default function Sidenar(props) {
                 link: "/ErrorSetting",
                 name: dataLang.formatMessage({ id: "errorsetting" }),
               },
+              {
+                link: "/RegisterSetting",
+                name: dataLang.formatMessage({ id: "registersetting" }),
+              },
               { link: "/Rule", name: dataLang.formatMessage({ id: "rule" }) },
             ]
             : userInfor.value.type === "admin"
@@ -123,6 +132,10 @@ export default function Sidenar(props) {
                 {
                   link: "/ErrorSetting",
                   name: dataLang.formatMessage({ id: "errorsetting" }),
+                },
+                {
+                  link: "/RegisterSetting",
+                  name: dataLang.formatMessage({ id: "registersetting" }),
                 },
                 { link: "/Rule", name: dataLang.formatMessage({ id: "rule" }) },
               ]
@@ -154,7 +167,7 @@ export default function Sidenar(props) {
   };
 
   let handleOutsideAna = (e) => {
-    if (isMobile) {
+    if(isMobile){
       if (!ana_icon.current.contains(e.target)) {
         if (!ana_box.current.contains(e.target)) {
           anamenu.value = false;
@@ -164,13 +177,13 @@ export default function Sidenar(props) {
   };
 
   let handleOutsideSet = (e) => {
-    if (isMobile) {
-      if (!set_icon.current.contains(e.target)) {
-        if (!set_box.current.contains(e.target)) {
-          setmenu.value = false;
-        }
+    if(isMobile){
+    if (!set_icon.current.contains(e.target)) {
+      if (!set_box.current.contains(e.target)) {
+        setmenu.value = false;
       }
     }
+  }
   };
 
   const handleMenuLi = (e) => {
@@ -486,7 +499,7 @@ export default function Sidenar(props) {
             {data["Setting"].li.map((data, index) => {
               return data.link === "none"
                 ? <span key={index} >{data.name}</span>
-                : <div className="DAT_SettingMenu_Item" key={index} onClick={() => { handleDirect(data.link); setmenu.value = false }}>{data.name}</div>
+                : <div className="DAT_SettingMenu_Item"  key={index} onClick={() => { handleDirect(data.link); setmenu.value = false }}>{data.name}</div>
             })}
           </div>
         </>

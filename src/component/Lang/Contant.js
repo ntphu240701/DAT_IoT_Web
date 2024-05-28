@@ -1,3 +1,5 @@
+import RegisterSetting from "../RegisterSetting/RegisterSetting";
+
 export const host = {
   AUTH: process.env.REACT_APP_SOLAR + "/auth",
   DATA: process.env.REACT_APP_SOLAR + "/data",
@@ -8,6 +10,11 @@ export const host = {
 
 export const messages = {
   en: {
+    erroraddress: "Error code",
+    date: "Date",
+    registersetting: "Register Setting",
+    export: "Export",
+    map: "Map",
     on: "On",
     off: "Off",
     utilities: "Utilities",
@@ -17,6 +24,7 @@ export const messages = {
     elev: "Elevator",
     energy: "Energy",
     typedescription: "Enter description",
+    delErrorAddr: "Are you sure to delete this error address ?",
     description: "Description",
     all: "All",
     account: "Account",
@@ -692,6 +700,7 @@ export const messages = {
     alert_60: "Delete error code successfully!",
     alert_61: "Create new rule successfully!",
     alert_62: "Update rule successfully!",
+    alert_63: "Atleast one configuration is required.",
 
     // --------------------------------- //
 
@@ -918,6 +927,11 @@ export const messages = {
     // A_48_17: "Unknown",
   },
   vi: {
+    erroraddress: "Mã lỗi",
+    date: "Ngày",
+    registersetting: "Cài đặt thanh ghi",
+    export: "Xuất báo cáo",
+    map: "Bản đồ",
     on: "Bật",
     off: "Tắt",
     utilities: "Tiện ích",
@@ -927,6 +941,7 @@ export const messages = {
     elev: "Thang máy",
     energy: "Năng lượng",
     typedescription: "Nhập mô tả",
+    delErrorAddr: "Bạn có chắc muốn xóa địa chỉ thanh ghi này không ?",
     description: "Mô tả",
     all: "Tất cả",
     account: "Tài khoản",
@@ -959,7 +974,7 @@ export const messages = {
     analyticsList: "Danh sách mẫu phân tích",
     devicelist: "Danh sách thiết bị",
     monitorlist: "Danh sách màn hình",
-    view: 'Tổng quan',
+    view: "Tổng quan",
     overview: "Tổng quan dữ liệu phát điện",
     history: "Lịch sử phát điện",
     historyInverter: "Lịch sử biến tần",
@@ -1546,7 +1561,7 @@ export const messages = {
     alert_6: "Thiết lập thành công!",
     alert_7: "Thiết lập không thành công, vui lòng thử lại!",
     alert_8: "Bạn vui lòng truy cập vào Email của bạn và xác nhận!",
-    alert_9: "Dăng ký thành công!",
+    alert_9: "Đăng ký thành công!",
     alert_10: "Tài khoản hoặc email đã được sử dụng!",
     alert_11: "Email này đã tồn tại!",
     alert_12: "Mã OTP không đúng!",
@@ -1600,6 +1615,7 @@ export const messages = {
     alert_60: "Xóa thông tin mã lỗi thành công!",
     alert_61: "Tạo phân quyền thành công!",
     alert_62: "Cập nhật quyền thành công!",
+    alert_63: "Ít nhất phải tồn tại 1 cấu hình.",
 
     // --------------------------------- //
 
