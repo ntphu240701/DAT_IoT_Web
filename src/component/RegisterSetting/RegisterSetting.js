@@ -331,7 +331,8 @@ export default function RegisterSetting() {
       alertDispatch(dataLang.formatMessage({ id: "alert_22" }));
     } else {
       if (
-        t[i].register[t[i].register.length - 1].addr === `${addr1}-${addr2}`
+        t[i].register[t[i].register.length - 1].addr === `${addr1}-${addr2}` &&
+        t[i].register[t[i].register.length - 1].val === val
       ) {
         alertDispatch(dataLang.formatMessage({ id: "alert_49" }));
       } else {
@@ -432,13 +433,13 @@ export default function RegisterSetting() {
     >
       {isBrowser ? (
         <>
-          <div className="DAT_GRHeader">
-            <div className="DAT_GRHeader_Title">
+          <div className="DAT_RSHeader">
+            <div className="DAT_RSHeader_Title">
               <PiUsersFour color="gray" size={25} />
               <span>{dataLang.formatMessage({ id: "registersetting" })}</span>
             </div>
             <div
-              className="DAT_GRHeader_Filter"
+              className="DAT_RSHeader_Filter"
               style={{
                 backgroundColor:
                   groupRegID.value === 0 ? "rgba(233, 233, 233, 0.5)" : "white",
@@ -463,7 +464,7 @@ export default function RegisterSetting() {
             </div>
             <div></div>
             {/* <button
-          className="DAT_GRHeader_New"
+          className="DAT_RSHeader_New"
           onClick={() => {
             changePopupstate();
             setStatePopup("addNewReg");
@@ -477,24 +478,24 @@ export default function RegisterSetting() {
         </button> */}
           </div>
 
-          <div className="DAT_GR">
-            <div className="DAT_GR_Header">
+          <div className="DAT_RS">
+            <div className="DAT_RS_Header">
               {dataLang.formatMessage({ id: "registersetting" })}
             </div>
-            <div className="DAT_GR_Content">
-              <div className="DAT_GR_Content_DevideTable">
+            <div className="DAT_RS_Content">
+              <div className="DAT_RS_Content_DevideTable">
                 <div
-                  className="DAT_GR_Content_DevideTable_Left"
+                  className="DAT_RS_Content_DevideTable_Left"
                   style={{ width: "300px" }}
                 >
-                  <div className="DAT_GR_Content_DevideTable_Left_Head">
+                  <div className="DAT_RS_Content_DevideTable_Left_Head">
                     {dataLang.formatMessage({ id: "device" })}
                   </div>
 
-                  <div className="DAT_GR_Content_DevideTable_Left_ItemList">
+                  <div className="DAT_RS_Content_DevideTable_Left_ItemList">
                     {dataGateway.map((item, index) => (
                       <div
-                        className="DAT_GR_Content_DevideTable_Left_ItemList_Item"
+                        className="DAT_RS_Content_DevideTable_Left_ItemList_Item"
                         key={index}
                         id={item.sn_}
                         style={{
@@ -507,14 +508,14 @@ export default function RegisterSetting() {
                       >
                         <div>
                           <div
-                            className="DAT_GR_Content_DevideTable_Left_ItemList_Item_Name"
+                            className="DAT_RS_Content_DevideTable_Left_ItemList_Item_Name"
                             style={{ fontSize: "15px" }}
                           >
                             {item.sn_}
                           </div>
 
                           <div
-                            className="DAT_GR_Content_DevideTable_Left_ItemList_Item_Info"
+                            className="DAT_RS_Content_DevideTable_Left_ItemList_Item_Info"
                             style={{
                               fontSize: "13px",
                               color: "grey",
@@ -525,7 +526,7 @@ export default function RegisterSetting() {
                           </div>
                         </div>
                         <div
-                          className="DAT_GR_Content_DevideTable_Left_ItemList_Item_Shortcut"
+                          className="DAT_RS_Content_DevideTable_Left_ItemList_Item_Shortcut"
                           //   id={item.id_ + "_dot"}
                           onClick={() => {
                             changePopupstate();
@@ -536,7 +537,7 @@ export default function RegisterSetting() {
                         </div>
 
                         <div
-                          className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More"
+                          className="DAT_RS_Content_DevideTable_Left_ItemList_Item_More"
                           //   id={item.id_ + "_function"}
                           style={{ display: "none" }}
                           //   onMouseLeave={(e) => handleShowFunction(e)}
@@ -545,7 +546,7 @@ export default function RegisterSetting() {
                         <></>
                       ) : ( */}
                           <div
-                            className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More_Delete"
+                            className="DAT_RS_Content_DevideTable_Left_ItemList_Item_More_Delete"
                             //   id={item.id_}
                             //   onClick={() => props.groupDelState()}
                           >
@@ -553,7 +554,7 @@ export default function RegisterSetting() {
                           </div>
                           {/* )} */}
                           <div
-                            className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More_Edit"
+                            className="DAT_RS_Content_DevideTable_Left_ItemList_Item_More_Edit"
                             style={{ right: "40px" }}
                             // id={item.id_}
                             // onClick={(e) => handleEditGroup(e)}
@@ -562,7 +563,7 @@ export default function RegisterSetting() {
                           </div>
 
                           <div
-                            className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More_Add"
+                            className="DAT_RS_Content_DevideTable_Left_ItemList_Item_More_Add"
                             // onClick={() => props.addState()}
                           >
                             <AiOutlineUserAdd size={18} />
@@ -572,8 +573,8 @@ export default function RegisterSetting() {
                     ))}
                   </div>
                 </div>
-                <div className="DAT_GR_Content_DevideTable_Right">
-                  <div className="DAT_GR_Content_DevideTable_Right_ItemList">
+                <div className="DAT_RS_Content_DevideTable_Right">
+                  <div className="DAT_RS_Content_DevideTable_Right_ItemList">
                     {dataRegister === undefined ? (
                       <Empty />
                     ) : (
@@ -636,8 +637,8 @@ export default function RegisterSetting() {
           </div>
 
           {regList ? (
-            <div className="DAT_GRMobile_Content_DevideTable_Right">
-              <div className="DAT_GRMobile_Content_DevideTable_Right_Head">
+            <div className="DAT_RSMobile_Content_DevideTable_Right">
+              <div className="DAT_RSMobile_Content_DevideTable_Right_Head">
                 <IoCaretBackOutline
                   style={{ cursor: "pointer" }}
                   size={20}
@@ -649,7 +650,7 @@ export default function RegisterSetting() {
                 />
                 <div>{dataLang.formatMessage({ id: "roleList" })}</div>
               </div>
-              <div className="DAT_GRMobile_Content_DevideTable_Right_ItemList">
+              <div className="DAT_RSMobile_Content_DevideTable_Right_ItemList">
                 {groupRegID.value === 0 ? (
                   <Empty />
                 ) : (
@@ -748,17 +749,17 @@ export default function RegisterSetting() {
             </div>
           ) : (
             <div
-              className="DAT_GRMobile_Content_DevideTable_Left"
+              className="DAT_RSMobile_Content_DevideTable_Left"
               style={{ width: "100% !important", height: "100%" }}
             >
-              <div className="DAT_GRMobile_Content_DevideTable_Left_Head">
-                {dataLang.formatMessage({ id: "RegisterSetting" })}
+              <div className="DAT_RSMobile_Content_DevideTable_Left_Head">
+                {dataLang.formatMessage({ id: "registersetting" })}
               </div>
 
-              <div className="DAT_GRMobile_Content_DevideTable_Left_ItemList">
+              <div className="DAT_RSMobile_Content_DevideTable_Left_ItemList">
                 {dataGateway.map((item, index) => (
                   <div
-                    className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item"
+                    className="DAT_RSMobile_Content_DevideTable_Left_ItemList_Item"
                     key={index}
                     style={{
                       backgroundColor:
@@ -769,7 +770,7 @@ export default function RegisterSetting() {
                   >
                     <div>
                       <div
-                        className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_Name"
+                        className="DAT_RSMobile_Content_DevideTable_Left_ItemList_Item_Name"
                         style={{ fontSize: "16px" }}
                         id={item.sn_}
                         onClick={(e) => {
@@ -781,18 +782,18 @@ export default function RegisterSetting() {
                       </div>
 
                       <div
-                        className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_Info"
+                        className="DAT_RSMobile_Content_DevideTable_Left_ItemList_Item_Info"
                         style={{
                           fontSize: "14px",
                           color: "grey",
-                          maxWidth: "100px",
+                          minWidth: "100px",
                         }}
                       >
-                        {item.nam_}
+                        {item.name_}
                       </div>
                     </div>
                     <div
-                      className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_Shortcut"
+                      className="DAT_RSMobile_Content_DevideTable_Left_ItemList_Item_Shortcut"
                       // id={item.sn_ + "_dot"}
                       onClick={(e) => {
                         groupRegID.value = item.sn_;
@@ -802,7 +803,7 @@ export default function RegisterSetting() {
                     </div>
 
                     <div
-                      className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More"
+                      className="DAT_RSMobile_Content_DevideTable_Left_ItemList_Item_More"
                       // id={item.id_ + "_function"}
                       style={{ display: "none" }}
                       // onMouseLeave={(e) => handleShowFunction(e)}
@@ -811,7 +812,7 @@ export default function RegisterSetting() {
                         <></>
                       ) : (
                         <div
-                          className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More_Delete"
+                          className="DAT_RSMobile_Content_DevideTable_Left_ItemList_Item_More_Delete"
                           id={item.sn_}
                           // onClick={() => props.groupDelState()}
                         >
@@ -819,7 +820,7 @@ export default function RegisterSetting() {
                         </div>
                       )}
                       <div
-                        className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More_Edit"
+                        className="DAT_RSMobile_Content_DevideTable_Left_ItemList_Item_More_Edit"
                         style={{ right: "40px" }}
                         id={item.sn_}
                         // onClick={(e) => handleEditGroup(e)}
@@ -828,7 +829,7 @@ export default function RegisterSetting() {
                       </div>
 
                       <div
-                        className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More_Add"
+                        className="DAT_RSMobile_Content_DevideTable_Left_ItemList_Item_More_Add"
                         // onClick={() => props.addState()}
                       >
                         <AiOutlineUserAdd size={18} />
