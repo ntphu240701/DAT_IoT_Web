@@ -10,6 +10,7 @@ import { callApi } from "../Api/Api";
 import { host } from "../Lang/Contant";
 
 import { IoClose, IoSaveOutline } from "react-icons/io5";
+import { isBrowser } from "react-device-detect";
 
 export const editruledata = signal();
 const temp = signal();
@@ -135,68 +136,137 @@ export default function EditRule(props) {
   }, []);
 
   return (
-    <div className="DAT_CreateRule">
-      <div className="DAT_CreateRule_Header">
-        <div className="DAT_CreateRule_Header_Left">
-          <p>
-            {dataLang.formatMessage({ id: "editRule" })}
-          </p>
-        </div>
+    <>
+      {isBrowser
+        ?
+        <div className="DAT_CreateRule">
+          <div className="DAT_CreateRule_Header">
+            <div className="DAT_CreateRule_Header_Left">
+              <p>
+                {dataLang.formatMessage({ id: "editRule" })}
+              </p>
+            </div>
 
-        <div className="DAT_CreateRule_Header_Right">
-          <div className="DAT_CreateRule_Header_Right_Save"
-            onClick={() => handleSave()}
-          >
-            <IoSaveOutline size={20} color={'white'} />
-            <span>{dataLang.formatMessage({ id: "save" })}</span>
+            <div className="DAT_CreateRule_Header_Right">
+              <div className="DAT_CreateRule_Header_Right_Save"
+                onClick={() => handleSave()}
+              >
+                <IoSaveOutline size={20} color={'white'} />
+                <span>{dataLang.formatMessage({ id: "save" })}</span>
+              </div>
+
+              <div className="DAT_CreateRule_Header_Right_Close"
+                id="Popup"
+                onClick={() => (props.handleClose())}
+                onMouseEnter={(e) => handlePopup("new")}
+                onMouseLeave={(e) => handlePopup("pre")}
+              >
+                <IoClose size={25} />
+              </div>
+            </div>
           </div>
 
-          <div className="DAT_CreateRule_Header_Right_Close"
-            id="Popup"
-            onClick={() => (props.handleClose())}
-            onMouseEnter={(e) => handlePopup("new")}
-            onMouseLeave={(e) => handlePopup("pre")}
-          >
-            <IoClose size={25} />
-          </div>
-        </div>
-      </div>
-
-      <div className="DAT_CreateRule_Body">
-        <TypeReport />
-        <div className="DAT_CreateRule_Body_Item">
-          <div className="DAT_CreateRule_Body_Item_Option">
-            <label className="DAT_CreateRule_Body_Item_Option_Title"
-              style={{ margin: "0" }}
-            >
-              {dataLang.formatMessage({ id: "ruleOptions" })}
-            </label>
-
-            {Object.entries(editruledata.value.setting).map(
-              ([key, value], index) => (
-                <div className="DAT_CreateRule_Body_Item_Option_Check"
-                  key={key}
+          <div className="DAT_CreateRule_Body">
+            <TypeReport />
+            <div className="DAT_CreateRule_Body_Item">
+              <div className="DAT_CreateRule_Body_Item_Option">
+                <label className="DAT_CreateRule_Body_Item_Option_Title"
+                  style={{ margin: "0" }}
                 >
-                  <p style={{ color: "grey" }}>
-                    {dataLang.formatMessage({ id: key })}
-                  </p>
-                  {Object.entries(value).map(([key_, value_], index_) => (
-                    <CheckBox
-                      key={index_}
-                      rights={key}
-                      custom={key_}
-                      status={value_}
-                      id={dataLang.formatMessage({ id: key_ })}
-                      html={index + "_" + index_}
-                      width={widthCheckBox}
-                    />
-                  ))}
-                </div>
-              )
-            )}
+                  {dataLang.formatMessage({ id: "ruleOptions" })}
+                </label>
+
+                {Object.entries(editruledata.value.setting).map(
+                  ([key, value], index) => (
+                    <div className="DAT_CreateRule_Body_Item_Option_Check"
+                      key={key}
+                    >
+                      <p style={{ color: "grey" }}>
+                        {dataLang.formatMessage({ id: key })}
+                      </p>
+                      {Object.entries(value).map(([key_, value_], index_) => (
+                        <CheckBox
+                          key={index_}
+                          rights={key}
+                          custom={key_}
+                          status={value_}
+                          id={dataLang.formatMessage({ id: key_ })}
+                          html={index + "_" + index_}
+                          width={widthCheckBox}
+                        />
+                      ))}
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+        :
+        <div className="DAT_CreateRuleMobile">
+          <div className="DAT_CreateRuleMobile_Header">
+            <div className="DAT_CreateRuleMobile_Header_Left">
+              <p>
+                {dataLang.formatMessage({ id: "editRule" })}
+              </p>
+            </div>
+
+            <div className="DAT_CreateRuleMobile_Header_Right">
+              <div className="DAT_CreateRuleMobile_Header_Right_Save"
+                onClick={() => handleSave()}
+              >
+                <IoSaveOutline size={20} color={'white'} />
+                <span>{dataLang.formatMessage({ id: "save" })}</span>
+              </div>
+
+              <div className="DAT_CreateRuleMobile_Header_Right_Close"
+                id="Popup"
+                onClick={() => (props.handleClose())}
+                onMouseEnter={(e) => handlePopup("new")}
+                onMouseLeave={(e) => handlePopup("pre")}
+              >
+                <IoClose size={25} />
+              </div>
+            </div>
+          </div>
+
+          <div className="DAT_CreateRuleMobile_Body">
+            <TypeReport />
+            <div className="DAT_CreateRuleMobile_Body_Item">
+              <div className="DAT_CreateRuleMobile_Body_Item_Option">
+                <label className="DAT_CreateRuleMobile_Body_Item_Option_Title"
+                  style={{ margin: "0" }}
+                >
+                  {dataLang.formatMessage({ id: "ruleOptions" })}
+                </label>
+
+                {Object.entries(editruledata.value.setting).map(
+                  ([key, value], index) => (
+                    <div className="DAT_CreateRuleMobile_Body_Item_Option_Check"
+                      key={key}
+                    >
+                      <p style={{ color: "grey" }}>
+                        {dataLang.formatMessage({ id: key })}
+                      </p>
+                      {Object.entries(value).map(([key_, value_], index_) => (
+                        <CheckBox
+                          key={index_}
+                          rights={key}
+                          custom={key_}
+                          status={value_}
+                          id={dataLang.formatMessage({ id: key_ })}
+                          html={index + "_" + index_}
+                          width={widthCheckBox}
+                        />
+                      ))}
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </>
   );
 }

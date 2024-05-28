@@ -10,7 +10,6 @@ import { host } from "../Lang/Contant";
 import { callApi } from "../Api/Api";
 import { partnerInfor, ruleInfor, userInfor } from "../../App";
 import { useIntl } from "react-intl";
-import { isMobile } from "../Navigation/Navigation";
 import { lowercasedata } from "../ErrorSetting/ErrorSetting";
 import PopupState, { bindMenu, bindToggle } from "material-ui-popup-state";
 import { Menu, MenuItem } from "@mui/material";
@@ -339,12 +338,12 @@ export default function Role(props) {
   }, [Usr_.value]);
 
   return (
-    <div
-      style={{ position: 'relative', top: '0', left: '0', width: '100%', height: '100vh' }}
-    >
+    <>
       {isBrowser
         ?
-        <>
+        <div
+          style={{ position: 'relative', top: '0', left: '0', width: '100%', height: '100vh' }}
+        >
           <div className="DAT_ProjectHeader">
             <div className="DAT_ProjectHeader_Title">
               <LuUserSquare color="gray" size={25} />
@@ -403,7 +402,29 @@ export default function Role(props) {
               />
             </div>
           </div>
-        </>
+
+          <div className="DAT_ViewPopup"
+            style={{
+              height: roleState === "default" ? "0px" : "100vh",
+              transition: "0.5s",
+            }}
+          >
+            {(() => {
+              switch (roleState) {
+                case "create":
+                  return <CreateRole handleClose={handleCloseCreate} />;
+                default:
+                  return <></>;
+              }
+            })()}
+          </div>
+
+          {popupState ?
+            <div className="DAT_PopupBG">
+              <RolePopup user={temp} type={type} handleClose={handleClosePopup} />
+            </div>
+            : <></>}
+        </div>
         :
         <>
           <div className="DAT_ProjectHeaderMobile">
@@ -557,30 +578,30 @@ export default function Role(props) {
               );
             })}
           </div>
+
+          <div className="DAT_ViewPopupMobile"
+            style={{
+              height: roleState === "default" ? "0px" : "100vh",
+              transition: "0.5s",
+            }}
+          >
+            {(() => {
+              switch (roleState) {
+                case "create":
+                  return <CreateRole handleClose={handleCloseCreate} />;
+                default:
+                  return <></>;
+              }
+            })()}
+          </div>
+
+          {popupState ?
+            <div className="DAT_PopupBGMobile">
+              <RolePopup user={temp} type={type} handleClose={handleClosePopup} />
+            </div>
+            : <></>}
         </>
       }
-
-      <div className="DAT_ViewPopup"
-        style={{
-          height: roleState === "default" ? "0px" : "100vh",
-          transition: "0.5s",
-        }}
-      >
-        {(() => {
-          switch (roleState) {
-            case "create":
-              return <CreateRole handleClose={handleCloseCreate} />;
-            default:
-              return <></>;
-          }
-        })()}
-      </div>
-
-      {popupState ?
-        <div className="DAT_PopupBG">
-          <RolePopup user={temp} type={type} handleClose={handleClosePopup} />
-        </div>
-        : <></>}
-    </div>
+    </>
   );
 }
