@@ -58,7 +58,7 @@
     }
 }
 
-.DAT_GR {
+.DAT_RS {
     width: 98%;
     margin: auto;
     margin-top: 15px;
@@ -195,7 +195,7 @@
     }
 }
 
-.DAT_GRMobile {
+.DAT_RSMobile {
     &_Content {
         height: calc(100vh - 280px);
         // margin-bottom: 60px;
@@ -359,11 +359,13 @@
                         gap: 8px;
 
                         &_Vi {
-                            width: 100px;
+                            min-width: 100px;
+                            max-width: 300px;
                         }
 
                         &_En {
-                            width: 100px;
+                            min-width: 100px;
+                            max-width: 300px;
                         }
                     }
 
@@ -509,6 +511,10 @@
             border: solid 1px rgb(199, 199, 199);
             padding: 4px;
             font-family: Montserrat-Regular;
+        }
+
+        & span {
+            font-family: Montserrat-SemiBold;
         }
 
         & input {

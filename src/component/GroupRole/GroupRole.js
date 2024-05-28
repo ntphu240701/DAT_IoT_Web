@@ -804,8 +804,8 @@ export default function GroupRole(props) {
             </div>
           </div>
 
-          <div className="DAT_GR">
-            <div className="DAT_GR_Content">
+          <div className="DAT_GRMobile">
+            <div className="DAT_GRMobile_Content">
               <GroupUsers
                 addState={handleAddState}
                 delState={handleDelState}

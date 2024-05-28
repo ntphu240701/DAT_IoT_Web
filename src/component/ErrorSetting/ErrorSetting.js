@@ -10,6 +10,7 @@ import { IoMdMore, IoIosAddCircleOutline, IoMdAdd } from "react-icons/io";
 import { CiSearch } from "react-icons/ci";
 import { FiEdit } from "react-icons/fi";
 import {
+  IoAddOutline,
   IoCaretBackOutline,
   IoTrashOutline,
 } from "react-icons/io5";
@@ -73,6 +74,7 @@ export default function ErrorSetting(props) {
   const [dataGateway, setDataGateway] = useState([]);
   const [dataGatewaySub, setDataGatewaySub] = useState([]);
   const [dataErr, setDataErr] = useState([]);
+  const [errList, setErrList] = useState(false);
 
   const paginationComponentOptions = {
     rowsPerPageText: dataLang.formatMessage({ id: "row" }),
@@ -562,10 +564,12 @@ export default function ErrorSetting(props) {
           ...bigdata[index].solution_,
           {
             id: bigdata[index].solution_[solutionlength - 1].id + 1,
-            vi: `Giải pháp ${bigdata[index].solution_[solutionlength - 1].id + 1
-              }`,
-            en: `Solution ${bigdata[index].solution_[solutionlength - 1].id + 1
-              }`,
+            vi: `Giải pháp ${
+              bigdata[index].solution_[solutionlength - 1].id + 1
+            }`,
+            en: `Solution ${
+              bigdata[index].solution_[solutionlength - 1].id + 1
+            }`,
           },
         ];
         setDataErr([...bigdata]);
@@ -646,7 +650,13 @@ export default function ErrorSetting(props) {
 
   return (
     <div
-      style={{ position: 'relative', top: '0', left: '0', width: '100%', height: '100vh' }}
+      style={{
+        position: "relative",
+        top: "0",
+        left: "0",
+        width: "100%",
+        height: "100vh",
+      }}
     >
       {/* BẢN CŨ CHƯA UPDATE */}
       {/* {isMobile.value
@@ -867,19 +877,21 @@ export default function ErrorSetting(props) {
       {/* BẢN MỚI ĐANG UPDATE */}
       {isBrowser ? (
         <>
-          <div className="DAT_GRHeader">
-            <div className="DAT_GRHeader_Title">
+          <div className="DAT_ESHeader">
+            <div className="DAT_ESHeader_Title">
               <PiUsersFour color="gray" size={25} />
               <span>{dataLang.formatMessage({ id: "errorsetting" })}</span>
             </div>
             <div
-              className="DAT_GRHeader_Filter"
+              className="DAT_ESHeader_Filter"
               style={{
                 backgroundColor:
-                  groupErrSN.value === 0 ? "rgba(233, 233, 233, 0.5)" : "white",
+                  groupErrSN.value === ""
+                    ? "rgba(233, 233, 233, 0.5)"
+                    : "white",
               }}
             >
-              {groupErrSN.value === 0 ? (
+              {groupErrSN.value === "" ? (
                 <input
                   disabled
                   type="text"
@@ -899,24 +911,24 @@ export default function ErrorSetting(props) {
             <div></div>
           </div>
 
-          <div className="DAT_GR">
-            <div className="DAT_GR_Header">
+          <div className="DAT_ES">
+            <div className="DAT_ES_Header">
               {dataLang.formatMessage({ id: "errorsetting" })}
             </div>
-            <div className="DAT_GR_Content">
-              <div className="DAT_GR_Content_DevideTable">
+            <div className="DAT_ES_Content">
+              <div className="DAT_ES_Content_DevideTable">
                 <div
-                  className="DAT_GR_Content_DevideTable_Left"
+                  className="DAT_ES_Content_DevideTable_Left"
                   style={{ width: "300px" }}
                 >
-                  <div className="DAT_GR_Content_DevideTable_Left_Head">
-                    {dataLang.formatMessage({ id: "device" })}
+                  <div className="DAT_ES_Content_DevideTable_Left_Head">
+                    {dataLang.formatMessage({ id: "devicelist" })}
                   </div>
 
-                  <div className="DAT_GR_Content_DevideTable_Left_ItemList">
+                  <div className="DAT_ES_Content_DevideTable_Left_ItemList">
                     {dataGateway.map((item, index) => (
                       <div
-                        className="DAT_GR_Content_DevideTable_Left_ItemList_Item"
+                        className="DAT_ES_Content_DevideTable_Left_ItemList_Item"
                         key={index}
                         id={item.sn_}
                         style={{
@@ -929,14 +941,14 @@ export default function ErrorSetting(props) {
                       >
                         <div>
                           <div
-                            className="DAT_GR_Content_DevideTable_Left_ItemList_Item_Name"
+                            className="DAT_ES_Content_DevideTable_Left_ItemList_Item_Name"
                             style={{ fontSize: "15px" }}
                           >
                             {item.sn_}
                           </div>
 
                           <div
-                            className="DAT_GR_Content_DevideTable_Left_ItemList_Item_Info"
+                            className="DAT_ES_Content_DevideTable_Left_ItemList_Item_Info"
                             style={{
                               fontSize: "13px",
                               color: "grey",
@@ -947,7 +959,7 @@ export default function ErrorSetting(props) {
                           </div>
                         </div>
                         <div
-                          className="DAT_GR_Content_DevideTable_Left_ItemList_Item_Shortcut"
+                          className="DAT_ES_Content_DevideTable_Left_ItemList_Item_Shortcut"
                           //   id={item.id_ + "_dot"}
                           onClick={() => setCreateState(true)}
                         >
@@ -955,34 +967,34 @@ export default function ErrorSetting(props) {
                         </div>
 
                         <div
-                          className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More"
+                          className="DAT_ES_Content_DevideTable_Left_ItemList_Item_More"
                           //   id={item.id_ + "_function"}
                           style={{ display: "none" }}
-                        //   onMouseLeave={(e) => handleShowFunction(e)}
+                          //   onMouseLeave={(e) => handleShowFunction(e)}
                         >
                           {/* {item.id_ === 1 ? (
                         <></>
                       ) : ( */}
                           <div
-                            className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More_Delete"
-                          //   id={item.id_}
-                          //   onClick={() => props.groupDelState()}
+                            className="DAT_ES_Content_DevideTable_Left_ItemList_Item_More_Delete"
+                            //   id={item.id_}
+                            //   onClick={() => props.groupDelState()}
                           >
                             <IoTrashOutline size={18} />
                           </div>
                           {/* )} */}
                           <div
-                            className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More_Edit"
+                            className="DAT_ES_Content_DevideTable_Left_ItemList_Item_More_Edit"
                             style={{ right: "40px" }}
-                          // id={item.id_}
-                          // onClick={(e) => handleEditGroup(e)}
+                            // id={item.id_}
+                            // onClick={(e) => handleEditGroup(e)}
                           >
                             <FiEdit size={18} />
                           </div>
 
                           <div
-                            className="DAT_GR_Content_DevideTable_Left_ItemList_Item_More_Add"
-                          // onClick={() => props.addState()}
+                            className="DAT_ES_Content_DevideTable_Left_ItemList_Item_More_Add"
+                            // onClick={() => props.addState()}
                           >
                             <AiOutlineUserAdd size={18} />
                           </div>
@@ -991,8 +1003,8 @@ export default function ErrorSetting(props) {
                     ))}
                   </div>
                 </div>
-                <div className="DAT_GR_Content_DevideTable_Right">
-                  <div className="DAT_GR_Content_DevideTable_Right_ItemList">
+                <div className="DAT_ES_Content_DevideTable_Right">
+                  <div className="DAT_ES_Content_DevideTable_Right_ItemList">
                     {dataErr === undefined ? (
                       <Empty />
                     ) : (
@@ -1017,31 +1029,28 @@ export default function ErrorSetting(props) {
             <div className="DAT_ProjectHeaderMobile_Top">
               <div
                 className="DAT_ProjectHeaderMobile_Top_Filter"
-              // style={{
-              //   backgroundColor: regList ? "rgb(235, 235, 228)" : "white",
-              // }}
+                style={{
+                  backgroundColor: errList ? "rgb(235, 235, 228)" : "white",
+                }}
               >
                 <CiSearch color="gray" size={20} />
                 <input
-                  // disabled={regList ? true : false}
+                  disabled={errList ? true : false}
                   type="text"
                   placeholder={dataLang.formatMessage({ id: "enterInfo" })}
                   onChange={(e) => handleFilter(e)}
                 />
               </div>
-              {/* {regList ? (
+              {errList ? (
                 <button
                   className="DAT_ProjectHeaderMobile_Top_New"
-                  // onClick={() => {
-                  //   changePopupstate();
-                  //   setStatePopup("addNewReg");
-                  // }}
+                  onClick={() => setCreateState(true)}
                 >
                   <IoAddOutline color="white" size={20} />
                 </button>
               ) : (
                 <></>
-              )} */}
+              )}
             </div>
 
             <div
@@ -1049,215 +1058,275 @@ export default function ErrorSetting(props) {
               style={{ marginBottom: "10px" }}
             >
               <PiUsersFour color="gray" size={25} />
-              <span>{dataLang.formatMessage({ id: "roleList" })}</span>
+              <span>{dataLang.formatMessage({ id: "errlist" })}</span>
             </div>
           </div>
 
-          {/* {regList ? ( */}
-          <div className="DAT_GRMobile_Content_DevideTable_Right">
-            <div className="DAT_GRMobile_Content_DevideTable_Right_Head">
-              <IoCaretBackOutline
-                style={{ cursor: "pointer" }}
-                size={20}
-                color="white"
-              // onClick={() => {
-              //   setRegList(false);
-              //   groupErrSN.value = 0;
-              // }}
-              />
-              <div>{dataLang.formatMessage({ id: "roleList" })}</div>
-            </div>
-            <div className="DAT_GRMobile_Content_DevideTable_Right_ItemList">
-              {groupErrSN.value === 0 ? (
-                <Empty />
-              ) : (
-                // <div className="DAT_RegSetMobile">
-                //   {dataRegister.map((item, index) => {
-                //     return (
-                //       <div key={index} className="DAT_RegSetMobile_Content">
-                //         <div className="DAT_RegSetMobile_Content_Top">
-                //           <div className="DAT_RegSetMobile_Content_Top_Type">
-                //             {/* {item.addrcode} */}hi
-                //           </div>
-                //           <div className="DAT_RegSetMobile_Content_Top_Info">
-                //             <div className="DAT_RegSetMobile_Content_Top_Info_Cause">
-                //               <span>
-                //                 {dataLang.formatMessage({ id: "config" })}
-                //               </span>
-                //               <div className="DAT_RegSetMobile_Content_Top_Info_Cause_Row1">
-                //                 {/* <div className="DAT_RegSetMobile_Content_Top_Info_Cause_Row1_En">
-                //                   en:
-                //                 </div> */}
-                //               </div>
+          {errList ? (
+            <div className="DAT_ESMobile_Content_DevideTable_Right">
+              <div className="DAT_ESMobile_Content_DevideTable_Right_Head">
+                <IoCaretBackOutline
+                  style={{ cursor: "pointer" }}
+                  size={20}
+                  color="white"
+                  onClick={() => {
+                    setErrList(false);
+                    groupErrSN.value = "";
+                  }}
+                />
+                <div>{dataLang.formatMessage({ id: "roleList" })}</div>
+              </div>
+              <div className="DAT_ESMobile_Content_DevideTable_Right_ItemList">
+                {dataErr ? (
+                  <div className="DAT_RegSetMobile">
+                    {dataErr.map((item, index) => {
+                      return (
+                        <div key={index} className="DAT_RegSetMobile_Content">
+                          <div className="DAT_RegSetMobile_Content_Top">
+                            <div className="DAT_RegSetMobile_Content_Top_Type">
+                              {item.addrcode}
+                            </div>
+                            <div className="DAT_RegSetMobile_Content_Top_Info">
+                              <div className="DAT_RegSetMobile_Content_Top_Info_Cause">
+                                <span>
+                                  {dataLang.formatMessage({ id: "cause" })}
+                                </span>
+                                <div className="DAT_RegSetMobile_Content_Top_Info_Cause_Row1">
+                                  <div className="DAT_RegSetMobile_Content_Top_Info_Cause_Row1_En">
+                                    En:
+                                  </div>
+                                  <div className="DAT_RegSetMobile_Content_Top_Info_Cause_Row1_Vi">
+                                    Vi:
+                                  </div>
+                                </div>
 
-                //               <div>
-                //                 {/* {item.register.map((cause, i) => {
-                //                   return (
-                //                     <div
-                //                       key={i}
-                //                       className="DAT_RegSetMobile_Content_Top_Info_Cause_Row2"
-                //                     >
-                //                       <div className="DAT_RegSetMobile_Content_Top_Info_Cause_Row2_Vi">
-                //                         {i + 1}.{" "}
-                //                         {`${cause.addr}: ${cause.val}`}
-                //                       </div>
-                //                       <div className="DAT_RegSetMobile_Content_Top_Info_Cause_Row2_Func">
-                //                         <FiEdit
-                //                           size={14}
-                //                           id={`${item.id}_${cause.id}_EDIT`}
-                //                           // onClick={(e) => {
-                //                           //   changePopupstate();
-                //                           //   setStatePopup("editConfig");
-                //                           //   handleSetConfig(e);
-                //                           // }}
-                //                         />
-                //                         <IoTrashOutline
-                //                           size={16}
-                //                           id={`${item.id}_${cause.id}_REMOVE`}
-                //                           // onClick={(e) => {
-                //                           //   changePopupstate();
-                //                           //   setStatePopup("removeConfig");
-                //                           //   handleSetConfig(e);
-                //                           // }}
-                //                         />
-                //                         {parseInt(i) ===
-                //                         item.register.length - 1 ? (
-                //                           <IoIosAddCircleOutline
-                //                             size={16}
-                //                             style={{ cursor: "pointer" }}
-                //                             id={`${item.id}_ADD`}
-                //                             onClick={(e) => {
-                //                               handleAddConfig(e);
-                //                               handleSetConfig(e);
-                //                             }}
-                //                           />
-                //                         ) : (
-                //                           <></>
-                //                         )}
-                //                       </div>
-                //                     </div>
-                //                   );
-                //                 })} */}
-                //               </div>
-                //             </div>
-                //           </div>
-                //         </div>
+                                <div>
+                                  {item.cause_.map((cause, i) => {
+                                    return (
+                                      <div
+                                        key={i}
+                                        className="DAT_RegSetMobile_Content_Top_Info_Cause_Row2"
+                                      >
+                                        <div className="DAT_RegSetMobile_Content_Top_Info_Cause_Row2_Vi">
+                                          {i + 1}. {`${cause.vi}`}
+                                        </div>
+                                        <div className="DAT_RegSetMobile_Content_Top_Info_Cause_Row2_En">
+                                          {`${cause.en}`}
+                                        </div>
+                                        <div className="DAT_RegSetMobile_Content_Top_Info_Cause_Row2_Func">
+                                          <FiEdit
+                                            size={14}
+                                            style={{ cursor: "pointer" }}
+                                            id={`${item.boxid_}-${cause.id}-EDITCAUSE`}
+                                            onClick={(e) => handleEdit(e)}
+                                          />
+                                          <IoTrashOutline
+                                            size={16}
+                                            style={{ cursor: "pointer" }}
+                                            id={`${item.boxid_}_${cause.id}_REMOVECAUSE`}
+                                            onClick={(e) => handleDelete(e)}
+                                          />
+                                          {parseInt(i) ===
+                                          item.cause_.length - 1 ? (
+                                            <IoIosAddCircleOutline
+                                              size={16}
+                                              style={{ cursor: "pointer" }}
+                                              id={`${item.boxid_}-ADDCAUSE`}
+                                              onClick={(e) => handleAdd(e)}
+                                            />
+                                          ) : (
+                                            <></>
+                                          )}
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                              <div className="DAT_RegSetMobile_Content_Top_Info_Solution">
+                                <span>
+                                  {dataLang.formatMessage({ id: "solution" })}
+                                </span>
+                                <div className="DAT_RegSetMobile_Content_Top_Info_Solution_Row1">
+                                  <div className="DAT_RegSetMobile_Content_Top_Info_Solution_Row1_En">
+                                    En:
+                                  </div>
+                                  <div className="DAT_RegSetMobile_Content_Top_Info_Solution_Row1_Vi">
+                                    Vi:
+                                  </div>
+                                </div>
 
-                //         <div className="DAT_RegSetMobile_Content_Bottom">
-                //           <div
-                //             className="DAT_RegSetMobile_Content_Bottom_Item"
-                //             // id={item.id}
-                //             // onClick={(e) => {
-                //             //   changePopupstate();
-                //             //   setStatePopup("removeError");
-                //             //   configEdit.value = e.currentTarget.id;
-                //             //   console.log(configEdit.value);
-                //             // }}
-                //           >
-                //             <IoTrashOutline size={16} />
-                //           </div>
-                //         </div>
-                //       </div>
-                //     );
-                //   })}
-                // </div>
-                <></>
-              )}
-            </div>
-          </div>
-          {/* ) : ( */}
-          <div
-            className="DAT_GRMobile_Content_DevideTable_Left"
-            style={{ width: "100% !important", height: "100%" }}
-          >
-            <div className="DAT_GRMobile_Content_DevideTable_Left_Head">
-              {dataLang.formatMessage({ id: "RegisterSetting" })}
-            </div>
+                                <div>
+                                  {item.solution_.map((solution, i) => {
+                                    return (
+                                      <div
+                                        key={i}
+                                        className="DAT_RegSetMobile_Content_Top_Info_Solution_Row2"
+                                      >
+                                        <div className="DAT_RegSetMobile_Content_Top_Info_Solution_Row2_Vi">
+                                          {i + 1}. {`${solution.vi}`}
+                                        </div>
+                                        <div className="DAT_RegSetMobile_Content_Top_Info_Solution_Row2_En">
+                                          {`${solution.en}`}
+                                        </div>
+                                        <div className="DAT_RegSetMobile_Content_Top_Info_Solution_Row2_Func">
+                                          <FiEdit
+                                            size={14}
+                                            id={`${item.id}_${solution.id}_EDIT`}
+                                            onClick={(e) => {
+                                              // changePopupstate();
+                                              // setStatePopup("editConfig");
+                                              // handleSetConfig(e);
+                                            }}
+                                          />
+                                          <IoTrashOutline
+                                            size={16}
+                                            id={`${item.id}_${solution.id}_REMOVE`}
+                                            onClick={(e) => {
+                                              // changePopupstate();
+                                              // setStatePopup("removeConfig");
+                                              // handleSetConfig(e);
+                                            }}
+                                          />
+                                          {parseInt(i) ===
+                                          item.solution_.length - 1 ? (
+                                            <IoIosAddCircleOutline
+                                              size={16}
+                                              style={{ cursor: "pointer" }}
+                                              id={`${item.id}_ADD`}
+                                              onClick={(e) => {
+                                                // handleAddConfig(e);
+                                                // handleSetConfig(e);
+                                              }}
+                                            />
+                                          ) : (
+                                            <></>
+                                          )}
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
 
-            <div className="DAT_GRMobile_Content_DevideTable_Left_ItemList">
-              {/* {dataGateway.map((item, index) => ( */}
-              <div
-                className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item"
-              // key={index}
-              // style={{
-              //   backgroundColor:
-              //     groupErrSN.value === item.sn_
-              //       ? "rgb(207, 207, 207, 0.4)"
-              //       : "",
-              // }}
-              >
-                <div>
-                  <div
-                    className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_Name"
-                    style={{ fontSize: "16px" }}
-                  // id={item.sn_}
-                  // onClick={(e) => {
-                  //   handleChangeGroup(e);
-                  //   setRegList(true);
-                  // }}
-                  >
-                    {/* {item.sn_} */}hi
+                          <div className="DAT_RegSetMobile_Content_Bottom">
+                            <div
+                              className="DAT_RegSetMobile_Content_Bottom_Item"
+                              id={item.id}
+                              onClick={(e) => {
+                                // changePopupstate();
+                                // setStatePopup("removeError");
+                                // configEdit.value = e.currentTarget.id;
+                                // console.log(configEdit.value);
+                              }}
+                            >
+                              <IoTrashOutline size={16} />
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
+                ) : (
+                  <Empty />
+                )}
+              </div>
+            </div>
+          ) : (
+            <div
+              className="DAT_ESMobile_Content_DevideTable_Left"
+              style={{ width: "100% !important", height: "100%" }}
+            >
+              <div className="DAT_ESMobile_Content_DevideTable_Left_Head">
+                {dataLang.formatMessage({ id: "errorsetting" })}
+              </div>
 
+              <div className="DAT_ESMobile_Content_DevideTable_Left_ItemList">
+                {dataGateway.map((item, index) => (
                   <div
-                    className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_Info"
+                    className="DAT_ESMobile_Content_DevideTable_Left_ItemList_Item"
+                    key={index}
+                    id={item.sn_}
                     style={{
-                      fontSize: "14px",
-                      color: "grey",
-                      maxWidth: "100px",
+                      backgroundColor:
+                        groupErrSN.value === item.sn_
+                          ? "rgb(207, 207, 207, 0.4)"
+                          : "",
+                    }}
+                    onClick={(e) => {
+                      handleChangeGroup(e);
+                      setErrList(true);
                     }}
                   >
-                    {/* {item.nam_} */}he
-                  </div>
-                </div>
-                <div
-                  className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_Shortcut"
-                // id={item.sn_ + "_dot"}
-                // onClick={(e) => {
-                //   groupErrSN.value = item.sn_;
-                // }}
-                >
-                  <IoMdMore size={20} color="grey" />
-                </div>
+                    <div>
+                      <div
+                        className="DAT_ESMobile_Content_DevideTable_Left_ItemList_Item_Name"
+                        style={{ fontSize: "16px" }}
+                      >
+                        {item.sn_}
+                      </div>
 
-                <div
-                  className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More"
-                  // id={item.id_ + "_function"}
-                  style={{ display: "none" }}
-                // onMouseLeave={(e) => handleShowFunction(e)}
-                >
-                  {/* {item.id_ === 1 ? (
-                      <></>
-                    ) : ( */}
-                  <div
-                    className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More_Delete"
-                  // id={item.sn_}
-                  // onClick={() => props.groupDelState()}
-                  >
-                    <IoTrashOutline size={18} />
-                  </div>
-                  {/* )} */}
-                  <div
-                    className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More_Edit"
-                    style={{ right: "40px" }}
-                  // id={item.sn_}
-                  // onClick={(e) => handleEditGroup(e)}
-                  >
-                    <FiEdit size={18} />
-                  </div>
+                      <div
+                        className="DAT_ESMobile_Content_DevideTable_Left_ItemList_Item_Info"
+                        style={{
+                          fontSize: "14px",
+                          color: "grey",
+                          minWidth: "100px",
+                        }}
+                      >
+                        {item.name_}
+                      </div>
+                    </div>
+                    <div
+                      className="DAT_ESMobile_Content_DevideTable_Left_ItemList_Item_Shortcut"
+                      // id={item.sn_ + "_dot"}
+                      onClick={(e) => {
+                        groupErrSN.value = item.sn_;
+                      }}
+                    >
+                      {/* <IoMdMore size={20} color="grey" /> */}
+                    </div>
 
-                  <div
-                    className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More_Add"
-                  // onClick={() => props.addState()}
-                  >
-                    <AiOutlineUserAdd size={18} />
+                    <div
+                      className="DAT_ESMobile_Content_DevideTable_Left_ItemList_Item_More"
+                      // id={item.id_ + "_function"}
+                      style={{ display: "none" }}
+                      // onMouseLeave={(e) => handleShowFunction(e)}
+                    >
+                      {item.id_ === 1 ? (
+                        <></>
+                      ) : (
+                        <div
+                          className="DAT_ESMobile_Content_DevideTable_Left_ItemList_Item_More_Delete"
+                          id={item.sn_}
+                          // onClick={() => props.groupDelState()}
+                        >
+                          <IoTrashOutline size={18} />
+                        </div>
+                      )}
+                      <div
+                        className="DAT_ESMobile_Content_DevideTable_Left_ItemList_Item_More_Edit"
+                        style={{ right: "40px" }}
+                        id={item.sn_}
+                        // onClick={(e) => handleEditGroup(e)}
+                      >
+                        <FiEdit size={18} />
+                      </div>
+
+                      <div
+                        className="DAT_ESMobile_Content_DevideTable_Left_ItemList_Item_More_Add"
+                        // onClick={() => props.addState()}
+                      >
+                        <AiOutlineUserAdd size={18} />
+                      </div>
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
-              {/* ))} */}
             </div>
-          </div>
-          {/* )} */}
+          )}
         </>
       )}
 
