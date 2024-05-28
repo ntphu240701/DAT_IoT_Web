@@ -565,12 +565,10 @@ export default function ErrorSetting(props) {
           ...bigdata[index].solution_,
           {
             id: bigdata[index].solution_[solutionlength - 1].id + 1,
-            vi: `Giải pháp ${
-              bigdata[index].solution_[solutionlength - 1].id + 1
-            }`,
-            en: `Solution ${
-              bigdata[index].solution_[solutionlength - 1].id + 1
-            }`,
+            vi: `Giải pháp ${bigdata[index].solution_[solutionlength - 1].id + 1
+              }`,
+            en: `Solution ${bigdata[index].solution_[solutionlength - 1].id + 1
+              }`,
           },
         ];
         setDataErr([...bigdata]);
@@ -971,15 +969,15 @@ export default function ErrorSetting(props) {
                           className="DAT_ES_Content_DevideTable_Left_ItemList_Item_More"
                           //   id={item.id_ + "_function"}
                           style={{ display: "none" }}
-                          //   onMouseLeave={(e) => handleShowFunction(e)}
+                        //   onMouseLeave={(e) => handleShowFunction(e)}
                         >
                           {/* {item.id_ === 1 ? (
                         <></>
                       ) : ( */}
                           <div
                             className="DAT_ES_Content_DevideTable_Left_ItemList_Item_More_Delete"
-                            //   id={item.id_}
-                            //   onClick={() => props.groupDelState()}
+                          //   id={item.id_}
+                          //   onClick={() => props.groupDelState()}
                           >
                             <IoTrashOutline size={18} />
                           </div>
@@ -987,15 +985,15 @@ export default function ErrorSetting(props) {
                           <div
                             className="DAT_ES_Content_DevideTable_Left_ItemList_Item_More_Edit"
                             style={{ right: "40px" }}
-                            // id={item.id_}
-                            // onClick={(e) => handleEditGroup(e)}
+                          // id={item.id_}
+                          // onClick={(e) => handleEditGroup(e)}
                           >
                             <FiEdit size={18} />
                           </div>
 
                           <div
                             className="DAT_ES_Content_DevideTable_Left_ItemList_Item_More_Add"
-                            // onClick={() => props.addState()}
+                          // onClick={() => props.addState()}
                           >
                             <AiOutlineUserAdd size={18} />
                           </div>
@@ -1130,7 +1128,7 @@ export default function ErrorSetting(props) {
                                             onClick={(e) => handleDelete(e)}
                                           />
                                           {parseInt(i) ===
-                                          item.cause_.length - 1 ? (
+                                            item.cause_.length - 1 ? (
                                             <IoIosAddCircleOutline
                                               size={16}
                                               style={{ cursor: "pointer" }}
@@ -1192,7 +1190,7 @@ export default function ErrorSetting(props) {
                                             }}
                                           />
                                           {parseInt(i) ===
-                                          item.solution_.length - 1 ? (
+                                            item.solution_.length - 1 ? (
                                             <IoIosAddCircleOutline
                                               size={16}
                                               style={{ cursor: "pointer" }}
@@ -1217,12 +1215,9 @@ export default function ErrorSetting(props) {
                           <div className="DAT_RegSetMobile_Content_Bottom">
                             <div
                               className="DAT_RegSetMobile_Content_Bottom_Item"
-                              id={item.id}
+                              id={item.boxid_}
                               onClick={(e) => {
-                                // changePopupstate();
-                                // setStatePopup("removeError");
-                                // configEdit.value = e.currentTarget.id;
-                                // console.log(configEdit.value);
+                                handleDelete(e);
                               }}
                             >
                               <IoTrashOutline size={16} />
@@ -1294,7 +1289,7 @@ export default function ErrorSetting(props) {
                       className="DAT_ESMobile_Content_DevideTable_Left_ItemList_Item_More"
                       // id={item.id_ + "_function"}
                       style={{ display: "none" }}
-                      // onMouseLeave={(e) => handleShowFunction(e)}
+                    // onMouseLeave={(e) => handleShowFunction(e)}
                     >
                       {item.id_ === 1 ? (
                         <></>
@@ -1302,7 +1297,7 @@ export default function ErrorSetting(props) {
                         <div
                           className="DAT_ESMobile_Content_DevideTable_Left_ItemList_Item_More_Delete"
                           id={item.sn_}
-                          // onClick={() => props.groupDelState()}
+                        // onClick={() => props.groupDelState()}
                         >
                           <IoTrashOutline size={18} />
                         </div>
@@ -1311,14 +1306,14 @@ export default function ErrorSetting(props) {
                         className="DAT_ESMobile_Content_DevideTable_Left_ItemList_Item_More_Edit"
                         style={{ right: "40px" }}
                         id={item.sn_}
-                        // onClick={(e) => handleEditGroup(e)}
+                      // onClick={(e) => handleEditGroup(e)}
                       >
                         <FiEdit size={18} />
                       </div>
 
                       <div
                         className="DAT_ESMobile_Content_DevideTable_Left_ItemList_Item_More_Add"
-                        // onClick={() => props.addState()}
+                      // onClick={() => props.addState()}
                       >
                         <AiOutlineUserAdd size={18} />
                       </div>
