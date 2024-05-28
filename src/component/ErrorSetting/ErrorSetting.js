@@ -455,6 +455,7 @@ export default function ErrorSetting(props) {
 
   const handleDelete = (e) => {
     let arr = e.currentTarget.id.split("_");
+    console.log(arr);
     setArrayData(arr);
     setRemoveType(arr[4]);
     setRemoveState(true);
@@ -638,7 +639,7 @@ export default function ErrorSetting(props) {
       if (res.status) {
         setDataGateway([...res.data]);
         setDataGatewaySub([...res.data]);
-        // console.log(res.data);
+        console.log(res.data);
       }
     };
 
@@ -1026,6 +1027,15 @@ export default function ErrorSetting(props) {
         <>
           <div className="DAT_ProjectHeaderMobile">
             <div className="DAT_ProjectHeaderMobile_Top">
+              {errList ? (
+                <IoCaretBackOutline
+                  size={40}
+                  color="#0B1967"
+                  onClick={() => setErrList(false)}
+                />
+              ) : (
+                <></>
+              )}
               <div
                 className="DAT_ProjectHeaderMobile_Top_Filter"
                 style={{
@@ -1056,14 +1066,14 @@ export default function ErrorSetting(props) {
               className="DAT_ProjectHeaderMobile_Title"
               style={{ marginBottom: "10px" }}
             >
-              <PiUsersFour color="gray" size={25} />
+              <PiUsersFour color="gray" size={25} />{" "}
               <span>{dataLang.formatMessage({ id: "errlist" })}</span>
             </div>
           </div>
 
           {errList ? (
             <div className="DAT_ESMobile_Content_DevideTable_Right">
-              <div className="DAT_ESMobile_Content_DevideTable_Right_Head">
+              {/* <div className="DAT_ESMobile_Content_DevideTable_Right_Head">
                 <IoCaretBackOutline
                   style={{ cursor: "pointer" }}
                   size={20}
@@ -1073,8 +1083,8 @@ export default function ErrorSetting(props) {
                     groupErrSN.value = "";
                   }}
                 />
-                <div>{dataLang.formatMessage({ id: "errconfiglist" })}</div>
-              </div>
+                <div>{dataLang.formatMessage({ id: "previous" })}</div>
+              </div> */}
               <div className="DAT_ESMobile_Content_DevideTable_Right_ItemList">
                 {dataErr === undefined ? (
                   <Empty />
@@ -1235,9 +1245,9 @@ export default function ErrorSetting(props) {
               className="DAT_ESMobile_Content_DevideTable_Left"
               style={{ width: "100% !important", height: "100%" }}
             >
-              <div className="DAT_ESMobile_Content_DevideTable_Left_Head">
+              {/* <div className="DAT_ESMobile_Content_DevideTable_Left_Head">
                 {dataLang.formatMessage({ id: "errorsetting" })}
-              </div>
+              </div> */}
 
               <div className="DAT_ESMobile_Content_DevideTable_Left_ItemList">
                 {dataGateway.map((item, index) => (
@@ -1256,23 +1266,31 @@ export default function ErrorSetting(props) {
                       setErrList(true);
                     }}
                   >
-                    <div>
+                    <div style={{ display: "flex" }}>
                       <div
-                        className="DAT_ESMobile_Content_DevideTable_Left_ItemList_Item_Name"
+                        className="DAT_ESMobile_Content_DevideTable_Left_ItemList_Item_ID"
                         style={{ fontSize: "16px" }}
                       >
-                        {item.sn_}
+                        {item.id_}
                       </div>
+                      <div className="DAT_ESMobile_Content_DevideTable_Left_ItemList_Item_Container">
+                        <div
+                          className="DAT_ESMobile_Content_DevideTable_Left_ItemList_Item_Container_Name"
+                          style={{ fontSize: "16px" }}
+                        >
+                          {item.sn_}
+                        </div>
 
-                      <div
-                        className="DAT_ESMobile_Content_DevideTable_Left_ItemList_Item_Info"
-                        style={{
-                          fontSize: "14px",
-                          color: "grey",
-                          minWidth: "100px",
-                        }}
-                      >
-                        {item.name_}
+                        <div
+                          className="DAT_ESMobile_Content_DevideTable_Left_ItemList_Item_Container_Info"
+                          style={{
+                            fontSize: "14px",
+                            color: "grey",
+                            minWidth: "100px",
+                          }}
+                        >
+                          {item.name_}
+                        </div>
                       </div>
                     </div>
                     <div
