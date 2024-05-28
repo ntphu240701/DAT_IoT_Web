@@ -264,10 +264,7 @@ export default function GroupRole(props) {
     };
 
     return (
-      <div
-      // className="DAT_GR_Content_DevideTable"
-      // style={{ height: "100% !important", width: "100% !important" }}
-      >
+      <>
         {isBrowser
           ?
           <>
@@ -596,7 +593,7 @@ export default function GroupRole(props) {
             }
           </>
         }
-      </div>
+      </>
     );
   };
 
@@ -665,12 +662,12 @@ export default function GroupRole(props) {
   };
 
   return (
-    <div
-      style={{ position: 'relative', top: '0', left: '0', width: '100%', height: '100vh' }}
-    >
+    <>
       {isBrowser
         ?
-        <>
+        <div
+          style={{ position: 'relative', top: '0', left: '0', width: '100%', height: '100vh' }}
+        >
           <div className="DAT_GRHeader">
             <div className="DAT_GRHeader_Title">
               <PiUsersFour color="gray" size={25} />
@@ -725,7 +722,55 @@ export default function GroupRole(props) {
               />
             </div>
           </div>
-        </>
+
+          {createState ? (
+            <div className="DAT_PopupBG">
+              <CreateGroupRole handleClose={handleCloseCreate} />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {popupState ? (
+            <div className="DAT_PopupBG">
+              <Popup handleClose={handleCloseDel} />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {addState ? (
+            <div className="DAT_PopupBG">
+              <AddUsers handleClose={handleCloseAdd} />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {groupDelState ? (
+            <div className="DAT_PopupBG">
+              <ConfirmDeleteGroup handleClose={handleCloseGroupDel} />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {editState ? (
+            <div className="DAT_PopupBG">
+              <EditGroup handleClose={handleCloseEdit} />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {editrole ? (
+            <div className="DAT_PopupBG">
+              <EditRole handleClose={handleCloseEditRole} />
+            </div>
+          ) : (
+            <></>
+          )}
+        </div>
         :
         <>
           <div className="DAT_ProjectHeaderMobile">
@@ -769,56 +814,56 @@ export default function GroupRole(props) {
               />
             </div>
           </div>
+
+          {createState ? (
+            <div className="DAT_PopupBGMobile">
+              <CreateGroupRole handleClose={handleCloseCreate} />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {popupState ? (
+            <div className="DAT_PopupBGMobile">
+              <Popup handleClose={handleCloseDel} />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {addState ? (
+            <div className="DAT_PopupBGMobile">
+              <AddUsers handleClose={handleCloseAdd} />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {groupDelState ? (
+            <div className="DAT_PopupBGMobile">
+              <ConfirmDeleteGroup handleClose={handleCloseGroupDel} />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {editState ? (
+            <div className="DAT_PopupBGMobile">
+              <EditGroup handleClose={handleCloseEdit} />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {editrole ? (
+            <div className="DAT_PopupBGMobile">
+              <EditRole handleClose={handleCloseEditRole} />
+            </div>
+          ) : (
+            <></>
+          )}
         </>
       }
-
-      {createState ? (
-        <div className="DAT_PopupBG">
-          <CreateGroupRole handleClose={handleCloseCreate} />
-        </div>
-      ) : (
-        <></>
-      )}
-
-      {popupState ? (
-        <div className="DAT_PopupBG">
-          <Popup handleClose={handleCloseDel} />
-        </div>
-      ) : (
-        <></>
-      )}
-
-      {addState ? (
-        <div className="DAT_PopupBG">
-          <AddUsers handleClose={handleCloseAdd} />
-        </div>
-      ) : (
-        <></>
-      )}
-
-      {groupDelState ? (
-        <div className="DAT_PopupBG">
-          <ConfirmDeleteGroup handleClose={handleCloseGroupDel} />
-        </div>
-      ) : (
-        <></>
-      )}
-
-      {editState ? (
-        <div className="DAT_PopupBG">
-          <EditGroup handleClose={handleCloseEdit} />
-        </div>
-      ) : (
-        <></>
-      )}
-
-      {editrole ? (
-        <div className="DAT_PopupBG">
-          <EditRole handleClose={handleCloseEditRole} />
-        </div>
-      ) : (
-        <></>
-      )}
-    </div>
+    </>
   );
 }

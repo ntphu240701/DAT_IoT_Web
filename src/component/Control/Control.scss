@@ -72,7 +72,7 @@
 .DAT_ProjectHeaderMobile {
     width: 98%;
     margin: auto;
-    margin-top: 70px;
+    padding-top: 70px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -204,6 +204,7 @@
 .DAT_ProjectMobile {
     width: 98%;
     margin: auto;
+    margin-bottom: 100px;
 
     &_Content {
         background-color: white;
@@ -4084,16 +4085,6 @@
 }
 
 .DAT_ScreenMobile {
-    width: 99%;
-    margin: auto;
-    height: calc(100vh - 160px);
-    background-color: rgba(240, 242, 245, 1);
-    // display: flex;
-    // gap: 10px;
-    // padding: 0px 10px 10px 10px;
-    box-sizing: border-box;
-    // margin-top: 10px;
-
     &_Tit {
         height: 60px;
         font-size: 18px;
@@ -4118,16 +4109,20 @@
     }
 
     &_main {
+        width: 98%;
+        margin: auto;
+        margin-bottom: 10px;
         overflow-y: scroll;
-        height: calc(100vh - 220px);
+        -ms-overflow-style: none;
+        scrollbar-width: none;
 
-        background-color: rgb(241, 241, 241);
-        box-shadow:
-            2px 2px 5px rgba(128, 128, 128, 0.1),
-            -2px -2px 5px rgba(128, 128, 128, 0.1);
+        &::-webkit-scrollbar {
+            display: none;
+            /* Safari and Chrome */
+        }
 
-        // border-radius: 5px;
-        // border: solid 1px rgb(199, 199, 199);
+        height: calc(100vh - 300px);
+
         &_item {
             border-radius: 7px;
             background-color: white;
@@ -4193,78 +4188,13 @@
                 gap: 10px;
             }
         }
-
-        // &_item {
-        //     // border-radius: 5px;
-        //     display: flex;
-        //     gap: 25px;
-        //     align-items: center;
-        //     justify-content: space-between;
-        //     padding: 10px;
-        //     border-top: solid 1px rgb(199, 199, 199);
-        //     background-color: rgb(250, 250, 250);
-
-        //     &_content {
-        //         cursor: pointer;
-
-        //         &_name {
-        //             font-size: 17px;
-        //             font-family: Montserrat-SemiBold;
-        //             display: flex;
-        //             align-items: center;
-        //             text-align: justify;
-        //             min-width: 100px;
-        //             max-width: 120px;
-
-        //             &_content {
-        //                 max-width: 100px;
-        //                 white-space: nowrap;
-        //                 overflow: hidden;
-        //                 text-overflow: ellipsis;
-        //             }
-
-        //             &_state {
-        //                 display: flex;
-        //                 align-items: center;
-        //                 margin-left: 4px;
-        //             }
-        //         }
-
-        //         &_sn {
-        //             color: gray;
-        //             font-size: 12px;
-        //         }
-        //     }
-
-        //     &_des {
-        //         font-size: 15px;
-        //         color: gray;
-        //         text-align: justify;
-        //         white-space: nowrap;
-        //         overflow: hidden;
-        //         text-overflow: ellipsis;
-        //     }
-
-        //     &:hover {
-        //         background-color: rgb(230, 230, 230);
-        //     }
-        // }
     }
 
     &_sub {
-        // flex: 4;
-        // padding: 10px;
-
-        box-sizing: border-box;
-        // position: relative;
-        // border-radius: 5px;
-        background-color: rgb(241, 241, 241);
-
-        // box-shadow:
-        //     2px 2px 5px rgba(128, 128, 128, 0.1),
-        //     -2px -2px 5px rgba(128, 128, 128, 0.1);
+        width: 98%;
+        margin: auto;
+        margin-bottom: 10px;
         overflow-y: scroll;
-
         -ms-overflow-style: none;
         scrollbar-width: none;
 
@@ -4273,22 +4203,16 @@
             /* Safari and Chrome */
         }
 
-        height: calc(100vh - 210px);
+        height: calc(100vh - 300px);
 
         &_list {
-            // display: grid;
-            // gap: 10px;
-            // grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            padding-top: 10px;
+            // padding-top: 10px;
 
             &_item {
                 background-color: white;
                 border: solid 1px rgb(199, 199, 199);
                 border-radius: 5px;
-                margin-bottom: 10px;
-                // padding: 16px;
-                // width: 200px;
-
+                margin-top: 10px;
                 position: relative;
                 background-color: rgb(255, 255, 255);
 

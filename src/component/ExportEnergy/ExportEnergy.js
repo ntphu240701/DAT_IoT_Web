@@ -10,6 +10,7 @@ import moment from 'moment-timezone';
 import { FaFileExcel } from 'react-icons/fa';
 import fileDownload from 'js-file-download';
 import { format, eachDayOfInterval } from 'date-fns';
+import { isBrowser } from 'react-device-detect';
 
 function ExportEnergy(props) {
     const dataLang = useIntl();
@@ -128,7 +129,7 @@ function ExportEnergy(props) {
     }
 
 
-    const exportExcelDaily = async(e) => {
+    const exportExcelDaily = async (e) => {
         // console.log(logger_.current, machine_.current.value,reporttype, moment(date_.current.value).format('MM/DD/YYYY'), type_.current.value, from_.current.value, to_.current.value)
         // console.log(gateway, report, machine.current.value, moment(date.current.value).format('MM/DD/YYYY'), type_time.current.value, from.current.value, to.current.value)
         if (list.length > 0) {
@@ -152,8 +153,8 @@ function ExportEnergy(props) {
 
                         console.log(res)
                         if (res.type === 'application/json') {
-                            
-                        }else{
+
+                        } else {
                             fileDownload(res, `Daily_All_${list[i].name}_${moment(date_.current.value).format('MMDDYYYY')}.xlsx`)
                         }
                         // axios.post(host.DEVICE + "/ReportDaily", { deviceid: gateway, code: machine.current.value, name: reportm.value[i].name, register: reportm.value[i].register, date: moment(date.current.value).format('MM/DD/YYYY'), time: newData, type: type_time.current.value }, { responseType: 'blob' }, { secure: true, reconnect: true }).then(
@@ -191,8 +192,8 @@ function ExportEnergy(props) {
 
                 console.log(res)
                 if (res.type === 'application/json') {
-                    
-                }else{
+
+                } else {
                     fileDownload(res, `Daily_All_${list[i].name}_${moment(date_.current.value).format('MMDDYYYY')}.xlsx`)
                 }
             }
@@ -205,14 +206,14 @@ function ExportEnergy(props) {
                     name: list[i].name,
                     register: list[i].register,
                     date: moment(date_.current.value).format('MM/DD/YYYY'),
-                    time:(dayofweek === 0) ? Mid_Weekend : Mid_Week,
+                    time: (dayofweek === 0) ? Mid_Weekend : Mid_Week,
                     type: (dayofweek === 0) ? "custom" : type_.current.value
                 })
 
                 console.log(res)
                 if (res.type === 'application/json') {
-                    
-                }else{
+
+                } else {
                     fileDownload(res, `Daily_Mid_${list[i].name}_${moment(date_.current.value).format('MMDDYYYY')}.xlsx`)
                 }
 
@@ -231,11 +232,11 @@ function ExportEnergy(props) {
 
                 console.log(res)
                 if (res.type === 'application/json') {
-                    
-                }else{
+
+                } else {
                     fileDownload(res, `Daily_Low_${list[i].name}_${moment(date_.current.value).format('MMDDYYYY')}.xlsx`)
                 }
-                
+
             }
 
         } else {
@@ -245,7 +246,7 @@ function ExportEnergy(props) {
     }
 
 
-    const exportExcelMonth = async(e) => {
+    const exportExcelMonth = async (e) => {
         // console.log(gateway, report, machine.current.value, moment(month.current.value).format('MM/YYYY'), type_month.current.value, datefrom.current.value, dateto.current.value)
         if (list.length > 0) {
 
@@ -270,8 +271,8 @@ function ExportEnergy(props) {
                     })
                     console.log(res)
                     if (res.type === 'application/json') {
-                        
-                    }else{
+
+                    } else {
                         fileDownload(res, `Month_${list[i].name}_${moment(month_.current.value).format('MMYYYY')}.xlsx`)
                     }
 
@@ -315,10 +316,14 @@ function ExportEnergy(props) {
                 </div>
             </div>
 
-            <div className="DAT_Export">
+            <div className="DAT_Export"
+                style={{ height: isBrowser ? "calc(100vh - 130px)" : "calc(100vh - 210px)" }}
+            >
                 <div className="DAT_Export_Left">
                     <div className="DAT_Export_Left_Tit" >Thiết bị</div>
-                    <div className="DAT_Export_Left_Box">
+                    <div className="DAT_Export_Left_Box"
+                        style={{ height: isBrowser ? "calc(100vh - 180px)" : "calc(100vh - 260px)" }}
+                    >
                         {
                             logger.map((item, i) => {
                                 return (
@@ -460,6 +465,8 @@ function ExportEnergy(props) {
                                         </div>
 
                                     </>
+                                default:
+                                    return <></>
                             }
                         })()}
 

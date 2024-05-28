@@ -431,12 +431,12 @@ export default function Warn(props) {
   }, [dataWarn.value]);
 
   return (
-    <div
-      style={{ position: 'relative', top: '0', left: '0', width: '100%', height: '100vh' }}
-    >
+    <>
       {isBrowser
         ?
-        <>
+        <div
+          style={{ position: 'relative', top: '0', left: '0', width: '100%', height: '100vh' }}
+        >
           <div className="DAT_WarnHeader">
             <div className="DAT_WarnHeader_Title">
               <LuMailWarning color="gray" size={25} />
@@ -558,7 +558,13 @@ export default function Warn(props) {
               />
             </div>
           </div>
-        </>
+
+          <div className="DAT_PopupBG"
+            style={{ height: popupState ? "100vh" : "0px" }}
+          >
+            <WarnPopup boxid={boxid} level={level} plant={plant} device={device} cause={cause} solution={solution} type={type} handleClose={handleClosePopup} />
+          </div>
+        </div>
         :
         <>
           <div className="DAT_WarnHeaderMobile">
@@ -843,14 +849,14 @@ export default function Warn(props) {
               }
             })()}
           </div>
+
+          <div className="DAT_PopupBG"
+            style={{ height: popupState ? "100vh" : "0px" }}
+          >
+            <WarnPopup boxid={boxid} level={level} plant={plant} device={device} cause={cause} solution={solution} type={type} handleClose={handleClosePopup} />
+          </div>
         </>
       }
-
-      <div className="DAT_PopupBG"
-        style={{ height: popupState ? "100vh" : "0px" }}
-      >
-        <WarnPopup boxid={boxid} level={level} plant={plant} device={device} cause={cause} solution={solution} type={type} handleClose={handleClosePopup} />
-      </div>
-    </div>
+    </>
   );
 }
