@@ -49,10 +49,11 @@ export default function GroupRole(props) {
   const [editState, setEditState] = useState(false);
   const [groupDelState, setGroupDelState] = useState(false);
   const [editrole, setEditrole] = useState(false);
+  const [userList, setUserlist] = useState(false);
 
   const GroupUsers = (props) => {
     const dataLang = useIntl();
-    const [userList, setUserlist] = useState(false);
+    // const [userList, setUserlist] = useState(false);
 
     const colorbackground = {
       master: "rgba(255, 0, 0)",
@@ -379,7 +380,7 @@ export default function GroupRole(props) {
             {userList
               ?
               <div className="DAT_GRMobile_Content_DevideTable_Right">
-                <div className="DAT_GRMobile_Content_DevideTable_Right_Head">
+                {/* <div className="DAT_GRMobile_Content_DevideTable_Right_Head">
                   <IoCaretBackOutline
                     style={{ cursor: "pointer" }}
                     size={20}
@@ -390,7 +391,7 @@ export default function GroupRole(props) {
                     }}
                   />
                   <div>{dataLang.formatMessage({ id: "roleList" })}</div>
-                </div>
+                </div> */}
                 <div className="DAT_GRMobile_Content_DevideTable_Right_ItemList">
                   {groupID.value === 0
                     ? <Empty />
@@ -516,9 +517,9 @@ export default function GroupRole(props) {
               <div className="DAT_GRMobile_Content_DevideTable_Left"
                 style={{ width: "100% !important", height: "100%" }}
               >
-                <div className="DAT_GRMobile_Content_DevideTable_Left_Head">
+                {/* <div className="DAT_GRMobile_Content_DevideTable_Left_Head">
                   {dataLang.formatMessage({ id: "grouprole" })}
-                </div>
+                </div> */}
 
                 <div className="DAT_GRMobile_Content_DevideTable_Left_ItemList">
                   {group.value.map((item, index) => (
@@ -531,25 +532,33 @@ export default function GroupRole(props) {
                             : "",
                       }}
                     >
-                      <div>
-                        <div className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_Name"
+                      <div style={{ display: "flex" }}>
+                        <div className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_ID"
                           style={{ fontSize: "16px" }}
-                          id={item.id_}
-                          onClick={(e) => { handleChangeGroup(e); setUserlist(true); }}
                         >
-                          {item.name_}
+                          {index + 1}
                         </div>
+                        <div className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_Container">
+                          <div className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_Container_Name"
+                            style={{ fontSize: "16px" }}
+                            id={item.id_}
+                            onClick={(e) => { handleChangeGroup(e); setUserlist(true); }}
+                          >
+                            {item.name_}
+                          </div>
 
-                        <div className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_Info"
-                          style={{
-                            fontSize: "14px",
-                            color: "grey",
-                            maxWidth: "100px",
-                          }}
-                        >
-                          {item.code_}
+                          <div className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_Container_Info"
+                            style={{
+                              fontSize: "14px",
+                              color: "grey",
+                              maxWidth: "100px",
+                            }}
+                          >
+                            {item.code_}
+                          </div>
                         </div>
                       </div>
+
                       <div className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_Shortcut"
                         id={item.id_ + "_dot"}
                         onClick={(e) => { handleShowFunction(e); groupID.value = item.id_ }}
@@ -775,25 +784,34 @@ export default function GroupRole(props) {
         <>
           <div className="DAT_ProjectHeaderMobile">
             <div className="DAT_ProjectHeaderMobile_Top">
+              {userList
+                ? <IoCaretBackOutline
+                  size={40}
+                  color="#0B1967"
+                  onClick={() => setUserlist(false)}
+                />
+                : <></>}
               <div className="DAT_ProjectHeaderMobile_Top_Filter"
                 style={{
                   backgroundColor:
-                    groupID.value === 0 ? "rgb(235, 235, 228)" : "white",
+                    userList ? "rgb(235, 235, 228)" : "white",
                 }}
               >
                 <CiSearch color="gray" size={20} />
                 <input
-                  disabled={groupID.value === 0 ? true : false}
+                  disabled={userList ? true : false}
                   type="text"
                   placeholder={dataLang.formatMessage({ id: "enterInfo" })}
                   onChange={(e) => handleFilter(e)}
                 />
               </div>
-              <button className="DAT_ProjectHeaderMobile_Top_New"
-                onClick={() => setCreateState(true)}
-              >
-                <IoAddOutline color="white" size={20} />
-              </button>
+              {userList ?
+                <button className="DAT_ProjectHeaderMobile_Top_New"
+                  onClick={() => setCreateState(true)}
+                >
+                  <IoAddOutline color="white" size={20} />
+                </button>
+                : <></>}
             </div>
 
             <div className="DAT_ProjectHeaderMobile_Title"
