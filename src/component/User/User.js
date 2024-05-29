@@ -6,6 +6,7 @@ import { userInfor } from "../../App";
 import { useIntl } from "react-intl";
 
 import { VscAccount } from "react-icons/vsc";
+import { isBrowser } from "react-device-detect";
 
 export default function User(props) {
   const dataLang = useIntl();
@@ -122,13 +123,28 @@ export default function User(props) {
         </div>
       </div>
 
-      {popupState ? (
-        <div className="DAT_PopupBG">
-          <Popup handleClose={handleClose} editType={editType} />
-        </div>
-      ) : (
-        <></>
-      )}
+      {isBrowser
+        ?
+        <>
+          {popupState ? (
+            <div className="DAT_PopupBG">
+              <Popup handleClose={handleClose} editType={editType} />
+            </div>
+          ) : (
+            <></>
+          )}
+        </>
+        :
+        <>
+          {popupState ? (
+            <div className="DAT_PopupBGMobile">
+              <Popup handleClose={handleClose} editType={editType} />
+            </div>
+          ) : (
+            <></>
+          )}
+        </>
+      }
     </div>
   );
 }

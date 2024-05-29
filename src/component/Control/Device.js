@@ -4,7 +4,7 @@ import { host } from '../Lang/Contant';
 import { FaCheckCircle, FaRegFileAlt } from 'react-icons/fa';
 import { useIntl } from 'react-intl';
 import { ruleInfor } from '../../App';
-import { MdOutlineError } from 'react-icons/md';
+import { MdDesktopAccessDisabled, MdOutlineError } from 'react-icons/md';
 import { IoMdMore } from 'react-icons/io';
 import { Menu, MenuItem, snackbarClasses } from '@mui/material';
 import PopupState, { bindMenu, bindToggle, bindPopper, bindHover } from 'material-ui-popup-state';
@@ -16,7 +16,7 @@ import { SettingContext } from '../Context/SettingContext';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { plantState } from './Signal';
 import Popup from './Popup';
-import { isBrowser } from 'react-device-detect';
+import { isBrowser, useMobileOrientation } from 'react-device-detect';
 import { AiOutlineAppstoreAdd } from 'react-icons/ai';
 import PopupMonitor from './PopupMonitor';
 import { TbDeviceDesktopPlus } from 'react-icons/tb';
@@ -26,6 +26,9 @@ import Popper from "@mui/material/Popper";
 import Fade from "@mui/material/Fade";
 import Paper from "@mui/material/Paper";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import { alertDispatch } from '../Alert/Alert';
+import { CgScreen } from "react-icons/cg";
+import { PiScreencastDuotone } from 'react-icons/pi';
 
 export const device = signal([]);
 export const deviceData = signal([]);
@@ -44,7 +47,7 @@ function Device(props) {
     const [dev, setDev] = useState({});
     const [monitor, setMonitor] = useState({});
     const [monitorList, setMonitorList] = useState(false);
-
+    const { isLandscape } = useMobileOrientation()
 
 
     const handleEdit = (e) => {
@@ -75,26 +78,26 @@ function Device(props) {
 
 
 
-    const handleScreen = (e) => {
+    const handleScreen = (id) => {
         // console.log(e.currentTarget.id);
-        let arr = e.currentTarget.id.split("_");
+        // let arr = e.currentTarget.id.split("_");
         // console.log(arr);
         const getScreen = async () => {
             let res = await callApi("post", host.DATA + "/getLoggerScreen", {
-                id: arr[0],
+                id: id,
             });
-            // console.log(res);
-            if (res.status) {
+            console.log(res);
+            if (res.status && res.data.length > 0) {
 
 
 
-                let index = deviceData.value.findIndex((data) => data.id_ == arr[0])
+                let index = deviceData.value.findIndex((data) => data.id_ == id)
                 // console.log(res.data, arr[0], deviceData.value[index].sn_)
 
                 settingDispatch({
                     type: "LOAD_SCREEN",
                     payload: {
-                        currentID: arr[0],
+                        currentID: id,
                         currentSN: deviceData.value[index].sn_,
                         currentName: deviceData.value[index].name_,
                         screen: res.data,
@@ -128,6 +131,8 @@ function Device(props) {
 
                 plantState.value = 'toollist';
 
+            } else {
+                alertDispatch(dataLang.formatMessage({ id: 'alert_63' }));
             }
         }
 
@@ -146,7 +151,8 @@ function Device(props) {
             // console.log(res)
             if (res.status) {
                 // setDevice(res.data)
-                device.value = res.data
+                let temp = res.data.sort((a, b) => a.id_ - b.id_)
+                device.value = temp
             }
         }
 
@@ -168,6 +174,12 @@ function Device(props) {
         let arr = e.currentTarget.id.split("_");
         // console.log(arr);
         deviceCurrent.value = arr[0]
+        let i = device.value.findIndex((data) => data.id_ == arr[0]);
+        console.log(device.value[i])
+        if (device.value[i].defaultscreenstate_ && device.value[i].defaultscreenid_ !== 0) {
+            handleScreen(device.value[i].defaultscreenid_)
+        }
+
         const getList = async () => {
 
             let res = await callApi("post", host.DATA + "/getLoggerData", {
@@ -184,6 +196,49 @@ function Device(props) {
         getList();
     }
 
+    const handleDefaultScreen = async (e) => {
+
+        let arr = e.currentTarget.id.split("_");
+        console.log(arr);
+
+        let res = await callApi("post", host.DATA + "/setDefaultScreen", {
+            loggerdataid: arr[0],
+            sn: arr[1],
+
+        })
+
+        console.log(res);
+        if (res.status) {
+            console.log(device.value)
+            let i = device.value.findIndex((data) => data.sn_ == arr[1]);
+            device.value[i].defaultscreenid_ = arr[0];
+            device.value[i].defaultscreenstate_ = 1;
+            alertDispatch(dataLang.formatMessage({ id: 'alert_64' }));
+
+        }
+    }
+
+    const handleDisableDefaultScreen = async (e) => {
+
+        let arr = e.currentTarget.id.split("_");
+        console.log(arr);
+        let res = await callApi("post", host.DATA + "/disableDefaultScreen", {
+
+            sn: arr[0],
+
+        })
+
+        console.log(res);
+        if (res.status) {
+            console.log(device.value)
+            let i = device.value.findIndex((data) => data.sn_ == arr[0]);
+            device.value[i].defaultscreenstate_ = 0;
+            alertDispatch(dataLang.formatMessage({ id: 'alert_65' }));
+
+        }
+    }
+
+
 
     return (
         <>
@@ -194,7 +249,7 @@ function Device(props) {
                         <div className="DAT_Screen_Left">
                             <div className='DAT_Screen_Left_head'>
                                 <div>
-                                    {dataLang.formatMessage({ id: 'devicelist' })}
+                                    {props.bu === 'elev' ? dataLang.formatMessage({ id: 'gatewaylist' }) : dataLang.formatMessage({ id: 'devicelist' })}
                                 </div>
                                 {ruleInfor.value.setting.device.add
 
@@ -285,6 +340,18 @@ function Device(props) {
                                                                         </MenuItem>
                                                                         : <></>
                                                                     }
+
+                                                                    <MenuItem
+                                                                        id={`${data.sn_}_default`}
+                                                                        onClick={(e) => { handleDisableDefaultScreen(e); popupState.close(); }}
+                                                                    >
+                                                                        <MdDesktopAccessDisabled size={16} />
+                                                                        &nbsp;
+                                                                        {dataLang.formatMessage({ id: "disdefault" })}
+                                                                    </MenuItem>
+
+
+
                                                                 </Menu>
                                                             </div>)}
                                                         </PopupState>
@@ -301,7 +368,7 @@ function Device(props) {
                         <div className="DAT_Screen_Right">
                             <div className='DAT_Screen_Right_head'>
                                 <div>
-                                    {dataLang.formatMessage({ id: 'monitorlist' })}
+                                    {props.bu === 'elev' ? dataLang.formatMessage({ id: 'elevlist' }) : dataLang.formatMessage({ id: 'monitorlist' })}
                                 </div>
                                 {deviceCurrent.value === 0
                                     ? <></>
@@ -320,7 +387,7 @@ function Device(props) {
                                                 <div className='DAT_Screen_Right_sub_list_item_content' >
                                                     <div className='DAT_Screen_Right_sub_list_item_content_name'
                                                         id={`${data.id_}_SCREEN`}
-                                                        onClick={(e) => handleScreen(e)}
+                                                        onClick={(e) => handleScreen(data.id_)}
                                                     >
                                                         <div className='DAT_Screen_Right_sub_list_item_content_name_icon' >
                                                             <FiMonitor size={20} />
@@ -333,6 +400,13 @@ function Device(props) {
                                                 </div>
                                                 {ruleInfor.value.setting.monitor.modify || ruleInfor.value.setting.monitor.remove
                                                     ? <div className='DAT_Screen_Right_sub_list_item_modify' >
+                                                        <PiScreencastDuotone
+                                                            size={18}
+                                                            color='gray'
+                                                            style={{ cursor: 'pointer' }}
+                                                            id={`${data.id_}_${data.sn_}_edit`}
+                                                            onClick={(e) => { handleDefaultScreen(e) }}
+                                                        />
                                                         {ruleInfor.value.setting.monitor.modify
                                                             ? <FiEdit
                                                                 size={16}
@@ -385,7 +459,7 @@ function Device(props) {
                                         color="black"
                                         onClick={() => setMonitorList(false)}
                                     />
-                                    {dataLang.formatMessage({ id: 'monitorlist' })}
+                                    {props.bu === 'elev' ? dataLang.formatMessage({ id: 'elevlist' }) : dataLang.formatMessage({ id: 'monitorlist' })}
                                 </div>
                                 {ruleInfor.value.setting.monitor.add
                                     ? <TbDeviceDesktopPlus
@@ -396,7 +470,7 @@ function Device(props) {
                                     : <></>
                                 }
                             </div>
-                            <div className='DAT_ScreenMobile_sub'>
+                            <div className='DAT_ScreenMobile_sub' style={{ height: isLandscape ? "calc(100vh - 220px)" : "calc(100vh - 300px)" }}>
                                 <div className='DAT_ScreenMobile_sub_list'>
                                     {deviceData.value.map((data, i) => {
                                         return (
@@ -404,7 +478,7 @@ function Device(props) {
                                                 <div className='DAT_ScreenMobile_sub_list_item_content'>
                                                     <div className='DAT_ScreenMobile_sub_list_item_content_name'
                                                         id={`${data.id_}_SCREEN`}
-                                                        onClick={(e) => handleScreen(e)}
+                                                        onClick={(e) => handleScreen(data.id_)}
                                                     >
                                                         <div className='DAT_ScreenMobile_sub_list_item_content_name_icon' >
                                                             <FiMonitor size={60} />
@@ -415,6 +489,13 @@ function Device(props) {
                                                 </div>
                                                 {ruleInfor.value.setting.monitor.modify || ruleInfor.value.setting.monitor.remove
                                                     ? <div className='DAT_ScreenMobile_sub_list_item_modify'>
+                                                        <PiScreencastDuotone
+                                                            size={18}
+                                                            color='gray'
+                                                            style={{ cursor: 'pointer' }}
+                                                            id={`${data.id_}_${data.sn_}_edit`}
+                                                            onClick={(e) => { handleDefaultScreen(e) }}
+                                                        />
                                                         {ruleInfor.value.setting.monitor.modify
                                                             ? <FiEdit
                                                                 size={16}
@@ -444,7 +525,7 @@ function Device(props) {
                         :
                         <div className="DAT_ScreenMobile">
                             <div className="DAT_ScreenMobile_Tit">
-                                {dataLang.formatMessage({ id: 'devicelist' })}
+                                {props.bu === 'elev' ? dataLang.formatMessage({ id: 'gatewaylist' }) : dataLang.formatMessage({ id: 'devicelist' })}
                                 {ruleInfor.value.setting.device.add
                                     ? <AiOutlineAppstoreAdd
                                         size={20}
@@ -454,7 +535,7 @@ function Device(props) {
                                     : <></>
                                 }
                             </div>
-                            <div className="DAT_ScreenMobile_main">
+                            <div className="DAT_ScreenMobile_main" style={{ height: isLandscape ? "calc(100vh - 220px)" : "calc(100vh - 300px)" }} >
                                 {device.value.map((data, i) => {
                                     return (
                                         <div className="DAT_ScreenMobile_main_item" key={i}    >
@@ -540,6 +621,16 @@ function Device(props) {
                                                         />
                                                         : <></>
                                                     }
+
+                                                    <MdDesktopAccessDisabled
+                                                        size={16}
+                                                        color='red'
+                                                        style={{ cursor: 'pointer' }}
+                                                        id={`${data.sn_}_default`}
+                                                        onClick={(e) => { handleDisableDefaultScreen(e); }}
+                                                    />
+
+
                                                 </div>
                                                 : <></>}
 
@@ -591,12 +682,12 @@ function Device(props) {
                         </div>
                     }
 
-                    <div className="DAT_PopupBG"
+                    <div className="DAT_PopupBGMobile"
                         style={{ display: popupState ? "block" : "none" }}
                     >
                         <Popup handleClose={handleClosePopup} popupType={popupType} type={"device"} data={dev} plant={props.data} />
                     </div>
-                    <div className="DAT_PopupBG"
+                    <div className="DAT_PopupBGMobile"
                         style={{ display: popupMonitor ? "block" : "none" }}
                     >
                         <PopupMonitor handleClose={handleCloseMonitor} popupType={popupType} type={"monitor"} monitor={monitor} plant={props.data} />

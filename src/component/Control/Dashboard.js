@@ -100,14 +100,14 @@ export default function Dashboard(props) {
 
 
 
-  const defaultProps = {
-    center: {
-      lat: 16.0544068,
-      lng: 108.2021667,
-    },
-    zoom: 5,
-    mapId: "my_map",
-  };
+  // const defaultProps = {
+  //   center: {
+  //     lat: 16.0544068,
+  //     lng: 108.2021667,
+  //   },
+  //   zoom: 5,
+  //   mapId: "my_map2",
+  // };
 
   const loader = new Loader({
     apiKey: process.env.REACT_APP_GGKEY,
@@ -116,33 +116,41 @@ export default function Dashboard(props) {
   });
 
   const initMap = async (data) => {
-    const { AdvancedMarkerElement } = await loader.importLibrary("marker");
-    const { Map } = await loader.importLibrary("maps");
 
-    let map = new Map(document.getElementById("map"), defaultProps);
-    // console.log(data.lat_);
 
-    const marker = {
-      lat: parseFloat(data.lat_),
-      lng: parseFloat(data.long_),
-    };
-    const markerElement = new AdvancedMarkerElement({
-      position: marker,
-      map: map,
-      title: data.name_,
-    });
-    // markerElement.addListener("click", () => {
-    //   plantState.value = "info";
-    //   projectData.value = item;
-    //   sidebartab.value = "Monitor";
-    //   sidebartabli.value = "/Project";
-    // });
-    return markerElement;
+
+    
+    loader.load().then(async (google) => {
+      const defaultProps = {
+        center: {
+          lat: parseFloat(data.lat_),
+          lng: parseFloat(data.long_),
+        },
+        zoom: 15.0,
+        mapId: "my_map2",
+      };
+
+      const { Map } = await google.maps.importLibrary("maps");
+      const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+      let map = new Map(document.getElementById("map2"), defaultProps);
+
+     
+        const marker = { lat: parseFloat(data.lat_), lng: parseFloat(data.long_) };
+        const markerElement = new AdvancedMarkerElement({
+          position: marker,
+          map: map,
+          title: data.name_,
+        });
+        return markerElement;
+     
+    })
+
   };
 
   useEffect(() => {
 
     if (props.data) {
+      console.log(props.data);
       initMap(props.data);
 
       const getGateway = async () => {
@@ -240,7 +248,7 @@ export default function Dashboard(props) {
           <div className="DAT_MainInfo_Map">
             <div className="DAT_MainInfo_Map_Item1">
               <div
-                id="map"
+                id="map2"
                 style={{ width: "100%", height: "100%", borderRadius: "5px" }}
               ></div>
             </div>
@@ -458,7 +466,7 @@ export default function Dashboard(props) {
           <div className="DAT_MainInfoMobile_Map">
             <div className="DAT_MainInfoMobile_Map_Item1">
               <div
-                id="map"
+                id="map2"
                 style={{ width: "100%", height: "100%", borderRadius: "5px" }}
               ></div>
             </div>

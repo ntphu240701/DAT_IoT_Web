@@ -13,6 +13,10 @@ import { isBrowser } from 'react-device-detect';
 import Dashboard from './Dashboard';
 import Tooloverview from '../LibOverview/Tooloverview';
 import { OverviewContext } from '../Context/OverviewContext';
+import { RiDashboard2Line } from 'react-icons/ri';
+import { RxDashboard } from 'react-icons/rx';
+import { LuRouter } from 'react-icons/lu';
+
 const viewNav = signal(false);
 const viewStateNav = signal([false, false]);
 function Project(props) {
@@ -78,6 +82,7 @@ function Project(props) {
         plantState.value = "default";
         deviceCurrent.value = 0;
         listDevice.value = [];
+        deviceData.value = [];
         mode.value = 'overview';
         setModeState(false);
         overviewDispatch({
@@ -110,7 +115,8 @@ function Project(props) {
                         </div>
 
                         <div className="DAT_ProjectData_Header_Right">
-                            <div className="DAT_ProjectData_Header_Right_More">
+
+                            {/* <div className="DAT_ProjectData_Header_Right_More">
                                 <BsThreeDotsVertical
                                     size={20}
                                     color="white"
@@ -121,7 +127,78 @@ function Project(props) {
                                     }}
                                     onMouseLeave={() => handleOutsideView()}
                                 />
-                            </div>
+                            </div> */}
+
+
+                            {(() => {
+                                switch (mode.value) {
+                                    case "device":
+                                        return (
+                                            <>
+                                               
+
+
+
+                                                <div className="DAT_ProjectData_Header_Right_More">
+                                                    <RxDashboard
+                                                        size={20}
+                                                        color="white"
+                                                        id="overview"
+                                                        onClick={(e) => handleView(e)}
+
+                                                    />
+                                                </div>
+
+                                                <div className="DAT_ProjectData_Header_Right_More">
+                                                    <RiDashboard2Line
+                                                        size={20}
+                                                        color="white"
+                                                        id="dashboard"
+                                                        onClick={(e) => handleView(e)}
+
+                                                    />
+                                                </div>
+
+
+                                            </>
+                                        );
+                                    case "overview":
+                                        return (
+                                            <>
+
+                                                <div className="DAT_ProjectData_Header_Right_More">
+                                                    <LuRouter
+                                                        size={20}
+                                                        color="white"
+                                                        id="device"
+                                                        onClick={(e) => handleView(e)}
+
+                                                    />
+                                                </div>
+
+                                                <div className="DAT_ProjectData_Header_Right_More">
+                                                    <RiDashboard2Line
+                                                        size={20}
+                                                        color="white"
+                                                        id="dashboard"
+                                                        onClick={(e) => handleView(e)}
+
+                                                    />
+                                                </div>
+
+
+
+                                            </>
+                                        );
+                                    default:
+                                        return (
+                                            <>
+                                            </>
+                                        );
+                                }
+                            })()}
+
+
 
                             {/* {ruleInfor.value.setting.device.add
                                 ? props.data.shared_ === 1
@@ -144,7 +221,7 @@ function Project(props) {
 
                             <div className="DAT_ProjectData_Header_Right_Close"
                                 onClick={() => {
-                                   handleCloseProjet();
+                                    handleCloseProjet();
                                 }}
                             >
                                 <IoClose
@@ -162,7 +239,7 @@ function Project(props) {
                             switch (mode.value) {
                                 case "device":
                                     return (
-                                        <Device  data={props.data} popupGateway={handlePopupGateway} />
+                                        <Device bu={props.bu} data={props.data} popupGateway={handlePopupGateway} />
                                     );
                                 case "overview":
                                     return (
@@ -247,7 +324,7 @@ function Project(props) {
                         : <></>
                     }
                     {gatewayState
-                        ? <div className="DAT_AddGatewayPopup">
+                        ? <div className="DAT_PopupBG">
                             <AddGateway
                                 data={props.data}
                                 // handleInvt={handleInvt}
@@ -431,7 +508,7 @@ function Project(props) {
                     }
 
                     {gatewayState
-                        ? <div className="DAT_AddGatewayPopup">
+                        ? <div className="DAT_PopupBGMobile">
                             <AddGateway
                                 data={props.data}
                                 // handleInvt={handleInvt}

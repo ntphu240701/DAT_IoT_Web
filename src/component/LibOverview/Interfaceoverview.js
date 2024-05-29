@@ -25,6 +25,7 @@ import Gauge from "../Lib/Gauge";
 import Tablepro from "../Lib/Tablepro";
 import Picture from "../Lib/Picture";
 import View32bit from "../Lib/View32bit";
+import { ruleInfor } from "../../App";
 
 export default function Interfaceoverview(props) {
     const type = useSelector((state) => state.admin.type)
@@ -180,11 +181,11 @@ export default function Interfaceoverview(props) {
         // onMouseLeave={(e) => { disableScroll.off() }}
 
         >
-
-            {/* <div className="DAT_TlOverviewMenu" style={{ top: "10px", right: "10px" }} onClick={(event) => { handleConfig(event) }}>
+            {/* {ruleInfor.value.setting.screen.modify
+            ?<div className="DAT_TlOverviewMenu" style={{ top: "10px", right: "10px" }} onClick={(event) => { handleConfig(event) }}>
                 <TbSettingsCog size={20} />
-            </div> */}
-
+            </div>
+            :<></>} */}
 
             {/* <div className="DAT_TlOverview_Menu" style={(dropdowm) ? { display: "block" } : { display: "none", bottom: "10px", right: "10px" }}>
                 <div className="DAT_TlOverview_Menu-content" onClick={(event) => { handleConfig(event) }}>Chỉnh sửa</div>

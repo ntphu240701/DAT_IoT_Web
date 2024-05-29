@@ -136,20 +136,20 @@
     //height: 60px;
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 10px;
 
     &_content {
         // -webkit-appearance: none;
         // -moz-appearance: none;
         // appearance: none;
-        margin-left: 10px;
-        padding-left: 20px;
+        // margin-left: 10px;
+        // padding-left: 20px;
         box-sizing: border-box;
         display: flex;
         align-items: center;
-        // justify-content: center;
-        justify-content: space-between;
-        width: 200px;
+        justify-content: center;
+        // justify-content: space-between;
+        width: 160px;
         height: 30px;
         border-radius: 5px;
         // font-size: 14px;
@@ -159,6 +159,13 @@
         transition: all 0.5s ease-in;
         z-index: 1;
         cursor: pointer;
+        & span {
+            width: 140px;
+            white-space: nowrap; // ngan xuong dong
+            overflow: hidden; // an noi dung vuot ra ngoai
+            text-overflow: ellipsis; // hien thi 3 cham khi vuot ra ngoai
+        }
+       
 
         // &::before,
         // &::after {
@@ -360,7 +367,7 @@
 
         &_right {
             border-radius: 45%;
-            top:1px;
+            top: 1px;
             right: -25px;
             position: absolute;
             width: 25px;
@@ -638,7 +645,7 @@
 
                 &-index {
                     width: 35px;
-                    
+
                     // background-color: #03a9f4;
                 }
 
@@ -1643,7 +1650,7 @@
 
         &-content {
             padding: 10px;
-          
+
             margin-top: 15px;
         }
     }

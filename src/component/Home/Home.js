@@ -23,6 +23,8 @@ import { FaMapLocation } from "react-icons/fa6";
 import Map from "./Map";
 import { plantState } from "../Control/Signal";
 import Project from "../Control/Project";
+import { MdOutlineVideoSettings, MdSettings } from "react-icons/md";
+import { PiScreencastDuotone } from "react-icons/pi";
 // import MenuTop from "../MenuTop/MenuTop";
 
 
@@ -115,7 +117,7 @@ export default function Home(props) {
                 }
                 // console.log(new Date().getTime() - movestart.value)
                 // console.log(new Date().getTime() - movestart.value)
-                if ((new Date().getTime() - movestart.value) < 120) {
+                if ((new Date().getTime() - movestart.value) < 150) {
                         // console.log(page)
                         movestart.value = 0
                         nevigate('/' + page_[page])
@@ -125,8 +127,8 @@ export default function Home(props) {
 
 
         const handleWiget = () => {
-               
-                if ((new Date().getTime() - movestart.value) < 120) {
+
+                if ((new Date().getTime() - movestart.value) < 150) {
                         // console.log(page)
                         movestart.value = 0
                         setWidgetState(true)
@@ -135,29 +137,39 @@ export default function Home(props) {
         }
 
         const handleMap = () => {
-               
-                if ((new Date().getTime() - movestart.value) < 120) {
+
+                if ((new Date().getTime() - movestart.value) < 150) {
                         // console.log(page)
                         movestart.value = 0
-                        setMapState(true)
+
+                        const getAllPlant = async (usr, id, type) => {
+
+                                let res = await callApi("post", host.DATA + "/getAllPlant", {
+                                        usr: usr,
+                                        partnerid: id,
+                                        type: type,
+                                })
+                                console.log(res)
+                                if (res.status) {
+                                        // setLogger(res.data)
+                                        setPlant(res.data)
+                                        setMapState(true)
+                                }
+                        }
+                        getAllPlant(user, userInfor.value.partnerid, userInfor.value.type)
                 }
 
         }
 
-        useEffect(() => {
-                const getAllPlant = async (usr, id, type) => {
-
-                        let res = await callApi("post", host.DATA + "/getAllPlant", {
-                                usr: usr,
-                                partnerid: id,
-                                type: type,
-                        })
-                        console.log(res)
-                        if (res.status) {
-                                // setLogger(res.data)
-                                setPlant(res.data)
-                        }
+        const handleTool = () => {
+                if ((new Date().getTime() - movestart.value) < 150) {
+                        
+                        setStep(0)
                 }
+        }
+
+        useEffect(() => {
+
                 const getAllLogger = async (usr, id, type) => {
 
                         let res = await callApi("post", host.DATA + "/getAllLogger", {
@@ -255,7 +267,7 @@ export default function Home(props) {
                 if (step === 0) {
                         getWidget(user)
                         getAllLogger(user, userInfor.value.partnerid, userInfor.value.type)
-                        getAllPlant(user, userInfor.value.partnerid, userInfor.value.type)
+                        // getAllPlant(user, userInfor.value.partnerid, userInfor.value.type)
                 }
 
                 if (step === 1) {
@@ -364,10 +376,11 @@ export default function Home(props) {
                                         <span style={{ "--i": 3 }} className="DAT_viewIOT-3D-Item">
                                         </span>
                                         <span style={{ "--i": 4 }} className="DAT_viewIOT-3D-Item">
+                                                <div className="DAT_viewIOT-3D-Item-Setting" ><MdSettings size={25} color="white" onPointerUp={() => handleWiget()} /></div>
                                                 <div className="DAT_viewIOT-3D-Item-Icon" >
-                                                        <SiPowerapps size={60} color="white" onPointerUp={() => handleWiget()} />
+                                                        <PiScreencastDuotone size={60} color="white" onPointerUp={() => handleTool()} />
                                                 </div>
-                                                <label style={{ color: (s.value === 4) ? "white" : "gray", transition: "1s" }}>{dataLang.formatMessage({ id: "utilities" })}</label>
+                                                <label style={{ color: (s.value === 4) ? "white" : "gray", transition: "1s" }}>{dataLang.formatMessage({ id: "shortcut" })}</label>
                                         </span>
                                         <span style={{ "--i": 5 }} className="DAT_viewIOT-3D-Item">
                                                 <div className="DAT_viewIOT-3D-Item-Icon" >
@@ -405,15 +418,36 @@ export default function Home(props) {
                                 <div></div>
                                 {/* <div className="DAT_viewIOT-Arrow" style={{ visibility: (s.value !== 8) ? "visible" : "hidden" }} id="next" onClick={(e) => { handeAction(e) }}><ion-icon name="chevron-forward-outline"></ion-icon></div> */}
 
-                        <div className="DAT_viewIOT-Widget" style={{ height: widgetState ? "100vh" : "0", transition: "0.5s" }}>
-                                <Widget logger={logger} widget={widget} loggerdata={loggerdata} handleClose={handleClose} />
-                        </div>
+                                <div className="DAT_viewIOT-Widget" style={{ height: widgetState ? "100vh" : "0", transition: "0.5s" }}>
+                                        <Widget logger={logger} widget={widget} loggerdata={loggerdata} handleClose={handleClose} />
+                                </div>
 
 
 
-                        <div className="DAT_viewIOT-Widget" style={{ height: mapState ? "100vh" : "0", transition: "0.5s" }}>
-                                <Map plant={plant} handleClose={handleCloseMap} handleProject={handleProject} />
-                        </div>
+                                <div className="DAT_viewIOT-Widget" style={{ height: mapState ? "100vh" : "0", transition: "0.5s" }}>
+                                        <Map plant={plant} handleClose={handleCloseMap} handleProject={handleProject} />
+                                </div>
+
+
+                                <div className="DAT_ProjectInfor" style={{ height: plantState.value === "default" ? "0px" : "100vh", transition: "0.5s", }}>
+                                        {(() => {
+                                                switch (plantState.value) {
+                                                        case "info":
+                                                                return <Project usr={user} bu={plantobj.type_} data={plantobj} />;
+                                                        case "toollist":
+                                                                return <div className="DAT_Toollist">
+                                                                        <div
+                                                                                className="DAT_Toollist-card"
+                                                                                id="CARD"
+                                                                        >
+                                                                                <Toollist bu={plantobj.type_} ></Toollist>
+                                                                        </div>
+                                                                </div>;
+                                                        default:
+                                                                return <></>;
+                                                }
+                                        })()}
+                                </div>
                         </div >
 
 
@@ -439,6 +473,7 @@ export default function Home(props) {
                                 : <></>
 
                         } */}
+
 
 
                 </>
