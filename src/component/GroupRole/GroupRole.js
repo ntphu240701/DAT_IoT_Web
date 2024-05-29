@@ -794,24 +794,22 @@ export default function GroupRole(props) {
               <div className="DAT_ProjectHeaderMobile_Top_Filter"
                 style={{
                   backgroundColor:
-                    userList ? "rgb(235, 235, 228)" : "white",
+                    groupID.value === 0 ? "rgb(235, 235, 228)" : "white",
                 }}
               >
                 <CiSearch color="gray" size={20} />
                 <input
-                  disabled={userList ? true : false}
+                  disabled={groupID.value === 0 ? true : false}
                   type="text"
                   placeholder={dataLang.formatMessage({ id: "enterInfo" })}
                   onChange={(e) => handleFilter(e)}
                 />
               </div>
-              {userList ?
-                <button className="DAT_ProjectHeaderMobile_Top_New"
-                  onClick={() => setCreateState(true)}
-                >
-                  <IoAddOutline color="white" size={20} />
-                </button>
-                : <></>}
+              <button className="DAT_ProjectHeaderMobile_Top_New"
+                onClick={() => setCreateState(true)}
+              >
+                <IoAddOutline color="white" size={20} />
+              </button>
             </div>
 
             <div className="DAT_ProjectHeaderMobile_Title"
