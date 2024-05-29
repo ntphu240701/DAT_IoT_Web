@@ -161,25 +161,36 @@ export default function GroupRole(props) {
               //   </span>
               // </div>
               <PopupState variant="popper" popupId="demo-popup-popper">
-                {(popupState) => (<div className="DAT_TableEdit">
-                  <IoMdMore size={20}   {...bindToggle(popupState)} />
-                  <Menu {...bindMenu(popupState)}>
+                {(popupState) => (
+                  <div className="DAT_TableEdit">
+                    <IoMdMore size={20} {...bindToggle(popupState)} />
+                    <Menu {...bindMenu(popupState)}>
+                      <MenuItem
+                        id={user.id_}
+                        onClick={(e) => {
+                          handleEdit(e);
+                          popupState.close();
+                        }}
+                      >
+                        <FiEdit size={14} />
+                        &nbsp;
+                        {dataLang.formatMessage({ id: "change" })}
+                      </MenuItem>
 
-                    <MenuItem id={user.id_} onClick={(e) => { handleEdit(e); popupState.close() }}>
-                      <FiEdit size={14} />&nbsp;
-                      {dataLang.formatMessage({ id: "change" })}
-                    </MenuItem>
-
-
-                    <MenuItem id={user.id_} onClick={(e) => { handleDeleteUser(e); popupState.close() }}>
-                      <IoTrashOutline size={16} />
-                      &nbsp;
-                      {dataLang.formatMessage({ id: "delete" })}
-                    </MenuItem>
-
-
-                  </Menu>
-                </div>)}
+                      <MenuItem
+                        id={user.id_}
+                        onClick={(e) => {
+                          handleDeleteUser(e);
+                          popupState.close();
+                        }}
+                      >
+                        <IoTrashOutline size={16} />
+                        &nbsp;
+                        {dataLang.formatMessage({ id: "delete" })}
+                      </MenuItem>
+                    </Menu>
+                  </div>
+                )}
               </PopupState>
             )}
             {/* <div
@@ -266,8 +277,7 @@ export default function GroupRole(props) {
 
     return (
       <>
-        {isBrowser
-          ?
+        {isBrowser ? (
           <>
             <div className="DAT_GR_Content_DevideTable">
               <div
@@ -375,10 +385,9 @@ export default function GroupRole(props) {
               </div>
             </div>
           </>
-          :
+        ) : (
           <>
-            {userList
-              ?
+            {userList ? (
               <div className="DAT_GRMobile_Content_DevideTable_Right">
                 {/* <div className="DAT_GRMobile_Content_DevideTable_Right_Head">
                   <IoCaretBackOutline
@@ -393,9 +402,9 @@ export default function GroupRole(props) {
                   <div>{dataLang.formatMessage({ id: "roleList" })}</div>
                 </div> */}
                 <div className="DAT_GRMobile_Content_DevideTable_Right_ItemList">
-                  {groupID.value === 0
-                    ? <Empty />
-                    :
+                  {groupID.value === 0 ? (
+                    <Empty />
+                  ) : (
                     <div className="DAT_GRMobile">
                       {datafilter.value?.map((item, i) => {
                         return (
@@ -410,8 +419,7 @@ export default function GroupRole(props) {
                                   justifyContent: "center",
                                   alignItems: "center",
                                   fontSize: "12px",
-                                  backgroundColor:
-                                    colorbackground[item.type_],
+                                  backgroundColor: colorbackground[item.type_],
                                   color: "white",
                                   padding: "5px",
                                 }}
@@ -481,40 +489,48 @@ export default function GroupRole(props) {
                               </div>
 
                               <div className="DAT_ProjectMobile_Content_Bottom_Right">
-                                {item.type_ !== "master"
-                                  ? ruleInfor.value.setting.rule.modify
-                                    ? <div
+                                {item.type_ !== "master" ? (
+                                  ruleInfor.value.setting.rule.modify ? (
+                                    <div
                                       className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                       id={item.id_}
                                       onClick={(e) => handleEdit(e)}
                                     >
                                       <FiEdit size={14} />
                                     </div>
-                                    : <></>
-                                  : <></>
-                                }
-                                {item.type_ !== "master"
-                                  ? ruleInfor.value.setting.rule.modify
-                                    ? <div
+                                  ) : (
+                                    <></>
+                                  )
+                                ) : (
+                                  <></>
+                                )}
+                                {item.type_ !== "master" ? (
+                                  ruleInfor.value.setting.rule.modify ? (
+                                    <div
                                       className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                       id={item.id_}
                                       onClick={(e) => handleDeleteUser(e)}
                                     >
                                       <IoTrashOutline size={16} />
                                     </div>
-                                    : <></>
-                                  : <></>}
+                                  ) : (
+                                    <></>
+                                  )
+                                ) : (
+                                  <></>
+                                )}
                               </div>
                             </div>
                           </div>
                         );
                       })}
                     </div>
-                  }
+                  )}
                 </div>
               </div>
-              :
-              <div className="DAT_GRMobile_Content_DevideTable_Left"
+            ) : (
+              <div
+                className="DAT_GRMobile_Content_DevideTable_Left"
                 style={{ width: "100% !important", height: "100%" }}
               >
                 {/* <div className="DAT_GRMobile_Content_DevideTable_Left_Head">
@@ -523,7 +539,8 @@ export default function GroupRole(props) {
 
                 <div className="DAT_GRMobile_Content_DevideTable_Left_ItemList">
                   {group.value.map((item, index) => (
-                    <div className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item"
+                    <div
+                      className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item"
                       key={index}
                       style={{
                         backgroundColor:
@@ -533,21 +550,27 @@ export default function GroupRole(props) {
                       }}
                     >
                       <div style={{ display: "flex" }}>
-                        <div className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_ID"
+                        <div
+                          className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_ID"
                           style={{ fontSize: "16px" }}
                         >
                           {index + 1}
                         </div>
                         <div className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_Container">
-                          <div className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_Container_Name"
+                          <div
+                            className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_Container_Name"
                             style={{ fontSize: "16px" }}
                             id={item.id_}
-                            onClick={(e) => { handleChangeGroup(e); setUserlist(true); }}
+                            onClick={(e) => {
+                              handleChangeGroup(e);
+                              setUserlist(true);
+                            }}
                           >
                             {item.name_}
                           </div>
 
-                          <div className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_Container_Info"
+                          <div
+                            className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_Container_Info"
                             style={{
                               fontSize: "14px",
                               color: "grey",
@@ -559,14 +582,19 @@ export default function GroupRole(props) {
                         </div>
                       </div>
 
-                      <div className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_Shortcut"
+                      <div
+                        className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_Shortcut"
                         id={item.id_ + "_dot"}
-                        onClick={(e) => { handleShowFunction(e); groupID.value = item.id_ }}
+                        onClick={(e) => {
+                          handleShowFunction(e);
+                          groupID.value = item.id_;
+                        }}
                       >
                         <IoMdMore size={20} color="grey" />
                       </div>
 
-                      <div className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More"
+                      <div
+                        className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More"
                         id={item.id_ + "_function"}
                         style={{ display: "none" }}
                         onMouseLeave={(e) => handleShowFunction(e)}
@@ -574,14 +602,16 @@ export default function GroupRole(props) {
                         {item.id_ === 1 ? (
                           <></>
                         ) : (
-                          <div className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More_Delete"
+                          <div
+                            className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More_Delete"
                             id={item.id_}
                             onClick={() => props.groupDelState()}
                           >
                             <IoTrashOutline size={18} />
                           </div>
                         )}
-                        <div className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More_Edit"
+                        <div
+                          className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More_Edit"
                           style={{ right: "40px" }}
                           id={item.id_}
                           onClick={(e) => handleEditGroup(e)}
@@ -589,7 +619,8 @@ export default function GroupRole(props) {
                           <FiEdit size={18} />
                         </div>
 
-                        <div className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More_Add"
+                        <div
+                          className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More_Add"
                           onClick={() => props.addState()}
                         >
                           <AiOutlineUserAdd size={18} />
@@ -599,9 +630,9 @@ export default function GroupRole(props) {
                   ))}
                 </div>
               </div>
-            }
+            )}
           </>
-        }
+        )}
       </>
     );
   };
@@ -672,10 +703,15 @@ export default function GroupRole(props) {
 
   return (
     <>
-      {isBrowser
-        ?
+      {isBrowser ? (
         <div
-          style={{ position: 'relative', top: '0', left: '0', width: '100%', height: '100vh' }}
+          style={{
+            position: "relative",
+            top: "0",
+            left: "0",
+            width: "100%",
+            height: "100vh",
+          }}
         >
           <div className="DAT_GRHeader">
             <div className="DAT_GRHeader_Title">
@@ -780,18 +816,21 @@ export default function GroupRole(props) {
             <></>
           )}
         </div>
-        :
+      ) : (
         <>
           <div className="DAT_ProjectHeaderMobile">
             <div className="DAT_ProjectHeaderMobile_Top">
-              {userList
-                ? <IoCaretBackOutline
+              {userList ? (
+                <IoCaretBackOutline
                   size={40}
                   color="#0B1967"
                   onClick={() => setUserlist(false)}
                 />
-                : <></>}
-              <div className="DAT_ProjectHeaderMobile_Top_Filter"
+              ) : (
+                <></>
+              )}
+              <div
+                className="DAT_ProjectHeaderMobile_Top_Filter"
                 style={{
                   backgroundColor:
                     groupID.value === 0 ? "rgb(235, 235, 228)" : "white",
@@ -805,14 +844,20 @@ export default function GroupRole(props) {
                   onChange={(e) => handleFilter(e)}
                 />
               </div>
-              <button className="DAT_ProjectHeaderMobile_Top_New"
-                onClick={() => setCreateState(true)}
-              >
-                <IoAddOutline color="white" size={20} />
-              </button>
+              {userList ? (
+                <div></div>
+              ) : (
+                <button
+                  className="DAT_ProjectHeaderMobile_Top_New"
+                  onClick={() => setCreateState(true)}
+                >
+                  <IoAddOutline color="white" size={20} />
+                </button>
+              )}
             </div>
 
-            <div className="DAT_ProjectHeaderMobile_Title"
+            <div
+              className="DAT_ProjectHeaderMobile_Title"
               style={{ marginBottom: "10px" }}
             >
               <PiUsersFour color="gray" size={25} />
@@ -879,7 +924,7 @@ export default function GroupRole(props) {
             <></>
           )}
         </>
-      }
+      )}
     </>
   );
 }
