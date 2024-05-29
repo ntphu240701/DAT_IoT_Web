@@ -204,7 +204,9 @@ export default function RegisterSetting() {
       // console.log(inf);
       if (inf.status === true) {
         if (inf.data.length > 0) {
-          setDataRegister(inf.data[0].setting_);
+          setDataRegister(
+            inf.data[0].setting_.sort((a, b) => a.addrcode - b.addrcode)
+          );
           console.log(inf.data);
         } else {
           setDataRegister([]);
