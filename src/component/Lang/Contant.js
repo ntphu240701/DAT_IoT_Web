@@ -1,5 +1,3 @@
-import RegisterSetting from "../RegisterSetting/RegisterSetting";
-
 export const host = {
   AUTH: process.env.REACT_APP_SOLAR + "/auth",
   DATA: process.env.REACT_APP_SOLAR + "/data",
@@ -12,12 +10,12 @@ export const messages = {
   en: {
     erroraddress: "Error code",
     disdefault: "Disable default",
-    shortcut:"Shortcut",
+    shortcut: "Shortcut",
     gatewaylist: "Project list",
     elevlist: "Elevator list",
-    date:"Date",
+    date: "Date",
     registersetting: "Register Setting",
-    export:'Export',
+    export: "Export",
     map: "Map",
     on: "On",
     off: "Off",
@@ -267,7 +265,6 @@ export const messages = {
     share: "Share",
     add: "Add",
     ADD: "Add",
-    export: "Export",
     cancel: "Cancel",
     confirm: "Confirm",
     choosePara: "Select Parameters",
@@ -593,6 +590,17 @@ export const messages = {
 
     // Others
     RatedPower: "Rated power",
+    machine: "Machine",
+    timeRange: "Time Range",
+    from: "From",
+    To: "To",
+    exportFile: "Export File",
+    reportDay: "Report Day",
+    reportMonth: "Report Month",
+    custom: "Custom",
+    rushHour: "Rush Hour",
+    normalHour: "Normal Hour",
+    lowHour: "Low Hour",
 
     //--------------------
     enter: "Enter ",
@@ -934,12 +942,12 @@ export const messages = {
   vi: {
     erroraddress: "Mã lỗi",
     disdefault: "Tắt màn hình mặc định",
-    shortcut:"Truy cập nhanh",
+    shortcut: "Truy cập nhanh",
     gatewaylist: "Danh sách công trình",
     elevlist: "Danh sách thang máy",
     date: "Ngày",
     registersetting: "Cài đặt thanh ghi",
-    export:'Xuất báo cáo',
+    export: "Xuất báo cáo",
     map: "Bản đồ",
     on: "Bật",
     off: "Tắt",
@@ -982,7 +990,7 @@ export const messages = {
     analyticsList: "Danh sách mẫu phân tích",
     devicelist: "Danh sách thiết bị",
     monitorlist: "Danh sách màn hình",
-    view: 'Tổng quan',
+    view: "Tổng quan",
     overview: "Tổng quan dữ liệu phát điện",
     history: "Lịch sử phát điện",
     historyInverter: "Lịch sử biến tần",
@@ -1185,7 +1193,6 @@ export const messages = {
     share: "Chia sẻ",
     add: "Thêm",
     ADD: "Thêm",
-    export: "Xuất báo cáo",
     cancel: "Hủy",
     confirm: "Xác nhận",
     choosePara: "Chọn thông số",
@@ -1514,6 +1521,17 @@ export const messages = {
 
     // Others
     RatedPower: "Công suất danh định",
+    machine: "Máy",
+    timeRange: "Khung giờ",
+    from: "Từ",
+    To: "Đến",
+    exportFile: "Xuất File",
+    reportDay: "Báo cáo ngày",
+    reportMonth: "Báo cáo tháng",
+    custom: "Tùy chỉnh",
+    rushHour: "Giờ cao điểm",
+    normalHour: "Giờ bình thường",
+    lowHour: "Giờ thấp điểm",
 
     //--------------------
     enter: "Nhập ",

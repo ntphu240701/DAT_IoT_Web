@@ -6,12 +6,13 @@ import { userInfor } from "../../App";
 import { useIntl } from "react-intl";
 
 import { VscAccount } from "react-icons/vsc";
-import { isBrowser } from "react-device-detect";
+import { isBrowser, useMobileOrientation } from "react-device-detect";
 
 export default function User(props) {
   const dataLang = useIntl();
   const [popupState, setPopupState] = useState(false);
   const [editType, setEditType] = useState("");
+  const { isLandscape } = useMobileOrientation();
 
   const handleClose = () => {
     setPopupState(false);
@@ -136,13 +137,24 @@ export default function User(props) {
         </>
         :
         <>
-          {popupState ? (
-            <div className="DAT_PopupBGMobile">
-              <Popup handleClose={handleClose} editType={editType} />
-            </div>
-          ) : (
-            <></>
-          )}
+          {isLandscape
+            ?
+            <>
+              {popupState ?
+                <div className="DAT_ViewPopupMobile">
+                  <Popup handleClose={handleClose} editType={editType} />
+                </div>
+                : <></>}
+            </>
+            :
+            <>
+              {popupState ?
+                <div className="DAT_PopupBGMobile">
+                  <Popup handleClose={handleClose} editType={editType} />
+                </div>
+                : <></>}
+            </>
+          }
         </>
       }
     </div>

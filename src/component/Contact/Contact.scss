@@ -165,11 +165,13 @@
 .DAT_PopupAva {
     position: relative;
     width: 400px;
-    background-color: white;
-    border-radius: 5px;
+    margin: auto;
     overflow: hidden;
-    box-shadow:
-        2px 2px 5px rgb(73, 73, 73, 0.2),
+    margin-top: 80px;
+    margin-bottom: 100px;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 2px 2px 5px rgb(73, 73, 73, 0.2),
         -2px -2px 5px rgb(67, 67, 67, 0.2);
 
     &_Head {
@@ -278,6 +280,8 @@
     width: 400px;
     margin: auto;
     overflow: hidden;
+    margin-top: 80px;
+    margin-bottom: 100px;
     border-radius: 5px;
     box-shadow: 2px 2px 5px rgb(73, 73, 73, 0.2),
         -2px -2px 5px rgb(67, 67, 67, 0.2);

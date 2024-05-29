@@ -9,7 +9,6 @@ import ConfirmDeleteRule from "./ConfirmDeleteRule";
 import EditRule, { editruledata } from "./EditRule";
 import { alertDispatch } from "../Alert/Alert";
 import { useIntl } from "react-intl";
-import { isMobile } from "../Navigation/Navigation";
 import { callApi } from "../Api/Api";
 import { host } from "../Lang/Contant";
 import { partnerInfor, ruleInfor, userInfor } from "../../App";
@@ -327,9 +326,7 @@ export default function Rule() {
             <div className="DAT_PopupBG">
               <ConfirmDeleteRule id={idDel} handleClose={handleCloseDelete} />
             </div>
-            :
-            <></>
-          }
+            : <></>}
         </div>
         :
         <>
