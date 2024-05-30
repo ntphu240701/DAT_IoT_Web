@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import "./Warn.scss";
 
-import { dataWarn, idDel } from "./Warn";
+import { dataWarn, idDel, inf } from "./Warn";
 import { alertDispatch } from "../Alert/Alert";
 import { useIntl } from "react-intl";
 import { callApi } from "../Api/Api";
@@ -26,22 +26,31 @@ export default function WarnPopup(props) {
         popup.style.color = popup_state[state].color;
     };
 
-    const handleDeleteReport = (e) => {
-        props.handleClose();
+    const handleDeleteReport = async (e) => {
+        // props.handleClose();
+
         const arr = idDel.value.split("_"); //['E02', 'T0623A000162']
-        dataWarn.value = dataWarn.value.filter((item) => item.device != arr[3] || item.boxid != `${arr[0]}_${arr[1]}_${arr[2]}`);
-        alertDispatch(dataLang.formatMessage({ id: "alert_28" }));
-        const checkApi = async () => {
-            const warn = await callApi("post", host.DATA + "/removeWarn", {
-                sn: arr[3],
-                boxid: `${arr[0]}_${arr[1]}_${arr[2]}`,
-            });
-        };
-        checkApi();
+
+        console.log(arr);
+        // alertDispatch(dataLang.formatMessage({ id: "alert_28" }));
+
+        const res = await callApi("post", host.DATA + "/removeWarn", {
+            sn: arr[1],
+            boxid: arr[0],
+        });
+
+        console.log(res);
+        if (res.status) {
+            props.handleClose();
+            alertDispatch(dataLang.formatMessage({ id: "alert_28" }));
+            dataWarn.value = dataWarn.value.filter((item) => item.boxid != arr[0]);
+        }
+
     };
 
     // Handle close when press ESC
     useEffect(() => {
+        console.log(props.data);
         const handleKeyDown = (event) => {
             if (event.key === "Escape") {
                 props.handleClose();
@@ -54,7 +63,10 @@ export default function WarnPopup(props) {
             document.removeEventListener("keydown", handleKeyDown);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [props.data]);
+
+
+
 
     return (
         <>
@@ -63,13 +75,13 @@ export default function WarnPopup(props) {
                 <div className="DAT_PopupReportInfo_Box">
                     <div className="DAT_PopupReportInfo_Box_Head">
                         <div className="DAT_PopupReportInfo_Box_Head_Left">
-                            {props.level == 'warn' ? (
+                            {props.data.level == 'warn' ? (
                                 <div className="DAT_PopupReportInfo_Box_Head_Left_TableWarning">
-                                    {dataLang.formatMessage({ id: props.boxid, defaultMessage: props.boxid })}
+                                    {props.data.name}
                                 </div>
                             ) : (
                                 <div className="DAT_PopupReportInfo_Box_Head_Left_TableNotice">
-                                    {dataLang.formatMessage({ id: props.boxid, defaultMessage: props.boxid })}
+                                    {props.data.name}
                                 </div>
                             )}
                         </div>
@@ -91,13 +103,13 @@ export default function WarnPopup(props) {
                         <div className="DAT_PopupReportInfo_Box_Body_Item">
                             {dataLang.formatMessage({ id: "project" })}:
                             &nbsp;
-                            {props.plant}
+                            {props.data.plant}
                         </div>
 
                         <div className="DAT_PopupReportInfo_Box_Body_Item">
                             {dataLang.formatMessage({ id: "device" })}:
                             &nbsp;
-                            {props.device}
+                            {props.data.device}
                         </div>
 
                         <div
@@ -107,7 +119,7 @@ export default function WarnPopup(props) {
                         </div>
 
                         <div className="DAT_PopupReportInfo_Box_Body_Item_Box">
-                            {props.cause.map((item, index) => (
+                            {props.data.cause.map((item, index) => (
                                 <div key={index} style={{ marginBottom: "5px" }}>
                                     {item[lang]}
                                 </div>
@@ -121,7 +133,7 @@ export default function WarnPopup(props) {
                         </div>
 
                         <div className="DAT_PopupReportInfo_Box_Body_Item_Box">
-                            {props.solution.map((item, index) => (
+                            {props.data.solution.map((item, index) => (
                                 <div key={index} style={{ marginBottom: "5px" }}>
                                     {item[lang]}
                                 </div>
