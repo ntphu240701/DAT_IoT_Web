@@ -18,7 +18,7 @@ import { BsFillMenuButtonWideFill } from "react-icons/bs";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { MdOutlineLanguage } from "react-icons/md";
 import { FaRegMessage } from "react-icons/fa6";
-import { plantState, projectwarnfilter } from "../Project/Project";
+// import { plantState, projectwarnfilter } from "../Project/Project";
 import { IoLogInOutline } from "react-icons/io5";
 import { PiUserCircle } from "react-icons/pi";
 import { BiMessageAltX, BiMessageCheck } from "react-icons/bi";
@@ -35,7 +35,7 @@ export const isMobile = signal(false);
 export const notifNav = signal(false);
 
 export default function Navigation(props) {
-  const { isLandscape } = useMobileOrientation()
+  const { isLandscape } = useMobileOrientation();
   const dataLang = useIntl();
   const navigate = useNavigate();
   const user_icon = useRef();
@@ -114,7 +114,7 @@ export default function Navigation(props) {
   };
 
   const handleFilterWarn = async (e) => {
-    projectwarnfilter.value = 0;
+    // projectwarnfilter.value = 0;
 
     let newdata = dataWarn.value.find(
       (item) => item.warnid == parseInt(e.currentTarget.id)
@@ -168,11 +168,11 @@ export default function Navigation(props) {
 
   return (
     <>
-      <div className="DAT_Navigation"
-        onClick={() => (plantState.value = "default")}
+      <div
+        className="DAT_Navigation"
+        // onClick={() => (plantState.value = "default")}
       >
-        {isBrowser || isLandscape
-          ?
+        {isBrowser || isLandscape ? (
           <div className="DAT_Navigation-menu">
             <button
               id="DAT_menuaction"
@@ -183,8 +183,9 @@ export default function Navigation(props) {
               <BsFillMenuButtonWideFill color="gray" size={22} />
             </button>
           </div>
-          : <></>
-        }
+        ) : (
+          <></>
+        )}
 
         <div className="DAT_Navigation_left">
           <div className="DAT_Navigation_left-logo">
@@ -202,7 +203,8 @@ export default function Navigation(props) {
         </div>
 
         <div className="DAT_Navigation_right">
-          <button className="DAT_Navigation_right-item"
+          <button
+            className="DAT_Navigation_right-item"
             id="notif"
             onClick={() => (notifNav.value = !notifNav.value)}
             ref={notif_icon}
@@ -218,7 +220,8 @@ export default function Navigation(props) {
             )}
           </button>
 
-          <button className="DAT_Navigation_right-language"
+          <button
+            className="DAT_Navigation_right-language"
             id="lang"
             onClick={() => {
               langNav.value = true;
@@ -230,7 +233,8 @@ export default function Navigation(props) {
             <span>{lang === "vi" ? "Vi" : "En"}</span>
           </button>
 
-          <button className="DAT_Navigation_right-item"
+          <button
+            className="DAT_Navigation_right-item"
             id="user"
             style={{
               backgroundColor: "rgba(159, 155, 155, 0.4)",
@@ -251,7 +255,8 @@ export default function Navigation(props) {
         </div>
       </div>
 
-      <div className="DAT_NavUser"
+      <div
+        className="DAT_NavUser"
         style={{ display: userNav.value ? "block" : "none" }}
         ref={user_box}
       >
@@ -296,7 +301,8 @@ export default function Navigation(props) {
         </div>
       </div>
 
-      <div className="DAT_NavNotif"
+      <div
+        className="DAT_NavNotif"
         style={{ display: notifNav.value ? "block" : "none" }}
         ref={notif_box}
       >
@@ -338,7 +344,10 @@ export default function Navigation(props) {
                       >
                         <div className="DAT_NavNotif-content-main-group-content-tit">
                           <span>
-                            {dataLang.formatMessage({ id: item.boxid, defaultMessage: item.boxid })}
+                            {dataLang.formatMessage({
+                              id: item.boxid,
+                              defaultMessage: item.boxid,
+                            })}
                           </span>
                           &nbsp;
                           {dataLang.formatMessage({ id: "at" })}
@@ -353,12 +362,18 @@ export default function Navigation(props) {
                           {dataLang.formatMessage({ id: "level" })}: &nbsp;
                           <span
                             style={{
-                              fontFamily: "Montserrat-SemiBold",
-                              color: item.level == "warn" ? "red" : "rgba(247, 148, 29)",
+                              fontFamily: "segoeui-sb",
+                              color:
+                                item.level == "warn"
+                                  ? "red"
+                                  : "rgba(247, 148, 29)",
                               // textTransform: "capitalize",
                             }}
                           >
-                            {dataLang.formatMessage({ id: item.level, defaultMessage: item.level })}
+                            {dataLang.formatMessage({
+                              id: item.level,
+                              defaultMessage: item.level,
+                            })}
                           </span>
                         </div>
                         <div className="DAT_NavNotif-content-main-group-content-status">
@@ -367,12 +382,25 @@ export default function Navigation(props) {
                           })}
                           <div className="DAT_NavNotif-content-main-group-content-status-read">
                             {item.state == 0 ? (
-                              <div style={{ color: "grey", display: "flex", gap: "4px" }}>
+                              <div
+                                style={{
+                                  color: "grey",
+                                  display: "flex",
+                                  gap: "4px",
+                                }}
+                              >
                                 {dataLang.formatMessage({ id: "readNotif" })}
                                 <BiMessageCheck />
                               </div>
                             ) : (
-                              <div style={{ color: "rgba(11, 25, 103)", display: "flex", gap: "4px", fontFamily: "Montserrat-SemiBold" }}>
+                              <div
+                                style={{
+                                  color: "rgba(11, 25, 103)",
+                                  display: "flex",
+                                  gap: "4px",
+                                  fontFamily: "segoeui-sb",
+                                }}
+                              >
                                 {dataLang.formatMessage({ id: "unreadNotif" })}
 
                                 <BiMessageAltX />
@@ -394,7 +422,8 @@ export default function Navigation(props) {
         </div>
       </div>
 
-      <div className="DAT_NavLang"
+      <div
+        className="DAT_NavLang"
         style={{ display: langNav.value ? "block" : "none" }}
         onMouseEnter={() => {
           langStateNav.value = [true, true];
@@ -404,7 +433,8 @@ export default function Navigation(props) {
           langStateNav.value = [false, false];
         }}
       >
-        <div className="DAT_NavLang-item"
+        <div
+          className="DAT_NavLang-item"
           style={{
             backgroundColor: lang === "vi" ? "rgba(43, 195, 253)" : "white",
             color: lang === "vi" ? "white" : "black",
@@ -415,7 +445,8 @@ export default function Navigation(props) {
         >
           <span>Tiếng Việt</span>
         </div>
-        <div className="DAT_NavLang-item"
+        <div
+          className="DAT_NavLang-item"
           style={{
             backgroundColor: lang === "en" ? "rgba(43, 195, 253)" : "white",
             color: lang === "en" ? "white" : "black",

@@ -4,7 +4,7 @@ import { isBrowser } from "react-device-detect";
 import { signal } from "@preact/signals-react";
 import { useIntl } from "react-intl";
 import { IoIosAddCircleOutline, IoMdAdd, IoMdMore } from "react-icons/io";
-import { Empty } from "../Project/Project";
+import { Empty } from "../../App";
 import { FiEdit } from "react-icons/fi";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import {

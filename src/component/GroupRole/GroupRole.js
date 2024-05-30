@@ -619,12 +619,12 @@ export default function GroupRole(props) {
                           <FiEdit size={18} />
                         </div>
 
-                        <div
+                        {/* <div
                           className="DAT_GRMobile_Content_DevideTable_Left_ItemList_Item_More_Add"
                           onClick={() => props.addState()}
                         >
                           <AiOutlineUserAdd size={18} />
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   ))}
@@ -822,7 +822,7 @@ export default function GroupRole(props) {
             <div className="DAT_ProjectHeaderMobile_Top">
               {userList ? (
                 <IoCaretBackOutline
-                  size={40}
+                  size={30}
                   color="#0B1967"
                   onClick={() => setUserlist(false)}
                 />
@@ -845,7 +845,12 @@ export default function GroupRole(props) {
                 />
               </div>
               {userList ? (
-                <div></div>
+                <button
+                  className="DAT_ProjectHeaderMobile_Top_New"
+                  onClick={() => handleAddState()}
+                >
+                  <IoAddOutline color="white" size={20} />
+                </button>
               ) : (
                 <button
                   className="DAT_ProjectHeaderMobile_Top_New"
