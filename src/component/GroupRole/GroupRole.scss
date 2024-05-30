@@ -18,7 +18,7 @@
     align-items: center;
     gap: 5px;
     color: COLOR.$Primary-color;
-    font-family: Montserrat-Bold;
+    font-family: segoeui-sb;
   }
 
   &_Filter {
@@ -36,7 +36,7 @@
       border: none;
       outline: none;
       font-size: 14px;
-      font-family: Montserrat-Regular;
+      font-family: segoeui;
     }
   }
 
@@ -46,7 +46,7 @@
     background-color: COLOR.$Primary-color;
     color: white;
     border-radius: 5px;
-    font-family: Montserrat-SemiBold;
+    font-family: segoeui-sb;
     padding: 8px;
 
     & span {
@@ -75,7 +75,7 @@
 
   &_Header {
     color: COLOR.$Primary-color;
-    font-family: Montserrat-SemiBold;
+    font-family: segoeui-sb;
     font-size: 16px;
     padding: 16px;
     background-color: rgba(233, 233, 233, 0.5);
@@ -108,7 +108,7 @@
           justify-content: center;
           background-color: COLOR.$Primary-color;
           color: white;
-          font-family: Montserrat-SemiBold;
+          font-family: segoeui-sb;
         }
 
         &_ItemList {
@@ -213,7 +213,7 @@
         border: none;
         outline: none;
         font-size: 14px;
-        font-family: Montserrat-Regular;
+        font-family: segoeui;
       }
 
       & input::-webkit-outer-spin-button,
@@ -234,7 +234,7 @@
       background-color: COLOR.$Primary-color;
       color: white;
       border-radius: 50%;
-      font-family: Montserrat-SemiBold;
+      font-family: segoeui-sb;
       padding: 8px;
       display: flex;
       justify-content: center;
@@ -248,7 +248,7 @@
     align-items: center;
     gap: 5px;
     color: COLOR.$Primary-color;
-    font-family: Montserrat-Bold;
+    font-family: segoeui-sb;
   }
 }
 
@@ -277,7 +277,7 @@
           justify-content: center;
           background-color: COLOR.$Primary-color;
           color: white;
-          font-family: Montserrat-SemiBold;
+          font-family: segoeui-sb;
         }
 
         &_ItemList {
@@ -353,7 +353,7 @@
           justify-content: center;
           background-color: COLOR.$Primary-color;
           color: white;
-          font-family: Montserrat-SemiBold;
+          font-family: segoeui-sb;
         }
       }
     }
@@ -375,7 +375,7 @@
     background-color: COLOR.$Primary-color !important; //rgba(182, 182, 182, 0.4)
     padding: 16px;
     color: white;
-    font-family: Montserrat-Bold;
+    font-family: segoeui-sb;
 
     &_Left {
       flex: 5;
@@ -429,7 +429,7 @@
           box-sizing: border-box;
           -webkit-box-sizing: border-box;
           -moz-box-sizing: border-box;
-          font-family: Montserrat-Regular;
+          font-family: segoeui;
         }
       }
     }
@@ -445,7 +445,7 @@
       border-radius: 5px;
       border: none;
       cursor: pointer;
-      font-family: Montserrat-SemiBold;
+      font-family: segoeui-sb;
       color: white;
       background-color: COLOR.$Primary-color;
     }
@@ -466,7 +466,7 @@
     background-color: COLOR.$Primary-color !important; //rgba(182, 182, 182, 0.4)
     padding: 16px;
     color: white;
-    font-family: Montserrat-Bold;
+    font-family: segoeui-sb;
 
     &_Left {
       flex: 9;
@@ -506,7 +506,7 @@
       border-radius: 5px;
       border: none;
       cursor: pointer;
-      font-family: Montserrat-SemiBold;
+      font-family: segoeui-sb;
     }
   }
 }
@@ -526,7 +526,7 @@
     background-color: COLOR.$Primary-color !important; //rgba(182, 182, 182, 0.4)
     padding: 16px;
     color: white;
-    font-family: Montserrat-Bold;
+    font-family: segoeui-sb;
 
     &_Left {
       flex: 5;
@@ -577,7 +577,7 @@
         box-sizing: border-box;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
-        font-family: Montserrat-Regular;
+        font-family: segoeui;
       }
     }
   }
@@ -592,7 +592,7 @@
       border-radius: 5px;
       border: none;
       cursor: pointer;
-      font-family: Montserrat-SemiBold;
+      font-family: segoeui-sb;
       color: white;
       background-color: COLOR.$Primary-color;
     }
@@ -613,7 +613,7 @@
     background-color: COLOR.$Primary-color !important; //rgba(182, 182, 182, 0.4)
     padding: 16px;
     color: white;
-    font-family: Montserrat-Bold;
+    font-family: segoeui-sb;
 
     &_Left {
       flex: 9;
@@ -653,7 +653,7 @@
       border-radius: 5px;
       border: none;
       cursor: pointer;
-      font-family: Montserrat-SemiBold;
+      font-family: segoeui-sb;
     }
   }
 }

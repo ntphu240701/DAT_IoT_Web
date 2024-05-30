@@ -18,7 +18,7 @@
     align-items: center;
     gap: 5px;
     color: COLOR.$Primary-color;
-    font-family: Montserrat-Bold;
+    font-family: segoeui-sb;
   }
 
   &_Filter {
@@ -36,7 +36,7 @@
       border: none;
       outline: none;
       font-size: 14px;
-      font-family: Montserrat-Regular;
+      font-family: segoeui;
     }
   }
 
@@ -46,7 +46,7 @@
     background-color: COLOR.$Primary-color;
     color: white;
     border-radius: 5px;
-    font-family: Montserrat-SemiBold;
+    font-family: segoeui-sb;
     padding: 8px;
 
     & span {
@@ -84,7 +84,7 @@
 
     &_Tit {
       font-size: 20px;
-      font-family: Montserrat-SemiBold;
+      font-family: segoeui-sb;
       color: COLOR.$Primary-color;
     }
 
@@ -132,7 +132,7 @@
 
     &_Tit {
       font-size: 20px;
-      font-family: Montserrat-SemiBold;
+      font-family: segoeui-sb;
       color: COLOR.$Primary-color;
     }
 
@@ -222,7 +222,7 @@
       justify-content: center;
       background-color: COLOR.$Primary-color;
       color: white;
-      font-family: Montserrat-SemiBold;
+      font-family: segoeui-sb;
     }
 
     &_Box {
@@ -273,7 +273,7 @@
 
     &_Tit {
       font-size: 20px;
-      font-family: Montserrat-SemiBold;
+      font-family: segoeui-sb;
       color: COLOR.$Primary-color;
     }
 

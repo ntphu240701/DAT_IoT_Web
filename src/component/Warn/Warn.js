@@ -3,12 +3,12 @@ import "./Warn.scss";
 
 import DataTable from "react-data-table-component";
 import { signal } from "@preact/signals-react";
-import { Empty, projectwarnfilter } from "../Project/Project";
+import { Empty } from "../../App";
 import { isMobile, warnfilter } from "../Navigation/Navigation";
 import WarnPopup from "./WarnPopup";
 import { useIntl } from "react-intl";
 import { ruleInfor } from "../../App";
-import Filter from "../Project/Filter";
+// import Filter from "../Project/Filter";
 import moment from "moment-timezone";
 
 import { CiSearch } from "react-icons/ci";
@@ -336,7 +336,7 @@ export default function Warn(props) {
     if (searchTerm === "") {
       setDatafilter([...dataWarn.value]);
       warnfilter.value = {};
-      projectwarnfilter.value = 0;
+      // projectwarnfilter.value = 0;
     } else {
       let temp = dataWarn.value.filter(
         (item) =>
@@ -444,28 +444,15 @@ export default function Warn(props) {
         (item) => item.warnid == warnfilter.value.warnid
       );
       setDatafilter([...temp_]);
-    } else if (projectwarnfilter.value !== 0) {
-      let t = dataWarn.value.filter(
-        (item) => item.plantid == projectwarnfilter.value
-      );
-      if (t[0]?.plant) {
-        let d = document.getElementById("warnsearch");
-        d.value = t[0].plant;
-      }
-      setDatafilter([...t]);
-    } else {
     }
 
     // eslint-disable-next-line
-  }, [dataWarn.value, warnfilter.value, projectwarnfilter.value]);
+  }, [dataWarn.value, warnfilter.value]);
 
   // by Mr Loc
   useEffect(() => {
     tabLable.value = listTab[0].name;
-    if (
-      warnfilter.value.device === undefined &&
-      Number(projectwarnfilter.value) === 0
-    ) {
+    if (warnfilter.value.device === undefined) {
       setDatafilter([...dataWarn.value]);
     }
     return () => {
@@ -538,7 +525,7 @@ export default function Warn(props) {
                 );
               })}
 
-              <div
+              {/* <div
                 className="DAT_Warn_Filter"
                 onClick={(e) => setDisplay(!display)}
               >
@@ -549,7 +536,7 @@ export default function Warn(props) {
                     transition: "0.5s",
                   }}
                 />
-              </div>
+              </div> */}
             </div>
 
             <div className="DAT_Warn_Content">
@@ -596,7 +583,7 @@ export default function Warn(props) {
                 }
               })()}
 
-              <Filter
+              {/* <Filter
                 type="warn"
                 display={display}
                 warn={warn}
@@ -605,7 +592,7 @@ export default function Warn(props) {
                 handleClose={handleCloseFilter}
                 handleReset={handleResetFilter}
                 handleCancel={closeFilter}
-              />
+              /> */}
             </div>
           </div>
 

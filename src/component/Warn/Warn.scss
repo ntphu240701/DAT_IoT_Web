@@ -19,7 +19,7 @@
     align-items: center;
     gap: 5px;
     color: COLOR.$Primary-color;
-    font-family: Montserrat-Bold;
+    font-family: segoeui-sb;
   }
 
   &_Filter {
@@ -37,7 +37,7 @@
       border: none;
       outline: none;
       font-size: 14px;
-      font-family: Montserrat-Regular;
+      font-family: segoeui;
     }
   }
 
@@ -47,7 +47,7 @@
     background-color: COLOR.$Primary-color;
     color: white;
     border-radius: 5px;
-    font-family: Montserrat-SemiBold;
+    font-family: segoeui-sb;
     padding: 8px;
 
     & span {
@@ -90,7 +90,7 @@
         border: none;
         outline: none;
         font-size: 14px;
-        font-family: Montserrat-Regular;
+        font-family: segoeui;
       }
 
       & input::-webkit-outer-spin-button,
@@ -106,7 +106,7 @@
       background-color: COLOR.$Primary-color;
       color: white;
       border-radius: 50%;
-      font-family: Montserrat-SemiBold;
+      font-family: segoeui-sb;
       padding: 8px;
       display: flex;
       justify-content: center;
@@ -120,7 +120,7 @@
     align-items: center;
     gap: 5px;
     color: COLOR.$Primary-color;
-    font-family: Montserrat-Bold;
+    font-family: segoeui-sb;
   }
 }
 
@@ -217,7 +217,7 @@
         color: #ffffff;
         font-size: 14px;
         border-radius: 5px;
-        font-family: Montserrat-SemiBold;
+        font-family: segoeui-sb;
       }
 
       &_Notice {
@@ -230,7 +230,7 @@
         color: #ffffff;
         font-size: 14px;
         border-radius: 5px;
-        font-family: Montserrat-SemiBold;
+        font-family: segoeui-sb;
       }
 
       &_Info {
@@ -241,7 +241,7 @@
           cursor: pointer;
           display: flex;
           justify-content: space-between;
-          font-family: Montserrat-SemiBold;
+          font-family: segoeui-sb;
         }
 
         &_Device {
@@ -635,7 +635,7 @@
   }
 }
 
-.DAT_PopupReport_Box {
+.DAT_PopupWarn_Box {
   position: relative;
   width: 400px;
   background-color: white;
@@ -653,7 +653,7 @@
     background-color: COLOR.$Primary-color !important; //rgba(182, 182, 182, 0.4)
     padding: 16px;
     color: white;
-    font-family: Montserrat-Bold;
+    font-family: segoeui-sb;
 
     &_Left {
       flex: 5;
@@ -693,13 +693,13 @@
       border-radius: 5px;
       border: none;
       cursor: pointer;
-      font-family: Montserrat-SemiBold;
+      font-family: segoeui-sb;
     }
   }
 }
 
 // INFO BOX IN WARN SECTION
-.DAT_PopupReportInfo_Box {
+.DAT_PopupWarnInfo_Box {
   position: relative;
   width: 400px;
   background-color: white;
@@ -721,7 +721,7 @@
     background-color: COLOR.$Primary-color !important; //rgba(182, 182, 182, 0.4)
     padding: 16px;
     color: white;
-    font-family: Montserrat-Bold;
+    font-family: segoeui-sb;
 
     &_Left {
       flex: 10;

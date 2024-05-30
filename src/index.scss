@@ -1310,6 +1310,13 @@ iframe {
 }
 
 @font-face {
+  font-family: "segoeui-sb";
+  src: url("../public/assets/fonts/segoeui/Segoe UI Semibold.ttf");
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
   font-family: "meytropolis";
   src: url("../public/assets/fonts/metropolis/Metropolis-Thin.otf");
   font-weight: 400;

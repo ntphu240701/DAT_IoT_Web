@@ -38,53 +38,57 @@ export default function Contact(props) {
           </div>
 
           <div className="DAT_Contact">
-            <div className="DAT_Contact_Item">
-              <div
-                className="DAT_Contact_Item_Registation"
-                style={{ marginBottom: isMobile.value ? "0px" : "10px" }}
-              >
-                <div className="DAT_Contact_Item_Registation_Tit">
-                  <div>{dataLang.formatMessage({ id: "registerInfo" })}</div>
-                  {ruleInfor.value.setting.contact.edit === false ? (
-                    <div></div>
-                  ) : (
-                    <div onClick={() => setContactState("editRegisterInf")}>
-                      {dataLang.formatMessage({ id: "edits" })}
-                    </div>
-                  )}
-                </div>
-
-                <div className="DAT_Contact_Item_Registation_Content">
-                  <div>{dataLang.formatMessage({ id: "businessModel" })}</div>
-                  <div>{partnerInfor.value.businessmodel}</div>
-                </div>
-
-                <div className="DAT_Contact_Item_Registation_Content">
-                  <div>{dataLang.formatMessage({ id: "businessname" })}</div>
-                  <div>{partnerInfor.value.businessname}</div>
-                </div>
-
-                <div className="DAT_Contact_Item_Registation_Content">
-                  <div>{dataLang.formatMessage({ id: "area" })}</div>
-                  <div>{partnerInfor.value.area}</div>
-                </div>
-
+            {ruleInfor.value.setting.contact.registerinf ? (
+              <div className="DAT_Contact_Item">
                 <div
-                  className="DAT_Contact_Item_Registation_Content"
-                  style={{ marginBottom: "0px" }}
+                  className="DAT_Contact_Item_Registation"
+                  style={{ marginBottom: isMobile.value ? "0px" : "10px" }}
                 >
-                  <div>{dataLang.formatMessage({ id: "businesstype" })}</div>
-                  <div>
-                    {dataLang.formatMessage({
-                      id: partnerInfor.value?.businesstype
-                        ? partnerInfor.value.businesstype
-                        : "unknown",
-                      defaultMessage: "...",
-                    })}
+                  <div className="DAT_Contact_Item_Registation_Tit">
+                    <div>{dataLang.formatMessage({ id: "registerInfo" })}</div>
+                    {ruleInfor.value.setting.contact.edit === false ? (
+                      <div></div>
+                    ) : (
+                      <div onClick={() => setContactState("editRegisterInf")}>
+                        {dataLang.formatMessage({ id: "edits" })}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="DAT_Contact_Item_Registation_Content">
+                    <div>{dataLang.formatMessage({ id: "businessModel" })}</div>
+                    <div>{partnerInfor.value.businessmodel}</div>
+                  </div>
+
+                  <div className="DAT_Contact_Item_Registation_Content">
+                    <div>{dataLang.formatMessage({ id: "businessname" })}</div>
+                    <div>{partnerInfor.value.businessname}</div>
+                  </div>
+
+                  <div className="DAT_Contact_Item_Registation_Content">
+                    <div>{dataLang.formatMessage({ id: "area" })}</div>
+                    <div>{partnerInfor.value.area}</div>
+                  </div>
+
+                  <div
+                    className="DAT_Contact_Item_Registation_Content"
+                    style={{ marginBottom: "0px" }}
+                  >
+                    <div>{dataLang.formatMessage({ id: "businesstype" })}</div>
+                    <div>
+                      {dataLang.formatMessage({
+                        id: partnerInfor.value?.businesstype
+                          ? partnerInfor.value.businesstype
+                          : "unknown",
+                        defaultMessage: "...",
+                      })}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <></>
+            )}
 
             <div className="DAT_Contact_Item">
               <div className="DAT_Contact_Item_Contact">
