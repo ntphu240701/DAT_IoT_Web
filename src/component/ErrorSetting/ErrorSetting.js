@@ -18,8 +18,13 @@ import RemoveErr from "./RemoveErr";
 import { alertDispatch } from "../Alert/Alert";
 import { callApi } from "../Api/Api";
 import { host } from "../Lang/Contant";
-import PopupState, { bindMenu, bindToggle } from "material-ui-popup-state";
-import { Menu, MenuItem } from "@mui/material";
+import PopupState, {
+  bindHover,
+  bindMenu,
+  bindPopper,
+  bindToggle,
+} from "material-ui-popup-state";
+import { Fade, Menu, MenuItem, Paper, Popper, Typography } from "@mui/material";
 import { Empty, partnerInfor, userInfor } from "../../App";
 import { isBrowser } from "react-device-detect";
 import { PiUsersFour } from "react-icons/pi";
@@ -119,8 +124,8 @@ export default function ErrorSetting(props) {
         return (
           <div>
             <div
-              id={row.boxid_}
               className="DAT_TableText"
+              id={row.boxid_}
               onClick={(e) => {
                 setEditNS(!editNS);
                 setEditName(row.name_);
@@ -353,6 +358,7 @@ export default function ErrorSetting(props) {
           console.log(dataErr);
         } else {
           setDataErr([]);
+          setDataApi([]);
         }
       }
     };
@@ -676,27 +682,61 @@ export default function ErrorSetting(props) {
 
       setDataGateway([...temp]);
     }
-
-    // const temp = dataErr.filter((item) => {
-    // return (
-    // lowercasedata(item.boxid_).includes(input) ||
-    // item.cause_.some(
-    //   (cause) =>
-    //     lowercasedata(cause.vi).includes(input) ||
-    //     lowercasedata(cause.en).includes(input)
-    // ) ||
-    // item.solution_.some(
-    //   (solution) =>
-    //     lowercasedata(solution.vi).includes(input) ||
-    //     lowercasedata(solution.en).includes(input)
-    // )
-    //     lowercasedata(data.sn_).includes(input) ||
-    //     lowercasedata(data.name_).includes(input)
-    //   );
-    // });
   };
 
-  const handleFilterDataErr = (e) => {};
+  const handleFilterDataErr = (e) => {
+    // if (dataErr.length > 0) {
+    //   const input = lowercasedata(e.currentTarget.value);
+    //   console.log(input);
+    //   const t = dataErr;
+    //   if (input == "") {
+    //     setDataErr([...dataErr]);
+    //   } else {
+    //     const temp = t.filter((item) => {
+    //       return (
+    //         lowercasedata(item.boxid_).includes(input) ||
+    //         lowercasedata(item.name_).includes(input) ||
+    //         item.cause_.some(
+    //           (cause) =>
+    //             lowercasedata(cause.vi).includes(input) ||
+    //             lowercasedata(cause.en).includes(input)
+    //         ) ||
+    //         item.solution_.some(
+    //           (solution) =>
+    //             lowercasedata(solution.vi).includes(input) ||
+    //             lowercasedata(solution.en).includes(input)
+    //         )
+    //       );
+    //     });
+    //     console.log(temp);
+    //     // setDataErr([...temp]);
+    //   }
+    // }
+    const input = lowercasedata(e.currentTarget.value);
+    console.log(input, "filter gateway");
+    const t = dataApi;
+    if (input == "") {
+      setDataErr([...t]);
+    } else {
+      let temp = t.filter((data) => {
+        return (
+          lowercasedata(data.boxid_).includes(input) ||
+          lowercasedata(data.name_).includes(input) ||
+          data.cause_.some(
+            (cause) =>
+              lowercasedata(cause.vi).includes(input) ||
+              lowercasedata(cause.en).includes(input)
+          ) ||
+          data.solution_.some(
+            (solution) =>
+              lowercasedata(solution.vi).includes(input) ||
+              lowercasedata(solution.en).includes(input)
+          )
+        );
+      });
+      setDataErr([...temp]);
+    }
+  };
 
   useEffect(() => {
     if (groupErrSN.value === "") {
@@ -753,26 +793,58 @@ export default function ErrorSetting(props) {
               <span>{dataLang.formatMessage({ id: "errorsetting" })}</span>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "1px" }}>
-              <div
-                className="DAT_ESHeader_Select"
-                onClick={() => setFilterType(!filterType)}
-              >
-                {filterType ? (
-                  <LuRouter size={17} color="#0b1967" />
-                ) : (
-                  <BiMessageAltError size={17} color="#0b1967" />
+              <PopupState variant="popper" popupId="demo-popup-popper">
+                {(popupState) => (
+                  <div style={{ cursor: "pointer" }}>
+                    <div
+                      className="DAT_ESHeader_Select"
+                      onClick={() => setFilterType(!filterType)}
+                      {...bindHover(popupState)}
+                    >
+                      {filterType ? (
+                        <LuRouter size={17} color="#0b1967" />
+                      ) : (
+                        <BiMessageAltError size={17} color="#0b1967" />
+                      )}
+                    </div>
+                    <Popper {...bindPopper(popupState)} transition>
+                      {({ TransitionProps }) => (
+                        <Fade {...TransitionProps} timeout={350}>
+                          <Paper
+                            sx={{
+                              width: "fit-content",
+                              marginLeft: "0px",
+                              marginTop: "5px",
+                              height: "20px",
+                              p: 2,
+                            }}
+                          >
+                            <Typography
+                              sx={{
+                                fontSize: "12px",
+                                textAlign: "justify",
+                                justifyItems: "center",
+                                // marginBottom: 1.7,
+                              }}
+                            >
+                              {dataLang.formatMessage({
+                                id: filterType ? "devicelist" : "errlist",
+                              })}
+                            </Typography>
+                          </Paper>
+                        </Fade>
+                      )}
+                    </Popper>
+                  </div>
                 )}
-              </div>
+              </PopupState>
+
               <div
                 className="DAT_ESHeader_Filter"
                 style={{
                   backgroundColor: "white",
-                  // groupErrSN.value === ""
-                  //   ? "white"
-                  //   : "rgba(233, 233, 233, 0.5)",
                 }}
               >
-                {/* {filterType ? ( */}
                 <>
                   <input
                     type="text"
@@ -780,76 +852,41 @@ export default function ErrorSetting(props) {
                     // autoComplete="on"
                     placeholder={dataLang.formatMessage({ id: "enterInfo" })}
                     onChange={(e) => {
-                      // handleFilter(e);
+                      handleFilter(e);
                       console.log(e.currentTarget.value);
                     }}
                     style={{
-                      display: filterType ? "none" : "block",
+                      display: filterType ? "block" : "none",
                     }}
                   />
-                  {/* <span
-                      style={{
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontFamily: "Montserrat-Bold",
-                        fontSize: "13px",
-                        color: "#0B1967",
-                      }}
-                      onClick={() => setFilterType(!filterType)}
-                    >
-                      {dataLang.formatMessage({
-                        id: "devicelist",
-                      })}
-                    </span> */}
                 </>
-                {/* ) : ( */}
                 <>
                   <input
                     type="text"
                     id="search2"
                     // autoComplete="on"
                     placeholder={dataLang.formatMessage({ id: "enterInfo" })}
-                    // onChange={(e) => handleFilterDataErr(e)}
-                    onChange={(e) => {
-                      // handleFilter(e);
-                      console.log(e.currentTarget.value);
-                    }}
-                    style={{ display: filterType ? "block" : "none" }}
+                    onChange={(e) => handleFilterDataErr(e)}
+                    style={{ display: filterType ? "none" : "block" }}
                   />
                   {/* <span
-                      style={{
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontFamily: "Montserrat-Bold",
-                        fontSize: "13px",
-                        color: "#0B1967",
-                      }}
-                      onClick={() => setFilterType(!filterType)}
-                    >
-                      {dataLang.formatMessage({
-                        id: "errlist",
-                      })}
-                    </span> */}
+                    style={{
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontFamily: "Montserrat-Bold",
+                      fontSize: "13px",
+                      color: "#0B1967",
+                    }}
+                    onClick={() => setFilterType(!filterType)}
+                  >
+                    {dataLang.formatMessage({
+                      id: filterType ? "devicelist" : "errlist",
+                    })}
+                  </span> */}
                 </>
-                {/* )} */}
 
-                {/* </>
-              ) : (
-                <>
-                  <input
-                    // disabled
-                    type="text"
-                    // autoComplete="off"
-                    placeholder={dataLang.formatMessage({ id: "enterInfo" })}
-                    onChange={(e) => handleFilterDataErr(e)}
-                  />
-                  <span>{dataLang.formatMessage({ id: "errlist" })}</span>
-                </>
-              )} */}
                 <CiSearch color="gray" size={20} />
               </div>
             </div>
@@ -1033,19 +1070,21 @@ export default function ErrorSetting(props) {
               ) : (
                 <></>
               )}
-              <div
-                className="DAT_ProjectHeaderMobile_Top_Filter"
-                style={{
-                  backgroundColor: errList ? "rgb(235, 235, 228)" : "white",
-                }}
-              >
+              <div className="DAT_ProjectHeaderMobile_Top_Filter">
                 <CiSearch color="gray" size={20} />
-                <input
-                  disabled={errList ? true : false}
-                  type="text"
-                  placeholder={dataLang.formatMessage({ id: "enterInfo" })}
-                  onChange={(e) => handleFilter(e)}
-                />
+                {filterType ? (
+                  <input
+                    type="text"
+                    placeholder={dataLang.formatMessage({ id: "enterInfo" })}
+                    onChange={(e) => handleFilter(e)}
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    placeholder={dataLang.formatMessage({ id: "enterInfo" })}
+                    onChange={(e) => handleFilterDataErr(e)}
+                  />
+                )}
               </div>
               {errList ? (
                 <button
@@ -1098,7 +1137,16 @@ export default function ErrorSetting(props) {
                               {/* <div className="DAT_ErrSetMobile_Content_Top_Info_Name">
                                 {item.name_}
                               </div> */}
-                              <span>{item.name_}</span>
+                              <span
+                                id={item.boxid_}
+                                onClick={(e) => {
+                                  setEditNS(!editNS);
+                                  setEditName(item.name_);
+                                  setEditarray(e.currentTarget.id);
+                                }}
+                              >
+                                {item.name_}
+                              </span>
                               <div className="DAT_ErrSetMobile_Content_Top_Info_Cause">
                                 <span>
                                   {dataLang.formatMessage({ id: "cause" })}
@@ -1254,6 +1302,7 @@ export default function ErrorSetting(props) {
                     onClick={(e) => {
                       handleChangeGroup(e);
                       setErrList(true);
+                      setFilterType(false);
                     }}
                   >
                     <div style={{ display: "flex" }}>

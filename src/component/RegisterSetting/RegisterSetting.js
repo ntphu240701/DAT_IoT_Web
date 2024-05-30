@@ -18,12 +18,19 @@ import { useSelector } from "react-redux";
 import { partnerInfor, userInfor } from "../../App";
 import { callApi } from "../Api/Api";
 import { host } from "../Lang/Contant";
-import PopupState, { bindMenu, bindToggle } from "material-ui-popup-state";
-import { Menu, MenuItem } from "@mui/material";
+import PopupState, {
+  bindHover,
+  bindMenu,
+  bindPopper,
+  bindToggle,
+} from "material-ui-popup-state";
+import { Fade, Menu, MenuItem, Paper, Popper, Typography } from "@mui/material";
 import DataTable from "react-data-table-component";
 import Popup from "./Popup";
 import { lowercasedata } from "../ErrorSetting/ErrorSetting";
 import { alertDispatch } from "../Alert/Alert";
+import { LuRouter } from "react-icons/lu";
+import { BiMessageAltError } from "react-icons/bi";
 
 export const groupRegID = signal("");
 export const configEdit = signal("");
@@ -32,10 +39,11 @@ export default function RegisterSetting() {
   const [dataGateway, setDataGateway] = useState([]);
   const [dataGatewaySub, setDataGatewaySub] = useState([]);
   const [dataRegister, setDataRegister] = useState([]);
+  const [dataRegisterSub, setDataRegisterSub] = useState([]);
   const [popup, setPopup] = useState(false);
   const [statePopup, setStatePopup] = useState("");
   const [regList, setRegList] = useState(false);
-
+  const [filterType, setFilterType] = useState(true);
   const dataLang = useIntl();
 
   const columnGroupRole = [
@@ -207,9 +215,13 @@ export default function RegisterSetting() {
           setDataRegister(
             inf.data[0].setting_.sort((a, b) => a.addrcode - b.addrcode)
           );
+          setDataRegisterSub(
+            inf.data[0].setting_.sort((a, b) => a.addrcode - b.addrcode)
+          );
           console.log(inf.data);
         } else {
           setDataRegister([]);
+          setDataRegisterSub([]);
         }
       }
     };
@@ -261,6 +273,7 @@ export default function RegisterSetting() {
           console.log(req);
           if (req.status === true) {
             setDataRegister([...temp]);
+            setDataRegisterSub([...temp]);
             changePopupstate();
           }
         };
@@ -295,6 +308,7 @@ export default function RegisterSetting() {
           });
           console.log(req);
           setDataRegister([...t]);
+          setDataRegisterSub([...t]);
         };
         upReg();
         changePopupstate();
@@ -312,6 +326,7 @@ export default function RegisterSetting() {
     } else {
       dataRegister[i].register.splice(j, 1);
       setDataRegister([...dataRegister]);
+      setDataRegisterSub([...dataRegister]);
       const upReg = async () => {
         let req = await callApi("post", `${host.DATA}/updateRegister`, {
           sn: groupRegID.value,
@@ -319,6 +334,7 @@ export default function RegisterSetting() {
         });
         console.log(req);
         setDataRegister([...t]);
+        setDataRegisterSub([...t]);
       };
       upReg();
       console.log(t);
@@ -351,6 +367,7 @@ export default function RegisterSetting() {
           });
           console.log(req);
           setDataRegister([...t]);
+          setDataRegisterSub([...t]);
         };
         upReg();
         console.log(t);
@@ -371,6 +388,7 @@ export default function RegisterSetting() {
       });
       console.log(req);
       setDataRegister([...t]);
+      setDataRegisterSub([...t]);
     };
     upReg();
     console.log(t);
@@ -395,6 +413,32 @@ export default function RegisterSetting() {
       setDataGateway([...temp]);
     }
   };
+
+  const handleFilterReg = (e) => {
+    const input = lowercasedata(e.currentTarget.value);
+    const t = dataRegisterSub;
+    if (input == "") {
+      setDataRegister([...t]);
+    } else {
+      let temp = t.filter((data) => {
+        return (
+          lowercasedata(data.addrcode).includes(input) ||
+          data.register.some(
+            (reg) =>
+              lowercasedata(`${reg.addr}: ${reg.val}`).includes(input) ||
+              lowercasedata(reg.val).includes(input) ||
+              lowercasedata(reg.addr).includes(input)
+          )
+        );
+      });
+      setDataRegister([...temp]);
+      console.log(temp);
+    }
+  };
+
+  useEffect(() => {
+    setDataRegister(dataRegisterSub);
+  }, [dataRegisterSub]);
 
   useEffect(() => {
     const getAllLogger = async (usr, id, type) => {
@@ -441,30 +485,103 @@ export default function RegisterSetting() {
               <PiUsersFour color="gray" size={25} />
               <span>{dataLang.formatMessage({ id: "registersetting" })}</span>
             </div>
-            <div
-              className="DAT_RSHeader_Filter"
-              style={{
-                backgroundColor:
-                  groupRegID.value === 0 ? "rgba(233, 233, 233, 0.5)" : "white",
-              }}
-            >
-              {groupRegID.value === 0 ? (
-                <input
-                  disabled
-                  type="text"
-                  autoComplete="off"
-                  placeholder={dataLang.formatMessage({ id: "enterInfo" })}
-                />
-              ) : (
-                <input
-                  type="text"
-                  autoComplete="on"
-                  placeholder={dataLang.formatMessage({ id: "enterInfo" })}
-                  onChange={(e) => handleFilter(e)}
-                />
-              )}
-              <CiSearch color="gray" size={20} />
+            <div style={{ display: "flex", alignItems: "center", gap: "1px" }}>
+              <PopupState variant="popper" popupId="demo-popup-popper">
+                {(popupState) => (
+                  <div style={{ cursor: "pointer" }}>
+                    <div
+                      className="DAT_ESHeader_Select"
+                      onClick={() => setFilterType(!filterType)}
+                      {...bindHover(popupState)}
+                    >
+                      {filterType ? (
+                        <LuRouter size={17} color="#0b1967" />
+                      ) : (
+                        <BiMessageAltError size={17} color="#0b1967" />
+                      )}
+                    </div>
+                    <Popper {...bindPopper(popupState)} transition>
+                      {({ TransitionProps }) => (
+                        <Fade {...TransitionProps} timeout={350}>
+                          <Paper
+                            sx={{
+                              width: "fit-content",
+                              marginLeft: "0px",
+                              marginTop: "5px",
+                              height: "20px",
+                              p: 2,
+                            }}
+                          >
+                            <Typography
+                              sx={{
+                                fontSize: "12px",
+                                textAlign: "justify",
+                                justifyItems: "center",
+                                // marginBottom: 1.7,
+                              }}
+                            >
+                              {dataLang.formatMessage({
+                                id: filterType ? "devicelist" : "errlist",
+                              })}
+                            </Typography>
+                          </Paper>
+                        </Fade>
+                      )}
+                    </Popper>
+                  </div>
+                )}
+              </PopupState>
+
+              <div
+                className="DAT_ESHeader_Filter"
+                style={{
+                  backgroundColor: "white",
+                }}
+              >
+                <>
+                  <input
+                    type="text"
+                    id="search"
+                    placeholder={dataLang.formatMessage({ id: "enterInfo" })}
+                    onChange={(e) => {
+                      handleFilter(e);
+                      console.log(e.currentTarget.value);
+                    }}
+                    style={{
+                      display: filterType ? "block" : "none",
+                    }}
+                  />
+                </>
+                <>
+                  <input
+                    type="text"
+                    id="search2"
+                    placeholder={dataLang.formatMessage({ id: "enterInfo" })}
+                    onChange={(e) => handleFilterReg(e)}
+                    style={{ display: filterType ? "none" : "block" }}
+                  />
+                  {/* <span
+                    style={{
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontFamily: "Montserrat-Bold",
+                      fontSize: "13px",
+                      color: "#0B1967",
+                    }}
+                    onClick={() => setFilterType(!filterType)}
+                  >
+                    {dataLang.formatMessage({
+                      id: filterType ? "devicelist" : "errlist",
+                    })}
+                  </span> */}
+                </>
+
+                <CiSearch color="gray" size={20} />
+              </div>
             </div>
+
             <div></div>
             {/* <button
           className="DAT_RSHeader_New"
