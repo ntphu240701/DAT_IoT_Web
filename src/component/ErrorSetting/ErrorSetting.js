@@ -787,8 +787,8 @@ export default function ErrorSetting(props) {
       {/* BẢN MỚI ĐANG UPDATE */}
       {isBrowser ? (
         <>
-          <div className="DAT_ESHeader">
-            <div className="DAT_ESHeader_Title">
+          <div className="DAT_Header">
+            <div className="DAT_Header_Title">
               <PiUsersFour color="gray" size={25} />
               <span>{dataLang.formatMessage({ id: "errorsetting" })}</span>
             </div>
@@ -797,7 +797,7 @@ export default function ErrorSetting(props) {
                 {(popupState) => (
                   <div style={{ cursor: "pointer" }}>
                     <div
-                      className="DAT_ESHeader_Select"
+                      className="DAT_Header_Select"
                       onClick={() => setFilterType(!filterType)}
                       {...bindHover(popupState)}
                     >
@@ -840,7 +840,7 @@ export default function ErrorSetting(props) {
               </PopupState>
 
               <div
-                className="DAT_ESHeader_Filter"
+                className="DAT_Header_Filter2"
                 style={{
                   backgroundColor: "white",
                 }}

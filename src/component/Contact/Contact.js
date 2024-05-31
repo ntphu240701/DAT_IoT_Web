@@ -30,8 +30,8 @@ export default function Contact(props) {
             height: "100vh",
           }}
         >
-          <div className="DAT_ContactHeader">
-            <div className="DAT_ContactHeader_Title">
+          <div className="DAT_Header">
+            <div className="DAT_Header_Title">
               <MdOutlineContactPhone color="gray" size={25} />
               <span>{dataLang.formatMessage({ id: "contact" })}</span>
             </div>
@@ -178,8 +178,8 @@ export default function Contact(props) {
         </div>
       ) : (
         <>
-          <div className="DAT_ContactHeader">
-            <div className="DAT_ContactHeader_Title">
+          <div className="DAT_Header">
+            <div className="DAT_Header_Title">
               <MdOutlineContactPhone color="gray" size={25} />
               <span>{dataLang.formatMessage({ id: "contact" })}</span>
             </div>

@@ -474,12 +474,12 @@ export default function Warn(props) {
             height: "100vh",
           }}
         >
-          <div className="DAT_WarnHeader">
-            <div className="DAT_WarnHeader_Title">
+          <div className="DAT_Header">
+            <div className="DAT_Header_Title">
               <LuMailWarning color="gray" size={25} />
               <span>{dataLang.formatMessage({ id: "warn" })}</span>
             </div>
-            <div className="DAT_WarnHeader_Filter">
+            <div className="DAT_Header_Filter">
               <input
                 type="text"
                 placeholder={dataLang.formatMessage({ id: "enterWarn" })}

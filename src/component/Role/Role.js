@@ -394,13 +394,13 @@ export default function Role(props) {
             height: "100vh",
           }}
         >
-          <div className="DAT_ProjectHeader">
-            <div className="DAT_ProjectHeader_Title">
+          <div className="DAT_Header">
+            <div className="DAT_Header_Title">
               <LuUserSquare color="gray" size={25} />
               <span>{dataLang.formatMessage({ id: "role" })}</span>
             </div>
 
-            <div className="DAT_ProjectHeader_Filter">
+            <div className="DAT_Header_Filter">
               <input
                 id="search"
                 type="text"
@@ -415,7 +415,7 @@ export default function Role(props) {
             </div>
             {ruleInfor.value.setting.user.add === true ? (
               <button
-                className="DAT_ProjectHeader_New"
+                className="DAT_Header_New"
                 onClick={() => setRoleState("create")}
               >
                 <span value={"createdate"}>

@@ -1,51 +1,26 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./Control.scss";
-
-// import ProjectData from "./ProjectData";
-// import EditProject from "./EditProject";
-// import AddProject from "./AddProject";
-// import Filter from "./Filter";
 import Popup from "./Popup";
-// import ShareBox from "./ShareBox";
-import { warnfilter } from "../Navigation/Navigation";
-import { sidebartab, sidebartabli, sidenar } from "../Sidenar/Sidenar";
 import { callApi } from "../Api/Api";
 import { host } from "../Lang/Contant";
 import { alertDispatch } from "../Alert/Alert";
-import {
-  ruleInfor,
-  Token,
-  partnerInfor,
-  userInfor,
-  convertUnit,
-  showUnitk,
-  showUnit,
-} from "../../App";
+import { ruleInfor, userInfor } from "../../App";
 import { useSelector } from "react-redux";
 import { signal } from "@preact/signals-react";
 import { useIntl } from "react-intl";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import { lowercasedata } from "../ErrorSetting/ErrorSetting";
-
 import { FaCheckCircle, FaRegFileAlt, FaStar } from "react-icons/fa";
 import { MdOutlineError, MdAddchart } from "react-icons/md";
 import { CiSearch } from "react-icons/ci";
-import { GoProject } from "react-icons/go";
-import {
-  IoIosArrowDown,
-  IoIosArrowForward,
-  IoIosArrowUp,
-  IoMdMore,
-} from "react-icons/io";
+import { IoIosArrowDown, IoIosArrowForward, IoMdMore } from "react-icons/io";
 import { IoAddOutline, IoTrashOutline } from "react-icons/io5";
 import { FiEdit, FiFilter } from "react-icons/fi";
 import { RiShareForwardLine } from "react-icons/ri";
 import PopupState, { bindToggle, bindMenu } from "material-ui-popup-state";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { isBrowser, isMobile } from "react-device-detect";
+import { isBrowser } from "react-device-detect";
 import EditProject from "./EditProject";
 import AddProject from "./AddProject";
 import { listDevice, plantData, plantState } from "./Signal";
@@ -56,6 +31,8 @@ import { SettingContext } from "../Context/SettingContext";
 import { ToolContext } from "../Context/ToolContext";
 import { deviceData } from "./Device";
 import { OverviewContext } from "../Context/OverviewContext";
+import { SlEnergy } from "react-icons/sl";
+import { sidenar } from "../Sidenar/Sidenar";
 
 const online = signal([]);
 const offline = signal([]);
@@ -100,15 +77,12 @@ export default function Auto(props) {
   const [tab, setTab] = useState("total");
   const [tabMobile, setTabMobile] = useState("total");
   const [tabState, setTabState] = useState(false);
-  // const [plantobjauto, setplantobjauto] = useState({})
   const bu = "energy";
-  const { screen, currentID, currentSN, settingDispatch } =
-    useContext(SettingContext);
+  const icon = <SlEnergy size={25} color="gray" />;
+  const { screen, currentSN, settingDispatch } = useContext(SettingContext);
   const { toolDispatch } = useContext(ToolContext);
   const { overviewDispatch } = useContext(OverviewContext);
-
   const [datafilter, setDatafilter] = useState([]);
-  const [display, setDisplay] = useState(false);
   const listTab = [
     { id: "total", name: dataLang.formatMessage({ id: "total" }) },
     { id: "online", name: dataLang.formatMessage({ id: "online" }) },
@@ -445,119 +419,6 @@ export default function Auto(props) {
     }
   };
 
-  const invtCloud = async (data, token) => {
-    var reqData = {
-      data: data,
-      token: token,
-    };
-
-    try {
-      const response = await axios({
-        url: host.CLOUD,
-        method: "post",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        data: Object.keys(reqData)
-          .map(function (key) {
-            return (
-              encodeURIComponent(key) + "=" + encodeURIComponent(reqData[key])
-            );
-          })
-          .join("&"),
-      });
-
-      return response.data;
-    } catch (e) {
-      return { ret: 1, msg: "cloud err" };
-    }
-  };
-
-  // const closeFilter = () => {
-  //   setDisplay(false);
-  // };
-
-  // const handleResetFilter = () => {
-  //   setSaveDataInputFilter({
-  //     min: 0,
-  //     max: 10000,
-  //     location: "",
-  //     elecmode: {
-  //       grid: true,
-  //       consumption: true,
-  //       hybrid: true,
-  //       ESS: true,
-  //     },
-  //   });
-  //   setDisplay(false);
-  //   setDatafilter(dataproject.value);
-  // };
-
-  // const handleApproveFilter = (_min, _max, _location, _elecmode) => {
-  //   let temp = [];
-  //   let min_ = _min === "" ? 0 : _min;
-  //   let max_ = _max === "" ? 1000000000000000 : _max;
-  //   // let elecmode_ = _elecmode;
-  //   setSaveDataInputFilter({
-  //     min: parseFloat(min_),
-  //     max: parseFloat(max_),
-  //     location: _location,
-  //     elecmode: _elecmode,
-  //   });
-  //   let filter1 = dataproject.value.filter((item) => {
-  //     if (
-  //       parseFloat(item.capacity) >= parseFloat(min_) &&
-  //       parseFloat(item.capacity) <= parseFloat(max_)
-  //     ) {
-  //       return item;
-  //     }
-  //   });
-  //   let filter2 = dataproject.value.filter((item) => {
-  //     if (_location) {
-  //       return lowercasedata(item.addr).includes(lowercasedata(_location));
-  //     } else {
-  //       return item;
-  //     }
-  //   });
-  //   let filter3 = [];
-  //   if (_elecmode.grid === true) {
-  //     let t = dataproject.value.filter((item) => item.plantmode === "grid");
-  //     filter3 = [...filter3, ...t];
-  //   }
-  //   if (_elecmode.consumption === true) {
-  //     let t = dataproject.value.filter(
-  //       (item) => item.plantmode === "consumption"
-  //     );
-  //     filter3 = [...filter3, ...t];
-  //   }
-  //   if (_elecmode.hybrid === true) {
-  //     let t = dataproject.value.filter((item) => item.plantmode === "hybrid");
-  //     filter3 = [...filter3, ...t];
-  //   }
-  //   if (_elecmode.ESS === true) {
-  //     let t = dataproject.value.filter((item) => item.plantmode === "ESS");
-  //     filter3 = [...filter3, ...t];
-  //   }
-
-  //   const set1 = new Set(filter1.map((obj) => Object.values(obj)[0]));
-  //   const set2 = new Set(filter2.map((obj) => Object.values(obj)[0]));
-  //   const set3 = new Set(filter3.map((obj) => Object.values(obj)[0]));
-
-  //   //TRẢ LẠI ARRAY [45, 68]
-  //   const commonKeys = [...set1].filter(
-  //     (value) => set2.has(value) && set3.has(value)
-  //   );
-
-  //   // TRẢ LẠI OBJECT {45, 68}
-  //   // const y = set1.intersection(set2, set3);
-
-  //   temp = dataproject.value.filter((item) =>
-  //     commonKeys.includes(item.plantid_)
-  //   );
-  //   setDatafilter(temp);
-  //   setDisplay(false);
-  // };
-
   useEffect(() => {
     online.value = plantData.value.filter((item) => item.state_ == 1);
     offline.value = plantData.value.filter((item) => item.state_ == 0);
@@ -633,13 +494,13 @@ export default function Auto(props) {
             height: "100vh",
           }}
         >
-          <div className="DAT_ProjectHeader">
-            <div className="DAT_ProjectHeader_Title">
-              <GoProject color="gray" size={25} />
+          <div className="DAT_Header">
+            <div className="DAT_Header_Title">
+              {icon}
               <span>{dataLang.formatMessage({ id: bu })}</span>
             </div>
 
-            <div className="DAT_ProjectHeader_Filter">
+            <div className="DAT_Header_Filter">
               <input
                 id="search"
                 type="text"
@@ -654,7 +515,7 @@ export default function Auto(props) {
             </div>
             {ruleInfor.value.setting.project.add === true ? (
               <button
-                className="DAT_ProjectHeader_New"
+                className="DAT_Header_New"
                 onClick={() => (plantState.value = "add")}
               >
                 <span value={"createdate"}>
@@ -919,7 +780,7 @@ export default function Auto(props) {
             </div>
 
             <div className="DAT_ProjectHeaderMobile_Title">
-              <GoProject color="gray" size={25} />
+              {icon}
               <span>{dataLang.formatMessage({ id: bu })}</span>
             </div>
           </div>

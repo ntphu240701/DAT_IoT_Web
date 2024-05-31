@@ -480,8 +480,8 @@ export default function RegisterSetting() {
     >
       {isBrowser ? (
         <>
-          <div className="DAT_RSHeader">
-            <div className="DAT_RSHeader_Title">
+          <div className="DAT_Header">
+            <div className="DAT_Header_Title">
               <PiUsersFour color="gray" size={25} />
               <span>{dataLang.formatMessage({ id: "registersetting" })}</span>
             </div>
@@ -490,7 +490,7 @@ export default function RegisterSetting() {
                 {(popupState) => (
                   <div style={{ cursor: "pointer" }}>
                     <div
-                      className="DAT_ESHeader_Select"
+                      className="DAT_Header_Select"
                       onClick={() => setFilterType(!filterType)}
                       {...bindHover(popupState)}
                     >
@@ -533,7 +533,7 @@ export default function RegisterSetting() {
               </PopupState>
 
               <div
-                className="DAT_ESHeader_Filter"
+                className="DAT_Header_Filter2"
                 style={{
                   backgroundColor: "white",
                 }}

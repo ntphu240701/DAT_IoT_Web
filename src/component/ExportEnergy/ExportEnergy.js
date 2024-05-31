@@ -445,12 +445,12 @@ function ExportEnergy(props) {
     <>
       {isBrowser ? (
         <>
-          <div className="DAT_ExportHeader">
-            <div className="DAT_ExportHeader_Title">
+          <div className="DAT_Header">
+            <div className="DAT_Header_Title">
               <TiFlowSwitch color="gray" size={25} />
               <span>{dataLang.formatMessage({ id: "export" })}</span>
             </div>
-            <div className="DAT_ExportHeader_Filter">
+            <div className="DAT_Header_Filter">
               <input
                 type="text"
                 placeholder={dataLang.formatMessage({ id: "enterInfo" })}
@@ -464,7 +464,9 @@ function ExportEnergy(props) {
 
           <div className="DAT_Export">
             <div className="DAT_Export_Left">
-              <div className="DAT_Export_Left_Tit">Thiết bị</div>
+              <div className="DAT_Export_Left_Tit">
+                {dataLang.formatMessage({ id: "device" })}
+              </div>
               <div className="DAT_Export_Left_Box">
                 {logger.map((item, i) => {
                   return (
@@ -485,10 +487,14 @@ function ExportEnergy(props) {
               </div>
             </div>
             <div className="DAT_Export_Right">
-              <div className="DAT_Export_Right_Tit">Xuất báo cáo</div>
+              <div className="DAT_Export_Right_Tit">
+                {dataLang.formatMessage({ id: "export" })}
+              </div>
               <div className="DAT_Export_Right_Box">
                 <div className="DAT_Export_Right_Box_Item">
-                  <div className="DAT_Export_Right_Box_Item_Name">Máy</div>
+                  <div className="DAT_Export_Right_Box_Item_Name">
+                    {dataLang.formatMessage({ id: "machine" })}
+                  </div>
                   <select ref={machine_}>
                     {list.map((data, index) => {
                       return (
@@ -502,11 +508,15 @@ function ExportEnergy(props) {
 
                 <div className="DAT_Export_Right_Box_Item">
                   <div className="DAT_Export_Right_Box_Item_Name">
-                    Loại báo cáo
+                    {dataLang.formatMessage({ id: "reportType" })}
                   </div>
                   <select onChange={(e) => setReporttype(e.target.value)}>
-                    <option value="Day">Báo cáo ngày</option>
-                    <option value="Month">Báo cáo tháng</option>
+                    <option value="Day">
+                      {dataLang.formatMessage({ id: "reportDay" })}
+                    </option>
+                    <option value="Month">
+                      {dataLang.formatMessage({ id: "reportMonth" })}
+                    </option>
                   </select>
                 </div>
 
@@ -517,7 +527,7 @@ function ExportEnergy(props) {
                         <>
                           <div className="DAT_Export_Right_Box_Item">
                             <div className="DAT_Export_Right_Box_Item_Name">
-                              Ngày
+                              {dataLang.formatMessage({ id: "date" })}
                             </div>
                             <input
                               type="date"
@@ -531,28 +541,34 @@ function ExportEnergy(props) {
 
                           <div className="DAT_Export_Right_Box_Item">
                             <div className="DAT_Export_Right_Box_Item_Name">
-                              Khung giờ
+                              {dataLang.formatMessage({ id: "timeRange" })}
                             </div>
 
                             <select ref={type_} onChange={(e) => handleType(e)}>
-                              <option value="custom">Tùy chỉnh</option>
+                              <option value="custom">
+                                {dataLang.formatMessage({ id: "custom" })}
+                              </option>
                               <option
                                 value="high"
                                 style={{
                                   display: dayofweek === 0 ? "none" : "block",
                                 }}
                               >
-                                Giờ cao điểm
+                                {dataLang.formatMessage({ id: "rushHour" })}
                               </option>
-                              <option value="mid">Giờ bình thường</option>
-                              <option value="low">Giờ thấp điểm</option>
+                              <option value="mid">
+                                {dataLang.formatMessage({ id: "normalHour" })}
+                              </option>
+                              <option value="low">
+                                {dataLang.formatMessage({ id: "lowHour" })}
+                              </option>
                             </select>
                           </div>
 
                           {dailyCustom ? (
                             <div className="DAT_Export_Right_Box_Item">
                               <div className="DAT_Export_Right_Box_Item_Name">
-                                Từ
+                                {dataLang.formatMessage({ id: "from" })}
                               </div>
 
                               <select ref={from_}>
@@ -567,7 +583,7 @@ function ExportEnergy(props) {
 
                               <div className="DAT_Export_Right_Box_Item">
                                 <div className="DAT_Export_Right_Box_Item_Name">
-                                  Đến
+                                  {dataLang.formatMessage({ id: "To" })}
                                 </div>
                                 <select ref={to_}>
                                   {time.map((item, index) => {
@@ -589,7 +605,9 @@ function ExportEnergy(props) {
                               className="DAT_Export_Right_Box_Item_Export"
                               onClick={(e) => exportExcelDaily(e)}
                             >
-                              <span>Xuất File</span>
+                              <span>
+                                {dataLang.formatMessage({ id: "exportFile" })}
+                              </span>
                               &nbsp;
                               <FaFileExcel
                                 size={24}
@@ -604,7 +622,7 @@ function ExportEnergy(props) {
                         <>
                           <div className="DAT_Export_Right_Box_Item">
                             <div className="DAT_Export_Right_Box_Item_Name">
-                              Tháng
+                              {dataLang.formatMessage({ id: "month" })}{" "}
                             </div>
                             <input
                               type="month"
@@ -618,20 +636,28 @@ function ExportEnergy(props) {
 
                           <div className="DAT_Export_Right_Box_Item">
                             <div className="DAT_Export_Right_Box_Item_Name">
-                              Khung giờ
+                              {dataLang.formatMessage({ id: "timeRange" })}
                             </div>
 
                             <select ref={type_} onChange={(e) => handleType(e)}>
-                              <option value="custom">Tùy chỉnh</option>
-                              <option value="high">Giờ cao điểm</option>
-                              <option value="mid">Giờ bình thường</option>
-                              <option value="low">Giờ thấp điểm</option>
+                              <option value="custom">
+                                {dataLang.formatMessage({ id: "custom" })}
+                              </option>
+                              <option value="high">
+                                {dataLang.formatMessage({ id: "rushHour" })}
+                              </option>
+                              <option value="mid">
+                                {dataLang.formatMessage({ id: "normalHour" })}
+                              </option>
+                              <option value="low">
+                                {dataLang.formatMessage({ id: "lowHour" })}
+                              </option>
                             </select>
                           </div>
 
                           <div className="DAT_Export_Right_Box_Item">
                             <div className="DAT_Export_Right_Box_Item_Name">
-                              Từ:
+                              {dataLang.formatMessage({ id: "from" })}
                             </div>
                             <input
                               style={{ marginRight: "10px" }}
@@ -646,7 +672,7 @@ function ExportEnergy(props) {
 
                           <div className="DAT_Export_Right_Box_Item">
                             <div className="DAT_Export_Right_Box_Item_Name">
-                              Đến:
+                              {dataLang.formatMessage({ id: "To" })}
                             </div>
                             <input
                               type="date"
@@ -663,7 +689,9 @@ function ExportEnergy(props) {
                             onClick={(e) => exportExcelMonth(e)}
                           >
                             <div className="DAT_Export_Right_Box_Item_Export">
-                              <span>Xuất File</span>
+                              <span>
+                                {dataLang.formatMessage({ id: "exportFile" })}
+                              </span>
                               &nbsp;
                               <FaFileExcel
                                 size={24}

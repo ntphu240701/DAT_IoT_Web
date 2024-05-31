@@ -713,13 +713,13 @@ export default function GroupRole(props) {
             height: "100vh",
           }}
         >
-          <div className="DAT_GRHeader">
-            <div className="DAT_GRHeader_Title">
+          <div className="DAT_Header">
+            <div className="DAT_Header_Title">
               <PiUsersFour color="gray" size={25} />
               <span>{dataLang.formatMessage({ id: "roleList" })}</span>
             </div>
             <div
-              className="DAT_GRHeader_Filter"
+              className="DAT_Header_Filter"
               style={{
                 backgroundColor:
                   groupID.value === 0 ? "rgba(233, 233, 233, 0.5)" : "white",
@@ -743,7 +743,7 @@ export default function GroupRole(props) {
               <CiSearch color="gray" size={20} />
             </div>
             <button
-              className="DAT_GRHeader_New"
+              className="DAT_Header_New"
               onClick={() => setCreateState(true)}
             >
               <span>
