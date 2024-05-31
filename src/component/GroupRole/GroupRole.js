@@ -16,8 +16,13 @@ import { AiOutlineUserAdd, AiOutlineUsergroupAdd } from "react-icons/ai";
 import { lowercasedata } from "../ErrorSetting/ErrorSetting";
 import EditRole from "../Role/EditRole";
 import { Usr_, roleData } from "../Role/Role";
-import PopupState, { bindMenu, bindToggle } from "material-ui-popup-state";
-import { Menu, MenuItem } from "@mui/material";
+import PopupState, {
+  bindHover,
+  bindMenu,
+  bindPopper,
+  bindToggle,
+} from "material-ui-popup-state";
+import { Fade, Menu, MenuItem, Paper, Popper, Typography } from "@mui/material";
 
 import { IoCaretBackOutline } from "react-icons/io5";
 import { FiEdit } from "react-icons/fi";
@@ -27,6 +32,8 @@ import { PiUsersFour } from "react-icons/pi";
 import { CiSearch } from "react-icons/ci";
 import { ruleInfor } from "../../App";
 import { isBrowser } from "react-device-detect";
+import { LuRouter } from "react-icons/lu";
+import { BiMessageAltError } from "react-icons/bi";
 
 //DATA TEMP
 export const group = signal([]);
@@ -50,6 +57,8 @@ export default function GroupRole(props) {
   const [groupDelState, setGroupDelState] = useState(false);
   const [editrole, setEditrole] = useState(false);
   const [userList, setUserlist] = useState(false);
+  const [filterType, setFilterType] = useState(true);
+  const [datapartner, setDatapartner] = useState([]);
 
   const GroupUsers = (props) => {
     const dataLang = useIntl();
@@ -275,6 +284,10 @@ export default function GroupRole(props) {
       }
     };
 
+    useEffect(() => {
+      console.log(filterType);
+    }, [filterType]);
+
     return (
       <>
         {isBrowser ? (
@@ -300,7 +313,9 @@ export default function GroupRole(props) {
                             ? "rgb(207, 207, 207, 0.4)"
                             : "",
                       }}
-                      onClick={(e) => handleChangeGroup(e)}
+                      onClick={(e) => {
+                        handleChangeGroup(e);
+                      }}
                     >
                       <div>
                         <div
@@ -548,6 +563,7 @@ export default function GroupRole(props) {
                             ? "rgb(207, 207, 207, 0.4)"
                             : "",
                       }}
+                      onClick={() => setFilterType(false)}
                     >
                       <div style={{ display: "flex" }}>
                         <div
@@ -639,6 +655,7 @@ export default function GroupRole(props) {
 
   const handleFilter = (e) => {
     const t = lowercasedata(e.currentTarget.value);
+    console.log(groupUser.value);
     if (groupID.value !== 0) {
       datafilter.value = groupUser.value.filter((item) => {
         return (
@@ -648,6 +665,23 @@ export default function GroupRole(props) {
           lowercasedata(item.usr_).includes(t)
         );
       });
+      console.log(datafilter.value);
+    }
+  };
+
+  const handleFilterGroupUser = (e) => {
+    const input = lowercasedata(e.currentTarget.value);
+    const t = datapartner;
+    if (input === "") {
+      group.value = t;
+    } else {
+      let temp = t.filter((data) => {
+        return (
+          lowercasedata(data.name_).includes(input) ||
+          lowercasedata(data.code_).includes(input)
+        );
+      });
+      group.value = temp;
     }
   };
 
@@ -692,6 +726,7 @@ export default function GroupRole(props) {
       const allPartner = await callApi("get", host.DATA + "/getallPartner", "");
       if (allPartner.status) {
         group.value = allPartner.data.sort((a, b) => a.id_ - b.id_);
+        setDatapartner(allPartner.data.sort((a, b) => a.id_ - b.id_));
       }
     };
     checkApi();
@@ -718,30 +753,75 @@ export default function GroupRole(props) {
               <PiUsersFour color="gray" size={25} />
               <span>{dataLang.formatMessage({ id: "roleList" })}</span>
             </div>
-            <div
-              className="DAT_GRHeader_Filter"
-              style={{
-                backgroundColor:
-                  groupID.value === 0 ? "rgba(233, 233, 233, 0.5)" : "white",
-              }}
-            >
-              {groupID.value === 0 ? (
+            <div style={{ display: "flex", alignItems: "center", gap: "1px" }}>
+              <PopupState variant="popper" popupId="demo-popup-popper">
+                {(popupState) => (
+                  <div style={{ cursor: "pointer" }}>
+                    <div
+                      className="DAT_ESHeader_Select"
+                      onClick={() => setFilterType(!filterType)}
+                      {...bindHover(popupState)}
+                    >
+                      {filterType ? (
+                        <LuRouter size={17} color="#0b1967" />
+                      ) : (
+                        <BiMessageAltError size={17} color="#0b1967" />
+                      )}
+                    </div>
+                    <Popper {...bindPopper(popupState)} transition>
+                      {({ TransitionProps }) => (
+                        <Fade {...TransitionProps} timeout={350}>
+                          <Paper
+                            sx={{
+                              width: "fit-content",
+                              marginLeft: "0px",
+                              marginTop: "5px",
+                              height: "20px",
+                              p: 2,
+                            }}
+                          >
+                            <Typography
+                              sx={{
+                                fontSize: "12px",
+                                textAlign: "justify",
+                                justifyItems: "center",
+                                // marginBottom: 1.7,
+                              }}
+                            >
+                              {dataLang.formatMessage({
+                                id: filterType ? "grouproleList" : "roleList",
+                              })}
+                            </Typography>
+                          </Paper>
+                        </Fade>
+                      )}
+                    </Popper>
+                  </div>
+                )}
+              </PopupState>
+
+              <div
+                className="DAT_GRHeader_Filter"
+                style={{ backgroundColor: "white" }}
+              >
                 <input
-                  disabled
                   type="text"
-                  autoComplete="off"
                   placeholder={dataLang.formatMessage({ id: "enterInfo" })}
+                  onChange={(e) => handleFilterGroupUser(e)}
+                  style={{
+                    display: filterType ? "block" : "none",
+                  }}
                 />
-              ) : (
                 <input
                   type="text"
-                  autoComplete="on"
                   placeholder={dataLang.formatMessage({ id: "enterInfo" })}
+                  style={{ display: filterType ? "none" : "block" }}
                   onChange={(e) => handleFilter(e)}
                 />
-              )}
-              <CiSearch color="gray" size={20} />
+                <CiSearch color="gray" size={20} />
+              </div>
             </div>
+
             <button
               className="DAT_GRHeader_New"
               onClick={() => setCreateState(true)}
@@ -824,25 +904,30 @@ export default function GroupRole(props) {
                 <IoCaretBackOutline
                   size={30}
                   color="#0B1967"
-                  onClick={() => setUserlist(false)}
+                  onClick={() => {
+                    setUserlist(false);
+                    setFilterType(true);
+                  }}
                 />
               ) : (
                 <></>
               )}
-              <div
-                className="DAT_ProjectHeaderMobile_Top_Filter"
-                style={{
-                  backgroundColor:
-                    groupID.value === 0 ? "rgb(235, 235, 228)" : "white",
-                }}
-              >
+              <div className="DAT_ProjectHeaderMobile_Top_Filter">
                 <CiSearch color="gray" size={20} />
-                <input
-                  disabled={groupID.value === 0 ? true : false}
-                  type="text"
-                  placeholder={dataLang.formatMessage({ id: "enterInfo" })}
-                  onChange={(e) => handleFilter(e)}
-                />
+                {filterType ? (
+                  <input
+                    // disabled={groupID.value === 0 ? true : false}
+                    type="text"
+                    placeholder={dataLang.formatMessage({ id: "enterInfo" })}
+                    onChange={(e) => handleFilterGroupUser(e)}
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    placeholder={dataLang.formatMessage({ id: "enterInfo" })}
+                    onChange={(e) => handleFilter(e)}
+                  />
+                )}
               </div>
               {userList ? (
                 <button

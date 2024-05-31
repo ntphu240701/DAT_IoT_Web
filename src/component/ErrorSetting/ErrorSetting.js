@@ -845,31 +845,28 @@ export default function ErrorSetting(props) {
                   backgroundColor: "white",
                 }}
               >
-                <>
-                  <input
-                    type="text"
-                    id="search"
-                    // autoComplete="on"
-                    placeholder={dataLang.formatMessage({ id: "enterInfo" })}
-                    onChange={(e) => {
-                      handleFilter(e);
-                      console.log(e.currentTarget.value);
-                    }}
-                    style={{
-                      display: filterType ? "block" : "none",
-                    }}
-                  />
-                </>
-                <>
-                  <input
-                    type="text"
-                    id="search2"
-                    // autoComplete="on"
-                    placeholder={dataLang.formatMessage({ id: "enterInfo" })}
-                    onChange={(e) => handleFilterDataErr(e)}
-                    style={{ display: filterType ? "none" : "block" }}
-                  />
-                  {/* <span
+                <input
+                  type="text"
+                  id="search"
+                  // autoComplete="on"
+                  placeholder={dataLang.formatMessage({ id: "enterInfo" })}
+                  onChange={(e) => {
+                    handleFilter(e);
+                    console.log(e.currentTarget.value);
+                  }}
+                  style={{
+                    display: filterType ? "block" : "none",
+                  }}
+                />
+                <input
+                  type="text"
+                  id="search2"
+                  // autoComplete="on"
+                  placeholder={dataLang.formatMessage({ id: "enterInfo" })}
+                  onChange={(e) => handleFilterDataErr(e)}
+                  style={{ display: filterType ? "none" : "block" }}
+                />
+                {/* <span
                     style={{
                       cursor: "pointer",
                       display: "flex",
@@ -885,7 +882,6 @@ export default function ErrorSetting(props) {
                       id: filterType ? "devicelist" : "errlist",
                     })}
                   </span> */}
-                </>
 
                 <CiSearch color="gray" size={20} />
               </div>
