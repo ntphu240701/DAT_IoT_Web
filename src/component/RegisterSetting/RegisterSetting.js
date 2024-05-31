@@ -521,7 +521,7 @@ export default function RegisterSetting() {
                               }}
                             >
                               {dataLang.formatMessage({
-                                id: filterType ? "devicelist" : "errlist",
+                                id: filterType ? "devicelist" : "registerList",
                               })}
                             </Typography>
                           </Paper>
@@ -750,16 +750,25 @@ export default function RegisterSetting() {
               <div
                 className="DAT_ProjectHeaderMobile_Top_Filter"
                 style={{
-                  backgroundColor: regList ? "rgb(235, 235, 228)" : "white",
+                  backgroundColor: "white",
                 }}
               >
                 <CiSearch color="gray" size={20} />
-                <input
-                  disabled={regList ? true : false}
-                  type="text"
-                  placeholder={dataLang.formatMessage({ id: "enterInfo" })}
-                  onChange={(e) => handleFilter(e)}
-                />
+                {filterType ? (
+                  <input
+                    // disabled={regList ? true : false}
+                    type="text"
+                    placeholder={dataLang.formatMessage({ id: "enterInfo" })}
+                    onChange={(e) => handleFilter(e)}
+                  />
+                ) : (
+                  <input
+                    // disabled={regList ? true : false}
+                    type="text"
+                    placeholder={dataLang.formatMessage({ id: "enterInfo" })}
+                    onChange={(e) => handleFilterReg(e)}
+                  />
+                )}
               </div>
               {regList ? (
                 <button
@@ -921,6 +930,7 @@ export default function RegisterSetting() {
                     onClick={(e) => {
                       handleChangeGroup(e);
                       setRegList(true);
+                      setFilterType(false);
                     }}
                   >
                     <div style={{ display: "flex" }}>
