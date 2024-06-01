@@ -3734,9 +3734,10 @@
 }
 
 .DAT_CustomPicker {
-  height: 40px;
+  height: 30px;
   min-width: 120px;
   border: solid 1px rgb(199, 199, 199);
+  border-radius: 5px;
   margin-right: 0px;
   display: flex;
   align-items: center;
@@ -4454,6 +4455,21 @@
         font-family: segoeui-sb;
         color: rgb(10, 24, 102);
       }
+
+      &_Datetime {
+        & input {
+          width: 120px;
+          height: 30px;
+          border-radius: 5px;
+          border: solid 1px rgb(199, 199, 199);
+          padding: 4px;
+          outline: none;
+          box-sizing: border-box;
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          font-family: segoeui;
+        }
+      }
     }
 
     &_Group {
@@ -4640,6 +4656,21 @@
         font-size: 15px;
         font-family: segoeui-sb;
         color: rgb(10, 24, 102);
+      }
+
+      &_Datetime {
+        & input {
+          width: 120px;
+          height: 30px;
+          border-radius: 5px;
+          border: solid 1px rgb(199, 199, 199);
+          padding: 4px;
+          outline: none;
+          box-sizing: border-box;
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          font-family: segoeui;
+        }
       }
     }
 
