@@ -4011,6 +4011,8 @@
           // position: relative;
           background-color: rgb(250, 250, 250);
 
+          -webkit-animation:swing-in-top-fwd .5s cubic-bezier(.175,.885,.32,1.275) both;animation:swing-in-top-fwd .5s cubic-bezier(.175,.885,.32,1.275) both;
+
           &_content {
             padding: 4px;
             box-sizing: border-box;

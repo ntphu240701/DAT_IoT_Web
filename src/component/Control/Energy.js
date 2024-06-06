@@ -23,13 +23,13 @@ import MenuItem from "@mui/material/MenuItem";
 import { isBrowser } from "react-device-detect";
 import EditProject from "./EditProject";
 import AddProject from "./AddProject";
-import { listDevice, plantData, plantState } from "./Signal";
+import { defaultData, defaultDataState, listDevice, mode, plantData, plantState } from "./Signal";
 import ShareBox from "./ShareBox";
 import Project from "./Project";
 import Toollist from "../Lib/Toollist";
 import { SettingContext } from "../Context/SettingContext";
 import { ToolContext } from "../Context/ToolContext";
-import { deviceData } from "./Device";
+import { device, deviceCurrent, deviceData } from "./Device";
 import { OverviewContext } from "../Context/OverviewContext";
 import { SlEnergy } from "react-icons/sl";
 import { sidenar } from "../Sidenar/Sidenar";
@@ -445,6 +445,16 @@ export default function Auto(props) {
 
     return () => {
       plantState.value = "default";
+      deviceCurrent.value = 0;
+      listDevice.value = [];
+      device.value = [];
+      deviceData.value = [];
+      mode.value = "overview";
+      defaultData.value = {
+        defaultscreenid_: 0,
+        defaultscreenstate_: 0,
+      };
+      defaultDataState.value = true;
     };
   }, []);
 

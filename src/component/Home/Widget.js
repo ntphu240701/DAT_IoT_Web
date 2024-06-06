@@ -206,9 +206,9 @@ function Widget(props) {
                                     checked={widget.screenstate_ === 1 ? true : false}
                                     onChange={() => setWidget({ ...widget, screenstate_: widget.screenstate_ === 1 ? 0 : 1 })}
                                 />
-                                {widget.screenstate_ === 1
-                                    ? <span style={{ color: 'green' }} >{dataLang.formatMessage({ id: "on" })}</span>
-                                    : <span style={{ color: 'red' }} >{dataLang.formatMessage({ id: "off" })}</span>}
+                           
+                                <div style={{ color: widget.screenstate_  ? 'green' : 'red' }} >{dataLang.formatMessage({ id: "on" })}</div>
+                                 
                             </div>
                         </>
                 }
