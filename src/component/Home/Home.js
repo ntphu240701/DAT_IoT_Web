@@ -37,6 +37,7 @@ const which = signal([
 ]);
 
 export const toolState = signal(false);
+export const viewMode = signal(true);
 
 export default function Home(props) {
         const dataLang = useIntl();
@@ -57,7 +58,7 @@ export default function Home(props) {
         const [plantobj, setPlantobj] = useState({});
         const [ismanual, setIsmanual] = useState(false);
         const { isLandscape } = useMobileOrientation()
-        const [viewMode, setViewMode] = useState(true);
+        // const [viewMode, setViewMode] = useState(true);
 
         const startDragging = (e, type) => {
                 setIsDragging(true);
@@ -162,8 +163,9 @@ export default function Home(props) {
         }
 
         const handleViewMode = () => {
-                setViewMode(!viewMode);
-                if (viewMode) {
+                // setViewMode(!viewMode);
+                viewMode.value = !viewMode.value;
+                if (viewMode.value) {
                         console.log(x.value, s.value);
                 }
                 // x.value = 108;
@@ -301,7 +303,7 @@ export default function Home(props) {
         }, [step])
 
         useEffect(() => {
-                if (viewMode) {
+                if (viewMode.value) {
                         let box = document.querySelector('.DAT_viewIOT-3D')
                         box.style.transform = `perspective(1000px) rotateY(${x.value}deg)`;
                 }
@@ -364,7 +366,7 @@ export default function Home(props) {
 
                                 <div></div>
                                 <div className="DAT_viewIOT-3D"
-                                        style={{ display: viewMode ? "block" : "none" }}
+                                        style={{ display: viewMode.value ? "block" : "none" }}
                                         ref={boxRef}
                                         onMouseDown={(e) => startDragging(e, 'mouse')}
                                         onMouseMove={(e) => dragging(e, 'mouse')}
@@ -427,7 +429,7 @@ export default function Home(props) {
 
                                 </div>
                                 <div className="DAT_viewIOT-Container"
-                                        style={{ display: viewMode ? "none" : "block" }}
+                                        style={{ display: viewMode.value ? "none" : "block" }}
                                 >
                                         Hello
                                 </div>
