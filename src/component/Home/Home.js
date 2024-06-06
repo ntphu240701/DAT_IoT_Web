@@ -426,6 +426,11 @@ export default function Home(props) {
                                         </span> */}
 
                                 </div>
+                                <div className="DAT_viewIOT-Container"
+                                        style={{ display: viewMode ? "none" : "block" }}
+                                >
+                                        Hello
+                                </div>
                                 <div></div>
 
                                 {/* <div className="DAT_viewIOT-Arrow" style={{ visibility: (s.value !== 8) ? "visible" : "hidden" }} id="next" onClick={(e) => { handeAction(e) }}><ion-icon name="chevron-forward-outline"></ion-icon></div> */}
