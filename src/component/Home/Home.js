@@ -1,18 +1,17 @@
-import React, { useContext, useEffect, useReducer, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./Home.scss";
 // import {useIntl} from 'react-intl';
 // import { AlertContext } from "../Context/AlertContext";
 // import { AuthContext, EnvContext } from "../Context/EnvContext";
 
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 //import Card from 'react-bootstrap/Card';
 // import { SettingContext } from "../Context/SettingContext";
-import { effect, signal } from "@preact/signals-react";
-import { pageDefault, ruleInfor, userInfor } from "../../App";
+import { signal } from "@preact/signals-react";
+import { ruleInfor, userInfor } from "../../App";
 import { useSelector } from "react-redux";
 import { useRef } from "react";
 import { useIntl } from "react-intl";
-import { SiPowerapps } from "react-icons/si";
 import { callApi } from "../Api/Api";
 import { host } from "../Lang/Contant";
 import Widget from "./Widget";
@@ -23,11 +22,9 @@ import { FaMapLocation } from "react-icons/fa6";
 import Map from "./Map";
 import { plantState } from "../Control/Signal";
 import Project from "../Control/Project";
-import { MdOutlineVideoSettings, MdSettings } from "react-icons/md";
+import { MdSettings } from "react-icons/md";
 import { PiScreencastDuotone } from "react-icons/pi";
 // import MenuTop from "../MenuTop/MenuTop";
-
-
 
 const x = signal(150);
 const s = signal(5);
@@ -45,26 +42,21 @@ export default function Home(props) {
         // const { settingDispatch } = useContext(SettingContext)
         // const type = useSelector((state) => state.admin.type)
         const user = useSelector((state) => state.admin.usr)
-
         const boxRef = useRef(null);
         let [isDragging, setIsDragging] = useState(false);
         const [startX, setStartX] = useState(0);
         const nevigate = useNavigate();
         const [step, setStep] = useState(0);
-
         const [widgetState, setWidgetState] = useState(false);
         const [mapState, setMapState] = useState(false);
         const { toolDispatch } = useContext(ToolContext);
         const { screen, currentID, currentSN, currentName, lasttab, defaulttab, settingDispatch } = useContext(SettingContext);
-
-
-
         const [widget, setWidget] = useState(0);
         const [plant, setPlant] = useState([])
         const [logger, setLogger] = useState([]);
         const [loggerdata, setLoggerdata] = useState({});
         const [plantobj, setPlantobj] = useState({});
-
+        const [viewMode, setViewMode] = useState(true);
 
         const startDragging = (e, type) => {
                 setIsDragging(true);
@@ -125,7 +117,6 @@ export default function Home(props) {
 
         }
 
-
         const handleWiget = () => {
 
                 if ((new Date().getTime() - movestart.value) < 150) {
@@ -163,10 +154,24 @@ export default function Home(props) {
 
         const handleTool = () => {
                 if ((new Date().getTime() - movestart.value) < 150) {
-                        
+
                         setStep(0)
                 }
         }
+
+        const handleViewMode = () => {
+                setViewMode(!viewMode);
+                if (viewMode) {
+                        console.log(x.value, s.value);
+                }
+                // x.value = 108;
+                // s.value = 6;
+                // movestart.value = 0;
+        };
+
+        useEffect(() => {
+                console.log(x.value, s.value, movestart.value);
+        }, [])
 
         useEffect(() => {
 
@@ -287,20 +292,16 @@ export default function Home(props) {
 
         }, [step])
 
-
-
-
-
         useEffect(() => {
-
-                let box = document.querySelector('.DAT_viewIOT-3D')
-                box.style.transform = `perspective(1000px) rotateY(${x.value}deg)`;
+                if (viewMode) {
+                        let box = document.querySelector('.DAT_viewIOT-3D')
+                        box.style.transform = `perspective(1000px) rotateY(${x.value}deg)`;
+                }
                 return (() => {
                         // settingDispatch({ type: "RESET", payload: [] })
 
                 })
         }, [x.value])
-
 
         useEffect(() => {
                 const which_ = [
@@ -316,7 +317,6 @@ export default function Home(props) {
                 // console.log(which_)
                 which.value = [...which_]
         }, [ruleInfor.value])
-
 
         const handleProject = (data) => {
                 setPlantobj(data)
@@ -344,16 +344,19 @@ export default function Home(props) {
         //         s.value = parseInt((360 - x.value) / 42);
         // }
 
-
-
         return (
                 <>
                         {/* <MenuTop user={user} /> */}
                         <div className="DAT_viewIOT">
+                                <div className="DAT_viewIOT-Mode" >
+                                        <input type="checkbox" class="theme-checkbox" onClick={() => handleViewMode()} />
+                                </div>
 
                                 {/* <div className="DAT_viewIOT-Arrow" style={{ visibility: (s.value !== 5) ? "visible" : "hidden", }} id="pre" onClick={(e) => { handeAction(e) }}><ion-icon name="chevron-back-outline"></ion-icon></div> */}
+
                                 <div></div>
                                 <div className="DAT_viewIOT-3D"
+                                        style={{ display: viewMode ? "block" : "none" }}
                                         ref={boxRef}
                                         onMouseDown={(e) => startDragging(e, 'mouse')}
                                         onMouseMove={(e) => dragging(e, 'mouse')}
@@ -416,18 +419,16 @@ export default function Home(props) {
 
                                 </div>
                                 <div></div>
+
                                 {/* <div className="DAT_viewIOT-Arrow" style={{ visibility: (s.value !== 8) ? "visible" : "hidden" }} id="next" onClick={(e) => { handeAction(e) }}><ion-icon name="chevron-forward-outline"></ion-icon></div> */}
 
                                 <div className="DAT_viewIOT-Widget" style={{ height: widgetState ? "100vh" : "0", transition: "0.5s" }}>
                                         <Widget logger={logger} widget={widget} loggerdata={loggerdata} handleClose={handleClose} />
                                 </div>
 
-
-
                                 <div className="DAT_viewIOT-Widget" style={{ height: mapState ? "100vh" : "0", transition: "0.5s" }}>
                                         <Map plant={plant} handleClose={handleCloseMap} handleProject={handleProject} />
                                 </div>
-
 
                                 <div className="DAT_ProjectInfor" style={{ height: plantState.value === "default" ? "0px" : "100vh", transition: "0.5s", }}>
                                         {(() => {
@@ -450,11 +451,9 @@ export default function Home(props) {
                                 </div>
                         </div >
 
-
                         {/* <div className="DAT_viewIOT-Plant" style={{ height: plantState.value === "info" ? "100vh" : "0", transition: "0.5s" }}>
                                 <Project usr={user} bu={plantobj.bu_} data={plantobj} />
                         </div> */}
-
 
                         {toolState.value
                                 ? <div className="DAT_Toollist" style={{ zIndex: 35 }}>
@@ -473,11 +472,6 @@ export default function Home(props) {
                                 : <></>
 
                         } */}
-
-
-
                 </>
         );
-
 }
-
