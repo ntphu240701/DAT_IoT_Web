@@ -24,6 +24,7 @@ import { plantState } from "../Control/Signal";
 import Project from "../Control/Project";
 import { MdSettings } from "react-icons/md";
 import { PiScreencastDuotone } from "react-icons/pi";
+import { isBrowser, useMobileOrientation } from "react-device-detect";
 // import MenuTop from "../MenuTop/MenuTop";
 
 const x = signal(150);
@@ -39,8 +40,6 @@ export const toolState = signal(false);
 
 export default function Home(props) {
         const dataLang = useIntl();
-        // const { settingDispatch } = useContext(SettingContext)
-        // const type = useSelector((state) => state.admin.type)
         const user = useSelector((state) => state.admin.usr)
         const boxRef = useRef(null);
         let [isDragging, setIsDragging] = useState(false);
@@ -50,12 +49,14 @@ export default function Home(props) {
         const [widgetState, setWidgetState] = useState(false);
         const [mapState, setMapState] = useState(false);
         const { toolDispatch } = useContext(ToolContext);
-        const { screen, currentID, currentSN, currentName, lasttab, defaulttab, settingDispatch } = useContext(SettingContext);
+        const { settingDispatch } = useContext(SettingContext);
         const [widget, setWidget] = useState(0);
         const [plant, setPlant] = useState([])
         const [logger, setLogger] = useState([]);
         const [loggerdata, setLoggerdata] = useState({});
         const [plantobj, setPlantobj] = useState({});
+        const [ismanual, setIsmanual] = useState(false);
+        const { isLandscape } = useMobileOrientation()
         const [viewMode, setViewMode] = useState(true);
 
         const startDragging = (e, type) => {
@@ -156,6 +157,7 @@ export default function Home(props) {
                 if ((new Date().getTime() - movestart.value) < 150) {
 
                         setStep(0)
+                        setIsmanual(true)
                 }
         }
 
@@ -284,9 +286,15 @@ export default function Home(props) {
                 }
                 if (step === 3) {
                         console.log('Load Tool')
-                        if (widget.screenstate_) {
+
+                        if (ismanual) {
                                 toolState.value = true;
+                        } else {
+                                if (widget.screenstate_) {
+                                        toolState.value = true;
+                                }
                         }
+
                 }
 
 
@@ -449,6 +457,31 @@ export default function Home(props) {
                                                 }
                                         })()}
                                 </div>
+
+
+                                {/* {isBrowser
+                                        ? <div className="DAT_viewIOT-Inf" >
+                                                <div className="DAT_viewIOT-Inf-Content"></div>
+                                                <div className="DAT_viewIOT-Inf-Content"></div>
+                                                <div className="DAT_viewIOT-Inf-Content"></div>
+                                                <div className="DAT_viewIOT-Inf-Content"></div>
+                                        </div>
+                                        : isLandscape
+                                                ? <></>
+
+                                                : <div className="DAT_viewIOT-InfMobile" >
+                                                        <div className="DAT_viewIOT-InfMobile-G">
+                                                                <div className="DAT_viewIOT-InfMobile-G-Content"></div>
+                                                                <div className="DAT_viewIOT-InfMobile-G-Content"></div>
+                                                        </div>
+
+                                                        <div className="DAT_viewIOT-InfMobile-G">
+                                                                <div className="DAT_viewIOT-InfMobile-G-Content"></div>
+                                                                <div className="DAT_viewIOT-InfMobile-G-Content"></div>
+                                                        </div>
+                                                </div>
+                                } */}
+
                         </div >
 
                         {/* <div className="DAT_viewIOT-Plant" style={{ height: plantState.value === "info" ? "100vh" : "0", transition: "0.5s" }}>

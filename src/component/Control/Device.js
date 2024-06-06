@@ -23,7 +23,7 @@ import { signal } from "@preact/signals-react";
 import { ToolContext } from "../Context/ToolContext";
 import { SettingContext } from "../Context/SettingContext";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { plantState } from "./Signal";
+import { defaultData, defaultDataState, plantState } from "./Signal";
 import Popup from "./Popup";
 import { isBrowser, useMobileOrientation } from "react-device-detect";
 import { AiOutlineAppstoreAdd } from "react-icons/ai";
@@ -55,6 +55,7 @@ function Device(props) {
   const [dev, setDev] = useState({});
   const [monitor, setMonitor] = useState({});
   const [monitorList, setMonitorList] = useState(false);
+  // const [defaultdata, setDefaultdata] = useState(0);
   const { isLandscape } = useMobileOrientation();
 
   const handleEdit = (e) => {
@@ -167,12 +168,9 @@ function Device(props) {
     deviceCurrent.value = arr[0];
     let i = device.value.findIndex((data) => data.id_ == arr[0]);
     console.log(device.value[i]);
-    if (
-      device.value[i].defaultscreenstate_ &&
-      device.value[i].defaultscreenid_ !== 0
-    ) {
-      handleScreen(device.value[i].defaultscreenid_);
-    }
+    defaultData.value.defaultscreenid_ = device.value[i].defaultscreenid_;
+    defaultData.value.defaultscreenstate_ = device.value[i].defaultscreenstate_;
+    // setDefaultdata(device.value[i].defaultscreenid_);
 
     const getList = async () => {
       let res = await callApi("post", host.DATA + "/getLoggerData", {
@@ -182,7 +180,12 @@ function Device(props) {
       console.log(res);
       if (res.status) {
         deviceData.value = res.data;
-
+        if (
+          device.value[i].defaultscreenstate_ &&
+          device.value[i].defaultscreenid_ !== 0
+        ) {
+          handleScreen(device.value[i].defaultscreenid_);
+        }
         // setDeviceState(true)
       }
     };
@@ -202,8 +205,16 @@ function Device(props) {
     if (res.status) {
       console.log(device.value);
       let i = device.value.findIndex((data) => data.sn_ == arr[1]);
-      device.value[i].defaultscreenid_ = arr[0];
+
+      device.value[i].defaultscreenid_ = parseInt(arr[0]);
       device.value[i].defaultscreenstate_ = 1;
+
+      defaultData.value = {
+        ...defaultData.value,
+        defaultscreenid_: parseInt(arr[0]),
+        defaultscreenstate_: 1,
+      };
+
       alertDispatch(dataLang.formatMessage({ id: "alert_64" }));
     }
   };
@@ -220,9 +231,48 @@ function Device(props) {
       console.log(device.value);
       let i = device.value.findIndex((data) => data.sn_ == arr[0]);
       device.value[i].defaultscreenstate_ = 0;
+      defaultData.value = {
+        ...defaultData.value,
+        defaultscreenid_: 0,
+        defaultscreenstate_: 0,
+      };
       alertDispatch(dataLang.formatMessage({ id: "alert_65" }));
     }
   };
+
+  useEffect(() => {
+
+    if (defaultDataState.value) {
+     
+      if (device.value && device.value.length > 0) {
+        console.log(defaultDataState.value);
+        console.log(deviceData.value);
+        const id = device.value[0].id_;
+        const sn = device.value[0].sn_;
+        const getList = async () => {
+          let res = await callApi("post", host.DATA + "/getLoggerData", {
+            id: id,
+            sn: sn,
+          });
+          console.log(res);
+          if (res.status) {
+            defaultDataState.value = false;
+            deviceData.value = res.data;
+            defaultData.value = {
+              ...defaultData.value,
+              defaultscreenid_: device.value[0].defaultscreenid_,
+              defaultscreenstate_: device.value[0].defaultscreenstate_,
+            };
+            deviceCurrent.value = id;
+          }
+        };
+        getList();
+
+      }
+    }
+
+    // handleScreen(device.value[i].defaultscreenid_);
+  }, [device.value, defaultDataState.value]);
 
   return (
     <>
@@ -336,7 +386,7 @@ function Device(props) {
                         {/* <div className='DAT_Screen_main_list_item_des' >{data.description_}</div> */}
                         <div className="DAT_Screen_Left_main_list_item_modify">
                           {ruleInfor.value.setting.device.modify ||
-                          ruleInfor.value.setting.device.remove ? (
+                            ruleInfor.value.setting.device.remove ? (
                             <PopupState
                               variant="popper"
                               popupId="demo-popup-popper"
@@ -452,11 +502,18 @@ function Device(props) {
                           </div>
                         </div>
                         {ruleInfor.value.setting.monitor.modify ||
-                        ruleInfor.value.setting.monitor.remove ? (
+                          ruleInfor.value.setting.monitor.remove ? (
                           <div className="DAT_Screen_Right_sub_list_item_modify">
                             <PiScreencastDuotone
                               size={18}
-                              color="gray"
+                              color={
+                                defaultData.value.defaultscreenstate_
+                                  ? defaultData.value.defaultscreenid_ ===
+                                    data.id_
+                                    ? "green"
+                                    : "gray"
+                                  : "gray"
+                              }
                               style={{ cursor: "pointer" }}
                               id={`${data.id_}_${data.sn_}_edit`}
                               onClick={(e) => {
@@ -584,11 +641,18 @@ function Device(props) {
                           </div>
                         </div>
                         {ruleInfor.value.setting.monitor.modify ||
-                        ruleInfor.value.setting.monitor.remove ? (
+                          ruleInfor.value.setting.monitor.remove ? (
                           <div className="DAT_ScreenMobile_sub_list_item_modify">
                             <PiScreencastDuotone
                               size={18}
-                              color="gray"
+                              color={
+                                defaultData.value.defaultscreenstate_
+                                  ? defaultData.value.defaultscreenid_ ===
+                                    data.id_
+                                    ? "green"
+                                    : "gray"
+                                  : "gray"
+                              }
                               style={{ cursor: "pointer" }}
                               id={`${data.id_}_${data.sn_}_edit`}
                               onClick={(e) => {
@@ -743,7 +807,7 @@ function Device(props) {
                         </div>
                       </div>
                       {ruleInfor.value.setting.device.modify ||
-                      ruleInfor.value.setting.device.remove ? (
+                        ruleInfor.value.setting.device.remove ? (
                         <div className="DAT_ScreenMobile_main_item_bottom">
                           {ruleInfor.value.setting.device.modify ? (
                             <FiEdit

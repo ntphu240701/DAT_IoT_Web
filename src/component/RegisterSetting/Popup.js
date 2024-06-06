@@ -3,6 +3,7 @@ import { IoClose } from "react-icons/io5";
 import { useIntl } from "react-intl";
 import { COLOR } from "../../App";
 import { configEdit } from "./RegisterSetting";
+import "./RegisterSetting.scss";
 
 export default function Popup(props) {
   const dataLang = useIntl();
@@ -11,6 +12,8 @@ export default function Popup(props) {
   const configAddRef1 = useRef();
   const configAddRef2 = useRef();
   const configAddRef3 = useRef();
+  const baseRef = useRef("10");
+  const newConfigBaseRef = useRef("10");
   const editValRef1 = useRef();
   const editValRef2 = useRef();
   const editValRef3 = useRef();
@@ -31,7 +34,7 @@ export default function Popup(props) {
       const t = props.data.find(
         (item) => item.id == configEdit.value.split("_")[0]
       ).register;
-      console.log(props.data);
+      // console.log(props.data);
       console.log(t.find((item) => item.id == configEdit.value.split("_")[1]));
       editValRef1.current.value = t
         .find((item) => item.id == configEdit.value.split("_")[1])
@@ -42,14 +45,16 @@ export default function Popup(props) {
       editValRef3.current.value = t.find(
         (item) => item.id == configEdit.value.split("_")[1]
       ).val;
-      console.log(
-        editValRef1.current.value,
-        editValRef2.current.value,
-        editValRef3.current.value
-      );
+      // console.log(
+      //   editValRef1.current.value,
+      //   editValRef2.current.value,
+      //   editValRef3.current.value
+      // );
     }
     console.log(props.type);
   }, []);
+
+  useEffect(() => {}, [props.data]);
 
   //addNewReg,
   return (
@@ -190,6 +195,38 @@ export default function Popup(props) {
                         required
                         ref={editValRef3}
                       />
+                      Base :
+                      <select
+                        ref={baseRef}
+                        defaultValue={
+                          props.data
+                            .find(
+                              (item) =>
+                                item.id == configEdit.value.split("_")[0]
+                            )
+                            .register.find(
+                              (con) => con.id == configEdit.value.split("_")[1]
+                            ).base
+                        }
+                      >
+                        <option value="10">10</option>
+                        <option value="16">16</option>
+                        <option value="2_1">2_1</option>
+                        <option value="2_2">2_2</option>
+                        <option value="2_3">2_3</option>
+                        <option value="2_4">2_4</option>
+                        <option value="2_5">2_5</option>
+                        <option value="2_6">2_6</option>
+                        <option value="2_7">2_7</option>
+                        <option value="2_8">2_8</option>
+                        <option value="2_9">2_9</option>
+                        <option value="2_10">2_10</option>
+                        <option value="2_11">2_11</option>
+                        <option value="2_12">2_12</option>
+                        <option value="2_13">2_13</option>
+                        <option value="2_14">2_14</option>
+                        <option value="2_15">2_15</option>
+                      </select>
                     </div>
                   </div>
                 </div>
@@ -205,7 +242,8 @@ export default function Popup(props) {
                       props.handleEditConfig(
                         editValRef1.current.value,
                         editValRef2.current.value,
-                        editValRef3.current.value
+                        editValRef3.current.value,
+                        baseRef.current.value
                       );
                     }}
                   >
@@ -240,7 +278,26 @@ export default function Popup(props) {
                   </span>
                   <input type="number" ref={configAddRef1} /> -
                   <input type="number" ref={configAddRef2} />:
-                  <input type="number" ref={configAddRef3} />
+                  <input type="number" ref={configAddRef3} /> Base :
+                  <select ref={newConfigBaseRef}>
+                    <option value="10">10</option>
+                    <option value="16">16</option>
+                    <option value="2_1">2_1</option>
+                    <option value="2_2">2_2</option>
+                    <option value="2_3">2_3</option>
+                    <option value="2_4">2_4</option>
+                    <option value="2_5">2_5</option>
+                    <option value="2_6">2_6</option>
+                    <option value="2_7">2_7</option>
+                    <option value="2_8">2_8</option>
+                    <option value="2_9">2_9</option>
+                    <option value="2_10">2_10</option>
+                    <option value="2_11">2_11</option>
+                    <option value="2_12">2_12</option>
+                    <option value="2_13">2_13</option>
+                    <option value="2_14">2_14</option>
+                    <option value="2_15">2_15</option>
+                  </select>
                 </div>
 
                 <div className="DAT_CreateErrSetting_Foot">
@@ -257,7 +314,8 @@ export default function Popup(props) {
                         props.handleAddConfig(
                           configAddRef1.current.value,
                           configAddRef2.current.value,
-                          configAddRef3.current.value
+                          configAddRef3.current.value,
+                          newConfigBaseRef.current.value
                         );
                       }}
                     >
