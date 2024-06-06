@@ -70,7 +70,8 @@
   box-sizing: border-box;
   border-radius: 5px;
   background-color: rgb(255, 255, 255, 0.95);
-  box-shadow: 2px 2px 5px rgba(198, 197, 197, 0.4),
+  box-shadow:
+    2px 2px 5px rgba(198, 197, 197, 0.4),
     -2px -2px 5px rgba(198, 197, 197, 0.4);
   &_Header {
     color: COLOR.$Primary-color;
@@ -549,7 +550,8 @@
   background-color: white;
   border-radius: 5px;
   overflow: hidden;
-  box-shadow: 2px 2px 5px rgb(73, 73, 73, 0.2),
+  box-shadow:
+    2px 2px 5px rgb(73, 73, 73, 0.2),
     -2px -2px 5px rgb(67, 67, 67, 0.2);
 
   &_Head {
@@ -586,7 +588,6 @@
     padding: 16px;
     color: COLOR.$Gray-color;
     border-bottom: solid 1px rgba(198, 197, 197, 0.5);
-
     display: flex;
     align-items: center;
     gap: 10px;
@@ -603,7 +604,7 @@
     }
 
     & input {
-      width: 80px;
+      width: 30px !important;
       border-radius: 5px;
       border: solid 1px rgb(199, 199, 199);
       padding: 4px;
@@ -666,7 +667,8 @@
   background-color: white;
   border-radius: 5px;
   overflow: hidden;
-  box-shadow: 2px 2px 5px rgb(73, 73, 73, 0.2),
+  box-shadow:
+    2px 2px 5px rgb(73, 73, 73, 0.2),
     -2px -2px 5px rgb(67, 67, 67, 0.2);
 
   &_Head {
@@ -737,10 +739,12 @@
     &_Content {
       &_Item {
         display: flex;
+        align-items: center;
+        justify-content: center;
         gap: 10px;
 
         & input {
-          width: 80px;
+          width: 30px;
           border-radius: 5px;
           border: solid 1px rgb(199, 199, 199);
           padding: 4px;
@@ -750,6 +754,12 @@
           -moz-box-sizing: border-box;
           font-family: segoeui;
           margin: 0;
+        }
+
+        & select {
+          border: solid 1px rgb(199, 199, 199);
+          padding: 4px;
+          border-radius: 5px;
         }
 
         input [type="number"] &input::-webkit-outer-spin-button,

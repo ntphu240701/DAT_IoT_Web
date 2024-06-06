@@ -87,7 +87,7 @@ export default function RegisterSetting() {
                   }}
                 >
                   <div className="DAT_TableText">
-                    {err.addr}: {err.val}
+                    {err.addr}: {err.val}. Base: {err.base}
                   </div>
                   <div
                     style={{
@@ -261,6 +261,7 @@ export default function RegisterSetting() {
                 id: 1,
                 addr: `${errAdd1}-${errAdd2}`,
                 val: "1",
+                base: "10",
               },
             ],
           },
@@ -282,8 +283,9 @@ export default function RegisterSetting() {
     }
   };
 
-  const handleEditConfig = (editVal1, editVal2, editVal3) => {
+  const handleEditConfig = (editVal1, editVal2, editVal3, base) => {
     const temp = configEdit.value.split("_");
+    console.log(temp);
     const i = dataRegister.findIndex((data) => data.id == temp[0]);
     const j = dataRegister[i].register.findIndex((data) => data.id == temp[1]);
     let t = dataRegister;
@@ -291,14 +293,13 @@ export default function RegisterSetting() {
       alertDispatch(dataLang.formatMessage({ id: "alert_22" }));
     } else {
       if (
-        t[i].register.filter((data) => data.addr === `${editVal1}-${editVal2}`)
-          .length > 0 &&
-        t[i].register.filter((data) => data.val === editVal3).length > 0
+        t[i].register[j].addr === `${editVal1}-${editVal2}` &&
+        t[i].register[j].val === editVal3 &&
+        t[i].register[j].id === parseInt(temp[1])
       ) {
-        alertDispatch(dataLang.formatMessage({ id: "alert_49" }));
-      } else {
         t[i].register[j].val = editVal3;
         t[i].register[j].addr = `${editVal1}-${editVal2}`;
+        t[i].register[j].base = base;
         console.log(t[i].register[j].addr);
         console.log(`${editVal1}-${editVal2}`);
         const upReg = async () => {
@@ -312,6 +313,8 @@ export default function RegisterSetting() {
         };
         upReg();
         changePopupstate();
+      } else {
+        alertDispatch(dataLang.formatMessage({ id: "alert_49" }));
       }
     }
   };
@@ -342,7 +345,7 @@ export default function RegisterSetting() {
     }
   };
 
-  const handleAddConfig = (addr1, addr2, val) => {
+  const handleAddConfig = (addr1, addr2, val, base) => {
     const temp = configEdit.value.split("_");
     const i = dataRegister.findIndex((data) => data.id == temp[0]);
     const t = dataRegister;
@@ -350,8 +353,10 @@ export default function RegisterSetting() {
       alertDispatch(dataLang.formatMessage({ id: "alert_22" }));
     } else {
       if (
-        t[i].register[t[i].register.length - 1].addr === `${addr1}-${addr2}` &&
-        t[i].register[t[i].register.length - 1].val === val
+        // t[i].register[t[i].register.length - 1].addr === `${addr1}-${addr2}` &&
+        // t[i].register[t[i].register.length - 1].val === val
+        t[i].register.some((reg) => reg.addr === `${addr1}-${addr2}`) &&
+        t[i].register.some((reg) => reg.val === val)
       ) {
         alertDispatch(dataLang.formatMessage({ id: "alert_49" }));
       } else {
@@ -359,6 +364,7 @@ export default function RegisterSetting() {
           id: t[i].register[t[i].register.length - 1].id + 1,
           addr: `${addr1}-${addr2}`,
           val: val,
+          base: base,
         });
         const upReg = async () => {
           let req = await callApi("post", `${host.DATA}/updateRegister`, {

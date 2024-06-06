@@ -97,9 +97,6 @@ export default function Dashboard(props) {
     );
   };
 
-
-
-
   // const defaultProps = {
   //   center: {
   //     lat: 16.0544068,
@@ -116,60 +113,53 @@ export default function Dashboard(props) {
   });
 
   const initMap = async (data) => {
-
-
-
-    
     loader.load().then(async (google) => {
       const defaultProps = {
         center: {
-          lat: parseFloat(data.lat_),
-          lng: parseFloat(data.long_),
+          lat: parseFloat(data?.lat_ ? data.lat_ : 16.0544068),
+          lng: parseFloat(data?.long_ ? data.long_ : 108.2021667),
         },
         zoom: 15.0,
         mapId: "my_map2",
       };
 
       const { Map } = await google.maps.importLibrary("maps");
-      const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+      const { AdvancedMarkerElement } = await google.maps.importLibrary(
+        "marker"
+      );
       let map = new Map(document.getElementById("map2"), defaultProps);
 
-     
-        const marker = { lat: parseFloat(data.lat_), lng: parseFloat(data.long_) };
-        const markerElement = new AdvancedMarkerElement({
-          position: marker,
-          map: map,
-          title: data.name_,
-        });
-        return markerElement;
-     
-    })
-
+      const marker = {
+        lat: parseFloat(data?.lat_ ? data.lat_ : 16.0544068),
+        lng: parseFloat(data?.long_ ? data.long_ : 108.2021667),
+      };
+      const markerElement = new AdvancedMarkerElement({
+        position: marker,
+        map: map,
+        title: data.name_,
+      });
+      return markerElement;
+    });
   };
 
   useEffect(() => {
-
     if (props.data) {
-      console.log(props.data);
-      initMap(props.data);
+      if (props.data) {
+        console.log(props.data);
+        initMap(props.data);
+        const getGateway = async () => {
+          let res = await callApi("post", host.DATA + "/getLogger", {
+            plantid: props.data.plantid_,
+          });
+          if (res.status) {
+            console.log(res.data.sort((a, b) => a.id_ - b.id_));
+            setDevicedata(res.data.sort((a, b) => a.id_ - b.id_));
+          }
+        };
 
-      const getGateway = async () => {
-        let res = await callApi("post", host.DATA + "/getLogger", {
-          plantid: props.data.plantid_,
-        });
-        if (res.status) {
-          console.log(res.data);
-          setDevicedata(res.data);
-        }
-      };
-
-      getGateway();
-
-
+        getGateway();
+      }
     }
-
-
-
   }, [props.data]);
 
   return (
@@ -366,8 +356,7 @@ export default function Dashboard(props) {
               <div className="DAT_MainInfo_Graph_Group_Label">
                 {chart === "year"
                   ? datalang.formatMessage({ id: "yearOutput" })
-                  : datalang.formatMessage({ id: "monthOutput" })
-                }
+                  : datalang.formatMessage({ id: "monthOutput" })}
                 : 0 kWh
               </div>
             </div>
