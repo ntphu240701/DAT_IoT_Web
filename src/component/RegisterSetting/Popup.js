@@ -211,6 +211,7 @@ export default function Popup(props) {
                       >
                         <option value="10">10</option>
                         <option value="16">16</option>
+                        <option value="2_0">2_0</option>
                         <option value="2_1">2_1</option>
                         <option value="2_2">2_2</option>
                         <option value="2_3">2_3</option>
@@ -273,7 +274,7 @@ export default function Popup(props) {
                 </div>
 
                 <div className="DAT_CreateErrSetting_Body">
-                  <span style={{ width: "70px" }}>
+                  <span style={{ width: "100px" }}>
                     {dataLang.formatMessage({ id: "config" })}:
                   </span>
                   <input type="number" ref={configAddRef1} /> -

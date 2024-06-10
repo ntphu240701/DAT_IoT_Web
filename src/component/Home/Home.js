@@ -4,7 +4,7 @@ import "./Home.scss";
 // import { AlertContext } from "../Context/AlertContext";
 // import { AuthContext, EnvContext } from "../Context/EnvContext";
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 //import Card from 'react-bootstrap/Card';
 // import { SettingContext } from "../Context/SettingContext";
 import { signal } from "@preact/signals-react";
@@ -32,11 +32,7 @@ import { set } from "lodash";
 const x = signal(150);
 const s = signal(5);
 const movestart = signal(0);
-const which = signal([
-        'auto',
-        'energy',
-        'elev',
-]);
+const which = signal(["auto", "energy", "elev"]);
 
 export const toolState = signal(false);
 export const viewMode = signal(true);
@@ -68,44 +64,45 @@ export default function Home(props) {
         const startDragging = (e, type) => {
                 setIsDragging(true);
                 movestart.value = new Date().getTime();
-                (type === 'mouse') ? setStartX(e.clientX - boxRef.current.offsetLeft) : setStartX(e.changedTouches[0].clientX - boxRef.current.offsetLeft);
+                type === "mouse"
+                        ? setStartX(e.clientX - boxRef.current.offsetLeft)
+                        : setStartX(e.changedTouches[0].clientX - boxRef.current.offsetLeft);
         };
 
         const dragging = (e, type) => {
-
                 if (!isDragging) return;
-                const x_ = type === 'mouse' ? e.clientX - boxRef.current.offsetLeft : e.changedTouches[0].clientX - boxRef.current.offsetLeft;
+                const x_ =
+                        type === "mouse"
+                                ? e.clientX - boxRef.current.offsetLeft
+                                : e.changedTouches[0].clientX - boxRef.current.offsetLeft;
                 const scrollLeft = x_ - startX;
                 if (scrollLeft > 0) {
                         if (x.value < 192) {
-                                x.value += 42
+                                x.value += 42;
                                 setIsDragging(false);
                         }
                 }
                 if (scrollLeft < 0) {
                         if (x.value > 24) {
-                                x.value -= 42
+                                x.value -= 42;
                                 setIsDragging(false);
                         }
                 }
                 s.value = parseInt((360 - x.value) / 42);
-                console.log(x.value, s.value)
-
-
+                console.log(x.value, s.value);
         };
 
         const stopDragging = () => {
-
                 setIsDragging(false);
         };
 
         const handleClose = () => {
-                setWidgetState(false)
-        }
+                setWidgetState(false);
+        };
 
         const handleCloseMap = () => {
-                setMapState(false)
-        }
+                setMapState(false);
+        };
 
         const handlePage = (page) => {
                 const page_ = {
@@ -129,14 +126,12 @@ export default function Home(props) {
         }
 
         const handleWiget = () => {
-
-                if ((new Date().getTime() - movestart.value) < 150) {
+                if (new Date().getTime() - movestart.value < 150) {
                         // console.log(page)
-                        movestart.value = 0
-                        setWidgetState(true)
+                        movestart.value = 0;
+                        setWidgetState(true);
                 }
-
-        }
+        };
 
         const handleMap = () => {
                 if (viewMode.value) {
@@ -183,12 +178,11 @@ export default function Home(props) {
         }
 
         const handleTool = () => {
-                if ((new Date().getTime() - movestart.value) < 150) {
-
-                        setStep(0)
-                        setIsmanual(true)
+                if (new Date().getTime() - movestart.value < 150) {
+                        setStep(0);
+                        setIsmanual(true);
                 }
-        }
+        };
 
         const handleViewMode = () => {
                 // setViewMode(!viewMode);
@@ -203,7 +197,7 @@ export default function Home(props) {
 
         useEffect(() => {
                 console.log(x.value, s.value, movestart.value);
-        }, [])
+        }, []);
 
         useEffect(() => {
                 const getAllLogger = async (usr, id, type) => {
@@ -220,42 +214,35 @@ export default function Home(props) {
                 }
 
                 const getWidget = async (usr) => {
-
                         let d = await callApi("post", host.DATA + "/getWidget", {
                                 usr: usr,
-
-                        })
-                        console.log(d)
+                        });
+                        console.log(d);
                         if (d.status) {
-                                setWidget(d.data)
-                                setStep(1)
+                                setWidget(d.data);
+                                setStep(1);
                         }
-
-                }
+                };
 
                 const getloggerDataUnit = async (id, sn) => {
-
                         let res = await callApi("post", host.DATA + "/getLoggerDataUnit", {
                                 loggerdataid: id,
                                 sn: sn,
                         });
                         //     console.log(res);
                         if (res.status) {
-
-                                setLoggerdata(res.data)
-                                setStep(2)
+                                setLoggerdata(res.data);
+                                setStep(2);
                                 // setDeviceState(true)
                         }
-                }
+                };
                 const getScreen = async (data) => {
                         let res = await callApi("post", host.DATA + "/getLoggerScreen", {
                                 id: data.id_,
                         });
                         // console.log(res);
                         if (res.status) {
-
-                                console.log(data.defaulttab_)
-
+                                console.log(data.defaulttab_);
 
                                 // console.log(res.data, arr[0], deviceData.value[index].sn_)
 
@@ -266,7 +253,6 @@ export default function Home(props) {
                                                 currentSN: data.sn_,
                                                 currentName: data.name_,
                                                 screen: res.data,
-
                                         },
                                 });
 
@@ -279,7 +265,6 @@ export default function Home(props) {
                                         payload: parseInt(data.defaulttab_),
                                 });
 
-
                                 res.data.map((data2, index) => {
                                         toolDispatch({
                                                 type: "LOAD_DEVICE",
@@ -290,8 +275,8 @@ export default function Home(props) {
                                                         name: data2.name_,
                                                         lastid: data2.data_.id,
                                                 },
-                                        })
-                                })
+                                        });
+                                });
 
                                 // console.log('Load Tool')
                                 setStep(3)
@@ -325,7 +310,7 @@ export default function Home(props) {
                 }
 
                 if (step === 1) {
-                        getloggerDataUnit(widget.loggerdataid_, widget.sn_)
+                        getloggerDataUnit(widget.loggerdataid_, widget.sn_);
                 }
 
                 if (step === 2) {
@@ -348,29 +333,24 @@ export default function Home(props) {
 
         useEffect(() => {
                 if (viewMode.value) {
-                        let box = document.querySelector('.DAT_viewIOT-3D')
+                        let box = document.querySelector(".DAT_viewIOT-3D");
                         box.style.transform = `perspective(1000px) rotateY(${x.value}deg)`;
                 }
-                return (() => {
+                return () => {
                         // settingDispatch({ type: "RESET", payload: [] })
-
-                })
-        }, [x.value])
+                };
+        }, [x.value]);
 
         useEffect(() => {
-                const which_ = [
-                        'energy',
-                        'auto',
-                        'elev',
-                ]
+                const which_ = ["energy", "auto", "elev"];
                 Object.keys(ruleInfor.value.setting.system).map((key) => {
                         if (ruleInfor.value.setting.system[key] === false) {
-                                which_.splice(which_.indexOf(key), 1)
+                                which_.splice(which_.indexOf(key), 1);
                         }
-                })
+                });
                 // console.log(which_)
-                which.value = [...which_]
-        }, [ruleInfor.value])
+                which.value = [...which_];
+        }, [ruleInfor.value]);
 
         const handleProject = (data) => {
                 setPlantobj(data)
@@ -412,59 +392,106 @@ export default function Home(props) {
                 <>
                         {/* <MenuTop user={user} /> */}
                         <div className="DAT_viewIOT">
-                                <div className="DAT_viewIOT-Mode" >
-                                        <input type="checkbox" class="theme-checkbox" onClick={() => handleViewMode()} />
+                                <div className="DAT_viewIOT-Mode">
+                                        <input
+                                                type="checkbox"
+                                                className="theme-checkbox"
+                                                onClick={() => handleViewMode()}
+                                        />
                                 </div>
 
                                 {/* <div className="DAT_viewIOT-Arrow" style={{ visibility: (s.value !== 5) ? "visible" : "hidden", }} id="pre" onClick={(e) => { handeAction(e) }}><ion-icon name="chevron-back-outline"></ion-icon></div> */}
 
                                 <div></div>
-                                <div className="DAT_viewIOT-3D"
+                                <div
+                                        className="DAT_viewIOT-3D"
                                         style={{ display: viewMode.value ? "block" : "none" }}
                                         ref={boxRef}
-                                        onMouseDown={(e) => startDragging(e, 'mouse')}
-                                        onMouseMove={(e) => dragging(e, 'mouse')}
+                                        onMouseDown={(e) => startDragging(e, "mouse")}
+                                        onMouseMove={(e) => dragging(e, "mouse")}
                                         onMouseUp={stopDragging}
                                         onMouseLeave={stopDragging}
-
-                                        onTouchStart={(e) => startDragging(e, 'touch')}
-                                        onTouchMove={(e) => dragging(e, 'touch')}
+                                        onTouchStart={(e) => startDragging(e, "touch")}
+                                        onTouchMove={(e) => dragging(e, "touch")}
                                         onTouchEnd={stopDragging}
 
                                 // onPointerDown={(e) => startDragging(e,'mouse')}
                                 // onPointerMove={(e) => dragging(e,'mouse')}
                                 // onPointerUp={stopDragging}
-
                                 >
-                                        <span style={{ "--i": 1 }} className="DAT_viewIOT-3D-Item" id="move">
-                                        </span>
-                                        <span style={{ "--i": 2 }} className="DAT_viewIOT-3D-Item">
-                                        </span>
-                                        <span style={{ "--i": 3 }} className="DAT_viewIOT-3D-Item">
-                                        </span>
+                                        <span
+                                                style={{ "--i": 1 }}
+                                                className="DAT_viewIOT-3D-Item"
+                                                id="move"
+                                        ></span>
+                                        <span style={{ "--i": 2 }} className="DAT_viewIOT-3D-Item"></span>
+                                        <span style={{ "--i": 3 }} className="DAT_viewIOT-3D-Item"></span>
                                         <span style={{ "--i": 4 }} className="DAT_viewIOT-3D-Item">
-                                                <div className="DAT_viewIOT-3D-Item-Setting" ><MdSettings size={25} color="white" onPointerUp={() => handleWiget()} /></div>
-                                                <div className="DAT_viewIOT-3D-Item-Icon" >
-                                                        <PiScreencastDuotone size={60} color="white" onPointerUp={() => handleTool()} />
+                                                <div className="DAT_viewIOT-3D-Item-Setting">
+                                                        <MdSettings
+                                                                size={25}
+                                                                color="white"
+                                                                onPointerUp={() => handleWiget()}
+                                                        />
                                                 </div>
-                                                <label style={{ color: (s.value === 4) ? "white" : "gray", transition: "1s" }}>{dataLang.formatMessage({ id: "shortcut" })}</label>
+                                                <div className="DAT_viewIOT-3D-Item-Icon">
+                                                        <PiScreencastDuotone
+                                                                size={60}
+                                                                color="white"
+                                                                onPointerUp={() => handleTool()}
+                                                        />
+                                                </div>
+                                                <label
+                                                        style={{
+                                                                color: s.value === 4 ? "white" : "gray",
+                                                                transition: "1s",
+                                                        }}
+                                                >
+                                                        {dataLang.formatMessage({ id: "shortcut" })}
+                                                </label>
                                         </span>
                                         <span style={{ "--i": 5 }} className="DAT_viewIOT-3D-Item">
-                                                <div className="DAT_viewIOT-3D-Item-Icon" >
-                                                        <FaMapLocation size={60} color="white" onPointerUp={() => handleMap()} />
+                                                <div className="DAT_viewIOT-3D-Item-Icon">
+                                                        <FaMapLocation
+                                                                size={60}
+                                                                color="white"
+                                                                onPointerUp={() => handleMap()}
+                                                        />
                                                 </div>
-                                                <label style={{ color: (s.value === 5) ? "white" : "gray", transition: "1s" }}>{dataLang.formatMessage({ id: "map" })}</label>
-
+                                                <label
+                                                        style={{
+                                                                color: s.value === 5 ? "white" : "gray",
+                                                                transition: "1s",
+                                                        }}
+                                                >
+                                                        {dataLang.formatMessage({ id: "map" })}
+                                                </label>
                                         </span>
 
                                         {which.value.map((data, index) => {
-                                                return <span key={index + 6} style={{ "--i": index + 6 }} className="DAT_viewIOT-3D-Item">
-                                                        <img alt="" draggable="false" onPointerUp={() => handlePage(data)} src={`dat_icon/${data}.png`}></img>
-                                                        <label style={{ color: (s.value === index + 6) ? "white" : "gray", transition: "1s" }}>{dataLang.formatMessage({ id: data })}</label>
-                                                </span>
-                                        })
-
-                                        }
+                                                return (
+                                                        <span
+                                                                key={index + 6}
+                                                                style={{ "--i": index + 6 }}
+                                                                className="DAT_viewIOT-3D-Item"
+                                                        >
+                                                                <img
+                                                                        alt=""
+                                                                        draggable="false"
+                                                                        onPointerUp={() => handlePage(data)}
+                                                                        src={`dat_icon/${data}.png`}
+                                                                ></img>
+                                                                <label
+                                                                        style={{
+                                                                                color: s.value === index + 6 ? "white" : "gray",
+                                                                                transition: "1s",
+                                                                        }}
+                                                                >
+                                                                        {dataLang.formatMessage({ id: data })}
+                                                                </label>
+                                                        </span>
+                                                );
+                                        })}
 
                                         {/* <span style={{ "--i": 6 }} className="DAT_viewIOT-3D-Item">
                                                 <img alt="" draggable="false" onPointerUp={() => handlePage('energy')} src="dat_icon/energy.png"></img>
@@ -721,34 +748,55 @@ export default function Home(props) {
 
                                 {/* <div className="DAT_viewIOT-Arrow" style={{ visibility: (s.value !== 8) ? "visible" : "hidden" }} id="next" onClick={(e) => { handeAction(e) }}><ion-icon name="chevron-forward-outline"></ion-icon></div> */}
 
-                                <div className="DAT_viewIOT-Widget" style={{ height: widgetState ? "100vh" : "0", transition: "0.5s" }}>
-                                        <Widget logger={logger} widget={widget} loggerdata={loggerdata} handleClose={handleClose} />
+                                <div
+                                        className="DAT_viewIOT-Widget"
+                                        style={{ height: widgetState ? "100vh" : "0", transition: "0.5s" }}
+                                >
+                                        <Widget
+                                                logger={logger}
+                                                widget={widget}
+                                                loggerdata={loggerdata}
+                                                handleClose={handleClose}
+                                        />
                                 </div>
 
-                                <div className="DAT_viewIOT-Widget" style={{ height: mapState ? "100vh" : "0", transition: "0.5s" }}>
-                                        <Map plant={plant} handleClose={handleCloseMap} handleProject={handleProject} />
+                                <div
+                                        className="DAT_viewIOT-Widget"
+                                        style={{ height: mapState ? "100vh" : "0", transition: "0.5s" }}
+                                >
+                                        <Map
+                                                plant={plant}
+                                                handleClose={handleCloseMap}
+                                                handleProject={handleProject}
+                                        />
                                 </div>
 
-                                <div className="DAT_ProjectInfor" style={{ height: plantState.value === "default" ? "0px" : "100vh", transition: "0.5s", }}>
+                                <div
+                                        className="DAT_ProjectInfor"
+                                        style={{
+                                                height: plantState.value === "default" ? "0px" : "100vh",
+                                                transition: "0.5s",
+                                        }}
+                                >
                                         {(() => {
                                                 switch (plantState.value) {
                                                         case "info":
-                                                                return <Project usr={user} bu={plantobj.type_} data={plantobj} />;
+                                                                return (
+                                                                        <Project usr={user} bu={plantobj.type_} data={plantobj} />
+                                                                );
                                                         case "toollist":
-                                                                return <div className="DAT_Toollist">
-                                                                        <div
-                                                                                className="DAT_Toollist-card"
-                                                                                id="CARD"
-                                                                        >
-                                                                                <Toollist bu={plantobj.type_} ></Toollist>
+                                                                return (
+                                                                        <div className="DAT_Toollist">
+                                                                                <div className="DAT_Toollist-card" id="CARD">
+                                                                                        <Toollist bu={plantobj.type_}></Toollist>
+                                                                                </div>
                                                                         </div>
-                                                                </div>;
+                                                                );
                                                         default:
                                                                 return <></>;
                                                 }
                                         })()}
                                 </div>
-
 
                                 {/* {isBrowser
                                         ? <div className="DAT_viewIOT-Inf" >
@@ -772,24 +820,21 @@ export default function Home(props) {
                                                         </div>
                                                 </div>
                                 } */}
-
-                        </div >
+                        </div>
 
                         {/* <div className="DAT_viewIOT-Plant" style={{ height: plantState.value === "info" ? "100vh" : "0", transition: "0.5s" }}>
                                 <Project usr={user} bu={plantobj.bu_} data={plantobj} />
                         </div> */}
 
-                        {toolState.value
-                                ? <div className="DAT_Toollist" style={{ zIndex: 35 }}>
-                                        <div
-                                                className="DAT_Toollist-card"
-                                                id="CARD"
-                                        >
-                                                <Toollist bu={widget.bu_} ></Toollist>
+                        {toolState.value ? (
+                                <div className="DAT_Toollist" style={{ zIndex: 35 }}>
+                                        <div className="DAT_Toollist-card" id="CARD">
+                                                <Toollist bu={widget.bu_}></Toollist>
                                         </div>
                                 </div>
-                                : <></>
-                        }
+                        ) : (
+                                <></>
+                        )}
 
                         {/* {plantState.value === "info"
                                 ? <Project usr={user} bu={plantobj.bu_} data={plantobj} />
