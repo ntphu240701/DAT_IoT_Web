@@ -161,6 +161,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 10px;
   // justify-content: center;
   // background-color: rgb(255, 255, 255, 0.85);
   // box-shadow: 2px 2px 5px rgba(198, 197, 197, 0.4);
@@ -415,6 +416,7 @@
   z-index: 35;
   display: flex;
   align-items: center;
+  overflow: hidden;
 
   &-group {
     padding: 15px;
@@ -435,35 +437,28 @@
       }
     }
   }
+
+  &_Icon {
+    width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & img {
+      width: 40px;
+      height: 40px;
+      // border: 1px solid white;
+      border-radius: 5px;
+      // box-shadow:
+      //   3px 3px 5px rgba(198, 197, 197, 0.4),
+      //   -3px -3px 5px rgba(198, 197, 197, 0.4);
+      box-shadow: 0px 0px 7px 5px rgba(198, 197, 197, 0.3);
+    }
+  }
 }
 
 .DAT_Shadow {
   width: 0;
-}
-
-.MuiMenu-paper {
-  border-radius: none !important;
-}
-
-.MuiMenu-list {
-  background-color: rgb(7, 38, 102) !important;
-  overflow: hidden;
-}
-
-.MuiMenuItem-root {
-  color: white !important;
-}
-
-.MuiButtonBase-root {
-  color: white;
-  border-bottom: 1px solid white;
-  border-bottom: 1px solid grey;
-  &:hover {
-    background-color: #144daf !important;
-
-    // background-color: white;
-    transition: 0.3s;
-  }
 }
 
 .DAT_SelectBox {
@@ -506,6 +501,21 @@
       border-bottom: none;
     }
   }
+}
+
+.DAT_InforBox {
+  position: fixed;
+  width: fit-content;
+  height: fit-content;
+  background-color: rgb(7, 38, 102, 0.8);
+  z-index: 35;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  border-radius: 5px;
+  width: 200px;
+  height: 200px;
 }
 
 @media (max-width: 900px) {

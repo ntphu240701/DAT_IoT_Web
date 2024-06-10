@@ -44,6 +44,7 @@ export default function Sidenar(props) {
   const set_box = useRef();
   const [showList, setShowList] = useState(false);
   const [preID, setPreID] = useState("");
+  const [raiseInfo, setRaiseInfo] = useState(false);
 
   const data = {
     Dashboard: {
@@ -283,9 +284,10 @@ export default function Sidenar(props) {
   const handleMenu = (e) => {
     const ID = e.currentTarget.id;
     setPreID(sidebartab.value);
-    // console.log(preID, ID);
+    console.log(preID, ID);
     if (preID !== ID) {
       setShowList(true);
+      // console.log(preID, ID);
       console.log("On");
     } else {
       setShowList(!showList);
@@ -521,7 +523,7 @@ export default function Sidenar(props) {
 
   useEffect(() => {
     if (sidenar.value) {
-      setShowList(true);
+      setShowList(false);
     } else {
       setShowList(false);
     }
@@ -530,9 +532,9 @@ export default function Sidenar(props) {
   const SelectBox = () => {
     const position = {
       Dashboard: { top: "70px", left: "70px" },
-      Monitor: { top: "120px", left: "70px" },
-      Analytics: { top: "170px", left: "70px" },
-      Setting: { top: "220px", left: "70px" },
+      Analytics: { top: "130px", left: "70px" },
+      Setting: { top: "190px", left: "70px" },
+      // Setting: { top: "220px", left: "70px" },
       // Notif: { top: "270px", left: "70px" },
     };
 
@@ -575,112 +577,109 @@ export default function Sidenar(props) {
     );
   };
 
+  const InforBox = () => {
+    return <div className="DAT_InforBox"></div>;
+  };
+
   return (
     <>
       {isBrowser || isLandscape ? (
         <>
           {viewMode.value ? (
-            <div
-              className="DAT_Sidenar"
-              style={sidenar.value ? { width: "200px" } : { width: "0px" }}
-            >
+            <>
               <div
-                style={
-                  sidenar.value ? { display: "block" } : { display: "none" }
-                }
+                className="DAT_Sidenar"
+                style={sidenar.value ? { width: "200px" } : { width: "0px" }}
               >
-                {MenuClassic(
+                <div
+                  style={
+                    sidenar.value ? { display: "block" } : { display: "none" }
+                  }
+                >
+                  {MenuClassic(
+                    "Dashboard",
+                    dataLang.formatMessage({ id: "dashboard" })
+                  )}
+                  {sidebartab.value === "Dashboard" ? (
+                    <>{MenuLi("Dashboard")}</>
+                  ) : (
+                    <></>
+                  )}
+
+                  {MenuClassic(
+                    "Analytics",
+                    dataLang.formatMessage({ id: "maintain" })
+                  )}
+                  {sidebartab.value === "Analytics" ? (
+                    <>{MenuLi("Analytics")}</>
+                  ) : (
+                    <></>
+                  )}
+
+                  {MenuClassic(
+                    "Setting",
+                    dataLang.formatMessage({ id: "setting" })
+                  )}
+                  {sidebartab.value === "Setting" ? (
+                    <>{MenuLi("Setting")}</>
+                  ) : (
+                    <></>
+                  )}
+                </div>
+              </div>
+              <div
+                className="DAT_User"
+                style={{
+                  width: sidenar.value ? "200px" : "0px",
+                }}
+              >
+                <div
+                  className="DAT_User-group"
+                  style={
+                    sidenar.value ? { display: "block" } : { display: "none" }
+                  }
+                >
+                  <div className="DAT_User-group-Tit">
+                    {dataLang.formatMessage({ id: "loginWith" })}
+                  </div>
+                  <div className="DAT_User-group-ID">
+                    {userInfor.value.name}
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div
+                className="DAT_NewSidenar"
+                style={{
+                  width: sidenar.value ? "60px" : "0px",
+                  transition: "0.3s",
+                }}
+              >
+                {MenuNew(
                   "Dashboard",
                   dataLang.formatMessage({ id: "dashboard" })
                 )}
-                {sidebartab.value === "Dashboard" ? (
-                  <>{MenuLi("Dashboard")}</>
-                ) : (
-                  <></>
-                )}
-
-                {MenuClassic(
+                {MenuNew(
                   "Analytics",
                   dataLang.formatMessage({ id: "maintain" })
                 )}
-                {sidebartab.value === "Analytics" ? (
-                  <>{MenuLi("Analytics")}</>
-                ) : (
-                  <></>
-                )}
-
-                {MenuClassic(
-                  "Setting",
-                  dataLang.formatMessage({ id: "setting" })
-                )}
-                {sidebartab.value === "Setting" ? (
-                  <>{MenuLi("Setting")}</>
-                ) : (
-                  <></>
-                )}
+                {MenuNew("Setting", dataLang.formatMessage({ id: "setting" }))}
               </div>
-            </div>
-          ) : (
-            <div
-              className="DAT_NewSidenar"
-              style={{
-                width: sidenar.value ? "60px" : "0px",
-                transition: "0.3s",
-              }}
-            >
-              {MenuNew(
-                "Dashboard",
-                dataLang.formatMessage({ id: "dashboard" })
-              )}
-              {/* {sidebartab.value === "Dashboard" ? (
-                  <>{MenuLi("Dashboard")}</>
-                ) : (
-                  <></>
-                )} */}
-              {MenuNew("Analytics", dataLang.formatMessage({ id: "maintain" }))}
-              {/* {sidebartab.value === "Analytics" ? (
-                  <>{MenuLi("Analytics")}</>
-                ) : (
-                  <></>
-                )} */}
-
-              {MenuNew("Setting", dataLang.formatMessage({ id: "setting" }))}
-              {/* {sidebartab.value === "Setting" ? (
-                  <>{MenuLi("Setting")}</>
-                ) : (
-                  <></>
-                )} */}
-            </div>
-          )}
-
-          {viewMode.value ? (
-            <div
-              className="DAT_User"
-              style={{
-                width: sidenar.value ? "200px" : "0px",
-              }}
-            >
               <div
-                className="DAT_User-group"
-                style={
-                  sidenar.value ? { display: "block" } : { display: "none" }
-                }
+                className="DAT_NewUser"
+                style={{
+                  width: sidenar.value ? "60px" : "0px",
+                  transition: "0.3s",
+                }}
               >
-                <div className="DAT_User-group-Tit">
-                  {dataLang.formatMessage({ id: "loginWith" })}
+                <div className="DAT_NewUser_Icon">
+                  <img src="./dat_icon/Embody_APP_25.png" alt="user" />
                 </div>
-                <div className="DAT_User-group-ID">{userInfor.value.name}</div>
               </div>
-            </div>
-          ) : (
-            <div
-              className="DAT_NewUser"
-              style={{
-                width: sidenar.value ? "60px" : "0px",
-              }}
-            ></div>
+            </>
           )}
-
           <div
             className="DAT_Shadow"
             id="DAT_Shadow"
@@ -689,6 +688,8 @@ export default function Sidenar(props) {
               handleShadow(event);
             }}
           ></div>
+          {raiseInfo ? <InforBox /> : <></>}
+          {viewMode.value ? <></> : <SelectBox />}
         </>
       ) : (
         <>
@@ -877,7 +878,6 @@ export default function Sidenar(props) {
           </div>
         </>
       )}
-      {viewMode.value ? <></> : <SelectBox />}
     </>
   );
 }
