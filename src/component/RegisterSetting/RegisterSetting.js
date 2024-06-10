@@ -293,15 +293,19 @@ export default function RegisterSetting() {
       alertDispatch(dataLang.formatMessage({ id: "alert_22" }));
     } else {
       if (
-        t[i].register[j].addr === `${editVal1}-${editVal2}` &&
-        t[i].register[j].val === editVal3 &&
-        t[i].register[j].id === parseInt(temp[1])
+        t[i].register.filter(
+          (data) =>
+            data.addr.split("-")[0] === `${editVal1}` &&
+            data.addr.split("-")[1] === `${editVal2}` &&
+            data.val === `${editVal3}`
+        ).length === 0 ||
+        (t[i].register[j].addr.split("-")[0] === `${editVal1}` &&
+          t[i].register[j].addr.split("-")[1] === `${editVal2}` &&
+          t[i].register[j].val === `${editVal3}`)
       ) {
-        t[i].register[j].val = editVal3;
         t[i].register[j].addr = `${editVal1}-${editVal2}`;
+        t[i].register[j].val = editVal3;
         t[i].register[j].base = base;
-        console.log(t[i].register[j].addr);
-        console.log(`${editVal1}-${editVal2}`);
         const upReg = async () => {
           let req = await callApi("post", `${host.DATA}/updateRegister`, {
             sn: groupRegID.value,
