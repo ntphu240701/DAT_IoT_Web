@@ -524,8 +524,10 @@ export default function Sidenar(props) {
   useEffect(() => {
     if (sidenar.value) {
       setShowList(false);
+      setRaiseInfo(false);
     } else {
       setShowList(false);
+      setRaiseInfo(false);
     }
   }, [sidenar.value]);
 
@@ -578,7 +580,19 @@ export default function Sidenar(props) {
   };
 
   const InforBox = () => {
-    return <div className="DAT_InforBox"></div>;
+    return (
+      <div className="DAT_InforBox">
+        <div className="DAT_InforBox_Col">
+          <img src="./dat_icon/Embody_APP_25.png" alt="user" />
+        </div>
+        <div className="DAT_InforBox_Col">
+          <div className="DAT_InforBox_Title">AIOT Energy</div>
+          <div className="DAT_InforBox_Content">
+            {dataLang.formatMessage({ id: "sologon" })}
+          </div>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -674,7 +688,12 @@ export default function Sidenar(props) {
                   transition: "0.3s",
                 }}
               >
-                <div className="DAT_NewUser_Icon">
+                <div
+                  className="DAT_NewUser_Icon"
+                  onClick={() => {
+                    setRaiseInfo(!raiseInfo);
+                  }}
+                >
                   <img src="./dat_icon/Embody_APP_25.png" alt="user" />
                 </div>
               </div>
