@@ -993,7 +993,7 @@ export const messages = {
     maintainance: "Bảo trì",
     maintain: "Vận hành-Bảo trì",
     analytic: "Phân tích",
-    analytics: "Analytics",
+    analytics: "Giám sát",
     analyticsList: "Danh sách mẫu phân tích",
     devicelist: "Danh sách thiết bị",
     monitorlist: "Danh sách màn hình",

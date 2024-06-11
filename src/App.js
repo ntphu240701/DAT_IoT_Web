@@ -3,7 +3,7 @@ import "./index.scss";
 
 import Alert from "./component/Alert/Alert";
 import Navigation from "./component/Navigation/Navigation";
-import Sidenar from "./component/Sidenar/Sidenar";
+import Sidenar, { raiseInfo, showList } from "./component/Sidenar/Sidenar";
 import {
   BrowserRouter as Router,
   Routes,
@@ -375,6 +375,15 @@ export default function App() {
     window.location.reload();
   };
 
+  const handleSidebar = () => {
+    if (showList.value) {
+      showList.value = false;
+    }
+    if (raiseInfo.value) {
+      raiseInfo.value = false;
+    }
+  };
+
   return (
     <>
       {userInfor.value.partnerid === "0" ? (
@@ -430,7 +439,10 @@ export default function App() {
                   ) : (
                     <Sidenar />
                   )}
-                  <div className="DAT_App_Content">
+                  <div
+                    className="DAT_App_Content"
+                    onClick={() => handleSidebar()}
+                  >
                     <Routes>
                       {userInfor.value.type === "master" ? (
                         <>
