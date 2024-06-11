@@ -14,7 +14,7 @@ import { groupID } from "../GroupRole/GroupRole";
 
 export default function EditRole(props) {
   const dataLang = useIntl();
-  const roleRef = useRef(roleData.value.type_);
+  const roleRef = useRef({});
   const ruleidRef = useRef(0);
 
   const popup_state = {
@@ -41,6 +41,12 @@ export default function EditRole(props) {
     };
     getRule();
   }, [partnerInfor.value.partnerid]);
+
+  useEffect(() => {
+    if (roleData.value.type_) {
+      roleRef.current.value = roleData.value.type_;
+    }
+  }, []);
 
   const handleConfirm = async () => {
     const updateRoleUser = await callApi(

@@ -9,6 +9,7 @@ export const host = {
 export const messages = {
   en: {
     erroraddress: "Error code",
+    classic: "Classic type",
     disdefault: "Disable default",
     shortcut: "Shortcut",
     gatewaylist: "Project list",
@@ -946,6 +947,7 @@ export const messages = {
   },
   vi: {
     erroraddress: "Mã lỗi",
+    classic: "Kiểu cổ điển",
     disdefault: "Tắt màn hình mặc định",
     shortcut: "Truy cập nhanh",
     gatewaylist: "Danh sách công trình",

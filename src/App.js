@@ -85,7 +85,7 @@ export const ruleInfor = signal({
     rule: { add: false, modify: false, remove: false },
     user: { add: false, modify: false, remove: false },
     warn: { remove: false },
-    screen: { add: false, modify: false, remove: false },
+    screen: { add: false, modify: false, remove: false, classic: false },
     system: { auto: false, energy: false, elev: false },
     errorsetting: { add: true, modify: true, remove: true },
     registersetting: { add: true, modify: true, remove: true },
