@@ -365,6 +365,9 @@ export default function Role(props) {
     fetchUsr();
   }, []);
 
+  useEffect(() => {
+    console.log(ruleInfor.value);
+  }, []);
   // useEffect(() => {
   //   const getRule = async (partnerid) => {
   //     const rule = await callApi("post", host.DATA + "/getRule", {
@@ -606,31 +609,120 @@ export default function Role(props) {
                       &nbsp;
                       <span>{item.rulename_}</span>
                     </div>
-
-                    <div className="DAT_RoleMobile_Content_Bottom_Right">
-                      {ruleInfor.value.setting.user.modify === true ? (
-                        <div
-                          className="DAT_RoleMobile_Content_Bottom_Right_Item"
-                          id={item.id_}
-                          onClick={(e) => handleEdit(e)}
-                        >
-                          <FiEdit size={14} />
-                        </div>
-                      ) : (
-                        <div></div>
-                      )}
-                      {ruleInfor.value.setting.user.remove === true ? (
-                        <div
-                          className="DAT_RoleMobile_Content_Bottom_Right_Item"
-                          id={item.id_}
-                          onClick={(e) => handleDelete_(e)}
-                        >
-                          <IoTrashOutline size={16} />
-                        </div>
-                      ) : (
-                        <div></div>
-                      )}
-                    </div>
+                    {(() => {
+                      switch (userInfor.value.type) {
+                        case "master":
+                          return (
+                            <>
+                              {item.type_ === "master" ? (
+                                <></>
+                              ) : (
+                                <div className="DAT_RoleMobile_Content_Bottom_Right">
+                                  {ruleInfor.value.setting.user.modify ===
+                                  true ? (
+                                    <div
+                                      className="DAT_RoleMobile_Content_Bottom_Right_Item"
+                                      id={item.id_}
+                                      onClick={(e) => handleEdit(e)}
+                                    >
+                                      <FiEdit size={14} />
+                                    </div>
+                                  ) : (
+                                    <div></div>
+                                  )}
+                                  {ruleInfor.value.setting.user.remove ===
+                                  true ? (
+                                    <div
+                                      className="DAT_RoleMobile_Content_Bottom_Right_Item"
+                                      id={item.id_}
+                                      onClick={(e) => handleDelete_(e)}
+                                    >
+                                      <IoTrashOutline size={16} />
+                                    </div>
+                                  ) : (
+                                    <div></div>
+                                  )}
+                                </div>
+                              )}
+                            </>
+                          );
+                        case "mainadmin":
+                          return (
+                            <>
+                              {item.type_ === "master" ||
+                              item.type_ === "mainadmin" ? (
+                                <></>
+                              ) : (
+                                <div className="DAT_RoleMobile_Content_Bottom_Right">
+                                  {ruleInfor.value.setting.user.modify ===
+                                  true ? (
+                                    <div
+                                      className="DAT_RoleMobile_Content_Bottom_Right_Item"
+                                      id={item.id_}
+                                      onClick={(e) => handleEdit(e)}
+                                    >
+                                      <FiEdit size={14} />
+                                    </div>
+                                  ) : (
+                                    <div></div>
+                                  )}
+                                  {ruleInfor.value.setting.user.remove ===
+                                  true ? (
+                                    <div
+                                      className="DAT_RoleMobile_Content_Bottom_Right_Item"
+                                      id={item.id_}
+                                      onClick={(e) => handleDelete_(e)}
+                                    >
+                                      <IoTrashOutline size={16} />
+                                    </div>
+                                  ) : (
+                                    <div></div>
+                                  )}
+                                </div>
+                              )}
+                            </>
+                          );
+                        case "admin":
+                          return (
+                            <>
+                              {item.type_ === "master" ||
+                              item.type_ === "mainadmin" ||
+                              item.type_ === "admin" ? (
+                                <></>
+                              ) : (
+                                <div className="DAT_RoleMobile_Content_Bottom_Right">
+                                  {ruleInfor.value.setting.user.modify ===
+                                  true ? (
+                                    <div
+                                      className="DAT_RoleMobile_Content_Bottom_Right_Item"
+                                      id={item.id_}
+                                      onClick={(e) => handleEdit(e)}
+                                    >
+                                      <FiEdit size={14} />
+                                    </div>
+                                  ) : (
+                                    <div></div>
+                                  )}
+                                  {ruleInfor.value.setting.user.remove ===
+                                  true ? (
+                                    <div
+                                      className="DAT_RoleMobile_Content_Bottom_Right_Item"
+                                      id={item.id_}
+                                      onClick={(e) => handleDelete_(e)}
+                                    >
+                                      <IoTrashOutline size={16} />
+                                    </div>
+                                  ) : (
+                                    <div></div>
+                                  )}
+                                </div>
+                              )}
+                            </>
+                          );
+                        default:
+                          return <></>;
+                      }
+                    })()}
                   </div>
                 </div>
               );

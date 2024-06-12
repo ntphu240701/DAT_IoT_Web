@@ -4,7 +4,7 @@ import { isBrowser } from "react-device-detect";
 import { signal } from "@preact/signals-react";
 import { useIntl } from "react-intl";
 import { IoIosAddCircleOutline, IoMdAdd, IoMdMore } from "react-icons/io";
-import { Empty } from "../../App";
+import { Empty, ruleInfor } from "../../App";
 import { FiEdit } from "react-icons/fi";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import {
@@ -89,49 +89,53 @@ export default function RegisterSetting() {
                   <div className="DAT_TableText">
                     {err.addr}: {err.val}. Base: {err.base}
                   </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      gap: "10px",
-                    }}
-                  >
-                    <FiEdit
-                      size={16}
-                      style={{ cursor: "pointer" }}
-                      id={`${row.id}_${err.id}_EDIT`}
-                      onClick={(e) => {
-                        changePopupstate();
-                        setStatePopup("editConfig");
-                        handleSetConfig(e);
+                  {ruleInfor.value.setting.registersetting.modify === true ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        gap: "10px",
                       }}
-                    />
-                    <IoTrashOutline
-                      size={16}
-                      style={{ cursor: "pointer" }}
-                      id={`${row.id}_${err.id}_REMOVE`}
-                      onClick={(e) => {
-                        changePopupstate();
-                        setStatePopup("removeConfig");
-                        handleSetConfig(e);
-                      }}
-                    />
-                    {parseInt(index) === cause.length - 1 ? (
-                      <IoIosAddCircleOutline
+                    >
+                      <FiEdit
                         size={16}
                         style={{ cursor: "pointer" }}
-                        id={`${row.id}_ADD`}
+                        id={`${row.id}_${err.id}_EDIT`}
                         onClick={(e) => {
-                          // handleAddConfig(e);
-                          handleSetConfig(e);
                           changePopupstate();
-                          setStatePopup("addNewConfig");
+                          setStatePopup("editConfig");
+                          handleSetConfig(e);
                         }}
                       />
-                    ) : (
-                      <></>
-                    )}
-                  </div>
+                      <IoTrashOutline
+                        size={16}
+                        style={{ cursor: "pointer" }}
+                        id={`${row.id}_${err.id}_REMOVE`}
+                        onClick={(e) => {
+                          changePopupstate();
+                          setStatePopup("removeConfig");
+                          handleSetConfig(e);
+                        }}
+                      />
+                      {parseInt(index) === cause.length - 1 ? (
+                        <IoIosAddCircleOutline
+                          size={16}
+                          style={{ cursor: "pointer" }}
+                          id={`${row.id}_ADD`}
+                          onClick={(e) => {
+                            // handleAddConfig(e);
+                            handleSetConfig(e);
+                            changePopupstate();
+                            setStatePopup("addNewConfig");
+                          }}
+                        />
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               );
             })}
@@ -150,7 +154,7 @@ export default function RegisterSetting() {
         <>
           {row.type_ === "master" ? (
             <></>
-          ) : (
+          ) : ruleInfor.value.setting.registersetting.modify === true ? (
             <PopupState variant="popper" popupId="demo-popup-popper">
               {(popupState) => (
                 <div className="DAT_TableEdit">
@@ -174,6 +178,8 @@ export default function RegisterSetting() {
                 </div>
               )}
             </PopupState>
+          ) : (
+            <></>
           )}
         </>
       ),
@@ -658,16 +664,20 @@ export default function RegisterSetting() {
                             {item.name_}
                           </div>
                         </div>
-                        <div
-                          className="DAT_RS_Content_DevideTable_Left_ItemList_Item_Shortcut"
-                          //   id={item.id_ + "_dot"}
-                          onClick={() => {
-                            changePopupstate();
-                            setStatePopup("addNewReg");
-                          }}
-                        >
-                          <IoMdAdd size={20} color="grey" />
-                        </div>
+                        {ruleInfor.value.setting.registersetting.add == true ? (
+                          <div
+                            className="DAT_RS_Content_DevideTable_Left_ItemList_Item_Shortcut"
+                            //   id={item.id_ + "_dot"}
+                            onClick={() => {
+                              changePopupstate();
+                              setStatePopup("addNewReg");
+                            }}
+                          >
+                            <IoMdAdd size={20} color="grey" />
+                          </div>
+                        ) : (
+                          <></>
+                        )}
 
                         <div
                           className="DAT_RS_Content_DevideTable_Left_ItemList_Item_More"
@@ -780,16 +790,20 @@ export default function RegisterSetting() {
                   />
                 )}
               </div>
-              {regList ? (
-                <button
-                  className="DAT_ProjectHeaderMobile_Top_New"
-                  onClick={() => {
-                    changePopupstate();
-                    setStatePopup("addNewReg");
-                  }}
-                >
-                  <IoAddOutline color="white" size={20} />
-                </button>
+              {ruleInfor.value.setting.registersetting.add == true ? (
+                regList ? (
+                  <button
+                    className="DAT_ProjectHeaderMobile_Top_New"
+                    onClick={() => {
+                      changePopupstate();
+                      setStatePopup("addNewReg");
+                    }}
+                  >
+                    <IoAddOutline color="white" size={20} />
+                  </button>
+                ) : (
+                  <></>
+                )
               ) : (
                 <></>
               )}
@@ -852,41 +866,46 @@ export default function RegisterSetting() {
                                           {i + 1}.{" "}
                                           {`${cause.addr}: ${cause.val}`}
                                         </div>
-                                        <div className="DAT_RegSetMobile_Content_Top_Info_Cause_Row2_Func">
-                                          <FiEdit
-                                            size={14}
-                                            id={`${item.id}_${cause.id}_EDIT`}
-                                            onClick={(e) => {
-                                              changePopupstate();
-                                              setStatePopup("editConfig");
-                                              handleSetConfig(e);
-                                            }}
-                                          />
-                                          <IoTrashOutline
-                                            size={16}
-                                            id={`${item.id}_${cause.id}_REMOVE`}
-                                            onClick={(e) => {
-                                              changePopupstate();
-                                              setStatePopup("removeConfig");
-                                              handleSetConfig(e);
-                                            }}
-                                          />
-                                          {parseInt(i) ===
-                                          item.register.length - 1 ? (
-                                            <IoIosAddCircleOutline
-                                              size={16}
-                                              style={{ cursor: "pointer" }}
-                                              id={`${item.id}_ADD`}
+                                        {ruleInfor.value.setting.registersetting
+                                          .modify === true ? (
+                                          <div className="DAT_RegSetMobile_Content_Top_Info_Cause_Row2_Func">
+                                            <FiEdit
+                                              size={14}
+                                              id={`${item.id}_${cause.id}_EDIT`}
                                               onClick={(e) => {
-                                                handleSetConfig(e);
                                                 changePopupstate();
-                                                setStatePopup("addNewConfig");
+                                                setStatePopup("editConfig");
+                                                handleSetConfig(e);
                                               }}
                                             />
-                                          ) : (
-                                            <></>
-                                          )}
-                                        </div>
+                                            <IoTrashOutline
+                                              size={16}
+                                              id={`${item.id}_${cause.id}_REMOVE`}
+                                              onClick={(e) => {
+                                                changePopupstate();
+                                                setStatePopup("removeConfig");
+                                                handleSetConfig(e);
+                                              }}
+                                            />
+                                            {parseInt(i) ===
+                                            item.register.length - 1 ? (
+                                              <IoIosAddCircleOutline
+                                                size={16}
+                                                style={{ cursor: "pointer" }}
+                                                id={`${item.id}_ADD`}
+                                                onClick={(e) => {
+                                                  handleSetConfig(e);
+                                                  changePopupstate();
+                                                  setStatePopup("addNewConfig");
+                                                }}
+                                              />
+                                            ) : (
+                                              <></>
+                                            )}
+                                          </div>
+                                        ) : (
+                                          <></>
+                                        )}
                                       </div>
                                     );
                                   })}
@@ -896,18 +915,23 @@ export default function RegisterSetting() {
                           </div>
 
                           <div className="DAT_RegSetMobile_Content_Bottom">
-                            <div
-                              className="DAT_RegSetMobile_Content_Bottom_Item"
-                              id={item.id}
-                              onClick={(e) => {
-                                changePopupstate();
-                                setStatePopup("removeError");
-                                configEdit.value = e.currentTarget.id;
-                                console.log(configEdit.value);
-                              }}
-                            >
-                              <IoTrashOutline size={16} />
-                            </div>
+                            {ruleInfor.value.setting.registersetting.remove ===
+                            true ? (
+                              <div
+                                className="DAT_RegSetMobile_Content_Bottom_Item"
+                                id={item.id}
+                                onClick={(e) => {
+                                  changePopupstate();
+                                  setStatePopup("removeError");
+                                  configEdit.value = e.currentTarget.id;
+                                  console.log(configEdit.value);
+                                }}
+                              >
+                                <IoTrashOutline size={16} />
+                              </div>
+                            ) : (
+                              <></>
+                            )}
                           </div>
                         </div>
                       );

@@ -245,8 +245,13 @@ export default function Rule() {
 
   const handleDel = (e) => {
     const id = e.currentTarget.id;
-    setIdDel(id);
-    setConfirmDeleteState(true);
+    console.log(id);
+    if (id == 1) {
+      alertDispatch(dataLang.formatMessage({ id: "alert_20" }));
+    } else {
+      setIdDel(id);
+      setConfirmDeleteState(true);
+    }
   };
 
   const handleCloseDelete = () => {
@@ -447,6 +452,7 @@ export default function Rule() {
                       {ruleInfor.value.setting.rule.remove ? (
                         <div
                           className="DAT_RuleMobile_Content_Bottom_Right_Item"
+                          id={item.ruleid_}
                           onClick={(e) => handleDel(e)}
                         >
                           <IoTrashOutline size={16} />

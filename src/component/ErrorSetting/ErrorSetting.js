@@ -25,7 +25,7 @@ import PopupState, {
   bindToggle,
 } from "material-ui-popup-state";
 import { Fade, Menu, MenuItem, Paper, Popper, Typography } from "@mui/material";
-import { Empty, partnerInfor, userInfor } from "../../App";
+import { Empty, partnerInfor, ruleInfor, userInfor } from "../../App";
 import { isBrowser } from "react-device-detect";
 import { PiUsersFour } from "react-icons/pi";
 import { signal } from "@preact/signals-react";
@@ -167,36 +167,40 @@ export default function ErrorSetting(props) {
                 >
                   <div className="DAT_TableText">{err.vi}</div>
                   <div className="DAT_TableText">{err.en}</div>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      gap: "10px",
-                    }}
-                  >
-                    <FiEdit
-                      size={16}
-                      style={{ cursor: "pointer" }}
-                      id={`${row.boxid_}-${err.id}-EDITCAUSE`}
-                      onClick={(e) => handleEdit(e)}
-                    />
-                    <IoTrashOutline
-                      size={16}
-                      style={{ cursor: "pointer" }}
-                      id={`${row.boxid_}_${err.id}_REMOVECAUSE`}
-                      onClick={(e) => handleDelete(e)}
-                    />
-                    {parseInt(index) === cause.length - 1 ? (
-                      <IoIosAddCircleOutline
+                  {ruleInfor.value.setting.errorsetting.modify == true ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        gap: "10px",
+                      }}
+                    >
+                      <FiEdit
                         size={16}
                         style={{ cursor: "pointer" }}
-                        id={`${row.boxid_}-ADDCAUSE`}
-                        onClick={(e) => handleAdd(e)}
+                        id={`${row.boxid_}-${err.id}-EDITCAUSE`}
+                        onClick={(e) => handleEdit(e)}
                       />
-                    ) : (
-                      <></>
-                    )}
-                  </div>
+                      <IoTrashOutline
+                        size={16}
+                        style={{ cursor: "pointer" }}
+                        id={`${row.boxid_}_${err.id}_REMOVECAUSE`}
+                        onClick={(e) => handleDelete(e)}
+                      />
+                      {parseInt(index) === cause.length - 1 ? (
+                        <IoIosAddCircleOutline
+                          size={16}
+                          style={{ cursor: "pointer" }}
+                          id={`${row.boxid_}-ADDCAUSE`}
+                          onClick={(e) => handleAdd(e)}
+                        />
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               );
             })}
@@ -229,36 +233,40 @@ export default function ErrorSetting(props) {
                 >
                   <div className="DAT_TableText">{err.vi}</div>
                   <div className="DAT_TableText">{err.en}</div>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      gap: "10px",
-                    }}
-                  >
-                    <FiEdit
-                      size={16}
-                      style={{ cursor: "pointer" }}
-                      id={`${row.boxid_}-${err.id}-EDITSOLUTION`}
-                      onClick={(e) => handleEdit(e)}
-                    />
-                    <IoTrashOutline
-                      size={16}
-                      style={{ cursor: "pointer" }}
-                      id={`${row.boxid_}_${err.id}_REMOVESOLUTION`}
-                      onClick={(e) => handleDelete(e)}
-                    />
-                    {parseInt(index) === solution.length - 1 ? (
-                      <IoIosAddCircleOutline
+                  {ruleInfor.value.setting.errorsetting.modify == true ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        gap: "10px",
+                      }}
+                    >
+                      <FiEdit
                         size={16}
                         style={{ cursor: "pointer" }}
-                        id={`${row.boxid_}-ADDSOLUTION`}
-                        onClick={(e) => handleAdd(e)}
+                        id={`${row.boxid_}-${err.id}-EDITSOLUTION`}
+                        onClick={(e) => handleEdit(e)}
                       />
-                    ) : (
-                      <></>
-                    )}
-                  </div>
+                      <IoTrashOutline
+                        size={16}
+                        style={{ cursor: "pointer" }}
+                        id={`${row.boxid_}_${err.id}_REMOVESOLUTION`}
+                        onClick={(e) => handleDelete(e)}
+                      />
+                      {parseInt(index) === solution.length - 1 ? (
+                        <IoIosAddCircleOutline
+                          size={16}
+                          style={{ cursor: "pointer" }}
+                          id={`${row.boxid_}-ADDSOLUTION`}
+                          onClick={(e) => handleAdd(e)}
+                        />
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               );
             })}
@@ -278,15 +286,7 @@ export default function ErrorSetting(props) {
         <>
           {row.type_ === "master" ? (
             <></>
-          ) : (
-            // <div className="DAT_TableEdit">
-            //   <span
-            //     id={row.warnid_ + "_MORE"}
-            //     onClick={(e) => handleModify(e, "block")}
-            //   >
-            //     <IoMdMore size={20} />
-            //   </span>
-            // </div>
+          ) : ruleInfor.value.setting.errorsetting.remove == true ? (
             <PopupState variant="popper" popupId="demo-popup-popper">
               {(popupState) => (
                 <div className="DAT_TableEdit">
@@ -307,23 +307,9 @@ export default function ErrorSetting(props) {
                 </div>
               )}
             </PopupState>
+          ) : (
+            <></>
           )}
-          {/* <div
-            className="DAT_ModifyBox"
-            id={row.warnid_ + "_Modify"}
-            style={{ display: "none", width: "80px" }}
-            onMouseLeave={(e) => handleModify(e, "none")}
-          >
-            <div
-              className="DAT_ModifyBox_Remove"
-              id={row.boxid_}
-              onClick={(e) => handleDelete(e)}
-            >
-              <IoTrashOutline size={16} />
-              &nbsp;
-              {dataLang.formatMessage({ id: "remove" })}
-            </div>
-          </div> */}
         </>
       ),
       width: "80px",
@@ -684,6 +670,10 @@ export default function ErrorSetting(props) {
     }
   };
 
+  useEffect(() => {
+    console.log(ruleInfor.value);
+  }, []);
+
   const handleFilterDataErr = (e) => {
     // if (dataErr.length > 0) {
     //   const input = lowercasedata(e.currentTarget.value);
@@ -937,13 +927,18 @@ export default function ErrorSetting(props) {
                             {item.name_}
                           </div>
                         </div>
-                        <div
-                          className="DAT_ES_Content_DevideTable_Left_ItemList_Item_Shortcut"
-                          //   id={item.id_ + "_dot"}
-                          onClick={() => setCreateState(true)}
-                        >
-                          <IoMdAdd size={20} color="grey" />
-                        </div>
+
+                        {ruleInfor.value.setting.errorsetting.add === true ? (
+                          <div
+                            className="DAT_ES_Content_DevideTable_Left_ItemList_Item_Shortcut"
+                            //   id={item.id_ + "_dot"}
+                            onClick={() => setCreateState(true)}
+                          >
+                            <IoMdAdd size={20} color="grey" />
+                          </div>
+                        ) : (
+                          <></>
+                        )}
 
                         <div
                           className="DAT_ES_Content_DevideTable_Left_ItemList_Item_More"
@@ -1082,13 +1077,17 @@ export default function ErrorSetting(props) {
                   />
                 )}
               </div>
-              {errList ? (
-                <button
-                  className="DAT_ProjectHeaderMobile_Top_New"
-                  onClick={() => setCreateState(true)}
-                >
-                  <IoAddOutline color="white" size={20} />
-                </button>
+              {ruleInfor.value.setting.errorsetting.add === true ? (
+                errList ? (
+                  <button
+                    className="DAT_ProjectHeaderMobile_Top_New"
+                    onClick={() => setCreateState(true)}
+                  >
+                    <IoAddOutline color="white" size={20} />
+                  </button>
+                ) : (
+                  <></>
+                )
               ) : (
                 <></>
               )}
@@ -1169,31 +1168,36 @@ export default function ErrorSetting(props) {
                                         <div className="DAT_ErrSetMobile_Content_Top_Info_Cause_Row2_En">
                                           {`${cause.en}`}
                                         </div>
-                                        <div className="DAT_ErrSetMobile_Content_Top_Info_Cause_Row2_Func">
-                                          <FiEdit
-                                            size={14}
-                                            style={{ cursor: "pointer" }}
-                                            id={`${item.boxid_}-${cause.id}-EDITCAUSE`}
-                                            onClick={(e) => handleEdit(e)}
-                                          />
-                                          <IoTrashOutline
-                                            size={16}
-                                            style={{ cursor: "pointer" }}
-                                            id={`${item.boxid_}_${cause.id}_REMOVECAUSE`}
-                                            onClick={(e) => handleDelete(e)}
-                                          />
-                                          {parseInt(i) ===
-                                          item.cause_.length - 1 ? (
-                                            <IoIosAddCircleOutline
+                                        {ruleInfor.value.setting.errorsetting
+                                          .modify === true ? (
+                                          <div className="DAT_ErrSetMobile_Content_Top_Info_Cause_Row2_Func">
+                                            <FiEdit
+                                              size={14}
+                                              style={{ cursor: "pointer" }}
+                                              id={`${item.boxid_}-${cause.id}-EDITCAUSE`}
+                                              onClick={(e) => handleEdit(e)}
+                                            />
+                                            <IoTrashOutline
                                               size={16}
                                               style={{ cursor: "pointer" }}
-                                              id={`${item.boxid_}-ADDCAUSE`}
-                                              onClick={(e) => handleAdd(e)}
+                                              id={`${item.boxid_}_${cause.id}_REMOVECAUSE`}
+                                              onClick={(e) => handleDelete(e)}
                                             />
-                                          ) : (
-                                            <></>
-                                          )}
-                                        </div>
+                                            {parseInt(i) ===
+                                            item.cause_.length - 1 ? (
+                                              <IoIosAddCircleOutline
+                                                size={16}
+                                                style={{ cursor: "pointer" }}
+                                                id={`${item.boxid_}-ADDCAUSE`}
+                                                onClick={(e) => handleAdd(e)}
+                                              />
+                                            ) : (
+                                              <></>
+                                            )}
+                                          </div>
+                                        ) : (
+                                          <></>
+                                        )}
                                       </div>
                                     );
                                   })}
@@ -1225,29 +1229,34 @@ export default function ErrorSetting(props) {
                                         <div className="DAT_ErrSetMobile_Content_Top_Info_Solution_Row2_En">
                                           {`${solution.en}`}
                                         </div>
-                                        <div className="DAT_ErrSetMobile_Content_Top_Info_Solution_Row2_Func">
-                                          <FiEdit
-                                            size={14}
-                                            id={`${item.boxid_}-${solution.id}-EDITSOLUTION`}
-                                            onClick={(e) => handleEdit(e)}
-                                          />
-                                          <IoTrashOutline
-                                            size={16}
-                                            id={`${item.boxid_}_${solution.id}_REMOVESOLUTION`}
-                                            onClick={(e) => handleDelete(e)}
-                                          />
-                                          {parseInt(i) ===
-                                          item.solution_.length - 1 ? (
-                                            <IoIosAddCircleOutline
-                                              size={16}
-                                              style={{ cursor: "pointer" }}
-                                              id={`${item.boxid_}-ADDSOLUTION`}
-                                              onClick={(e) => handleAdd(e)}
+                                        {ruleInfor.value.setting.errorsetting
+                                          .modify === true ? (
+                                          <div className="DAT_ErrSetMobile_Content_Top_Info_Solution_Row2_Func">
+                                            <FiEdit
+                                              size={14}
+                                              id={`${item.boxid_}-${solution.id}-EDITSOLUTION`}
+                                              onClick={(e) => handleEdit(e)}
                                             />
-                                          ) : (
-                                            <></>
-                                          )}
-                                        </div>
+                                            <IoTrashOutline
+                                              size={16}
+                                              id={`${item.boxid_}_${solution.id}_REMOVESOLUTION`}
+                                              onClick={(e) => handleDelete(e)}
+                                            />
+                                            {parseInt(i) ===
+                                            item.solution_.length - 1 ? (
+                                              <IoIosAddCircleOutline
+                                                size={16}
+                                                style={{ cursor: "pointer" }}
+                                                id={`${item.boxid_}-ADDSOLUTION`}
+                                                onClick={(e) => handleAdd(e)}
+                                              />
+                                            ) : (
+                                              <></>
+                                            )}
+                                          </div>
+                                        ) : (
+                                          <></>
+                                        )}
                                       </div>
                                     );
                                   })}
@@ -1257,15 +1266,20 @@ export default function ErrorSetting(props) {
                           </div>
 
                           <div className="DAT_ErrSetMobile_Content_Bottom">
-                            <div
-                              className="DAT_ErrSetMobile_Content_Bottom_Item"
-                              id={item.boxid_}
-                              onClick={(e) => {
-                                handleDelete(e);
-                              }}
-                            >
-                              <IoTrashOutline size={16} />
-                            </div>
+                            {ruleInfor.value.setting.errorsetting.remove ===
+                            true ? (
+                              <div
+                                className="DAT_ErrSetMobile_Content_Bottom_Item"
+                                id={item.boxid_}
+                                onClick={(e) => {
+                                  handleDelete(e);
+                                }}
+                              >
+                                <IoTrashOutline size={16} />
+                              </div>
+                            ) : (
+                              <></>
+                            )}
                           </div>
                         </div>
                       );
