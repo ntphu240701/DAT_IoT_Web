@@ -8,7 +8,7 @@ import AddUsers from "./AddUsers";
 import ConfirmDeleteGroup from "./ConfirmDeleteGroup";
 import EditGroup from "./EditGroup";
 import DataTable from "react-data-table-component";
-import { Empty } from "../../App";
+import { Empty, partnerInfor } from "../../App";
 import { useIntl } from "react-intl";
 import { callApi } from "../Api/Api";
 import { host } from "../Lang/Contant";
@@ -161,14 +161,6 @@ export default function GroupRole(props) {
             {user.type_ === "master" ? (
               <></>
             ) : (
-              // <div className="DAT_TableEdit">
-              //   <span
-              //     id={user.id_ + "_MORE"}
-              //     onClick={(e) => handleModify(e, "block")}
-              //   >
-              //     <IoMdMore size={20} />
-              //   </span>
-              // </div>
               <PopupState variant="popper" popupId="demo-popup-popper">
                 {(popupState) => (
                   <div className="DAT_TableEdit">
@@ -202,41 +194,31 @@ export default function GroupRole(props) {
                 )}
               </PopupState>
             )}
-            {/* <div
-              className="DAT_ModifyBox"
-              id={user.id_ + "_Modify"}
-              style={{ display: "none", marginRight: "4px", marginTop: "2px" }}
-              onMouseLeave={(e) => handleModify(e, "none")}
-            >
-              <div
-                className="DAT_ModifyBox_Fix"
-                id={user.id_}
-                onClick={(e) => handleEdit(e)}
-              >
-                <FiEdit size={14} />
-                &nbsp;
-                {dataLang.formatMessage({ id: "change" })}
-              </div>
-              <div
-                className="DAT_ModifyBox_Remove"
-                id={user.id_}
-                onClick={(e) => handleDeleteUser(e)}
-              >
-                <IoTrashOutline size={16} />
-                &nbsp;
-                {dataLang.formatMessage({ id: "remove" })}
-              </div>
-            </div> */}
           </>
         ),
         width: "110px",
       },
     ];
 
+    useEffect(() => {
+      const fetchUsr = async () => {
+        const d = await callApi("post", host.DATA + "/getallUser", {
+          partnerid: groupID.value,
+        });
+        if (d.status === true) {
+          console.log(d.data);
+          Usr_.value = d.data;
+          Usr_.value = Usr_.value.sort((a, b) => a.ruleid_ - b.ruleid_);
+        }
+      };
+      fetchUsr();
+    }, []);
+
     const handleEdit = (e) => {
       const id = parseInt(e.currentTarget.id);
       roleData.value = Usr_.value.find((item) => item.id_ == id);
       setEditrole(true);
+      // console.log(id, roleData.value, Usr_.value);
     };
 
     const handleChangeGroup = (e) => {
@@ -248,6 +230,8 @@ export default function GroupRole(props) {
         if (getUser.status) {
           Usr_.value = getUser.data.sort((a, b) => a.id_ - b.id_);
           groupUser.value = getUser.data.sort((a, b) => a.id_ - b.id_);
+          console.log(Usr_.value);
+          console.log(groupUser.value);
         }
       };
       checkApi();
