@@ -39,6 +39,7 @@ import { alertDispatch } from "../Alert/Alert";
 import { toolState } from "../Home/Home";
 import { LuContact2, LuMailWarning } from "react-icons/lu";
 import { PiExport } from "react-icons/pi";
+import { sidenar } from "../Sidenar/Sidenar";
 const length = signal(0);
 export const _tab = signal();
 
@@ -115,6 +116,7 @@ export default function Toollist(props) {
 
   const handleTabclose = () => {
     // rootDispatch(toolslice.actions.setstatus(false))
+    sidenar.value = false;
     toolDispatch({ type: "RESET_TOOL", payload: [] });
     settingDispatch({ type: "REMOVE_CURRENTID", payload: "" });
 

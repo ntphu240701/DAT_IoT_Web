@@ -609,6 +609,12 @@ export default function Sidenar(props) {
     );
   };
 
+  useEffect(() => {
+    if (isLandscape) {
+      sidenar.value = false;
+    }
+  }, [isLandscape]);
+
   return (
     <>
       {isBrowser || isLandscape ? (
