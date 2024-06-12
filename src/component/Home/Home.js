@@ -393,16 +393,252 @@ export default function Home(props) {
                         {/* <MenuTop user={user} /> */}
                         <div className="DAT_viewIOT">
                                 <div className="DAT_viewIOT-Mode">
-                                        <input
-                                                type="checkbox"
-                                                className="theme-checkbox"
-                                                onClick={() => handleViewMode()}
-                                        />
+                                        <div className="DAT_viewIOT-Mode-Switch">
+                                                <input
+                                                        type="checkbox"
+                                                        className="theme-checkbox"
+                                                        onClick={() => handleViewMode()}
+                                                />
+                                        </div>
+
+                                        {isBrowser
+                                                ?
+                                                <div className="DAT_viewIOT-Mode-Container"
+                                                        style={{ display: viewMode.value ? "none" : "block" }}
+                                                >
+                                                        <div className="DAT_viewIOT-Mode-Container_Top">
+                                                                <div className="DAT_viewIOT-Mode-Container_Top_Left">
+                                                                        <div className="DAT_viewIOT-Mode-Container_Top_Left_Tit">
+                                                                                {dataLang.formatMessage({ id: "projectTotal" })} {total}
+                                                                        </div>
+
+                                                                        <div className="DAT_viewIOT-Mode-Container_Top_Left_Content" style={{ borderRadius: "10px" }}>
+                                                                                <div className="DAT_viewIOT-Mode-Container_Top_Left_Content_Left">
+                                                                                        <div className="DAT_viewIOT-Mode-Container_Top_Left_Content_Left_Value">
+                                                                                                {online}
+                                                                                        </div>
+                                                                                        <div className="DAT_viewIOT-Mode-Container_Top_Left_Content_Left_Text">
+                                                                                                <img src="/dat_icon/online.png" alt="" />
+                                                                                                {dataLang.formatMessage({ id: "online" })}
+                                                                                        </div>
+                                                                                </div>
+
+                                                                                <div className="DAT_viewIOT-Mode-Container_Top_Left_Content_Line">
+
+                                                                                </div>
+
+                                                                                <div className="DAT_viewIOT-Mode-Container_Top_Left_Content_Left">
+                                                                                        <div className="DAT_viewIOT-Mode-Container_Top_Left_Content_Left_Value">
+                                                                                                {offline}
+                                                                                        </div>
+                                                                                        <div className="DAT_viewIOT-Mode-Container_Top_Left_Content_Left_Text">
+                                                                                                <img src="/dat_icon/offline.png" alt="" />
+                                                                                                {dataLang.formatMessage({ id: "offline" })}
+                                                                                        </div>
+                                                                                </div>
+                                                                        </div>
+                                                                </div>
+
+                                                                <div className="DAT_viewIOT-Mode-Container_Top_Right">
+                                                                        <div className="DAT_viewIOT-Mode-Container_Top_Right_Tit">
+                                                                                {dataLang.formatMessage({ id: "shared" })}
+                                                                        </div>
+
+                                                                        <div className="DAT_viewIOT-Mode-Container_Top_Right_Content"
+                                                                                style={{ paddingBottom: "0px" }}
+                                                                        >
+                                                                                <div className="DAT_viewIOT-Mode-Container_Top_Right_Content_Item"
+                                                                                        style={{ paddingBottom: "8px", borderBottom: "solid 1px rgb(255, 255, 255, 0.5)" }}
+                                                                                >
+                                                                                        <div className="DAT_viewIOT-Mode-Container_Top_Right_Content_Item_No"
+                                                                                        >
+                                                                                                {dataLang.formatMessage({ id: "ordinalNumber" })}
+                                                                                        </div>
+
+                                                                                        <div className="DAT_viewIOT-Mode-Container_Top_Right_Content_Item_Info">
+                                                                                                {dataLang.formatMessage({ id: "name" })}
+                                                                                        </div>
+
+                                                                                        <div className="DAT_viewIOT-Mode-Container_Top_Right_Content_Item_Type">
+                                                                                                BU
+                                                                                        </div>
+                                                                                </div>
+                                                                        </div>
+
+                                                                        <div className="DAT_viewIOT-Mode-Container_Top_Right_Content"
+                                                                                style={{ paddingBottom: "0px" }}
+                                                                        >
+                                                                                {share.map((data, index) => {
+                                                                                        return (
+                                                                                                <div className="DAT_viewIOT-Mode-Container_Top_Right_Content_Item"
+                                                                                                        key={index}
+                                                                                                        style={{ paddingBottom: "8px" }}
+                                                                                                >
+                                                                                                        <div className="DAT_viewIOT-Mode-Container_Top_Right_Content_Item_No"
+                                                                                                        >
+                                                                                                                {index + 1}
+                                                                                                        </div>
+
+                                                                                                        <div className="DAT_viewIOT-Mode-Container_Top_Right_Content_Item_Info"
+                                                                                                                style={{ cursor: "pointer" }}
+                                                                                                                id={data.plantid_}
+                                                                                                                onClick={(e) => handleProjectInfo(e)}
+                                                                                                        >
+                                                                                                                {data.name_}
+                                                                                                        </div>
+
+                                                                                                        <div className="DAT_viewIOT-Mode-Container_Top_Right_Content_Item_Type">
+                                                                                                                {dataLang.formatMessage({ id: data.type_ })}
+                                                                                                        </div>
+                                                                                                </div>
+                                                                                        )
+                                                                                })}
+                                                                        </div>
+                                                                </div>
+                                                        </div>
+
+                                                        <div className="DAT_viewIOT-Mode-Container_Bottom">
+                                                                <div className="DAT_viewIOT-Mode-Container_Bottom_Item">
+                                                                        <div className="DAT_viewIOT-Mode-Container_Bottom_Item-Setting" ><MdSettings size={25} color="white" onClick={() => setWidgetState(true)} /></div>
+                                                                        <div className="DAT_viewIOT-Mode-Container_Bottom_Item-Icon" >
+                                                                                <PiScreencastDuotone size={80} color="white" onClick={() => { setIsmanual(true); setStep(0) }} />
+                                                                        </div>
+                                                                        <label style={{ color: "white" }}>{dataLang.formatMessage({ id: "shortcut" })}</label>
+                                                                </div>
+                                                                <div className="DAT_viewIOT-Mode-Container_Bottom_Item">
+                                                                        <div className="DAT_viewIOT-Mode-Container_Bottom_Item-Icon" >
+                                                                                <FaMapLocation size={80} color="white" onClick={() => handleMap()} />
+                                                                        </div>
+                                                                        <label style={{ color: "white" }}>{dataLang.formatMessage({ id: "map" })}</label>
+                                                                </div>
+                                                                <div className="DAT_viewIOT-Mode-Container_Bottom_Item">
+                                                                        <div className="DAT_viewIOT-Mode-Container_Bottom_Item-Icon" >
+                                                                                <IoIosInformationCircle size={80} color="white" onClick={() => nevigate('/Contact')} />
+                                                                        </div>
+                                                                        <label style={{ color: "white" }}>{dataLang.formatMessage({ id: "contact" })}</label>
+                                                                </div>
+
+                                                                {which.value.map((data, index) => {
+                                                                        return (
+                                                                                <div className="DAT_viewIOT-Mode-Container_Bottom_Item" key={index}>
+                                                                                        <img alt="" onClick={() => handlePage(data)} src={`dat_icon/${data}.png`}></img>
+                                                                                        <label style={{ color: "white" }}>{dataLang.formatMessage({ id: data })}</label>
+                                                                                </div>
+                                                                        )
+                                                                })}
+                                                        </div>
+                                                </div>
+                                                :
+                                                <div className="DAT_viewIOT-Mode-ContainerMobile"
+                                                        style={{ display: viewMode.value ? "none" : "block" }}
+                                                >
+                                                        <div className="DAT_viewIOT-Mode-ContainerMobile_Status">
+                                                                <div className="DAT_viewIOT-Mode-ContainerMobile_Status_Tit">
+                                                                        {dataLang.formatMessage({ id: "projectTotal" })} {total}
+                                                                </div>
+
+                                                                <div className="DAT_viewIOT-Mode-ContainerMobile_Status_Content" style={{ borderRadius: "10px" }}>
+                                                                        <div className="DAT_viewIOT-Mode-ContainerMobile_Status_Content_Left">
+                                                                                <div className="DAT_viewIOT-Mode-ContainerMobile_Status_Content_Left_Value">
+                                                                                        {online}
+                                                                                </div>
+                                                                                <div className="DAT_viewIOT-Mode-ContainerMobile_Status_Content_Left_Text">
+                                                                                        <img src="/dat_icon/online.png" alt="" />
+                                                                                        {dataLang.formatMessage({ id: "online" })}
+                                                                                </div>
+                                                                        </div>
+
+                                                                        <div className="DAT_viewIOT-Mode-ContainerMobile_Status_Content_Line">
+
+                                                                        </div>
+
+                                                                        <div className="DAT_viewIOT-Mode-ContainerMobile_Status_Content_Left">
+                                                                                <div className="DAT_viewIOT-Mode-ContainerMobile_Status_Content_Left_Value">
+                                                                                        {offline}
+                                                                                </div>
+                                                                                <div className="DAT_viewIOT-Mode-ContainerMobile_Status_Content_Left_Text">
+                                                                                        <img src="/dat_icon/offline.png" alt="" />
+                                                                                        {dataLang.formatMessage({ id: "offline" })}
+                                                                                </div>
+                                                                        </div>
+                                                                </div>
+                                                        </div>
+
+                                                        <div className="DAT_viewIOT-Mode-ContainerMobile_Nav">
+                                                                {which.value.map((data, index) => {
+                                                                        return (
+                                                                                <div className="DAT_viewIOT-Mode-ContainerMobile_Nav_Item" key={index}>
+                                                                                        <img alt="" onClick={() => handlePage(data)} src={`dat_icon/${data}.png`}></img>
+                                                                                        <label style={{ color: "white" }}>{dataLang.formatMessage({ id: data })}</label>
+                                                                                </div>
+                                                                        )
+                                                                })}
+                                                        </div>
+
+                                                        <div className="DAT_viewIOT-Mode-ContainerMobile_Nav">
+                                                                <div className="DAT_viewIOT-Mode-ContainerMobile_Nav_Item">
+                                                                        <div className="DAT_viewIOT-Mode-ContainerMobile_Nav_Item-Setting" ><MdSettings size={25} color="white" onClick={() => setWidgetState(true)} /></div>
+                                                                        <div className="DAT_viewIOT-Mode-ContainerMobile_Nav_Item-Icon" >
+                                                                                <PiScreencastDuotone size={80} color="white" onClick={() => { setIsmanual(true); setStep(0) }} />
+                                                                        </div>
+                                                                        <label style={{ color: "white" }}>{dataLang.formatMessage({ id: "shortcut" })}</label>
+                                                                </div>
+                                                                <div className="DAT_viewIOT-Mode-ContainerMobile_Nav_Item">
+                                                                        <div className="DAT_viewIOT-Mode-ContainerMobile_Nav_Item-Icon" >
+                                                                                <FaMapLocation size={80} color="white" onClick={() => handleMap()} />
+                                                                        </div>
+                                                                        <label style={{ color: "white" }}>{dataLang.formatMessage({ id: "map" })}</label>
+                                                                </div>
+                                                                <div className="DAT_viewIOT-Mode-ContainerMobile_Nav_Item">
+                                                                        <div className="DAT_viewIOT-Mode-ContainerMobile_Nav_Item-Icon" >
+                                                                                <IoIosInformationCircle size={80} color="white" onClick={() => nevigate('/Contact')} />
+                                                                        </div>
+                                                                        <label style={{ color: "white" }}>{dataLang.formatMessage({ id: "contact" })}</label>
+                                                                </div>
+                                                        </div>
+
+                                                        <div className="DAT_viewIOT-Mode-ContainerMobile_Share">
+                                                                <div className="DAT_viewIOT-Mode-ContainerMobile_Share_Tit">
+                                                                        {dataLang.formatMessage({ id: "shared" })}
+                                                                </div>
+
+                                                                <div className="DAT_viewIOT-Mode-ContainerMobile_Share_Content">
+                                                                        {share.map((data, index) => {
+                                                                                return (
+                                                                                        <div className="DAT_viewIOT-Mode-ContainerMobile_Share_Content_Item" key={index}>
+                                                                                                <div className="DAT_viewIOT-Mode-ContainerMobile_Share_Content_Item_Top">
+                                                                                                        <div className="DAT_viewIOT-Mode-ContainerMobile_Share_Content_Item_Top_Ava"
+                                                                                                                id={data.plantid_}
+                                                                                                                onClick={(e) => handleProjectInfo(e)}
+                                                                                                        >
+                                                                                                                <img src={data.img} alt="" />
+                                                                                                        </div>
+
+                                                                                                        <div className="DAT_viewIOT-Mode-ContainerMobile_Share_Content_Item_Top_Info">
+                                                                                                                <div className="DAT_viewIOT-Mode-ContainerMobile_Share_Content_Item_Top_Info_Name"
+                                                                                                                        id={data.plantid_}
+                                                                                                                        onClick={(e) => handleProjectInfo(e)}
+                                                                                                                >
+                                                                                                                        {data.name_}
+                                                                                                                </div>
+
+                                                                                                                <div className="DAT_viewIOT-Mode-ContainerMobile_Share_Content_Item_Top_Info_Type">
+                                                                                                                        {dataLang.formatMessage({ id: data.type_ })}
+                                                                                                                </div>
+                                                                                                        </div>
+                                                                                                </div>
+                                                                                        </div>
+                                                                                )
+                                                                        })}
+                                                                </div>
+                                                        </div>
+                                                </div>
+                                        }
                                 </div>
 
                                 {/* <div className="DAT_viewIOT-Arrow" style={{ visibility: (s.value !== 5) ? "visible" : "hidden", }} id="pre" onClick={(e) => { handeAction(e) }}><ion-icon name="chevron-back-outline"></ion-icon></div> */}
 
-                                <div></div>
+                                {/* <div></div> */}
                                 <div
                                         className="DAT_viewIOT-3D"
                                         style={{ display: viewMode.value ? "block" : "none" }}
@@ -511,7 +747,7 @@ export default function Home(props) {
                                 </div>
 
 
-                                {isBrowser
+                                {/* {isBrowser
                                         ?
                                         <div className="DAT_viewIOT-Container"
                                                 style={{ display: viewMode.value ? "none" : "block" }}
@@ -743,8 +979,8 @@ export default function Home(props) {
                                                         </div>
                                                 </div>
                                         </div>
-                                }
-                                <div></div>
+                                } */}
+                                {/* <div></div> */}
 
                                 {/* <div className="DAT_viewIOT-Arrow" style={{ visibility: (s.value !== 8) ? "visible" : "hidden" }} id="next" onClick={(e) => { handeAction(e) }}><ion-icon name="chevron-forward-outline"></ion-icon></div> */}
 

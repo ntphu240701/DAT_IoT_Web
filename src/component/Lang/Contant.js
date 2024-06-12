@@ -36,7 +36,7 @@ export const messages = {
     email: "Email",
     login: "Login",
     logout: "Logout",
-    save_login: "Save login",
+    save_login: "Remember me",
     curr_pwd: "Current password",
     pwd: "Change password",
     forgot_pwd: "Forgot password",
