@@ -5,7 +5,7 @@ import { sidenar } from "../Sidenar/Sidenar";
 import { callApi } from "../Api/Api";
 import { host } from "../Lang/Contant";
 import { alertDispatch } from "../Alert/Alert";
-import { ruleInfor, userInfor } from "../../App";
+import { partnerInfor, ruleInfor, userInfor } from "../../App";
 import { useSelector } from "react-redux";
 import { signal } from "@preact/signals-react";
 import { useIntl } from "react-intl";
@@ -83,6 +83,8 @@ export default function Auto(props) {
   const { toolDispatch } = useContext(ToolContext);
   const { overviewDispatch } = useContext(OverviewContext);
   const [datafilter, setDatafilter] = useState([]);
+  const [loggerData, setLoggerData] = useState([]);
+
   const listTab = [
     { id: "total", name: dataLang.formatMessage({ id: "total" }) },
     { id: "online", name: dataLang.formatMessage({ id: "online" }) },
@@ -101,91 +103,6 @@ export default function Auto(props) {
 
   const columnproject = [
     {
-      name: dataLang.formatMessage({ id: "name" }),
-      selector: (row) => (
-        <div
-          className="DAT_Table"
-          id={row.plantid_}
-          style={{ cursor: "pointer" }}
-          onClick={(e) => {
-            handlePlant(e);
-            sidenar.value = false;
-          }}
-        >
-          <img src={row.img ? row.img : `/dat_picture/${bu}.jpg`} alt="" />
-
-          <div className="DAT_Table_Infor">
-            <div className="DAT_Table_Infor_Name">{row.name_}</div>
-            <div className="DAT_Table_Infor_Addr">{row.addr_}</div>
-          </div>
-        </div>
-      ),
-      sortable: true,
-      width: "400px",
-      style: {
-        justifyContent: "left !important",
-      },
-    },
-    {
-      name: dataLang.formatMessage({ id: "connect" }),
-      selector: (row) => (
-        <div
-          style={{ cursor: "pointer" }}
-          id={row.name_}
-          onClick={(e) => {
-            // connectval.value = e.currentTarget.id;
-            // sidebartab.value = "Monitor";
-            // sidebartabli.value = "/Device";
-            // navigate("/Device");
-          }}
-        >
-          {row.state_ === 1 ? (
-            <FaCheckCircle size={20} color="green" />
-          ) : (
-            <MdOutlineError size={22} color="red" />
-          )}
-        </div>
-      ),
-      width: "100px",
-    },
-    {
-      name: dataLang.formatMessage({ id: "warn" }),
-      selector: (row) => (
-        <div
-          style={{ cursor: "pointer" }}
-          id={row.plantid_}
-          onClick={(e) => {
-            // projectwarnfilter.value = e.currentTarget.id;
-            // warnfilter.value = {};
-            // sidebartab.value = "Monitor";
-            // sidebartabli.value = "/Warn";
-            // navigate("/Warn");
-          }}
-        >
-          {row.warn_ === 1 ? (
-            <FaCheckCircle size={20} color="green" />
-          ) : (
-            <MdOutlineError size={22} color="red" />
-          )}
-        </div>
-      ),
-      width: "100px",
-    },
-    {
-      name: dataLang.formatMessage({ id: "companyName" }),
-      selector: (row) => row.company_,
-      sortable: true,
-      style: {
-        justifyContent: "left !important",
-      },
-    },
-    {
-      name: dataLang.formatMessage({ id: "createdate" }),
-      selector: (row) => row.createdate_,
-      sortable: true,
-      width: "180px",
-    },
-    {
       name: dataLang.formatMessage({ id: "edits" }),
       selector: (row) => (
         <div
@@ -196,7 +113,7 @@ export default function Auto(props) {
           }}
         >
           {ruleInfor.value.setting.project.modify == true ||
-          ruleInfor.value.setting.project.remove == true ? (
+            ruleInfor.value.setting.project.remove == true ? (
             row.shared == 1 ? (
               <></>
             ) : (
@@ -280,6 +197,96 @@ export default function Auto(props) {
       width: "110px",
       justifyContent: "center",
       alignItems: "center",
+    },
+    {
+      name: dataLang.formatMessage({ id: "name" }),
+      selector: (row) => (
+        <div className="DAT_Table"
+          id={row.plantid_}
+          style={{ cursor: "pointer" }}
+          onClick={(e) => {
+            handlePlant(e);
+            sidenar.value = false;
+          }}
+        >
+          <img src={row.img ? row.img : `/dat_picture/${bu}.jpg`} alt="" />
+
+          <div className="DAT_Table_Infor">
+            <div className="DAT_Table_Infor_Name">{row.name_}</div>
+            <div className="DAT_Table_Infor_Addr">{row.addr_}</div>
+          </div>
+        </div>
+      ),
+      sortable: true,
+      width: "400px",
+      style: {
+        justifyContent: "left !important",
+      },
+    },
+    {
+      name: dataLang.formatMessage({ id: "connect" }),
+      selector: (row) => (
+        <div
+        // style={{ cursor: "pointer" }}
+        // id={row.name_}
+        // onClick={(e) => {
+        // connectval.value = e.currentTarget.id;
+        // sidebartab.value = "Monitor";
+        // sidebartabli.value = "/Device";
+        // navigate("/Device");
+        // }}
+        >
+          {row.state_ === 1 ? (
+            <FaCheckCircle size={20} color="green" />
+          ) : (
+            <MdOutlineError size={22} color="red" />
+          )}
+          {/* {row.newState.length > 0
+            ? "ok"
+            : "loading"
+          } */}
+        </div>
+      ),
+      width: "100px",
+    },
+    {
+      name: dataLang.formatMessage({ id: "warn" }),
+      selector: (row) => (
+        <div
+        // style={{ cursor: "pointer" }}
+        // id={row.plantid_}
+        // onClick={(e) => {
+        // projectwarnfilter.value = e.currentTarget.id;
+        // warnfilter.value = {};
+        // sidebartab.value = "Monitor";
+        // sidebartabli.value = "/Warn";
+        // navigate("/Warn");
+        // }}
+        >
+          {
+            row.warn_ === 1 ? (
+              <FaCheckCircle size={20} color="green" />
+            ) : (
+              <MdOutlineError size={22} color="red" />
+            )
+          }
+        </div >
+      ),
+      width: "100px",
+    },
+    {
+      name: dataLang.formatMessage({ id: "companyName" }),
+      selector: (row) => row.company_,
+      sortable: true,
+      style: {
+        justifyContent: "left !important",
+      },
+    },
+    {
+      name: dataLang.formatMessage({ id: "createdate" }),
+      selector: (row) => row.createdate_,
+      sortable: true,
+      width: "180px",
     },
   ];
 
@@ -436,8 +443,9 @@ export default function Auto(props) {
         type: userInfor.value.type,
         system: bu,
       });
-      // console.log(d);
+      console.log(d);
       if (d.status === true) {
+        d.data.map((item) => { return item["newState"] = []; });
         plantData.value = d.data.sort((a, b) => a.plantid_ - b.plantid_);
       }
     };
@@ -457,6 +465,25 @@ export default function Auto(props) {
       defaultDataState.value = true;
     };
   }, []);
+
+  useEffect(() => {
+    if (plantData.value.length > 0) {
+      const getAllLogger = async () => {
+        let res = await callApi("post", host.DATA + "/getAllLogger", {
+          usr: user,
+          partnerid: partnerInfor.value.partnerid,
+          type: userInfor.value.type,
+        });
+        if (res.status) {
+          // console.log(res.data.map((item_) => item_.plantid_));
+          const logger = res.data.map((item_) => plantData.value.findIndex((item) => item.plantid_ === item_.plantid_));
+          const loggerindex = logger.filter((item) => item !== -1);
+          loggerindex.map((item) => plantData.value[item].newState.push(res.data.find((item_) => item_.plantid_ === plantData.value[item].plantid_)));
+        }
+      };
+      getAllLogger();
+    }
+  }, [plantData.value]);
 
   useEffect(() => {
     const setScreen = async () => {
@@ -1036,7 +1063,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1048,7 +1075,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1217,7 +1244,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1229,7 +1256,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1398,7 +1425,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1410,7 +1437,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1579,7 +1606,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1591,7 +1618,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1760,7 +1787,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1772,7 +1799,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1941,7 +1968,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1953,7 +1980,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}

@@ -259,7 +259,7 @@ export default function App() {
       }
     };
 
-    const checkApi = async () => {};
+    const checkApi = async () => { };
     checkAuth();
 
     if (status) {
@@ -277,7 +277,7 @@ export default function App() {
         partnerid: partnerid,
         type: type,
       });
-      console.log(warn);
+      // console.log(warn);
       if (warn.status) {
         let newdb = warn.data.sort(
           (a, b) =>
@@ -310,7 +310,7 @@ export default function App() {
         partnerid: id,
         type: type,
       });
-      console.log(res);
+      // console.log(res);
       if (res.status) {
         res.data.map((item, index) => {
           socket.value.on("Server/notice/" + item.sn_, function (data) {
@@ -413,7 +413,7 @@ export default function App() {
         <Alert />
         {loading ? (
           window.location.pathname === "/Verify" ||
-          window.location.pathname === "/VerifyRegister" ? (
+            window.location.pathname === "/VerifyRegister" ? (
             <Verify path={window.location.pathname} />
           ) : (
             <div className="DAT_Loading">
@@ -425,16 +425,16 @@ export default function App() {
             {status ? (
               <>
                 {plantState.value === "toollist" ||
-                mode.value === "dashboard" ||
-                toolState.value ? (
+                  mode.value === "dashboard" ||
+                  toolState.value ? (
                   <></>
                 ) : (
                   <Navigation />
                 )}
                 <div className="DAT_App">
                   {plantState.value === "toollist" ||
-                  mode.value === "dashboard" ||
-                  toolState.value ? (
+                    mode.value === "dashboard" ||
+                    toolState.value ? (
                     <></>
                   ) : (
                     <Sidenar />
@@ -578,7 +578,7 @@ export default function App() {
                       )}
 
                       {userInfor.value.type === "mainadmin" ||
-                      userInfor.value.type === "admin" ? (
+                        userInfor.value.type === "admin" ? (
                         <>
                           <Route
                             path="/Role"

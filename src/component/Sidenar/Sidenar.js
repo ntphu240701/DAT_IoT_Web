@@ -278,14 +278,14 @@ export default function Sidenar(props) {
 
   const handleMenu = (e) => {
     const ID = e.currentTarget.id;
-    console.log(ID);
-    console.log(sidebartab.value);
+    // console.log(ID);
+    // console.log(sidebartab.value);
     if (sidebartab.value !== ID) {
       showList.value = true;
-      console.log("On");
+      // console.log("On");
     } else {
       showList.value = !showList.value;
-      console.log("Off");
+      // console.log("Off");
     }
     if (data[ID].li.length === 0) {
       sidebartabli.value = "none";
@@ -523,7 +523,7 @@ export default function Sidenar(props) {
         which_.splice(which_.indexOf(key), 1);
       }
     });
-    console.log(which_);
+    // console.log(which_);
     if (which_.length > 1) {
       which_.map((key) => {
         sys.value = [
