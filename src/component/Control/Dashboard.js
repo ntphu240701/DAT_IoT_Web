@@ -10,6 +10,7 @@ import { IoMdContact } from "react-icons/io";
 import { IoCalendar } from "react-icons/io5";
 import { FaPhone } from "react-icons/fa6";
 import DatePicker from "react-datepicker";
+import moment from "moment-timezone";
 import {
   BarChart,
   Bar,
@@ -27,6 +28,10 @@ import { useIntl } from "react-intl";
 export default function Dashboard(props) {
   const [devicedata, setDevicedata] = useState([]);
   const [chart, setChart] = useState("year");
+  const [d, setD] = useState({
+    month: moment(new Date()).format("MM/YYYY"),
+    year: moment(new Date()).format("YYYY"),
+  });
 
   const datalang = useIntl();
   const v = datalang.formatMessage({ id: "monthOutput" });
@@ -97,17 +102,14 @@ export default function Dashboard(props) {
     );
   };
 
-
-
-
-  const defaultProps = {
-    center: {
-      lat: 16.0544068,
-      lng: 108.2021667,
-    },
-    zoom: 5,
-    mapId: "my_map",
-  };
+  // const defaultProps = {
+  //   center: {
+  //     lat: 16.0544068,
+  //     lng: 108.2021667,
+  //   },
+  //   zoom: 5,
+  //   mapId: "my_map2",
+  // };
 
   const loader = new Loader({
     apiKey: process.env.REACT_APP_GGKEY,
@@ -116,52 +118,53 @@ export default function Dashboard(props) {
   });
 
   const initMap = async (data) => {
-    const { AdvancedMarkerElement } = await loader.importLibrary("marker");
-    const { Map } = await loader.importLibrary("maps");
+    loader.load().then(async (google) => {
+      const defaultProps = {
+        center: {
+          lat: parseFloat(data?.lat_ ? data.lat_ : 16.0544068),
+          lng: parseFloat(data?.long_ ? data.long_ : 108.2021667),
+        },
+        zoom: 15.0,
+        mapId: "my_map2",
+      };
 
-    let map = new Map(document.getElementById("map"), defaultProps);
-    // console.log(data.lat_);
+      const { Map } = await google.maps.importLibrary("maps");
+      const { AdvancedMarkerElement } = await google.maps.importLibrary(
+        "marker"
+      );
+      let map = new Map(document.getElementById("map2"), defaultProps);
 
-    const marker = {
-      lat: parseFloat(data.lat_),
-      lng: parseFloat(data.long_),
-    };
-    const markerElement = new AdvancedMarkerElement({
-      position: marker,
-      map: map,
-      title: data.name_,
+      const marker = {
+        lat: parseFloat(data?.lat_ ? data.lat_ : 16.0544068),
+        lng: parseFloat(data?.long_ ? data.long_ : 108.2021667),
+      };
+      const markerElement = new AdvancedMarkerElement({
+        position: marker,
+        map: map,
+        title: data.name_,
+      });
+      return markerElement;
     });
-    // markerElement.addListener("click", () => {
-    //   plantState.value = "info";
-    //   projectData.value = item;
-    //   sidebartab.value = "Monitor";
-    //   sidebartabli.value = "/Project";
-    // });
-    return markerElement;
   };
 
   useEffect(() => {
-
     if (props.data) {
-      initMap(props.data);
+      if (props.data) {
+        console.log(props.data);
+        initMap(props.data);
+        const getGateway = async () => {
+          let res = await callApi("post", host.DATA + "/getLogger", {
+            plantid: props.data.plantid_,
+          });
+          if (res.status) {
+            console.log(res.data.sort((a, b) => a.id_ - b.id_));
+            setDevicedata(res.data.sort((a, b) => a.id_ - b.id_));
+          }
+        };
 
-      const getGateway = async () => {
-        let res = await callApi("post", host.DATA + "/getLogger", {
-          plantid: props.data.plantid_,
-        });
-        if (res.status) {
-          console.log(res.data);
-          setDevicedata(res.data);
-        }
-      };
-
-      getGateway();
-
-
+        getGateway();
+      }
     }
-
-
-
   }, [props.data]);
 
   return (
@@ -240,7 +243,7 @@ export default function Dashboard(props) {
           <div className="DAT_MainInfo_Map">
             <div className="DAT_MainInfo_Map_Item1">
               <div
-                id="map"
+                id="map2"
                 style={{ width: "100%", height: "100%", borderRadius: "5px" }}
               ></div>
             </div>
@@ -338,18 +341,19 @@ export default function Dashboard(props) {
                 </span>
               </div>
               <div className="DAT_MainInfo_Graph_Head_Datetime">
-                <DatePicker
+                {/* <DatePicker
                   // id="datepicker"
                   // onChange={(date) => handleChart(date)}
                   showMonthYearPicker={chart === "year" ? false : true}
                   showYearPicker={chart === "month" ? false : true}
                   customInput={
                     <button className="DAT_CustomPicker">
-                      <span>{[chart]}</span>
+                      <span>{d[chart]}</span>
                       <IoCalendarOutline color="gray" />
                     </button>
                   }
-                />
+                /> */}
+                <input type="date" />
               </div>
             </div>
 
@@ -358,8 +362,7 @@ export default function Dashboard(props) {
               <div className="DAT_MainInfo_Graph_Group_Label">
                 {chart === "year"
                   ? datalang.formatMessage({ id: "yearOutput" })
-                  : datalang.formatMessage({ id: "monthOutput" })
-                }
+                  : datalang.formatMessage({ id: "monthOutput" })}
                 : 0 kWh
               </div>
             </div>
@@ -458,7 +461,7 @@ export default function Dashboard(props) {
           <div className="DAT_MainInfoMobile_Map">
             <div className="DAT_MainInfoMobile_Map_Item1">
               <div
-                id="map"
+                id="map2"
                 style={{ width: "100%", height: "100%", borderRadius: "5px" }}
               ></div>
             </div>
@@ -566,7 +569,7 @@ export default function Dashboard(props) {
                 </span>
               </div>
               <div className="DAT_MainInfoMobile_Graph_Head_Datetime">
-                <DatePicker
+                {/* <DatePicker
                   // id="datepicker"
                   // onChange={(date) => handleChart(date)}
                   showMonthYearPicker={chart === "year" ? false : true}
@@ -577,7 +580,8 @@ export default function Dashboard(props) {
                       <IoCalendarOutline color="gray" />
                     </button>
                   }
-                />
+                /> */}
+                <input type="date" />
               </div>
             </div>
 

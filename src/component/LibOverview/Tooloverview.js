@@ -82,7 +82,7 @@ export default function Tooloverview(props) {
     }
 
     const handlePopup = (state) => {
-        const popup = document.getElementById("Popup-")
+        const popup = document.getElementById("Popup")
         popup.style.transform = popup_state[state].transform;
         popup.style.transition = popup_state[state].transition;
         popup.style.color = popup_state[state].color;
@@ -284,7 +284,7 @@ export default function Tooloverview(props) {
                             </div>
                             <div className="DAT_ToolOverview_Overview_Container_Head_Close"
                                 onClick={(e) => handleTabCheck(e)}
-                                id="Popup-"
+                                id="Popup"
                                 onMouseEnter={(e) => handlePopup("new")}
                                 onMouseLeave={(e) => handlePopup("pre")}
                             >

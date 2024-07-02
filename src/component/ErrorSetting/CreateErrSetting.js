@@ -69,11 +69,17 @@ export default function CreateErrSetting(props) {
         </div>
       </div>
 
-      <div className="DAT_CreateErrSetting_Body">
+      <div className="DAT_CreateErrSetting_Body" style={{ border: "none" }}>
         <span style={{ width: "100px" }}>
           {dataLang.formatMessage({ id: "errcode" })}:
         </span>
         <input type="number" ref={codeRef1} style={{ width: "100%" }} />
+      </div>
+      <div className="DAT_CreateErrSetting_Body">
+        <span style={{ width: "100px" }}>
+          {dataLang.formatMessage({ id: "errname" })}:
+        </span>
+        <input type="text" ref={codeRef2} style={{ width: "100%" }} />
       </div>
 
       <div className="DAT_CreateErrSetting_Foot">
@@ -92,7 +98,11 @@ export default function CreateErrSetting(props) {
               color: "white",
             }}
             onClick={(e) => {
-              props.handleConfirm(e, codeRef1.current.value);
+              props.handleConfirm(
+                e,
+                codeRef1.current.value,
+                codeRef2.current.value
+              );
             }}
           >
             {dataLang.formatMessage({ id: "confirm" })}

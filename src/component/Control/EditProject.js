@@ -73,7 +73,7 @@ export default function EditProject(props) {
           usrtype: userInfor.value.type,
           img: projectData.value.img
             ? projectData.value.img
-            : `/dat_picture/${props.bu}/.jpg`,
+            : `/dat_picture/${props.bu}.jpg`,
         });
         console.log(d);
         if (d.status === true) {

@@ -3,7 +3,7 @@ import "./index.scss";
 
 import Alert from "./component/Alert/Alert";
 import Navigation from "./component/Navigation/Navigation";
-import Sidenar from "./component/Sidenar/Sidenar";
+import Sidenar, { raiseInfo, showList } from "./component/Sidenar/Sidenar";
 import {
   BrowserRouter as Router,
   Routes,
@@ -18,13 +18,15 @@ import { host } from "./component/Lang/Contant";
 import adminslice from "./component/Redux/adminslice";
 import { callApi } from "./component/Api/Api";
 import { signal } from "@preact/signals-react";
-import { dataWarn } from "./component/Warn/Warn";
+import { closed, dataWarn, open } from "./component/Warn/Warn";
 import { useIntl } from "react-intl";
+// import ErrorSetting from "./component/ErrorSetting/ErrorSetting";
 import { io } from "socket.io-client";
 import NotfoundErr from "./NotfoundErr";
 import { mode, plantState } from "./component/Control/Signal";
 import { FaRegFileAlt } from "react-icons/fa";
 import { toolState } from "./component/Home/Home";
+import moment from "moment-timezone";
 
 const Home = React.lazy(() => import("./component/Home/Home"));
 const Auto = React.lazy(() => import("./component/Control/Auto"));
@@ -32,7 +34,7 @@ const Elev = React.lazy(() => import("./component/Control/Elev"));
 const Energy = React.lazy(() => import("./component/Control/Energy"));
 // const Device = React.lazy(() => import("./component/Device/Device"));
 const Warn = React.lazy(() => import("./component/Warn/Warn"));
-const Report = React.lazy(() => import("./component/Report/Report"));
+// const Report = React.lazy(() => import("./component/Report/Report"));
 const Analytics = React.lazy(() => import("./component/Analytics/Analytics"));
 const User = React.lazy(() => import("./component/User/User"));
 const Role = React.lazy(() => import("./component/Role/Role"));
@@ -41,14 +43,14 @@ const Log = React.lazy(() => import("./component/Log/Log"));
 const Language = React.lazy(() => import("./component/Language/Language"));
 const Contact = React.lazy(() => import("./component/Contact/Contact"));
 const Rule = React.lazy(() => import("./component/Rule/Rule"));
+const ExportEnergy = React.lazy(() =>
+  import("./component/ExportEnergy/ExportEnergy")
+);
 const ErrorSetting = React.lazy(() =>
   import("./component/ErrorSetting/ErrorSetting")
 );
 const RegisterSetting = React.lazy(() =>
   import("./component/RegisterSetting/RegisterSetting")
-);
-const ExportEnergy = React.lazy(() =>
-  import("./component/ExportEnergy/ExportEnergy")
 );
 
 export const view = signal(false);
@@ -75,7 +77,7 @@ export const ruleInfor = signal({
   ruleid: "",
   name: "",
   setting: {
-    contact: { edit: false },
+    contact: { edit: false, registerinf: false },
     device: { add: false, modify: false, remove: false },
     monitor: { add: false, modify: false, remove: false },
     project: { add: false, modify: false, remove: false, share: false },
@@ -83,8 +85,10 @@ export const ruleInfor = signal({
     rule: { add: false, modify: false, remove: false },
     user: { add: false, modify: false, remove: false },
     warn: { remove: false },
-    screen: { add: false, modify: false, remove: false },
+    screen: { add: false, modify: false, remove: false, classic: false },
     system: { auto: false, energy: false, elev: false },
+    errorsetting: { add: true, modify: true, remove: true },
+    registersetting: { add: true, modify: true, remove: true },
   },
 });
 
@@ -255,7 +259,7 @@ export default function App() {
       }
     };
 
-    const checkApi = async () => {};
+    const checkApi = async () => { };
     checkAuth();
 
     if (status) {
@@ -276,7 +280,9 @@ export default function App() {
       // console.log(warn);
       if (warn.status) {
         let newdb = warn.data.sort(
-          (a, b) => new Date(b.opentime_) - new Date(a.opentime_)
+          (a, b) =>
+            new Date(`${b.opendate_} ${b.opentime_}`) -
+            new Date(`${a.opendate_} ${a.opentime_}`)
         );
         newdb.map((item, index) => {
           dataWarn.value = [
@@ -287,6 +293,7 @@ export default function App() {
               plant: item.name_,
               device: item.sn_,
               opentime: item.opentime_,
+              opendate: item.opendate_,
               state: item.state_, // 1:false, 0:true
               level: item.level_,
               plantid: item.plantid_,
@@ -297,7 +304,6 @@ export default function App() {
         // closed.value = dataWarn.value.filter((item) => item.status == "closed");
       }
     };
-
     const getAllLogger = async (usr, id, type) => {
       let res = await callApi("post", host.DATA + "/getAllLogger", {
         usr: usr,
@@ -311,29 +317,45 @@ export default function App() {
             console.log("Notice socket", item.sn_, data);
             if (data.type === "add") {
               dataWarn.value = [
-                ...dataWarn.value,
                 {
                   boxid: data.boxid_,
                   warnid: data.warnid_,
                   plant: data.name_,
                   device: data.sn_,
                   opentime: data.opentime_,
+                  opendate: data.opendate_,
                   state: data.state_, // 1:false, 0:true
-                  level: "wanrn",
+                  level: "warn",
                   plantid: data.plantid_,
                 },
+                ...dataWarn.value,
               ];
             } else {
-              let index = dataWarn.value.findIndex(
-                (item) => item.warnid == data.warnid_
+              // let index = dataWarn.value.findIndex((item) => item.warnid == data.warnid_);
+              let newWarn = dataWarn.value.filter(
+                (item) => item.warnid != data.warnid_
               );
-              let newWarn = dataWarn.value;
-              console.log(newWarn[index]);
-              newWarn[index] = {
-                ...newWarn[index],
-                state: data.state_,
-                opentime: data.opentime_,
-              };
+              newWarn = [
+                {
+                  boxid: data.boxid_,
+                  warnid: data.warnid_,
+                  plant: data.name_,
+                  device: data.sn_,
+                  opentime: data.opentime_,
+                  opendate: data.opendate_,
+                  state: data.state_, // 1:false, 0:true
+                  level: "warn",
+                  plantid: data.plantid_,
+                },
+                ...newWarn,
+              ];
+              // console.log(newWarn[index])
+              // newWarn[index]={
+              //     ...newWarn[index],
+              //     state: data.state_,
+              //     opentime: data.opentime_,
+              //     opendate: data.opendate_,
+              // }
 
               dataWarn.value = [...newWarn];
             }
@@ -347,11 +369,19 @@ export default function App() {
       getAllLogger(usr, partnerInfor.value.partnerid, userInfor.value.type);
     }
   }, [userInfor.value.type, partnerInfor.value.partnerid, usr]);
-
   const handleOut = () => {
     localStorage.clear();
     sessionStorage.clear();
     window.location.reload();
+  };
+
+  const handleSidebar = () => {
+    if (showList.value) {
+      showList.value = false;
+    }
+    if (raiseInfo.value) {
+      raiseInfo.value = false;
+    }
   };
 
   return (
@@ -379,12 +409,11 @@ export default function App() {
       ) : (
         <></>
       )}
-
       <Router>
         <Alert />
         {loading ? (
           window.location.pathname === "/Verify" ||
-          window.location.pathname === "/VerifyRegister" ? (
+            window.location.pathname === "/VerifyRegister" ? (
             <Verify path={window.location.pathname} />
           ) : (
             <div className="DAT_Loading">
@@ -396,21 +425,24 @@ export default function App() {
             {status ? (
               <>
                 {plantState.value === "toollist" ||
-                mode.value === "dashboard" ||
-                toolState.value ? (
+                  mode.value === "dashboard" ||
+                  toolState.value ? (
                   <></>
                 ) : (
                   <Navigation />
                 )}
                 <div className="DAT_App">
                   {plantState.value === "toollist" ||
-                  mode.value === "dashboard" ||
-                  toolState.value ? (
+                    mode.value === "dashboard" ||
+                    toolState.value ? (
                     <></>
                   ) : (
                     <Sidenar />
                   )}
-                  <div className="DAT_App_Content">
+                  <div
+                    className="DAT_App_Content"
+                    onClick={() => handleSidebar()}
+                  >
                     <Routes>
                       {userInfor.value.type === "master" ? (
                         <>
@@ -546,7 +578,7 @@ export default function App() {
                       )}
 
                       {userInfor.value.type === "mainadmin" ||
-                      userInfor.value.type === "admin" ? (
+                        userInfor.value.type === "admin" ? (
                         <>
                           <Route
                             path="/Role"
@@ -904,8 +936,9 @@ export default function App() {
                           </Suspense>
                         }
                       />
+                      {/* <Route path="/Report" element={<Suspense fallback={<div className="DAT_Loading"><ClockLoader color="#007bff" size={50} loading={loading} /></div>}><Report /></Suspense>} /> */}
                       <Route
-                        path="/Report"
+                        path="/ExportEnergy"
                         element={
                           <Suspense
                             fallback={
@@ -918,7 +951,7 @@ export default function App() {
                               </div>
                             }
                           >
-                            <Report />
+                            <ExportEnergy />
                           </Suspense>
                         }
                       />
@@ -973,24 +1006,6 @@ export default function App() {
                             }
                           >
                             <Language />
-                          </Suspense>
-                        }
-                      />
-                      <Route
-                        path="/ExportEnergy"
-                        element={
-                          <Suspense
-                            fallback={
-                              <div className="DAT_Loading">
-                                <ClockLoader
-                                  color="#007bff"
-                                  size={50}
-                                  loading={loading}
-                                />
-                              </div>
-                            }
-                          >
-                            <ExportEnergy />
                           </Suspense>
                         }
                       />

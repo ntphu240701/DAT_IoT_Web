@@ -152,105 +152,150 @@ export default function Role(props) {
                       <></>
                     ) : (
                       <PopupState variant="popper" popupId="demo-popup-popper">
-                        {(popupState) => (<div className="DAT_TableEdit">
-                          <IoMdMore size={20}   {...bindToggle(popupState)} />
-                          <Menu {...bindMenu(popupState)}>
+                        {(popupState) => (
+                          <div className="DAT_TableEdit">
+                            <IoMdMore size={20} {...bindToggle(popupState)} />
+                            <Menu {...bindMenu(popupState)}>
+                              <MenuItem
+                                id={row.id_}
+                                onClick={(e) => {
+                                  handleEdit(e);
+                                  popupState.close();
+                                }}
+                              >
+                                <FiEdit size={14} />
+                                &nbsp;
+                                {dataLang.formatMessage({ id: "change" })}
+                              </MenuItem>
 
-                            <MenuItem id={row.id_} onClick={(e) => { handleEdit(e); popupState.close() }}>
-                              <FiEdit size={14} />&nbsp;
-                              {dataLang.formatMessage({ id: "change" })}
-                            </MenuItem>
-
-
-                            <MenuItem id={row.usr_} onClick={(e) => { handleDelete_(e); popupState.close() }}>
-                              <IoTrashOutline size={16} />
-                              &nbsp;
-                              {dataLang.formatMessage({ id: "delete" })}
-                            </MenuItem>
-                          </Menu>
-                        </div>)}
+                              <MenuItem
+                                id={row.usr_}
+                                onClick={(e) => {
+                                  handleDelete_(e);
+                                  popupState.close();
+                                }}
+                              >
+                                <IoTrashOutline size={16} />
+                                &nbsp;
+                                {dataLang.formatMessage({ id: "delete" })}
+                              </MenuItem>
+                            </Menu>
+                          </div>
+                        )}
                       </PopupState>
                     )}
                   </>
-                )
+                );
               case "mainadmin":
                 return (
                   <>
                     {row.type_ === "master" || row.type_ === "mainadmin" ? (
                       <></>
-                    ) : (
-                      ruleInfor.value.setting.user.modify || ruleInfor.value.setting.user.remove ? (
-                        <PopupState variant="popper" popupId="demo-popup-popper">
-                          {(popupState) => (<div className="DAT_TableEdit">
-                            <IoMdMore size={20}   {...bindToggle(popupState)} />
+                    ) : ruleInfor.value.setting.user.modify ||
+                      ruleInfor.value.setting.user.remove ? (
+                      <PopupState variant="popper" popupId="demo-popup-popper">
+                        {(popupState) => (
+                          <div className="DAT_TableEdit">
+                            <IoMdMore size={20} {...bindToggle(popupState)} />
                             <Menu {...bindMenu(popupState)}>
                               {ruleInfor.value.setting.user.modify ? (
-                                <MenuItem id={row.id_} onClick={(e) => { handleEdit(e); popupState.close() }}>
-                                  <FiEdit size={14} />&nbsp;
+                                <MenuItem
+                                  id={row.id_}
+                                  onClick={(e) => {
+                                    handleEdit(e);
+                                    popupState.close();
+                                  }}
+                                >
+                                  <FiEdit size={14} />
+                                  &nbsp;
                                   {dataLang.formatMessage({ id: "change" })}
                                 </MenuItem>
-                              ) : (<></>)}
+                              ) : (
+                                <></>
+                              )}
 
                               {ruleInfor.value.setting.user.remove ? (
-                                <MenuItem id={row.usr_} onClick={(e) => { handleDelete_(e); popupState.close() }}>
+                                <MenuItem
+                                  id={row.usr_}
+                                  onClick={(e) => {
+                                    handleDelete_(e);
+                                    popupState.close();
+                                  }}
+                                >
                                   <IoTrashOutline size={16} />
                                   &nbsp;
                                   {dataLang.formatMessage({ id: "delete" })}
                                 </MenuItem>
-                              ) : (<></>)}
-
+                              ) : (
+                                <></>
+                              )}
                             </Menu>
-                          </div>)}
-                        </PopupState>
-                      ) : (
-                        <></>
-                      )
+                          </div>
+                        )}
+                      </PopupState>
+                    ) : (
+                      <></>
                     )}
                   </>
-                )
+                );
               case "admin":
                 return (
                   <>
-                    {row.type_ === "master" || row.type_ === "mainadmin" || row.type_ === "admin" ? (
+                    {row.type_ === "master" ||
+                    row.type_ === "mainadmin" ||
+                    row.type_ === "admin" ? (
                       <></>
-                    ) : (
-                      ruleInfor.value.setting.user.modify || ruleInfor.value.setting.user.remove ? (
-                        <PopupState variant="popper" popupId="demo-popup-popper">
-                          {(popupState) => (<div className="DAT_TableEdit">
-                            <IoMdMore size={20}   {...bindToggle(popupState)} />
+                    ) : ruleInfor.value.setting.user.modify ||
+                      ruleInfor.value.setting.user.remove ? (
+                      <PopupState variant="popper" popupId="demo-popup-popper">
+                        {(popupState) => (
+                          <div className="DAT_TableEdit">
+                            <IoMdMore size={20} {...bindToggle(popupState)} />
                             <Menu {...bindMenu(popupState)}>
                               {ruleInfor.value.setting.user.modify ? (
-                                <MenuItem id={row.id_} onClick={(e) => { handleEdit(e); popupState.close() }}>
-                                  <FiEdit size={14} />&nbsp;
+                                <MenuItem
+                                  id={row.id_}
+                                  onClick={(e) => {
+                                    handleEdit(e);
+                                    popupState.close();
+                                  }}
+                                >
+                                  <FiEdit size={14} />
+                                  &nbsp;
                                   {dataLang.formatMessage({ id: "change" })}
                                 </MenuItem>
-                              ) : (<></>)}
+                              ) : (
+                                <></>
+                              )}
 
                               {ruleInfor.value.setting.user.remove ? (
-                                <MenuItem id={row.usr_} onClick={(e) => { handleDelete_(e); popupState.close() }}>
+                                <MenuItem
+                                  id={row.usr_}
+                                  onClick={(e) => {
+                                    handleDelete_(e);
+                                    popupState.close();
+                                  }}
+                                >
                                   <IoTrashOutline size={16} />
                                   &nbsp;
                                   {dataLang.formatMessage({ id: "delete" })}
                                 </MenuItem>
-                              ) : (<></>)}
-
+                              ) : (
+                                <></>
+                              )}
                             </Menu>
-                          </div>)}
-                        </PopupState>
-                      ) : (
-                        <></>
-                      )
+                          </div>
+                        )}
+                      </PopupState>
+                    ) : (
+                      <></>
                     )}
                   </>
-                )
+                );
               default:
-                return (<></>)
+                return <></>;
             }
           })()}
-
-
-
-
         </>
       ),
       width: "110px",
@@ -320,6 +365,9 @@ export default function Role(props) {
     fetchUsr();
   }, []);
 
+  useEffect(() => {
+    console.log(ruleInfor.value);
+  }, []);
   // useEffect(() => {
   //   const getRule = async (partnerid) => {
   //     const rule = await callApi("post", host.DATA + "/getRule", {
@@ -339,18 +387,23 @@ export default function Role(props) {
 
   return (
     <>
-      {isBrowser
-        ?
+      {isBrowser ? (
         <div
-          style={{ position: 'relative', top: '0', left: '0', width: '100%', height: '100vh' }}
+          style={{
+            position: "relative",
+            top: "0",
+            left: "0",
+            width: "100%",
+            height: "100vh",
+          }}
         >
-          <div className="DAT_ProjectHeader">
-            <div className="DAT_ProjectHeader_Title">
+          <div className="DAT_Header">
+            <div className="DAT_Header_Title">
               <LuUserSquare color="gray" size={25} />
               <span>{dataLang.formatMessage({ id: "role" })}</span>
             </div>
 
-            <div className="DAT_ProjectHeader_Filter">
+            <div className="DAT_Header_Filter">
               <input
                 id="search"
                 type="text"
@@ -365,7 +418,7 @@ export default function Role(props) {
             </div>
             {ruleInfor.value.setting.user.add === true ? (
               <button
-                className="DAT_ProjectHeader_New"
+                className="DAT_Header_New"
                 onClick={() => setRoleState("create")}
               >
                 <span value={"createdate"}>
@@ -403,7 +456,8 @@ export default function Role(props) {
             </div>
           </div>
 
-          <div className="DAT_ViewPopup"
+          <div
+            className="DAT_ViewPopup"
             style={{
               height: roleState === "default" ? "0px" : "100vh",
               transition: "0.5s",
@@ -419,13 +473,19 @@ export default function Role(props) {
             })()}
           </div>
 
-          {popupState ?
+          {popupState ? (
             <div className="DAT_PopupBG">
-              <RolePopup user={temp} type={type} handleClose={handleClosePopup} />
+              <RolePopup
+                user={temp}
+                type={type}
+                handleClose={handleClosePopup}
+              />
             </div>
-            : <></>}
+          ) : (
+            <></>
+          )}
         </div>
-        :
+      ) : (
         <>
           <div className="DAT_ProjectHeaderMobile">
             <div className="DAT_ProjectHeaderMobile_Top">
@@ -449,8 +509,9 @@ export default function Role(props) {
                 >
                   <IoAddOutline color="white" size={20} />
                 </button>
-              ) : (<></>)}
-
+              ) : (
+                <></>
+              )}
             </div>
 
             <div
@@ -533,7 +594,7 @@ export default function Role(props) {
                           <div className="DAT_RoleMobile_Content_Top_Info_Data_Item_Name"></div>
                           <div>
                             {dataLang.formatMessage({ id: "account" })}:{" "}
-                            <span style={{ fontFamily: "Montserrat-Bold" }}>
+                            <span style={{ fontFamily: "segoeui-sb" }}>
                               {dataLang.formatMessage({ id: item.type_ })}
                             </span>
                           </div>
@@ -548,38 +609,128 @@ export default function Role(props) {
                       &nbsp;
                       <span>{item.rulename_}</span>
                     </div>
-
-                    <div className="DAT_RoleMobile_Content_Bottom_Right">
-                      {ruleInfor.value.setting.user.modify === true ? (
-                        <div
-                          className="DAT_RoleMobile_Content_Bottom_Right_Item"
-                          id={item.id_}
-                          onClick={(e) => handleEdit(e)}
-                        >
-                          <FiEdit size={14} />
-                        </div>
-                      ) : (
-                        <div></div>
-                      )}
-                      {ruleInfor.value.setting.user.remove === true ? (
-                        <div
-                          className="DAT_RoleMobile_Content_Bottom_Right_Item"
-                          id={item.id_}
-                          onClick={(e) => handleDelete_(e)}
-                        >
-                          <IoTrashOutline size={16} />
-                        </div>
-                      ) : (
-                        <div></div>
-                      )}
-                    </div>
+                    {(() => {
+                      switch (userInfor.value.type) {
+                        case "master":
+                          return (
+                            <>
+                              {item.type_ === "master" ? (
+                                <></>
+                              ) : (
+                                <div className="DAT_RoleMobile_Content_Bottom_Right">
+                                  {ruleInfor.value.setting.user.modify ===
+                                  true ? (
+                                    <div
+                                      className="DAT_RoleMobile_Content_Bottom_Right_Item"
+                                      id={item.id_}
+                                      onClick={(e) => handleEdit(e)}
+                                    >
+                                      <FiEdit size={14} />
+                                    </div>
+                                  ) : (
+                                    <div></div>
+                                  )}
+                                  {ruleInfor.value.setting.user.remove ===
+                                  true ? (
+                                    <div
+                                      className="DAT_RoleMobile_Content_Bottom_Right_Item"
+                                      id={item.id_}
+                                      onClick={(e) => handleDelete_(e)}
+                                    >
+                                      <IoTrashOutline size={16} />
+                                    </div>
+                                  ) : (
+                                    <div></div>
+                                  )}
+                                </div>
+                              )}
+                            </>
+                          );
+                        case "mainadmin":
+                          return (
+                            <>
+                              {item.type_ === "master" ||
+                              item.type_ === "mainadmin" ? (
+                                <></>
+                              ) : (
+                                <div className="DAT_RoleMobile_Content_Bottom_Right">
+                                  {ruleInfor.value.setting.user.modify ===
+                                  true ? (
+                                    <div
+                                      className="DAT_RoleMobile_Content_Bottom_Right_Item"
+                                      id={item.id_}
+                                      onClick={(e) => handleEdit(e)}
+                                    >
+                                      <FiEdit size={14} />
+                                    </div>
+                                  ) : (
+                                    <div></div>
+                                  )}
+                                  {ruleInfor.value.setting.user.remove ===
+                                  true ? (
+                                    <div
+                                      className="DAT_RoleMobile_Content_Bottom_Right_Item"
+                                      id={item.id_}
+                                      onClick={(e) => handleDelete_(e)}
+                                    >
+                                      <IoTrashOutline size={16} />
+                                    </div>
+                                  ) : (
+                                    <div></div>
+                                  )}
+                                </div>
+                              )}
+                            </>
+                          );
+                        case "admin":
+                          return (
+                            <>
+                              {item.type_ === "master" ||
+                              item.type_ === "mainadmin" ||
+                              item.type_ === "admin" ? (
+                                <></>
+                              ) : (
+                                <div className="DAT_RoleMobile_Content_Bottom_Right">
+                                  {ruleInfor.value.setting.user.modify ===
+                                  true ? (
+                                    <div
+                                      className="DAT_RoleMobile_Content_Bottom_Right_Item"
+                                      id={item.id_}
+                                      onClick={(e) => handleEdit(e)}
+                                    >
+                                      <FiEdit size={14} />
+                                    </div>
+                                  ) : (
+                                    <div></div>
+                                  )}
+                                  {ruleInfor.value.setting.user.remove ===
+                                  true ? (
+                                    <div
+                                      className="DAT_RoleMobile_Content_Bottom_Right_Item"
+                                      id={item.id_}
+                                      onClick={(e) => handleDelete_(e)}
+                                    >
+                                      <IoTrashOutline size={16} />
+                                    </div>
+                                  ) : (
+                                    <div></div>
+                                  )}
+                                </div>
+                              )}
+                            </>
+                          );
+                        default:
+                          return <></>;
+                      }
+                    })()}
                   </div>
                 </div>
               );
             })}
           </div>
 
-          <div className="DAT_ViewPopupMobile"
+          <div
+            className="DAT_ViewPopupMobile"
             style={{
               height: roleState === "default" ? "0px" : "100vh",
               transition: "0.5s",
@@ -595,13 +746,19 @@ export default function Role(props) {
             })()}
           </div>
 
-          {popupState ?
+          {popupState ? (
             <div className="DAT_PopupBGMobile">
-              <RolePopup user={temp} type={type} handleClose={handleClosePopup} />
+              <RolePopup
+                user={temp}
+                type={type}
+                handleClose={handleClosePopup}
+              />
             </div>
-            : <></>}
+          ) : (
+            <></>
+          )}
         </>
-      }
+      )}
     </>
   );
 }

@@ -17,7 +17,7 @@ const temp = signal({
   ruleid_: 0,
   rulename_: "",
   setting: {
-    contact: { edit: false },
+    contact: { edit: false, registerinf: false },
     device: { add: false, modify: false, remove: false },
     monitor: { add: false, modify: false, remove: false },
     project: { add: false, modify: false, remove: false, share: false },
@@ -25,8 +25,10 @@ const temp = signal({
     rule: { add: false, modify: false, remove: false },
     user: { add: false, modify: false, remove: false },
     warn: { remove: false },
-    screen: { add: false, modify: false, remove: false },
+    screen: { add: false, modify: false, remove: false, classic: false },
     system: { auto: false, energy: false, elev: false },
+    errorsetting: { add: true, modify: true, remove: true },
+    registersetting: { add: true, modify: true, remove: true },
   },
 });
 
@@ -48,7 +50,8 @@ export const CheckBox = (props) => {
   };
 
   return (
-    <div className="DAT_CreateRule_Body_Item_Option_Check_SingleCheck"
+    <div
+      className="DAT_CreateRule_Body_Item_Option_Check_SingleCheck"
       style={{ width: props.width }}
     >
       <div className="form-check">
@@ -61,7 +64,8 @@ export const CheckBox = (props) => {
             handleShow(e);
           }}
         />
-        <label className="form-check-label"
+        <label
+          className="form-check-label"
           style={{ cursor: "pointer", fontSize: "15px", color: "grey" }}
           htmlFor={props.html}
         >
@@ -95,7 +99,8 @@ export default function CreateRule(props) {
     };
 
     return (
-      <div className="DAT_CreateRule_Body_Item"
+      <div
+        className="DAT_CreateRule_Body_Item"
         style={{ borderBottom: "dashed 1px rgba(198, 197, 197, 0.5)" }}
       >
         <div className="DAT_CreateRule_Body_Item_Data">
@@ -116,7 +121,9 @@ export default function CreateRule(props) {
   };
 
   const handleCreate = async () => {
-    let d = datarule.value.filter((item) => rulenameRef.current == item.rulename_)
+    let d = datarule.value.filter(
+      (item) => rulenameRef.current == item.rulename_
+    );
     if (rulenameRef.current != "" && d.length == 0) {
       const createRule = await callApi("post", host.DATA + "/addRule", {
         name: rulenameRef.current,
@@ -160,26 +167,25 @@ export default function CreateRule(props) {
 
   return (
     <>
-      {isBrowser
-        ?
+      {isBrowser ? (
         <div className="DAT_CreateRule">
           <div className="DAT_CreateRule_Header">
             <div className="DAT_CreateRule_Header_Left">
-              <p>
-                {dataLang.formatMessage({ id: "newRule" })}
-              </p>
+              <p>{dataLang.formatMessage({ id: "newRule" })}</p>
             </div>
 
             <div className="DAT_CreateRule_Header_Right">
-              <div className="DAT_CreateRule_Header_Right_Save"
+              <div
+                className="DAT_CreateRule_Header_Right_Save"
                 onClick={() => handleCreate()}
               >
-                <IoSaveOutline size={20} color={'white'} />
-                <span>{dataLang.formatMessage({ id: 'save' })}</span>
+                <IoSaveOutline size={20} color={"white"} />
+                <span>{dataLang.formatMessage({ id: "save" })}</span>
               </div>
-              <div className="DAT_CreateRule_Header_Right_Close"
+              <div
+                className="DAT_CreateRule_Header_Right_Close"
                 id="Popup"
-                onClick={() => (props.handleClose())}
+                onClick={() => props.handleClose()}
                 onMouseEnter={(e) => handlePopup("new")}
                 onMouseLeave={(e) => handlePopup("pre")}
               >
@@ -192,7 +198,8 @@ export default function CreateRule(props) {
             <TypeReport />
             <div className="DAT_CreateRule_Body_Item">
               <div className="DAT_CreateRule_Body_Item_Option">
-                <label className="DAT_CreateRule_Body_Item_Option_Title"
+                <label
+                  className="DAT_CreateRule_Body_Item_Option_Title"
                   style={{ margin: "0" }}
                 >
                   {dataLang.formatMessage({ id: "ruleOptions" })}
@@ -200,7 +207,8 @@ export default function CreateRule(props) {
 
                 {Object.entries(newruledata.value.setting).map(
                   ([key, value], index) => (
-                    <div className="DAT_CreateRule_Body_Item_Option_Check"
+                    <div
+                      className="DAT_CreateRule_Body_Item_Option_Check"
                       key={key}
                     >
                       <p style={{ color: "grey" }}>
@@ -224,25 +232,25 @@ export default function CreateRule(props) {
             </div>
           </div>
         </div>
-        :
+      ) : (
         <div className="DAT_CreateRuleMobile">
           <div className="DAT_CreateRuleMobile_Header">
             <div className="DAT_CreateRuleMobile_Header_Left">
-              <p>
-                {dataLang.formatMessage({ id: "newRule" })}
-              </p>
+              <p>{dataLang.formatMessage({ id: "newRule" })}</p>
             </div>
 
             <div className="DAT_CreateRuleMobile_Header_Right">
-              <div className="DAT_CreateRuleMobile_Header_Right_Save"
+              <div
+                className="DAT_CreateRuleMobile_Header_Right_Save"
                 onClick={() => handleCreate()}
               >
-                <IoSaveOutline size={20} color={'white'} />
-                <span>{dataLang.formatMessage({ id: 'save' })}</span>
+                <IoSaveOutline size={20} color={"white"} />
+                <span>{dataLang.formatMessage({ id: "save" })}</span>
               </div>
-              <div className="DAT_CreateRuleMobile_Header_Right_Close"
+              <div
+                className="DAT_CreateRuleMobile_Header_Right_Close"
                 id="Popup"
-                onClick={() => (props.handleClose())}
+                onClick={() => props.handleClose()}
                 onMouseEnter={(e) => handlePopup("new")}
                 onMouseLeave={(e) => handlePopup("pre")}
               >
@@ -255,7 +263,8 @@ export default function CreateRule(props) {
             <TypeReport />
             <div className="DAT_CreateRuleMobile_Body_Item">
               <div className="DAT_CreateRuleMobile_Body_Item_Option">
-                <label className="DAT_CreateRuleMobile_Body_Item_Option_Title"
+                <label
+                  className="DAT_CreateRuleMobile_Body_Item_Option_Title"
                   style={{ margin: "0" }}
                 >
                   {dataLang.formatMessage({ id: "ruleOptions" })}
@@ -263,7 +272,8 @@ export default function CreateRule(props) {
 
                 {Object.entries(newruledata.value.setting).map(
                   ([key, value], index) => (
-                    <div className="DAT_CreateRuleMobile_Body_Item_Option_Check"
+                    <div
+                      className="DAT_CreateRuleMobile_Body_Item_Option_Check"
                       key={key}
                     >
                       <p style={{ color: "grey" }}>
@@ -287,7 +297,7 @@ export default function CreateRule(props) {
             </div>
           </div>
         </div>
-      }
+      )}
     </>
   );
 }

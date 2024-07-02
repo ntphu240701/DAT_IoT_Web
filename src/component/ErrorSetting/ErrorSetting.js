@@ -18,14 +18,23 @@ import RemoveErr from "./RemoveErr";
 import { alertDispatch } from "../Alert/Alert";
 import { callApi } from "../Api/Api";
 import { host } from "../Lang/Contant";
-import PopupState, { bindMenu, bindToggle } from "material-ui-popup-state";
-import { Menu, MenuItem } from "@mui/material";
-import { Empty, partnerInfor, userInfor } from "../../App";
+import PopupState, {
+  bindHover,
+  bindMenu,
+  bindPopper,
+  bindToggle,
+} from "material-ui-popup-state";
+import { Fade, Menu, MenuItem, Paper, Popper, Typography } from "@mui/material";
+import { Empty, partnerInfor, ruleInfor, userInfor } from "../../App";
 import { isBrowser } from "react-device-detect";
 import { PiUsersFour } from "react-icons/pi";
 import { signal } from "@preact/signals-react";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { useSelector } from "react-redux";
+import { MdOutlineManageHistory } from "react-icons/md";
+import ErrNameEdit from "./ErrNameEdit";
+import { LuRouter } from "react-icons/lu";
+import { BiMessageAltError } from "react-icons/bi";
 
 export const groupErrSN = signal("");
 
@@ -61,6 +70,8 @@ export default function ErrorSetting(props) {
   const dataLang = useIntl();
   const [createState, setCreateState] = useState(false);
   const [editState, setEditState] = useState(false);
+  const [editNS, setEditNS] = useState(false);
+  const [editName, setEditName] = useState("");
   const [editType, setEditType] = useState("");
   const [removeState, setRemoveState] = useState(false);
   const [removeType, setRemoveType] = useState("");
@@ -75,6 +86,7 @@ export default function ErrorSetting(props) {
   const [dataGatewaySub, setDataGatewaySub] = useState([]);
   const [dataErr, setDataErr] = useState([]);
   const [errList, setErrList] = useState(false);
+  const [filterType, setFilterType] = useState(true);
 
   const paginationComponentOptions = {
     rowsPerPageText: dataLang.formatMessage({ id: "row" }),
@@ -94,12 +106,41 @@ export default function ErrorSetting(props) {
         height: "auto !important",
       },
     },
+    //ERRCODE
     {
       name: dataLang.formatMessage({ id: "errcode" }),
       selector: (row) => row.boxid_,
       sortable: true,
-      width: "100px",
+      width: "60px",
       style: {
+        height: "auto !important",
+        justifyContent: "left !important",
+      },
+    },
+    //ERRNAME
+    {
+      name: dataLang.formatMessage({ id: "errname" }),
+      selector: (row) => {
+        return (
+          <div>
+            <div
+              className="DAT_TableText"
+              id={row.boxid_}
+              onClick={(e) => {
+                setEditNS(!editNS);
+                setEditName(row.name_);
+                setEditarray(e.currentTarget.id);
+              }}
+            >
+              {row.name_}
+            </div>
+          </div>
+        );
+      },
+      sortable: true,
+      width: "300px",
+      style: {
+        cursor: "pointer",
         height: "auto !important",
         justifyContent: "left !important",
       },
@@ -108,9 +149,9 @@ export default function ErrorSetting(props) {
     {
       name: dataLang.formatMessage({ id: "causeViEn" }),
       selector: (row) => {
-        // let cause = row.cause_.sort((a, b) => a.id - b.id);
+        let cause = row.cause_.sort((a, b) => a.id - b.id);
         // console.log(dataErr, row);
-        let cause = row.cause_;
+        // let cause = row.cause_;
         return (
           <div style={{ height: "auto" }}>
             {cause.map((err, index) => {
@@ -126,36 +167,40 @@ export default function ErrorSetting(props) {
                 >
                   <div className="DAT_TableText">{err.vi}</div>
                   <div className="DAT_TableText">{err.en}</div>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      gap: "10px",
-                    }}
-                  >
-                    <FiEdit
-                      size={16}
-                      style={{ cursor: "pointer" }}
-                      id={`${row.boxid_}-${err.id}-EDITCAUSE`}
-                      onClick={(e) => handleEdit(e)}
-                    />
-                    <IoTrashOutline
-                      size={16}
-                      style={{ cursor: "pointer" }}
-                      id={`${row.boxid_}_${err.id}_REMOVECAUSE`}
-                      onClick={(e) => handleDelete(e)}
-                    />
-                    {parseInt(index) === cause.length - 1 ? (
-                      <IoIosAddCircleOutline
+                  {ruleInfor.value.setting.errorsetting.modify == true ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        gap: "10px",
+                      }}
+                    >
+                      <FiEdit
                         size={16}
                         style={{ cursor: "pointer" }}
-                        id={`${row.boxid_}-ADDCAUSE`}
-                        onClick={(e) => handleAdd(e)}
+                        id={`${row.boxid_}-${err.id}-EDITCAUSE`}
+                        onClick={(e) => handleEdit(e)}
                       />
-                    ) : (
-                      <></>
-                    )}
-                  </div>
+                      <IoTrashOutline
+                        size={16}
+                        style={{ cursor: "pointer" }}
+                        id={`${row.boxid_}_${err.id}_REMOVECAUSE`}
+                        onClick={(e) => handleDelete(e)}
+                      />
+                      {parseInt(index) === cause.length - 1 ? (
+                        <IoIosAddCircleOutline
+                          size={16}
+                          style={{ cursor: "pointer" }}
+                          id={`${row.boxid_}-ADDCAUSE`}
+                          onClick={(e) => handleAdd(e)}
+                        />
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               );
             })}
@@ -188,36 +233,40 @@ export default function ErrorSetting(props) {
                 >
                   <div className="DAT_TableText">{err.vi}</div>
                   <div className="DAT_TableText">{err.en}</div>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      gap: "10px",
-                    }}
-                  >
-                    <FiEdit
-                      size={16}
-                      style={{ cursor: "pointer" }}
-                      id={`${row.boxid_}-${err.id}-EDITSOLUTION`}
-                      onClick={(e) => handleEdit(e)}
-                    />
-                    <IoTrashOutline
-                      size={16}
-                      style={{ cursor: "pointer" }}
-                      id={`${row.boxid_}_${err.id}_REMOVESOLUTION`}
-                      onClick={(e) => handleDelete(e)}
-                    />
-                    {parseInt(index) === solution.length - 1 ? (
-                      <IoIosAddCircleOutline
+                  {ruleInfor.value.setting.errorsetting.modify == true ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        gap: "10px",
+                      }}
+                    >
+                      <FiEdit
                         size={16}
                         style={{ cursor: "pointer" }}
-                        id={`${row.boxid_}-ADDSOLUTION`}
-                        onClick={(e) => handleAdd(e)}
+                        id={`${row.boxid_}-${err.id}-EDITSOLUTION`}
+                        onClick={(e) => handleEdit(e)}
                       />
-                    ) : (
-                      <></>
-                    )}
-                  </div>
+                      <IoTrashOutline
+                        size={16}
+                        style={{ cursor: "pointer" }}
+                        id={`${row.boxid_}_${err.id}_REMOVESOLUTION`}
+                        onClick={(e) => handleDelete(e)}
+                      />
+                      {parseInt(index) === solution.length - 1 ? (
+                        <IoIosAddCircleOutline
+                          size={16}
+                          style={{ cursor: "pointer" }}
+                          id={`${row.boxid_}-ADDSOLUTION`}
+                          onClick={(e) => handleAdd(e)}
+                        />
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               );
             })}
@@ -237,15 +286,7 @@ export default function ErrorSetting(props) {
         <>
           {row.type_ === "master" ? (
             <></>
-          ) : (
-            // <div className="DAT_TableEdit">
-            //   <span
-            //     id={row.warnid_ + "_MORE"}
-            //     onClick={(e) => handleModify(e, "block")}
-            //   >
-            //     <IoMdMore size={20} />
-            //   </span>
-            // </div>
+          ) : ruleInfor.value.setting.errorsetting.remove == true ? (
             <PopupState variant="popper" popupId="demo-popup-popper">
               {(popupState) => (
                 <div className="DAT_TableEdit">
@@ -266,23 +307,9 @@ export default function ErrorSetting(props) {
                 </div>
               )}
             </PopupState>
+          ) : (
+            <></>
           )}
-          {/* <div
-            className="DAT_ModifyBox"
-            id={row.warnid_ + "_Modify"}
-            style={{ display: "none", width: "80px" }}
-            onMouseLeave={(e) => handleModify(e, "none")}
-          >
-            <div
-              className="DAT_ModifyBox_Remove"
-              id={row.boxid_}
-              onClick={(e) => handleDelete(e)}
-            >
-              <IoTrashOutline size={16} />
-              &nbsp;
-              {dataLang.formatMessage({ id: "remove" })}
-            </div>
-          </div> */}
         </>
       ),
       width: "80px",
@@ -312,11 +339,12 @@ export default function ErrorSetting(props) {
       console.log(inf);
       if (inf.status === true) {
         if (inf.data.length > 0) {
-          setDataErr(inf.data);
-          setDataApi(inf.data);
-          console.log(inf.data);
+          setDataErr(inf.data.sort((a, b) => a.boxid_ - b.boxid_));
+          setDataApi(inf.data.sort((a, b) => a.boxid_ - b.boxid_));
+          console.log(dataErr);
         } else {
           setDataErr([]);
+          setDataApi([]);
         }
       }
     };
@@ -328,9 +356,13 @@ export default function ErrorSetting(props) {
     setCreateState(false);
   };
 
-  const handleConfirmCreate = async (e, code, num1, num2) => {
+  const handleCloseEditName = (e) => {
+    setEditNS(!editNS);
+  };
+
+  const handleConfirmCreate = async (e, code, name, num2) => {
     e.preventDefault();
-    if (code === "") {
+    if (code === "" || name === "") {
       alertDispatch(dataLang.formatMessage({ id: "alert_17" }));
     } else {
       const t = dataErr.find((item) => item.boxid_ === code);
@@ -340,6 +372,7 @@ export default function ErrorSetting(props) {
         let req = await callApi("post", `${host.DATA}/updateWarnBox`, {
           sn: groupErrSN.value,
           boxid: code,
+          name: name,
           cause: JSON.stringify([
             { id: 1, vi: "Nguyên nhân 1", en: "Cause 1" },
           ]),
@@ -352,6 +385,7 @@ export default function ErrorSetting(props) {
           const newdata = dataErr;
           newdata.push({
             boxid_: code,
+            name_: name,
             cause_: [{ id: 1, vi: "Nguyên nhân 1", en: "Cause 1" }],
             solution_: [{ id: 1, vi: "Giải pháp 1", en: "Solution 1" }],
           });
@@ -424,6 +458,7 @@ export default function ErrorSetting(props) {
     }
     let req = await callApi("post", `${host.DATA}/updateWarnBox`, {
       sn: groupErrSN.value,
+      name: dataErr.find((item) => item.boxid_ === editarray[0]).name_,
       boxid: editarray[0],
       cause: JSON.stringify(
         dataErr.find((item) => item.boxid_ === editarray[0]).cause_
@@ -454,6 +489,7 @@ export default function ErrorSetting(props) {
 
   const handleDelete = (e) => {
     let arr = e.currentTarget.id.split("_");
+    console.log(arr);
     setArrayData(arr);
     setRemoveType(arr[4]);
     setRemoveState(true);
@@ -480,6 +516,7 @@ export default function ErrorSetting(props) {
           let req1 = await callApi("post", `${host.DATA}/updateWarnBox`, {
             sn: groupErrSN.value,
             boxid: boxid,
+            name: dataErr.find((item) => item.boxid_ === boxid).name_,
             cause: JSON.stringify(
               dataErr.find((item) => item.boxid_ === boxid).cause_
             ),
@@ -508,6 +545,7 @@ export default function ErrorSetting(props) {
         let req2 = await callApi("post", `${host.DATA}/updateWarnBox`, {
           sn: groupErrSN.value,
           boxid: boxid,
+          name: dataErr.find((item) => item.boxid_ === boxid).name_,
           cause: JSON.stringify(
             dataErr.find((item) => item.boxid_ === boxid).cause_
           ),
@@ -580,6 +618,7 @@ export default function ErrorSetting(props) {
     await callApi("post", `${host.DATA}/updateWarnBox`, {
       sn: groupErrSN.value,
       boxid: arr[0],
+      name: dataErr.find((item) => item.boxid_ === arr[0]).name_,
       cause: JSON.stringify(
         dataErr.find((item) => item.boxid_ === arr[0]).cause_
       ),
@@ -587,6 +626,31 @@ export default function ErrorSetting(props) {
         dataErr.find((item) => item.boxid_ === arr[0]).solution_
       ),
     });
+  };
+
+  const handleConfirmEditName = async (editname) => {
+    console.log(editname);
+    console.log(editarray);
+    let un = await callApi("post", `${host.DATA}/updateWarnBox`, {
+      sn: groupErrSN.value,
+      boxid: editarray,
+      name: editname,
+      cause: JSON.stringify(
+        dataErr.find((item) => item.boxid_ === editarray).cause_
+      ),
+      solution: JSON.stringify(
+        dataErr.find((item) => item.boxid_ === editarray).solution_
+      ),
+    });
+
+    if (un.status) {
+      setEditNS(false);
+      const boxid = editarray;
+      const index = dataErr.findIndex((item) => item.boxid_ === editarray);
+      const t = dataErr;
+      t[index].name_ = editname;
+      setDataErr([...t]);
+    }
   };
 
   const handleFilter = (e) => {
@@ -604,25 +668,77 @@ export default function ErrorSetting(props) {
 
       setDataGateway([...temp]);
     }
-
-    // const temp = dataErr.filter((item) => {
-    // return (
-    // lowercasedata(item.boxid_).includes(input) ||
-    // item.cause_.some(
-    //   (cause) =>
-    //     lowercasedata(cause.vi).includes(input) ||
-    //     lowercasedata(cause.en).includes(input)
-    // ) ||
-    // item.solution_.some(
-    //   (solution) =>
-    //     lowercasedata(solution.vi).includes(input) ||
-    //     lowercasedata(solution.en).includes(input)
-    // )
-    //     lowercasedata(data.sn_).includes(input) ||
-    //     lowercasedata(data.name_).includes(input)
-    //   );
-    // });
   };
+
+  useEffect(() => {
+    console.log(ruleInfor.value);
+  }, []);
+
+  const handleFilterDataErr = (e) => {
+    // if (dataErr.length > 0) {
+    //   const input = lowercasedata(e.currentTarget.value);
+    //   console.log(input);
+    //   const t = dataErr;
+    //   if (input == "") {
+    //     setDataErr([...dataErr]);
+    //   } else {
+    //     const temp = t.filter((item) => {
+    //       return (
+    //         lowercasedata(item.boxid_).includes(input) ||
+    //         lowercasedata(item.name_).includes(input) ||
+    //         item.cause_.some(
+    //           (cause) =>
+    //             lowercasedata(cause.vi).includes(input) ||
+    //             lowercasedata(cause.en).includes(input)
+    //         ) ||
+    //         item.solution_.some(
+    //           (solution) =>
+    //             lowercasedata(solution.vi).includes(input) ||
+    //             lowercasedata(solution.en).includes(input)
+    //         )
+    //       );
+    //     });
+    //     console.log(temp);
+    //     // setDataErr([...temp]);
+    //   }
+    // }
+    const input = lowercasedata(e.currentTarget.value);
+    console.log(input, "filter gateway");
+    const t = dataApi;
+    if (input == "") {
+      setDataErr([...t]);
+    } else {
+      let temp = t.filter((data) => {
+        return (
+          lowercasedata(data.boxid_).includes(input) ||
+          lowercasedata(data.name_).includes(input) ||
+          data.cause_.some(
+            (cause) =>
+              lowercasedata(cause.vi).includes(input) ||
+              lowercasedata(cause.en).includes(input)
+          ) ||
+          data.solution_.some(
+            (solution) =>
+              lowercasedata(solution.vi).includes(input) ||
+              lowercasedata(solution.en).includes(input)
+          )
+        );
+      });
+      setDataErr([...temp]);
+    }
+  };
+
+  useEffect(() => {
+    if (groupErrSN.value === "") {
+      console.log(true);
+    } else {
+      console.log(false);
+    }
+  }, [groupErrSN.value]);
+
+  // useEffect(() => {
+  //   console.log(editNS);
+  // }, [editNS]);
 
   useEffect(() => {
     setData(dataApi);
@@ -637,9 +753,9 @@ export default function ErrorSetting(props) {
         type: type,
       });
       if (res.status) {
-        setDataGateway([...res.data]);
-        setDataGatewaySub([...res.data]);
-        // console.log(res.data);
+        setDataGateway([...res.data.sort((a, b) => a.id_ - b.id_)]);
+        setDataGatewaySub([...res.data.sort((a, b) => a.id_ - b.id_)]);
+        console.log(res.data.sort((a, b) => a.id_ - b.id_));
       }
     };
 
@@ -658,257 +774,110 @@ export default function ErrorSetting(props) {
         height: "100vh",
       }}
     >
-      {/* BẢN CŨ CHƯA UPDATE */}
-      {/* {isMobile.value
-        ?
-        <>
-          <div className="DAT_ErrSettingHeaderMobile">
-            <div className="DAT_ErrSettingHeaderMobile_Top">
-              <div className="DAT_ErrSettingHeaderMobile_Top_Filter">
-                <CiSearch color="gray" size={20} />
-                <input
-                  type="text"
-                  placeholder={
-                    dataLang.formatMessage({ id: "enterError" }) + "..."
-                  }
-                  ref={filterRef}
-                  onChange={(e) => {
-                    handleFilter(e);
-                  }}
-                />
-              </div>
-              <button
-                className="DAT_ErrSettingHeaderMobile_Top_New"
-                onClick={() => setCreateState(true)}
-              >
-                <IoAddOutline color="white" size={20} />
-              </button>
-            </div>
-
-            <div
-              className="DAT_ErrSettingHeaderMobile_Title"
-              style={{ marginBottom: "10px" }}
-            >
-              <MdOutlineManageHistory color="gray" size={25} />
-              <span>{dataLang.formatMessage({ id: "errorsetting" })}</span>
-            </div>
-          </div>
-
-          <div className="DAT_ErrSetMobile">
-            {data.map((item, index) => {
-              return (
-                <div key={index} className="DAT_ErrSetMobile_Content">
-                  <div className="DAT_ErrSetMobile_Content_Top">
-                    <div className="DAT_ErrSetMobile_Content_Top_Type">
-                      {item.boxid_}
-                    </div>
-                    <div className="DAT_ErrSetMobile_Content_Top_Info">
-                      <div className="DAT_ErrSetMobile_Content_Top_Info_Cause">
-                        <span>
-                          {dataLang.formatMessage({ id: "causeViEn" })}
-                        </span>
-                        <div className="DAT_ErrSetMobile_Content_Top_Info_Cause_Row1">
-                          <div className="DAT_ErrSetMobile_Content_Top_Info_Cause_Row1_Vi">
-                            vi:
-                          </div>
-                          <div className="DAT_ErrSetMobile_Content_Top_Info_Cause_Row1_En">
-                            en:
-                          </div>
-                        </div>
-
-                        <div>
-                          {item.cause_.map((cause, i) => {
-                            return (
-                              <div
-                                key={i}
-                                className="DAT_ErrSetMobile_Content_Top_Info_Cause_Row2"
-                              >
-                                <div className="DAT_ErrSetMobile_Content_Top_Info_Cause_Row2_Vi">
-                                  {i + 1}. {cause.vi}
-                                </div>
-                                <div className="DAT_ErrSetMobile_Content_Top_Info_Cause_Row2_En">
-                                  {i + 1}. {cause.en}
-                                </div>
-                                <div className="DAT_ErrSetMobile_Content_Top_Info_Cause_Row2_Func">
-                                  <FiEdit
-                                    size={14}
-                                    id={`${item.boxid_}-${cause.id}-EDITCAUSE`}
-                                    onClick={(e) => handleEdit(e)}
-                                  />
-                                  <IoTrashOutline
-                                    size={16}
-                                    id={`${item.boxid_}_${cause.id}_REMOVECAUSE`}
-                                    onClick={(e) => handleDelete(e)}
-                                  />
-                                  {parseInt(i) === item.cause_.length - 1 ? (
-                                    <IoIosAddCircleOutline
-                                      size={16}
-                                      id={`${item.boxid_}-ADDCAUSE`}
-                                      onClick={(e) => handleAdd(e)}
-                                    />
-                                  ) : (
-                                    <></>
-                                  )}
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-
-                      <div className="DAT_ErrSetMobile_Content_Top_Info_Solution">
-                        <span>
-                          {dataLang.formatMessage({ id: "solutionViEn" })}
-                        </span>
-                        <div className="DAT_ErrSetMobile_Content_Top_Info_Solution_Row1">
-                          <div className="DAT_ErrSetMobile_Content_Top_Info_Solution_Row1_Vi">
-                            vi:
-                          </div>
-                          <div className="DAT_ErrSetMobile_Content_Top_Info_Solution_Row1_En">
-                            en:
-                          </div>
-                        </div>
-
-                        <div>
-                          {item.solution_.map((solution, i) => {
-                            return (
-                              <div
-                                key={i}
-                                className="DAT_ErrSetMobile_Content_Top_Info_Solution_Row2"
-                              >
-                                <div className="DAT_ErrSetMobile_Content_Top_Info_Solution_Row2_Vi">
-                                  {i + 1}. {solution.vi}
-                                </div>
-                                <div className="DAT_ErrSetMobile_Content_Top_Info_Solution_Row2_En">
-                                  {i + 1}. {solution.en}
-                                </div>
-                                <div className="DAT_ErrSetMobile_Content_Top_Info_Solution_Row2_Func">
-                                  <FiEdit
-                                    size={14}
-                                    id={`${item.boxid_}-${solution.id}-EDITSOLUTION`}
-                                    onClick={(e) => handleEdit(e)}
-                                  />
-                                  <IoTrashOutline
-                                    size={16}
-                                    id={`${item.boxid_}_${solution.id}_REMOVESOLUTION`}
-                                    onClick={(e) => handleDelete(e)}
-                                  />
-                                  {parseInt(i) === item.solution_.length - 1 ? (
-                                    <IoIosAddCircleOutline
-                                      size={16}
-                                      id={`${item.boxid_}-ADDSOLUTION`}
-                                      onClick={(e) => handleAdd(e)}
-                                    />
-                                  ) : (
-                                    <></>
-                                  )}
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="DAT_ErrSetMobile_Content_Bottom">
-                    <div
-                      className="DAT_ErrSetMobile_Content_Bottom_Item"
-                      id={item.boxid_}
-                      onClick={(e) => handleDelete(e)}
-                    >
-                      <IoTrashOutline size={16} />
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </>
-        :
-        <>
-          <div className="DAT_ErrSetting">
-            <div className="DAT_ErrSetting_Title">
-              <MdOutlineManageHistory color="gray" size={25} />
-              <span>{dataLang.formatMessage({ id: "errorsetting" })}</span>
-            </div>
-
-            <div className="DAT_ErrSetting_Filter">
-              <input
-                type="text"
-                placeholder={dataLang.formatMessage({ id: "enterError" }) + "..."}
-                ref={filterRef}
-                onChange={(e) => { handleFilter(e) }}
-              />
-              <CiSearch color="gray" size={20} />
-            </div>
-
-            <button className="DAT_ErrSetting_New"
-              onClick={() => setCreateState(true)}
-            >
-              <span>
-                <MdOutlineManageHistory color="white" size={20} />
-                &nbsp;
-                {dataLang.formatMessage({ id: "createNew" })}
-              </span>
-            </button>
-          </div>
-
-          <div className="DAT_ErrSet">
-            <div className="DAT_ErrSet_Header">
-              {dataLang.formatMessage({ id: "errlist" })}
-            </div>
-
-            <div className="DAT_ErrSet_Content">
-              <DataTable
-                className="DAT_Table_Container"
-                columns={columnLog}
-                data={data}
-                pagination
-                paginationComponentOptions={paginationComponentOptions}
-                // fixedHeader={true}
-                noDataComponent={<Empty />}
-              />
-            </div>
-          </div>
-        </>
-      } */}
-
       {/* BẢN MỚI ĐANG UPDATE */}
       {isBrowser ? (
         <>
-          <div className="DAT_ESHeader">
-            <div className="DAT_ESHeader_Title">
+          <div className="DAT_Header">
+            <div className="DAT_Header_Title">
               <PiUsersFour color="gray" size={25} />
               <span>{dataLang.formatMessage({ id: "errorsetting" })}</span>
             </div>
-            <div
-              className="DAT_ESHeader_Filter"
-              style={{
-                backgroundColor:
-                  groupErrSN.value === ""
-                    ? "rgba(233, 233, 233, 0.5)"
-                    : "white",
-              }}
-            >
-              {groupErrSN.value === "" ? (
+            <div style={{ display: "flex", alignItems: "center", gap: "1px" }}>
+              <PopupState variant="popper" popupId="demo-popup-popper">
+                {(popupState) => (
+                  <div style={{ cursor: "pointer" }}>
+                    <div
+                      className="DAT_Header_Select"
+                      onClick={() => setFilterType(!filterType)}
+                      {...bindHover(popupState)}
+                    >
+                      {filterType ? (
+                        <LuRouter size={17} color="#0b1967" />
+                      ) : (
+                        <BiMessageAltError size={17} color="#0b1967" />
+                      )}
+                    </div>
+                    <Popper {...bindPopper(popupState)} transition>
+                      {({ TransitionProps }) => (
+                        <Fade {...TransitionProps} timeout={350}>
+                          <Paper
+                            sx={{
+                              width: "fit-content",
+                              marginLeft: "0px",
+                              marginTop: "5px",
+                              height: "20px",
+                              p: 2,
+                            }}
+                          >
+                            <Typography
+                              sx={{
+                                fontSize: "12px",
+                                textAlign: "justify",
+                                justifyItems: "center",
+                                // marginBottom: 1.7,
+                              }}
+                            >
+                              {dataLang.formatMessage({
+                                id: filterType ? "devicelist" : "errlist",
+                              })}
+                            </Typography>
+                          </Paper>
+                        </Fade>
+                      )}
+                    </Popper>
+                  </div>
+                )}
+              </PopupState>
+
+              <div
+                className="DAT_Header_Filter2"
+                style={{
+                  backgroundColor: "white",
+                }}
+              >
                 <input
-                  disabled
                   type="text"
-                  autoComplete="off"
+                  id="search"
+                  // autoComplete="on"
                   placeholder={dataLang.formatMessage({ id: "enterInfo" })}
+                  onChange={(e) => {
+                    handleFilter(e);
+                    console.log(e.currentTarget.value);
+                  }}
+                  style={{
+                    display: filterType ? "block" : "none",
+                  }}
                 />
-              ) : (
                 <input
                   type="text"
-                  autoComplete="on"
+                  id="search2"
+                  // autoComplete="on"
                   placeholder={dataLang.formatMessage({ id: "enterInfo" })}
-                  onChange={(e) => handleFilter(e)}
+                  onChange={(e) => handleFilterDataErr(e)}
+                  style={{ display: filterType ? "none" : "block" }}
                 />
-              )}
-              <CiSearch color="gray" size={20} />
+                {/* <span
+                    style={{
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontFamily: "Montserrat-Bold",
+                      fontSize: "13px",
+                      color: "#0B1967",
+                    }}
+                    onClick={() => setFilterType(!filterType)}
+                  >
+                    {dataLang.formatMessage({
+                      id: filterType ? "devicelist" : "errlist",
+                    })}
+                  </span> */}
+
+                <CiSearch color="gray" size={20} />
+              </div>
             </div>
-            <div></div>
+
+            <div className=""></div>
           </div>
 
           <div className="DAT_ES">
@@ -958,13 +927,18 @@ export default function ErrorSetting(props) {
                             {item.name_}
                           </div>
                         </div>
-                        <div
-                          className="DAT_ES_Content_DevideTable_Left_ItemList_Item_Shortcut"
-                          //   id={item.id_ + "_dot"}
-                          onClick={() => setCreateState(true)}
-                        >
-                          <IoMdAdd size={20} color="grey" />
-                        </div>
+
+                        {ruleInfor.value.setting.errorsetting.add === true ? (
+                          <div
+                            className="DAT_ES_Content_DevideTable_Left_ItemList_Item_Shortcut"
+                            //   id={item.id_ + "_dot"}
+                            onClick={() => setCreateState(true)}
+                          >
+                            <IoMdAdd size={20} color="grey" />
+                          </div>
+                        ) : (
+                          <></>
+                        )}
 
                         <div
                           className="DAT_ES_Content_DevideTable_Left_ItemList_Item_More"
@@ -1022,32 +996,98 @@ export default function ErrorSetting(props) {
               </div>
             </div>
           </div>
+
+          {createState ? (
+            <div className="DAT_PopupBG">
+              <CreateErrSetting
+                handleClose={handleCloseCreate}
+                handleConfirm={handleConfirmCreate}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {editState ? (
+            <div className="DAT_PopupBG">
+              <EditErr
+                type={editType}
+                handleClose={handleCloseEdit}
+                editVi={editVi}
+                editEn={editEn}
+                confirmEdit={confirmEdit}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {editNS ? (
+            <div className="DAT_PopupBG">
+              <ErrNameEdit
+                handleClose={handleCloseEditName}
+                editName={editName}
+                confirmEdit={confirmEdit}
+                handleConfirmEditName={handleConfirmEditName}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {removeState ? (
+            <div className="DAT_PopupBG">
+              <RemoveErr
+                type={removeType}
+                handleClose={handleCloseRemove}
+                handleDel={handleDelete}
+                confirmDel={confirmDelete}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
         </>
       ) : (
         <>
           <div className="DAT_ProjectHeaderMobile">
             <div className="DAT_ProjectHeaderMobile_Top">
-              <div
-                className="DAT_ProjectHeaderMobile_Top_Filter"
-                style={{
-                  backgroundColor: errList ? "rgb(235, 235, 228)" : "white",
-                }}
-              >
-                <CiSearch color="gray" size={20} />
-                <input
-                  disabled={errList ? true : false}
-                  type="text"
-                  placeholder={dataLang.formatMessage({ id: "enterInfo" })}
-                  onChange={(e) => handleFilter(e)}
-                />
-              </div>
               {errList ? (
-                <button
-                  className="DAT_ProjectHeaderMobile_Top_New"
-                  onClick={() => setCreateState(true)}
-                >
-                  <IoAddOutline color="white" size={20} />
-                </button>
+                <IoCaretBackOutline
+                  size={40}
+                  color="#0B1967"
+                  onClick={() => setErrList(false)}
+                />
+              ) : (
+                <></>
+              )}
+              <div className="DAT_ProjectHeaderMobile_Top_Filter">
+                <CiSearch color="gray" size={20} />
+                {filterType ? (
+                  <input
+                    type="text"
+                    placeholder={dataLang.formatMessage({ id: "enterInfo" })}
+                    onChange={(e) => handleFilter(e)}
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    placeholder={dataLang.formatMessage({ id: "enterInfo" })}
+                    onChange={(e) => handleFilterDataErr(e)}
+                  />
+                )}
+              </div>
+              {ruleInfor.value.setting.errorsetting.add === true ? (
+                errList ? (
+                  <button
+                    className="DAT_ProjectHeaderMobile_Top_New"
+                    onClick={() => setCreateState(true)}
+                  >
+                    <IoAddOutline color="white" size={20} />
+                  </button>
+                ) : (
+                  <></>
+                )
               ) : (
                 <></>
               )}
@@ -1057,14 +1097,14 @@ export default function ErrorSetting(props) {
               className="DAT_ProjectHeaderMobile_Title"
               style={{ marginBottom: "10px" }}
             >
-              <PiUsersFour color="gray" size={25} />
+              <PiUsersFour color="gray" size={25} />{" "}
               <span>{dataLang.formatMessage({ id: "errlist" })}</span>
             </div>
           </div>
 
           {errList ? (
             <div className="DAT_ESMobile_Content_DevideTable_Right">
-              <div className="DAT_ESMobile_Content_DevideTable_Right_Head">
+              {/* <div className="DAT_ESMobile_Content_DevideTable_Right_Head">
                 <IoCaretBackOutline
                   style={{ cursor: "pointer" }}
                   size={20}
@@ -1074,28 +1114,43 @@ export default function ErrorSetting(props) {
                     groupErrSN.value = "";
                   }}
                 />
-                <div>{dataLang.formatMessage({ id: "roleList" })}</div>
-              </div>
+                <div>{dataLang.formatMessage({ id: "previous" })}</div>
+              </div> */}
               <div className="DAT_ESMobile_Content_DevideTable_Right_ItemList">
-                {dataErr ? (
-                  <div className="DAT_RegSetMobile">
+                {dataErr === undefined ? (
+                  <Empty />
+                ) : (
+                  <div className="DAT_ErrSetMobile">
                     {dataErr.map((item, index) => {
                       return (
-                        <div key={index} className="DAT_RegSetMobile_Content">
-                          <div className="DAT_RegSetMobile_Content_Top">
-                            <div className="DAT_RegSetMobile_Content_Top_Type">
-                              {item.addrcode}
+                        <div key={index} className="DAT_ErrSetMobile_Content">
+                          <div className="DAT_ErrSetMobile_Content_Top">
+                            <div className="DAT_ErrSetMobile_Content_Top_Type">
+                              {item.boxid_}
                             </div>
-                            <div className="DAT_RegSetMobile_Content_Top_Info">
-                              <div className="DAT_RegSetMobile_Content_Top_Info_Cause">
+                            <div className="DAT_ErrSetMobile_Content_Top_Info">
+                              {/* <div className="DAT_ErrSetMobile_Content_Top_Info_Name">
+                                {item.name_}
+                              </div> */}
+                              <span
+                                id={item.boxid_}
+                                onClick={(e) => {
+                                  setEditNS(!editNS);
+                                  setEditName(item.name_);
+                                  setEditarray(e.currentTarget.id);
+                                }}
+                              >
+                                {item.name_}
+                              </span>
+                              <div className="DAT_ErrSetMobile_Content_Top_Info_Cause">
                                 <span>
                                   {dataLang.formatMessage({ id: "cause" })}
                                 </span>
-                                <div className="DAT_RegSetMobile_Content_Top_Info_Cause_Row1">
-                                  <div className="DAT_RegSetMobile_Content_Top_Info_Cause_Row1_En">
+                                <div className="DAT_ErrSetMobile_Content_Top_Info_Cause_Row1">
+                                  <div className="DAT_ErrSetMobile_Content_Top_Info_Cause_Row1_En">
                                     En:
                                   </div>
-                                  <div className="DAT_RegSetMobile_Content_Top_Info_Cause_Row1_Vi">
+                                  <div className="DAT_ErrSetMobile_Content_Top_Info_Cause_Row1_Vi">
                                     Vi:
                                   </div>
                                 </div>
@@ -1105,53 +1160,58 @@ export default function ErrorSetting(props) {
                                     return (
                                       <div
                                         key={i}
-                                        className="DAT_RegSetMobile_Content_Top_Info_Cause_Row2"
+                                        className="DAT_ErrSetMobile_Content_Top_Info_Cause_Row2"
                                       >
-                                        <div className="DAT_RegSetMobile_Content_Top_Info_Cause_Row2_Vi">
+                                        <div className="DAT_ErrSetMobile_Content_Top_Info_Cause_Row2_Vi">
                                           {i + 1}. {`${cause.vi}`}
                                         </div>
-                                        <div className="DAT_RegSetMobile_Content_Top_Info_Cause_Row2_En">
+                                        <div className="DAT_ErrSetMobile_Content_Top_Info_Cause_Row2_En">
                                           {`${cause.en}`}
                                         </div>
-                                        <div className="DAT_RegSetMobile_Content_Top_Info_Cause_Row2_Func">
-                                          <FiEdit
-                                            size={14}
-                                            style={{ cursor: "pointer" }}
-                                            id={`${item.boxid_}-${cause.id}-EDITCAUSE`}
-                                            onClick={(e) => handleEdit(e)}
-                                          />
-                                          <IoTrashOutline
-                                            size={16}
-                                            style={{ cursor: "pointer" }}
-                                            id={`${item.boxid_}_${cause.id}_REMOVECAUSE`}
-                                            onClick={(e) => handleDelete(e)}
-                                          />
-                                          {parseInt(i) ===
-                                          item.cause_.length - 1 ? (
-                                            <IoIosAddCircleOutline
+                                        {ruleInfor.value.setting.errorsetting
+                                          .modify === true ? (
+                                          <div className="DAT_ErrSetMobile_Content_Top_Info_Cause_Row2_Func">
+                                            <FiEdit
+                                              size={14}
+                                              style={{ cursor: "pointer" }}
+                                              id={`${item.boxid_}-${cause.id}-EDITCAUSE`}
+                                              onClick={(e) => handleEdit(e)}
+                                            />
+                                            <IoTrashOutline
                                               size={16}
                                               style={{ cursor: "pointer" }}
-                                              id={`${item.boxid_}-ADDCAUSE`}
-                                              onClick={(e) => handleAdd(e)}
+                                              id={`${item.boxid_}_${cause.id}_REMOVECAUSE`}
+                                              onClick={(e) => handleDelete(e)}
                                             />
-                                          ) : (
-                                            <></>
-                                          )}
-                                        </div>
+                                            {parseInt(i) ===
+                                            item.cause_.length - 1 ? (
+                                              <IoIosAddCircleOutline
+                                                size={16}
+                                                style={{ cursor: "pointer" }}
+                                                id={`${item.boxid_}-ADDCAUSE`}
+                                                onClick={(e) => handleAdd(e)}
+                                              />
+                                            ) : (
+                                              <></>
+                                            )}
+                                          </div>
+                                        ) : (
+                                          <></>
+                                        )}
                                       </div>
                                     );
                                   })}
                                 </div>
                               </div>
-                              <div className="DAT_RegSetMobile_Content_Top_Info_Solution">
+                              <div className="DAT_ErrSetMobile_Content_Top_Info_Solution">
                                 <span>
                                   {dataLang.formatMessage({ id: "solution" })}
                                 </span>
-                                <div className="DAT_RegSetMobile_Content_Top_Info_Solution_Row1">
-                                  <div className="DAT_RegSetMobile_Content_Top_Info_Solution_Row1_En">
+                                <div className="DAT_ErrSetMobile_Content_Top_Info_Solution_Row1">
+                                  <div className="DAT_ErrSetMobile_Content_Top_Info_Solution_Row1_En">
                                     En:
                                   </div>
-                                  <div className="DAT_RegSetMobile_Content_Top_Info_Solution_Row1_Vi">
+                                  <div className="DAT_ErrSetMobile_Content_Top_Info_Solution_Row1_Vi">
                                     Vi:
                                   </div>
                                 </div>
@@ -1161,48 +1221,42 @@ export default function ErrorSetting(props) {
                                     return (
                                       <div
                                         key={i}
-                                        className="DAT_RegSetMobile_Content_Top_Info_Solution_Row2"
+                                        className="DAT_ErrSetMobile_Content_Top_Info_Solution_Row2"
                                       >
-                                        <div className="DAT_RegSetMobile_Content_Top_Info_Solution_Row2_Vi">
+                                        <div className="DAT_ErrSetMobile_Content_Top_Info_Solution_Row2_Vi">
                                           {i + 1}. {`${solution.vi}`}
                                         </div>
-                                        <div className="DAT_RegSetMobile_Content_Top_Info_Solution_Row2_En">
+                                        <div className="DAT_ErrSetMobile_Content_Top_Info_Solution_Row2_En">
                                           {`${solution.en}`}
                                         </div>
-                                        <div className="DAT_RegSetMobile_Content_Top_Info_Solution_Row2_Func">
-                                          <FiEdit
-                                            size={14}
-                                            id={`${item.id}_${solution.id}_EDIT`}
-                                            onClick={(e) => {
-                                              // changePopupstate();
-                                              // setStatePopup("editConfig");
-                                              // handleSetConfig(e);
-                                            }}
-                                          />
-                                          <IoTrashOutline
-                                            size={16}
-                                            id={`${item.id}_${solution.id}_REMOVE`}
-                                            onClick={(e) => {
-                                              // changePopupstate();
-                                              // setStatePopup("removeConfig");
-                                              // handleSetConfig(e);
-                                            }}
-                                          />
-                                          {parseInt(i) ===
-                                          item.solution_.length - 1 ? (
-                                            <IoIosAddCircleOutline
-                                              size={16}
-                                              style={{ cursor: "pointer" }}
-                                              id={`${item.id}_ADD`}
-                                              onClick={(e) => {
-                                                // handleAddConfig(e);
-                                                // handleSetConfig(e);
-                                              }}
+                                        {ruleInfor.value.setting.errorsetting
+                                          .modify === true ? (
+                                          <div className="DAT_ErrSetMobile_Content_Top_Info_Solution_Row2_Func">
+                                            <FiEdit
+                                              size={14}
+                                              id={`${item.boxid_}-${solution.id}-EDITSOLUTION`}
+                                              onClick={(e) => handleEdit(e)}
                                             />
-                                          ) : (
-                                            <></>
-                                          )}
-                                        </div>
+                                            <IoTrashOutline
+                                              size={16}
+                                              id={`${item.boxid_}_${solution.id}_REMOVESOLUTION`}
+                                              onClick={(e) => handleDelete(e)}
+                                            />
+                                            {parseInt(i) ===
+                                            item.solution_.length - 1 ? (
+                                              <IoIosAddCircleOutline
+                                                size={16}
+                                                style={{ cursor: "pointer" }}
+                                                id={`${item.boxid_}-ADDSOLUTION`}
+                                                onClick={(e) => handleAdd(e)}
+                                              />
+                                            ) : (
+                                              <></>
+                                            )}
+                                          </div>
+                                        ) : (
+                                          <></>
+                                        )}
                                       </div>
                                     );
                                   })}
@@ -1211,26 +1265,26 @@ export default function ErrorSetting(props) {
                             </div>
                           </div>
 
-                          <div className="DAT_RegSetMobile_Content_Bottom">
-                            <div
-                              className="DAT_RegSetMobile_Content_Bottom_Item"
-                              id={item.id}
-                              onClick={(e) => {
-                                // changePopupstate();
-                                // setStatePopup("removeError");
-                                // configEdit.value = e.currentTarget.id;
-                                // console.log(configEdit.value);
-                              }}
-                            >
-                              <IoTrashOutline size={16} />
-                            </div>
+                          <div className="DAT_ErrSetMobile_Content_Bottom">
+                            {ruleInfor.value.setting.errorsetting.remove ===
+                            true ? (
+                              <div
+                                className="DAT_ErrSetMobile_Content_Bottom_Item"
+                                id={item.boxid_}
+                                onClick={(e) => {
+                                  handleDelete(e);
+                                }}
+                              >
+                                <IoTrashOutline size={16} />
+                              </div>
+                            ) : (
+                              <></>
+                            )}
                           </div>
                         </div>
                       );
                     })}
                   </div>
-                ) : (
-                  <Empty />
                 )}
               </div>
             </div>
@@ -1239,9 +1293,9 @@ export default function ErrorSetting(props) {
               className="DAT_ESMobile_Content_DevideTable_Left"
               style={{ width: "100% !important", height: "100%" }}
             >
-              <div className="DAT_ESMobile_Content_DevideTable_Left_Head">
+              {/* <div className="DAT_ESMobile_Content_DevideTable_Left_Head">
                 {dataLang.formatMessage({ id: "errorsetting" })}
-              </div>
+              </div> */}
 
               <div className="DAT_ESMobile_Content_DevideTable_Left_ItemList">
                 {dataGateway.map((item, index) => (
@@ -1258,25 +1312,34 @@ export default function ErrorSetting(props) {
                     onClick={(e) => {
                       handleChangeGroup(e);
                       setErrList(true);
+                      setFilterType(false);
                     }}
                   >
-                    <div>
+                    <div style={{ display: "flex" }}>
                       <div
-                        className="DAT_ESMobile_Content_DevideTable_Left_ItemList_Item_Name"
+                        className="DAT_ESMobile_Content_DevideTable_Left_ItemList_Item_ID"
                         style={{ fontSize: "16px" }}
                       >
-                        {item.sn_}
+                        {item.id_}
                       </div>
+                      <div className="DAT_ESMobile_Content_DevideTable_Left_ItemList_Item_Container">
+                        <div
+                          className="DAT_ESMobile_Content_DevideTable_Left_ItemList_Item_Container_Name"
+                          style={{ fontSize: "16px" }}
+                        >
+                          {item.sn_}
+                        </div>
 
-                      <div
-                        className="DAT_ESMobile_Content_DevideTable_Left_ItemList_Item_Info"
-                        style={{
-                          fontSize: "14px",
-                          color: "grey",
-                          minWidth: "100px",
-                        }}
-                      >
-                        {item.name_}
+                        <div
+                          className="DAT_ESMobile_Content_DevideTable_Left_ItemList_Item_Container_Info"
+                          style={{
+                            fontSize: "14px",
+                            color: "grey",
+                            minWidth: "100px",
+                          }}
+                        >
+                          {item.name_}
+                        </div>
                       </div>
                     </div>
                     <div
@@ -1327,45 +1390,58 @@ export default function ErrorSetting(props) {
               </div>
             </div>
           )}
+
+          {editNS ? (
+            <div className="DAT_PopupBGMobile">
+              <ErrNameEdit
+                handleClose={handleCloseEditName}
+                editName={editName}
+                confirmEdit={confirmEdit}
+                handleConfirmEditName={handleConfirmEditName}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {createState ? (
+            <div className="DAT_PopupBGMobile">
+              <CreateErrSetting
+                handleClose={handleCloseCreate}
+                handleConfirm={handleConfirmCreate}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {editState ? (
+            <div className="DAT_PopupBGMobile">
+              <EditErr
+                type={editType}
+                handleClose={handleCloseEdit}
+                editVi={editVi}
+                editEn={editEn}
+                confirmEdit={confirmEdit}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          {removeState ? (
+            <div className="DAT_PopupBGMobile">
+              <RemoveErr
+                type={removeType}
+                handleClose={handleCloseRemove}
+                handleDel={handleDelete}
+                confirmDel={confirmDelete}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
         </>
-      )}
-
-      {createState ? (
-        <div className="DAT_PopupBG">
-          <CreateErrSetting
-            handleClose={handleCloseCreate}
-            handleConfirm={handleConfirmCreate}
-          />
-        </div>
-      ) : (
-        <></>
-      )}
-
-      {editState ? (
-        <div className="DAT_PopupBG">
-          <EditErr
-            type={editType}
-            handleClose={handleCloseEdit}
-            editVi={editVi}
-            editEn={editEn}
-            confirmEdit={confirmEdit}
-          />
-        </div>
-      ) : (
-        <></>
-      )}
-
-      {removeState ? (
-        <div className="DAT_PopupBG">
-          <RemoveErr
-            type={removeType}
-            handleClose={handleCloseRemove}
-            handleDel={handleDelete}
-            confirmDel={confirmDelete}
-          />
-        </div>
-      ) : (
-        <></>
       )}
     </div>
   );

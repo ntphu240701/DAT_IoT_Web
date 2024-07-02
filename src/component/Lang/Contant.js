@@ -1,5 +1,3 @@
-import RegisterSetting from "../RegisterSetting/RegisterSetting";
-
 export const host = {
   AUTH: process.env.REACT_APP_SOLAR + "/auth",
   DATA: process.env.REACT_APP_SOLAR + "/data",
@@ -11,6 +9,12 @@ export const host = {
 export const messages = {
   en: {
     erroraddress: "Error code",
+    classic: "Classic type",
+    disdefault: "Disable default",
+    shortcut: "Shortcut",
+    gatewaylist: "Project list",
+    registerList: "Register list",
+    elevlist: "Elevator list",
     date: "Date",
     registersetting: "Register Setting",
     export: "Export",
@@ -24,7 +28,6 @@ export const messages = {
     elev: "Elevator",
     energy: "Energy",
     typedescription: "Enter description",
-    delErrorAddr: "Are you sure to delete this error address ?",
     description: "Description",
     all: "All",
     account: "Account",
@@ -33,7 +36,7 @@ export const messages = {
     email: "Email",
     login: "Login",
     logout: "Logout",
-    save_login: "Save login",
+    save_login: "Remember me",
     curr_pwd: "Current password",
     pwd: "Change password",
     forgot_pwd: "Forgot password",
@@ -53,6 +56,7 @@ export const messages = {
     maintainance: "Maintenance",
     maintain: "Analytics",
     analytic: "Analytic",
+    analytics: "Analytics",
     analyticsList: "List of Analytics",
     devicelist: "List of Devices",
     monitorlist: "List of Monitors",
@@ -262,9 +266,9 @@ export const messages = {
     save: "Save",
     reset: "Reset",
     share: "Share",
+    shared: "Shared with me",
     add: "Add",
     ADD: "Add",
-    export: "Export",
     cancel: "Cancel",
     confirm: "Confirm",
     choosePara: "Select Parameters",
@@ -283,6 +287,7 @@ export const messages = {
     yieldInfo: "Yield Information",
     ownerInfo: "Owner Information",
     registerInfo: "Registration Information",
+    registerinf: "Registration Information",
     operationInfo: "Operation Information",
     moduleVersion: "Module Version No",
     masterVersion: "Software master version",
@@ -590,6 +595,17 @@ export const messages = {
 
     // Others
     RatedPower: "Rated power",
+    machine: "Machine",
+    timeRange: "Time Range",
+    from: "From",
+    To: "To",
+    exportFile: "Export File",
+    reportDay: "Report Day",
+    reportMonth: "Report Month",
+    custom: "Custom",
+    rushHour: "Rush Hour",
+    normalHour: "Normal Hour",
+    lowHour: "Low Hour",
 
     //--------------------
     enter: "Enter ",
@@ -624,6 +640,7 @@ export const messages = {
     delCause: "Are you sure want to delete this cause?",
     delSolution: "Are you sure want to delete this solution?",
     delErrorInfo: "Are you sure want to delete this error?",
+    delErrorAddr: "Are you sure want to delete this error address?",
     delWarnmess: "Are you sure want to delete this warning?",
     delreportmess: "Are you sure want to delete this report?",
     delaccountmess: "Are you sure want to delete this account?",
@@ -700,7 +717,9 @@ export const messages = {
     alert_60: "Delete error code successfully!",
     alert_61: "Create new rule successfully!",
     alert_62: "Update rule successfully!",
-    alert_63: "Atleast one configuration is required.",
+    alert_63: "Page default not found!",
+    alert_64: "Setup Page default successfully!",
+    alert_65: "Disable Page default successfully!",
 
     // --------------------------------- //
 
@@ -928,6 +947,12 @@ export const messages = {
   },
   vi: {
     erroraddress: "Mã lỗi",
+    classic: "Kiểu cổ điển",
+    disdefault: "Tắt màn hình mặc định",
+    shortcut: "Truy cập nhanh",
+    gatewaylist: "Danh sách công trình",
+    registerList: "Danh sách thanh ghi",
+    elevlist: "Danh sách thang máy",
     date: "Ngày",
     registersetting: "Cài đặt thanh ghi",
     export: "Xuất báo cáo",
@@ -941,7 +966,6 @@ export const messages = {
     elev: "Thang máy",
     energy: "Năng lượng",
     typedescription: "Nhập mô tả",
-    delErrorAddr: "Bạn có chắc muốn xóa địa chỉ thanh ghi này không ?",
     description: "Mô tả",
     all: "Tất cả",
     account: "Tài khoản",
@@ -971,6 +995,7 @@ export const messages = {
     maintainance: "Bảo trì",
     maintain: "Vận hành-Bảo trì",
     analytic: "Phân tích",
+    analytics: "Giám sát",
     analyticsList: "Danh sách mẫu phân tích",
     devicelist: "Danh sách thiết bị",
     monitorlist: "Danh sách màn hình",
@@ -1175,9 +1200,9 @@ export const messages = {
     save: "Lưu",
     reset: "Đặt lại",
     share: "Chia sẻ",
+    shared: "Chia sẻ với tôi",
     add: "Thêm",
     ADD: "Thêm",
-    export: "Xuất báo cáo",
     cancel: "Hủy",
     confirm: "Xác nhận",
     choosePara: "Chọn thông số",
@@ -1196,6 +1221,7 @@ export const messages = {
     yieldInfo: "Thông tin sản lượng",
     ownerInfo: "Thông tin người sở hữu",
     registerInfo: "Thông tin đăng ký",
+    registerinf: "Thông tin đăng ký",
     operationInfo: "Thông tin dữ liệu",
     moduleVersion: "Số phiên bản chứng nhận",
     masterVersion: "Phiên bản phần mềm chính",
@@ -1506,6 +1532,17 @@ export const messages = {
 
     // Others
     RatedPower: "Công suất danh định",
+    machine: "Máy",
+    timeRange: "Khung giờ",
+    from: "Từ",
+    To: "Đến",
+    exportFile: "Xuất File",
+    reportDay: "Báo cáo ngày",
+    reportMonth: "Báo cáo tháng",
+    custom: "Tùy chỉnh",
+    rushHour: "Giờ cao điểm",
+    normalHour: "Giờ bình thường",
+    lowHour: "Giờ thấp điểm",
 
     //--------------------
     enter: "Nhập ",
@@ -1540,6 +1577,7 @@ export const messages = {
     delCause: "Bạn có chắc muốn xóa nguyên nhân này không?",
     delSolution: "Bạn có chắc muốn xóa biện pháp này không?",
     delErrorInfo: "Bạn có chắc muốn xóa thông tin mã lỗi này không?",
+    delErrorAddr: "Bạn có chắc muốn xóa mã lỗi này không?",
     delWarnmess: "Bạn có chắc muốn xóa mẫu cảnh báo này không?",
     delreportmess: "Bạn có chắc muốn xóa mẫu báo cáo này không?",
     delDevicemess: "Bạn có chắc muốn xóa thiết bị:",
@@ -1615,7 +1653,9 @@ export const messages = {
     alert_60: "Xóa thông tin mã lỗi thành công!",
     alert_61: "Tạo phân quyền thành công!",
     alert_62: "Cập nhật quyền thành công!",
-    alert_63: "Ít nhất phải tồn tại 1 cấu hình.",
+    alert_63: "Màn hình mặc định không tồn tại!",
+    alert_64: "Thiết lập màn hình mặc định thành công!",
+    alert_65: "Tắt màn hình mặc định thành công!",
 
     // --------------------------------- //
 
