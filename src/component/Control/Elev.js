@@ -283,6 +283,23 @@ export default function Auto(props) {
       },
     },
     {
+      name: dataLang.formatMessage({ id: "projectInfo" }),
+      selector: (row) =>
+        <div style={{
+          cursor: "pointer",
+          color: "blue"
+        }}
+          id={row.plantid_}
+          onClick={(e) => {
+            handlePlant(e);
+            sidenar.value = false;
+          }}
+        >
+          {dataLang.formatMessage({ id: "view_" })}
+        </div>,
+      width: "180px",
+    },
+    {
       name: dataLang.formatMessage({ id: "createdate" }),
       selector: (row) => row.createdate_,
       sortable: true,
@@ -475,13 +492,15 @@ export default function Auto(props) {
           type: userInfor.value.type,
         });
         if (res.status) {
-          // console.log(res.data.map((item_) => item_.plantid_));
           const logger = res.data.map((item_) => plantData.value.findIndex((item) => item.plantid_ === item_.plantid_));
           const loggerindex = logger.filter((item) => item !== -1);
-          loggerindex.map((item) => plantData.value[item].newState.push(res.data.find((item_) => item_.plantid_ === plantData.value[item].plantid_)));
+          console.log(loggerindex);
+          // loggerindex.map((item) => plantData.value[item].newState.push(res.data.find((item_) => item_.plantid_ === plantData.value[item].plantid_)));
         }
       };
       getAllLogger();
+    } else {
+      console.log("loading");
     }
   }, [plantData.value]);
 
