@@ -120,7 +120,7 @@ export default function Auto(props) {
           }}
         >
           {ruleInfor.value.setting.project.modify == true ||
-          ruleInfor.value.setting.project.remove == true ? (
+            ruleInfor.value.setting.project.remove == true ? (
             row.shared == 1 ? (
               <></>
             ) : (
@@ -238,13 +238,13 @@ export default function Auto(props) {
         return (
           <div
             style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "5px" }}
-            // id={row.name_}
-            // onClick={(e) => {
-            // connectval.value = e.currentTarget.id;
-            // sidebartab.value = "Monitor";
-            // sidebartabli.value = "/Device";
-            // navigate("/Device");
-            // }}
+          // id={row.name_}
+          // onClick={(e) => {
+          // connectval.value = e.currentTarget.id;
+          // sidebartab.value = "Monitor";
+          // sidebartabli.value = "/Device";
+          // navigate("/Device");
+          // }}
           >
             {row.online} / {row.total}
             {row.state_ === 1 ? (
@@ -294,22 +294,6 @@ export default function Auto(props) {
     },
     {
       name: dataLang.formatMessage({ id: "projectInfo" }),
-<<<<<<< HEAD
-      selector: (row) =>
-        <div style={{
-          cursor: "pointer",
-          color: "blue"
-        }}
-          id={row.plantid_}
-          onClick={(e) => {
-            handlePlant(e);
-            sidenar.value = false;
-          }}
-        >
-          {dataLang.formatMessage({ id: "view_" })}
-        </div>,
-      width: "180px",
-=======
       selector: (row) => {
         return (
           <div
@@ -329,7 +313,6 @@ export default function Auto(props) {
       style: {
         justifyContent: "center !important",
       },
->>>>>>> 28dfe93615ede746b17d3cb19d647894fc4f9e2e
     },
     {
       name: dataLang.formatMessage({ id: "createdate" }),
@@ -529,12 +512,6 @@ export default function Auto(props) {
         });
         console.log(res.data);
         if (res.status) {
-<<<<<<< HEAD
-          const logger = res.data.map((item_) => plantData.value.findIndex((item) => item.plantid_ === item_.plantid_));
-          const loggerindex = logger.filter((item) => item !== -1);
-          console.log(loggerindex);
-          // loggerindex.map((item) => plantData.value[item].newState.push(res.data.find((item_) => item_.plantid_ === plantData.value[item].plantid_)));
-=======
           let newdb = [...plantData.value];
           res.data.map((data) => {
             console.log(data.plantid_);
@@ -559,7 +536,6 @@ export default function Auto(props) {
           //   }
           // });
           // console.log(newdb);
->>>>>>> 28dfe93615ede746b17d3cb19d647894fc4f9e2e
         }
       };
       getAllLogger();
@@ -1146,7 +1122,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1158,7 +1134,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1327,7 +1303,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1339,7 +1315,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1508,7 +1484,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1520,7 +1496,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1689,7 +1665,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1701,7 +1677,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1870,7 +1846,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1882,7 +1858,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -2051,7 +2027,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -2063,7 +2039,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}

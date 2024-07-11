@@ -1,12 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./Home.scss";
-// import {useIntl} from 'react-intl';
-// import { AlertContext } from "../Context/AlertContext";
-// import { AuthContext, EnvContext } from "../Context/EnvContext";
 
 import { useNavigate } from "react-router-dom";
-//import Card from 'react-bootstrap/Card';
-// import { SettingContext } from "../Context/SettingContext";
 import { signal } from "@preact/signals-react";
 import { ruleInfor, userInfor } from "../../App";
 import { useSelector } from "react-redux";
@@ -26,8 +21,6 @@ import { MdSettings } from "react-icons/md";
 import { PiScreencastDuotone } from "react-icons/pi";
 import { isBrowser } from "react-device-detect";
 import { IoIosInformationCircle } from "react-icons/io";
-import { set } from "lodash";
-// import MenuTop from "../MenuTop/MenuTop";
 
 const x = signal(150);
 const s = signal(5);
@@ -66,7 +59,6 @@ export default function Home(props) {
         const [online, setOnline] = useState(0);
         const [offline, setOffline] = useState(0);
         const [share, setShare] = useState([]);
-        // const [viewMode, setViewMode] = useState(true);
 
         const startDragging = (e, type) => {
                 setIsDragging(true);
@@ -201,10 +193,6 @@ export default function Home(props) {
                 // s.value = 6;
                 // movestart.value = 0;
         };
-
-        useEffect(() => {
-                console.log(x.value, s.value, movestart.value);
-        }, []);
 
         useEffect(() => {
                 const getAllLogger = async (usr, id, type) => {
@@ -369,32 +357,6 @@ export default function Home(props) {
                 plantState.value = "info";
         };
 
-        // useEffect(() => {
-        //         console.log(share)
-        // }, [])
-
-        // useEffect(() => {
-        //         if (type === 'user') {
-        //                 console.log(pageDefault.value)
-        //                 if (pageDefault.value.status) {
-        //                         navigate('/' + which[pageDefault.value.code])
-        //                 }
-        //         }
-        // }, [pageDefault.value])
-
-        // const handeAction = (e) => {
-
-        //         if (e.currentTarget.id === 'pre') {
-        //                 x.value += 42;
-        //         }
-
-        //         if (e.currentTarget.id === 'next') {
-        //                 x.value -= 42;
-        //         }
-
-        //         s.value = parseInt((360 - x.value) / 42);
-        // }
-
         const handleWindowResize = () => {
                 let home = document.getElementById("Home");
                 console.log(home.offsetWidth);
@@ -470,7 +432,6 @@ export default function Home(props) {
 
         return (
                 <>
-                        {/* <MenuTop user={user} /> */}
                         <div className="DAT_viewIOT" id="Home">
                                 <div className="DAT_viewIOT-Mode">
                                         <div className="DAT_viewIOT-Mode-Switch">
@@ -612,13 +573,6 @@ export default function Home(props) {
                                                                                         </div>
                                                                                         <label style={{ color: "white", fontSize: sizedesktop.value.label.fontSize }}>{dataLang.formatMessage({ id: "map" })}</label>
                                                                                 </div>
-                                                                                <div className="DAT_viewIOT-Mode-Container_Bottom_Item">
-                                                                                        <div className="DAT_viewIOT-Mode-Container_Bottom_Item-Icon" >
-                                                                                                <IoIosInformationCircle size={sizedesktop.value.icon.fontSize} color="white" onClick={() => nevigate('/Contact')} />
-                                                                                        </div>
-                                                                                        <label style={{ color: "white", fontSize: sizedesktop.value.label.fontSize }}>{dataLang.formatMessage({ id: "contact" })}</label>
-                                                                                </div>
-
                                                                                 {which.value.map((data, index) => {
                                                                                         return (
                                                                                                 <div className="DAT_viewIOT-Mode-Container_Bottom_Item" key={index}>
@@ -627,6 +581,13 @@ export default function Home(props) {
                                                                                                 </div>
                                                                                         )
                                                                                 })}
+
+                                                                                <div className="DAT_viewIOT-Mode-Container_Bottom_Item">
+                                                                                        <div className="DAT_viewIOT-Mode-Container_Bottom_Item-Icon" >
+                                                                                                <IoIosInformationCircle size={sizedesktop.value.icon.fontSize} color="white" onClick={() => nevigate('/Contact')} />
+                                                                                        </div>
+                                                                                        <label style={{ color: "white", fontSize: sizedesktop.value.label.fontSize }}>{dataLang.formatMessage({ id: "contact" })}</label>
+                                                                                </div>
                                                                         </div>
                                                                 </div>
                                                                 :
@@ -892,29 +853,12 @@ export default function Home(props) {
                                                         {dataLang.formatMessage({ id: "shortcut" })}
                                                 </label>
                                         </span>
-                                        <span style={{ "--i": 5 }} className="DAT_viewIOT-3D-Item">
-                                                <div className="DAT_viewIOT-3D-Item-Icon">
-                                                        <FaMapLocation
-                                                                size={60}
-                                                                color="white"
-                                                                onPointerUp={() => handleMap()}
-                                                        />
-                                                </div>
-                                                <label
-                                                        style={{
-                                                                color: s.value === 5 ? "white" : "gray",
-                                                                transition: "1s",
-                                                        }}
-                                                >
-                                                        {dataLang.formatMessage({ id: "map" })}
-                                                </label>
-                                        </span>
 
                                         {which.value.map((data, index) => {
                                                 return (
                                                         <span
-                                                                key={index + 6}
-                                                                style={{ "--i": index + 6 }}
+                                                                key={index + 5}
+                                                                style={{ "--i": index + 5 }}
                                                                 className="DAT_viewIOT-3D-Item"
                                                         >
                                                                 <img
@@ -925,7 +869,7 @@ export default function Home(props) {
                                                                 ></img>
                                                                 <label
                                                                         style={{
-                                                                                color: s.value === index + 6 ? "white" : "gray",
+                                                                                color: s.value === index + 5 ? "white" : "gray",
                                                                                 transition: "1s",
                                                                         }}
                                                                 >
@@ -934,6 +878,24 @@ export default function Home(props) {
                                                         </span>
                                                 );
                                         })}
+
+                                        <span style={{ "--i": which.value.length + 5 }} className="DAT_viewIOT-3D-Item">
+                                                <div className="DAT_viewIOT-3D-Item-Icon">
+                                                        <FaMapLocation
+                                                                size={60}
+                                                                color="white"
+                                                                onPointerUp={() => handleMap()}
+                                                        />
+                                                </div>
+                                                <label
+                                                        style={{
+                                                                color: s.value === which.value.length + 5 ? "white" : "gray",
+                                                                transition: "1s",
+                                                        }}
+                                                >
+                                                        {dataLang.formatMessage({ id: "map" })}
+                                                </label>
+                                        </span>
 
                                         {/* <span style={{ "--i": 6 }} className="DAT_viewIOT-3D-Item">
                                                 <img alt="" draggable="false" onPointerUp={() => handlePage('energy')} src="dat_icon/energy.png"></img>
@@ -1190,8 +1152,7 @@ export default function Home(props) {
 
                                 {/* <div className="DAT_viewIOT-Arrow" style={{ visibility: (s.value !== 8) ? "visible" : "hidden" }} id="next" onClick={(e) => { handeAction(e) }}><ion-icon name="chevron-forward-outline"></ion-icon></div> */}
 
-                                <div
-                                        className="DAT_viewIOT-Widget"
+                                <div className="DAT_viewIOT-Widget"
                                         style={{ height: widgetState ? "100vh" : "0", transition: "0.5s" }}
                                 >
                                         <Widget
@@ -1202,8 +1163,7 @@ export default function Home(props) {
                                         />
                                 </div>
 
-                                <div
-                                        className="DAT_viewIOT-Widget"
+                                <div className="DAT_viewIOT-Widget"
                                         style={{ height: mapState ? "100vh" : "0", transition: "0.5s" }}
                                 >
                                         <Map
@@ -1213,8 +1173,7 @@ export default function Home(props) {
                                         />
                                 </div>
 
-                                <div
-                                        className="DAT_ProjectInfor"
+                                <div className="DAT_ProjectInfor"
                                         style={{
                                                 height: plantState.value === "default" ? "0px" : "100vh",
                                                 transition: "0.5s",
@@ -1239,34 +1198,7 @@ export default function Home(props) {
                                                 }
                                         })()}
                                 </div>
-
-                                {/* {isBrowser
-                                        ? <div className="DAT_viewIOT-Inf" >
-                                                <div className="DAT_viewIOT-Inf-Content"></div>
-                                                <div className="DAT_viewIOT-Inf-Content"></div>
-                                                <div className="DAT_viewIOT-Inf-Content"></div>
-                                                <div className="DAT_viewIOT-Inf-Content"></div>
-                                        </div>
-                                        : isLandscape
-                                                ? <></>
-
-                                                : <div className="DAT_viewIOT-InfMobile" >
-                                                        <div className="DAT_viewIOT-InfMobile-G">
-                                                                <div className="DAT_viewIOT-InfMobile-G-Content"></div>
-                                                                <div className="DAT_viewIOT-InfMobile-G-Content"></div>
-                                                        </div>
-
-                                                        <div className="DAT_viewIOT-InfMobile-G">
-                                                                <div className="DAT_viewIOT-InfMobile-G-Content"></div>
-                                                                <div className="DAT_viewIOT-InfMobile-G-Content"></div>
-                                                        </div>
-                                                </div>
-                                } */}
                         </div>
-
-                        {/* <div className="DAT_viewIOT-Plant" style={{ height: plantState.value === "info" ? "100vh" : "0", transition: "0.5s" }}>
-                                <Project usr={user} bu={plantobj.bu_} data={plantobj} />
-                        </div> */}
 
                         {toolState.value ? (
                                 <div className="DAT_Toollist" style={{ zIndex: 35 }}>
@@ -1274,15 +1206,7 @@ export default function Home(props) {
                                                 <Toollist bu={widget.bu_}></Toollist>
                                         </div>
                                 </div>
-                        ) : (
-                                <></>
-                        )}
-
-                        {/* {plantState.value === "info"
-                                ? <Project usr={user} bu={plantobj.bu_} data={plantobj} />
-                                : <></>
-
-                        } */}
+                        ) : (<></>)}
                 </>
         );
 }
