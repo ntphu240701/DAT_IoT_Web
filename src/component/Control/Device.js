@@ -143,7 +143,7 @@ function Device(props) {
       let res = await callApi("post", host.DATA + "/getLogger", {
         plantid: props.data.plantid_,
       });
-      // console.log(res)
+      console.log(res)
       if (res.status) {
         // setDevice(res.data)
         let temp = res.data.sort((a, b) => a.id_ - b.id_);
