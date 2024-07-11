@@ -26,6 +26,8 @@ import Tablepro from "../Lib/Tablepro";
 import Picture from "../Lib/Picture";
 import View32bit from "../Lib/View32bit";
 import { ruleInfor } from "../../App";
+import { isBrowser } from "react-device-detect";
+import Img from "../Lib/Img";
 
 export default function Interfaceoverview(props) {
     const type = useSelector((state) => state.admin.type)
@@ -82,6 +84,8 @@ export default function Interfaceoverview(props) {
                 return <Tablepro id={id} data={invt} setting={overview_setting[id]} width={w} height={h} />
             case 'picture':
                 return <Picture id={id} data={invt} setting={overview_setting[id]} width={w} height={h} />
+            case 'image':
+                return <Img id={id} data={invt} setting={overview_setting[id]} width={w} height={h} />
             case 'view32bit':
                 return <View32bit id={id} data={invt} setting={overview_setting[id]} width={w} height={h} />
 
@@ -126,7 +130,8 @@ export default function Interfaceoverview(props) {
 
     useEffect(() => {
         var card = document.getElementById("DAT_overview")
-        if(card === null) return
+
+        if (card === null) return
         var svgcontainner = document.getElementById("OVERVIEW_SVGCONTAINNER")
         var svgview = document.getElementById("OVERVIEW_SVGVIEW")
         if (window.innerWidth >= 1500) {
@@ -136,18 +141,16 @@ export default function Interfaceoverview(props) {
             svgview.style.transform = "scale(" + card.offsetWidth / 1500 + ")"
             svgview.style.width = svgcontainner.offsetWidth / (card.offsetWidth / 1500)
         }
-        window.addEventListener('resize', handleWindowResize);
 
-        return () => {
-            window.removeEventListener('resize', handleWindowResize);
-        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
 
     //scale khi Thay đổi kích thước màn hình
     function handleWindowResize() {
-        var card = document.getElementById("DAT_overview")
+        var card = document.getElementById("CARDOVERVIEW")
+        console.log('resize')
+        console.log(card.offsetWidth)
         var svgcontainner = document.getElementById("OVERVIEW_SVGCONTAINNER")
         var svgview = document.getElementById("OVERVIEW_SVGVIEW")
         if (overview_config === false) {
@@ -167,6 +170,11 @@ export default function Interfaceoverview(props) {
     useEffect(() => {
         //console.log(props.invt)
         setInvt(props.invt)
+        window.addEventListener('resize', handleWindowResize);
+
+        return () => {
+            window.removeEventListener('resize', handleWindowResize);
+        };
     }, [props])
 
     //Vào trang cài dặt
@@ -181,11 +189,15 @@ export default function Interfaceoverview(props) {
         // onMouseLeave={(e) => { disableScroll.off() }}
 
         >
-            {/* {ruleInfor.value.setting.screen.modify
-            ?<div className="DAT_TlOverviewMenu" style={{ top: "10px", right: "10px" }} onClick={(event) => { handleConfig(event) }}>
-                <TbSettingsCog size={20} />
-            </div>
-            :<></>} */}
+            {isBrowser
+
+                ? ruleInfor.value.setting.screen.modify
+                    ? <div className="DAT_TlOverviewMenu" style={{ top: "10px", right: "10px" }} onClick={(event) => { handleConfig(event) }}>
+                        <TbSettingsCog size={20} />
+                    </div>
+                    : <></>
+
+                : <></>}
 
             {/* <div className="DAT_TlOverview_Menu" style={(dropdowm) ? { display: "block" } : { display: "none", bottom: "10px", right: "10px" }}>
                 <div className="DAT_TlOverview_Menu-content" onClick={(event) => { handleConfig(event) }}>Chỉnh sửa</div>
@@ -205,10 +217,10 @@ export default function Interfaceoverview(props) {
 
                                 {overview_visual.map((data, index) => (
                                     <foreignObject key={data.id} x={data.x} y={data.y} width={data.w} height={data.h}
-                                    style={{ border: "solid 1px rgb(219, 219, 219,0)" }} 
+                                        style={{ border: "solid 1px rgb(219, 219, 219,0)" }}
                                     >
                                         <div className="DAT_Edit">
-                                            {visdata(data.type, data.id, data.w, data.h)}
+                                            {visdata(data.type, data.id, data.w, data.h-2)}
                                         </div>
                                     </foreignObject>
                                 ))}

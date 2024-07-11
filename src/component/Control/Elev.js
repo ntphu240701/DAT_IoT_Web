@@ -187,8 +187,58 @@ export default function Auto(props) {
             // </div>
             <div></div>
           )}
+        </div>
+      ),
+      width: "70px",
+      sortable: false,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    {
+      name: dataLang.formatMessage({ id: "name" }),
+      selector: (row) => (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between !important",
+            gap: "20px",
+            width: "100%",
+          }}
+        >
+          <div className="DAT_Table" style={{ padding: "0px" }}>
+            <img
+              src={row.img ? row.img : `/dat_picture/${bu}.jpg`}
+              alt=""
+              id={row.plantid_}
+              style={{ cursor: "pointer" }}
+              onClick={(e) => {
+                handlePlant(e);
+                mode.value = "dashboard";
+                sidenar.value = false;
+              }}
+            />
 
-          <div className="DAT_TableMark">
+            <div className="DAT_Table_Infor">
+              <div
+                className="DAT_Table_Infor_Name"
+                id={row.plantid_}
+                style={{ cursor: "pointer", width: "fit-content" }}
+                onClick={(e) => {
+                  handlePlant(e);
+                  mode.value = "dashboard";
+                  sidenar.value = false;
+                }}
+              >
+                {" "}
+                {row.name_}
+              </div>
+              <div className="DAT_Table_Infor_Addr">{row.addr_}</div>
+            </div>
+          </div>
+          <div
+            className="DAT_TableMark"
+            style={{ cursor: "pointer", paddingRight: "-10px" }}
+          >
             <FaStar
               id={row.plantid_}
               style={{
@@ -201,35 +251,10 @@ export default function Auto(props) {
           </div>
         </div>
       ),
-      width: "110px",
-      justifyContent: "center",
-      alignItems: "center",
-    },
-    {
-      name: dataLang.formatMessage({ id: "name" }),
-      selector: (row) => (
-        <div
-          className="DAT_Table"
-          id={row.plantid_}
-          style={{ cursor: "pointer" }}
-          onClick={(e) => {
-            handlePlant(e);
-            mode.value = "device";
-            sidenar.value = false;
-          }}
-        >
-          <img src={row.img ? row.img : `/dat_picture/${bu}.jpg`} alt="" />
-
-          <div className="DAT_Table_Infor">
-            <div className="DAT_Table_Infor_Name">{row.name_}</div>
-            <div className="DAT_Table_Infor_Addr">{row.addr_}</div>
-          </div>
-        </div>
-      ),
-      sortable: true,
-      width: "400px",
+      sortable: false,
+      width: "500px",
       style: {
-        justifyContent: "left !important",
+        justifyContent: "space-between !important",
       },
     },
     {
@@ -237,7 +262,12 @@ export default function Auto(props) {
       selector: (row) => {
         return (
           <div
-            style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "5px" }}
+            style={{
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: "5px",
+            }}
             // id={row.name_}
             // onClick={(e) => {
             // connectval.value = e.currentTarget.id;
@@ -291,6 +321,7 @@ export default function Auto(props) {
       style: {
         justifyContent: "left !important",
       },
+      // width: "450px",
     },
     {
       name: dataLang.formatMessage({ id: "projectInfo" }),
@@ -298,7 +329,7 @@ export default function Auto(props) {
         return (
           <div
             id={row.plantid_}
-            style={{ cursor: "pointer", color: "blue" }}
+            style={{ cursor: "pointer", color: "#0082CA" }}
             onClick={(e) => {
               handlePlant(e);
               sidenar.value = false;
@@ -324,6 +355,7 @@ export default function Auto(props) {
 
   const handlePlant = async (e) => {
     plantState.value = "info";
+    console.log(e.currentTarget.id);
     const newPlant = plantData.value.find(
       (item) => item.plantid_ == e.currentTarget.id
     );
@@ -331,18 +363,20 @@ export default function Auto(props) {
 
     let sn = [0];
     let res = await callApi("post", host.DATA + "/getLogger", {
-      plantid: newPlant.plantid_,
+      plantid: parseInt(e.currentTarget.id),
     });
-    // console.log(res)
+    console.log(res.data);
     if (res.status) {
       // setDevice(res.data)
       listDevice.value = res.data;
       res.data.map((data, index) => {
         sn.push(data.sn_);
       });
+      device.value = res.data;
+      plantobjauto.value = newPlant;
     }
 
-    plantobjauto.value = newPlant;
+    // plantobjauto.value = newPlant;
     // setplantobjauto(newPlant);
     overviewDispatch({
       type: "LOAD_DEVICE",
@@ -469,19 +503,44 @@ export default function Auto(props) {
 
   useEffect(() => {
     const getPlant = async () => {
-      let d = await callApi("post", host.DATA + "/getPlant", {
+      let pD = await callApi("post", host.DATA + "/getPlant", {
         usr: user,
         partnerid: userInfor.value.partnerid,
         type: userInfor.value.type,
         system: bu,
       });
-      console.log(d);
-      if (d.status === true) {
-        plantData.value = d.data.sort((a, b) => a.plantid_ - b.plantid_);
+      console.log(pD);
+      if (pD.status === true) {
+        plantData.value = pD.data.sort((a, b) => a.plantid_ - b.plantid_);
         plantData.value.map((item) => {
           item["online"] = 0;
           item["total"] = 0;
         });
+
+        const getAllLogger = async () => {
+          let res = await callApi("post", host.DATA + "/getAllLogger", {
+            usr: user,
+            partnerid: partnerInfor.value.partnerid,
+            type: userInfor.value.type,
+          });
+          // console.log(res.data);
+          if (res.status) {
+            let newdb = [...pD.data];
+            res.data.forEach((data) => {
+              let id = newdb.findIndex(
+                (item) => item.plantid_ === data.plantid_
+              );
+              if (id !== -1) {
+                newdb[id]["total"] += 1;
+                if (newdb[id]["state_"] === 1) {
+                  newdb[id]["online"] += 1;
+                }
+              }
+            });
+          }
+        };
+        getAllLogger();
+
         console.log(plantData.value);
       }
     };
@@ -502,45 +561,38 @@ export default function Auto(props) {
     };
   }, []);
 
-  useEffect(() => {
-    if (plantData.value.length > 0) {
-      const getAllLogger = async () => {
-        let res = await callApi("post", host.DATA + "/getAllLogger", {
-          usr: user,
-          partnerid: partnerInfor.value.partnerid,
-          type: userInfor.value.type,
-        });
-        console.log(res.data);
-        if (res.status) {
-          let newdb = [...plantData.value];
-          res.data.map((data) => {
-            console.log(data.plantid_);
-            let id = newdb.findIndex((item) => item.plantid_ === data.plantid_);
-            console.log(id);
-            if (id !== -1) {
-              newdb[id]["total"] = 0;
-              newdb[id]["total"] += 1;
-              if (newdb[id]["state_"] === 1) {
-                newdb[id]["online"] = 0;
-                newdb[id]["online"] += 1;
-              }
-            }
-          });
-          console.log(newdb);
-
-          // const newdb = plantData.value
-          // newdb.map((item) => {
-          //   if(item.plantid_ === res.data.map(data => data.plantid_)) {
-          //     item.total += 1;
-          //     if (item.state_ === 1) item.online += 1;
-          //   }
-          // });
-          // console.log(newdb);
-        }
-      };
-      getAllLogger();
-    }
-  }, [plantData.value]);
+  // useEffect(() => {
+  //   if (plantData.value.length > 0) {
+  //     const getAllLogger = async () => {
+  //       let res = await callApi("post", host.DATA + "/getAllLogger", {
+  //         usr: user,
+  //         partnerid: partnerInfor.value.partnerid,
+  //         type: userInfor.value.type,
+  //       });
+  //       console.log(res.data);
+  //       if (res.status) {
+  //         let newdb = [...plantData.value];
+  //         res.data.forEach((data) => {
+  //           data.online = 0;
+  //           data.total = 0;
+  //           console.log(data.plantid_);
+  //           let id = newdb.findIndex((item) => item.plantid_ === data.plantid_);
+  //           console.log(id);
+  //           if (id !== -1) {
+  //             newdb[id]["total"] += 1;
+  //             console.log(newdb[id]);
+  //             if (newdb[id]["state_"] === 1) {
+  //               newdb[id]["online"] += 1;
+  //               console.log(newdb[id]);
+  //             }
+  //           }
+  //         });
+  //         console.log(newdb);
+  //       }
+  //     };
+  //     getAllLogger();
+  //   }
+  // }, [plantData.value]);
 
   useEffect(() => {
     const setScreen = async () => {

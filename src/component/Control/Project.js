@@ -23,6 +23,8 @@ import { OverviewContext } from "../Context/OverviewContext";
 import { RiDashboard2Line } from "react-icons/ri";
 import { RxDashboard } from "react-icons/rx";
 import { LuRouter } from "react-icons/lu";
+import { host } from "../Lang/Contant";
+import { callApi } from "../Api/Api";
 
 const viewNav = signal(false);
 const viewStateNav = signal([false, false]);
@@ -42,8 +44,7 @@ function Project(props) {
     if (viewNav.value === false) {
       setModeState(false);
     }
-    return () => {
-    };
+    return () => {};
   }, [viewNav.value]);
 
   const handleOutsideView = (e) => {
@@ -96,8 +97,14 @@ function Project(props) {
       defaultscreenstate_: 0,
     };
     defaultDataState.value = true;
-    
   };
+  useEffect(() => {
+    console.log(mode.value);
+  }, [mode.value]);
+
+  useEffect(() => {
+    console.log(props.data);
+  }, [props]);
 
   return (
     <>
