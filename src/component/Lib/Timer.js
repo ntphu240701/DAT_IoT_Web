@@ -55,9 +55,9 @@ export default function Timer(props) {
 
     const handleOpen = (e) => {
 
-        console.log(e.currentTarget.id)
+        // console.log(e.currentTarget.id)
         var arr = e.currentTarget.id.split("_")
-        console.log(arr[3])
+        // console.log(arr[3])
         setMem(arr[2])
         if (arr[3] === 'VALUE') {
             setDropvalue(true)
@@ -68,7 +68,7 @@ export default function Timer(props) {
 
     const handleClose = (e) => {
 
-        console.log(e.currentTarget.id)
+        // console.log(e.currentTarget.id)
         if (e.currentTarget.id === "VALUE") {
             setDropvalue(false)
         } else {
@@ -82,27 +82,27 @@ export default function Timer(props) {
 
         var id = e.currentTarget.id
         var value = e.currentTarget.value
-        console.log(id, value)
+        // console.log(id, value)
         var arr = id.split("_")
         if (arr[1] === 'value') {
             var val = document.getElementById(`${props.tab}_${props.id}_${value}_INPUTVALUE`)
-            console.log(val.value)
+            // console.log(val.value)
             if (val.value !== '') {
                 var TIME = val.value
                 setting2[value].input = val.value
                 setting2[value].value = String(handlegetnum(eval(setting2.cal)))
                 setDropvalue(false)
-                console.log(setting)
+                // console.log(setting)
             }
         }
 
         if (arr[1] === 'time') {
             var time = document.getElementById(`${props.tab}_${props.id}_${value}_INPUTTIME`)
-            console.log(time.value)
+            // console.log(time.value)
             if (time.value !== '') {
                 setting2[value].time = time.value + ":00"
                 setDroptime(false)
-                console.log(setting2)
+                // console.log(setting2)
             }
         }
     }
@@ -135,7 +135,7 @@ export default function Timer(props) {
         axios.post(host.DEVICE + "/setRegisterDevice", { id: currentID, data: JSON.stringify(setting[props.tab]), tab: props.tab }, { secure: true, reconnect: true }).then(
             function (res) {
                 if (res.data) {
-                    console.log("save dat visual", res.data)
+                    // console.log("save dat visual", res.data)
                     //alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_5" }), show: 'block' }))
 
                 } else {

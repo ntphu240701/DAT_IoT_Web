@@ -18,7 +18,7 @@ import { IoIosArrowDown, IoIosArrowForward, IoMdMore } from "react-icons/io";
 import { IoAddOutline, IoTrashOutline } from "react-icons/io5";
 import { FiEdit, FiFilter } from "react-icons/fi";
 import { RiShareForwardLine } from "react-icons/ri";
-import PopupState, { bindToggle, bindMenu } from "material-ui-popup-state";
+import PopupState, { bindToggle, bindMenu, bindHover, bindPopper } from "material-ui-popup-state";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { isBrowser } from "react-device-detect";
@@ -40,6 +40,7 @@ import { ToolContext } from "../Context/ToolContext";
 import { device, deviceCurrent, deviceData } from "./Device";
 import { OverviewContext } from "../Context/OverviewContext";
 import { PiElevatorDuotone } from "react-icons/pi";
+import { Fade, Paper, Popper, Typography } from "@mui/material";
 
 const online = signal([]);
 const offline = signal([]);
@@ -120,7 +121,7 @@ export default function Auto(props) {
           }}
         >
           {ruleInfor.value.setting.project.modify == true ||
-            ruleInfor.value.setting.project.remove == true ? (
+          ruleInfor.value.setting.project.remove == true ? (
             row.shared == 1 ? (
               <></>
             ) : (
@@ -210,7 +211,14 @@ export default function Auto(props) {
               src={row.img ? row.img : `/dat_picture/${bu}.jpg`}
               alt=""
               id={row.plantid_}
-              style={{ cursor: "pointer" }}
+              style={{
+                cursor: "pointer",
+                minWidth: "45px",
+                height: "45px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
               onClick={(e) => {
                 handlePlant(e);
                 mode.value = "dashboard";
@@ -235,20 +243,55 @@ export default function Auto(props) {
               <div className="DAT_Table_Infor_Addr">{row.addr_}</div>
             </div>
           </div>
-          <div
-            className="DAT_TableMark"
-            style={{ cursor: "pointer", paddingRight: "-10px" }}
-          >
-            <FaStar
-              id={row.plantid_}
-              style={{
-                color: row.mark_ ? "rgb(255, 233, 39)" : "rgb(190, 190, 190)",
-                cursor: "pointer",
-              }}
-              onClick={(e) => handleLike(e)}
-              size={17}
-            />
-          </div>
+          <PopupState variant="popper" popupId="demo-popup-popper">
+            {(popupState) => (
+              <div style={{ cursor: "pointer" }}>
+                <div
+                  className="DAT_TableMark"
+                  style={{ cursor: "pointer"}}
+                  {...bindHover(popupState)}
+                >
+                  <FaStar
+                    id={row.plantid_}
+                    style={{
+                      color: row.mark_
+                        ? "rgb(255, 233, 39)"
+                        : "rgb(190, 190, 190)",
+                      cursor: "pointer",
+                    }}
+                    onClick={(e) => handleLike(e)}
+                    size={13}
+                  />
+                </div>
+                <Popper {...bindPopper(popupState)} transition>
+                  {({ TransitionProps }) => (
+                    <Fade {...TransitionProps} timeout={350}>
+                      <Paper
+                        sx={{
+                          width: "fit-content",
+                          marginLeft: "0px",
+                          marginTop: "10px",
+                          height: "20px",
+                          p: 1,
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            fontSize: "12px",
+                            textAlign: "justify",
+                            justifyItems: "center",
+                            // marginBottom: 1.7,
+                          }}
+                        >
+                          {dataLang.formatMessage({ id: "watchlist" })}
+                        </Typography>
+                      </Paper>
+                    </Fade>
+                  )}
+                </Popper>
+              </div>
+            )}
+          </PopupState>
         </div>
       ),
       sortable: false,
@@ -999,7 +1042,11 @@ export default function Auto(props) {
                                   <div
                                     className="DAT_ProjectMobile_Content_Top_Info_Name_Left"
                                     id={item.plantid_}
-                                    onClick={(e) => handlePlant(e)}
+                                    onClick={(e) => {
+                                      handlePlant(e);
+                                      mode.value = "dashboard";
+                                      sidenar.value = false;
+                                    }}
                                   >
                                     {item.name_}
                                   </div>
@@ -1017,6 +1064,9 @@ export default function Auto(props) {
                                       onClick={(e) => handleLike(e)}
                                     />
                                   </div>
+                                </div>
+                                <div className="DAT_ProjectMobile_Content_Top_Info_Company">
+                                  {item.company_}
                                 </div>
 
                                 <div className="DAT_ProjectMobile_Content_Top_Info_State">
@@ -1150,6 +1200,16 @@ export default function Auto(props) {
                                     </div>
                                   </div> */}
                                 </div>
+
+                                <div
+                                  className="DAT_ProjectMobile_Content_Top_Info_Detail"
+                                  id={item.plantid_}
+                                  onClick={(e) => handlePlant(e)}
+                                >
+                                  {dataLang.formatMessage({
+                                    id: "projectInfo",
+                                  })}
+                                </div>
                               </div>
                             </div>
 
@@ -1172,7 +1232,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                  true ? (
+                                true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1184,7 +1244,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                  true ? (
+                                true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1353,7 +1413,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                  true ? (
+                                true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1365,7 +1425,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                  true ? (
+                                true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1534,7 +1594,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                  true ? (
+                                true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1546,7 +1606,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                  true ? (
+                                true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1715,7 +1775,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                  true ? (
+                                true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1727,7 +1787,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                  true ? (
+                                true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1896,7 +1956,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                  true ? (
+                                true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1908,7 +1968,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                  true ? (
+                                true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -2077,7 +2137,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                  true ? (
+                                true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -2089,7 +2149,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                  true ? (
+                                true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}

@@ -119,6 +119,7 @@ export default function Navigation(props) {
     let newdata = dataWarn.value.find(
       (item) => item.warnid == parseInt(e.currentTarget.id)
     );
+    console.log(newdata);
 
     warnfilter.value = newdata;
     notifNav.value = false;

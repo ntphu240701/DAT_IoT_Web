@@ -25,6 +25,8 @@ import { RxDashboard } from "react-icons/rx";
 import { LuRouter } from "react-icons/lu";
 import { host } from "../Lang/Contant";
 import { callApi } from "../Api/Api";
+import PopupState, { bindHover, bindPopper } from "material-ui-popup-state";
+import { Fade, Paper, Popper, Typography } from "@mui/material";
 
 const viewNav = signal(false);
 const viewStateNav = signal([false, false]);
@@ -103,8 +105,9 @@ function Project(props) {
   }, [mode.value]);
 
   useEffect(() => {
-    console.log(props.data);
-  }, [props]);
+    console.log(props.data.plantid_);
+    console.log(mode.value);
+  }, [mode.value]);
 
   return (
     <>
@@ -159,45 +162,204 @@ function Project(props) {
                   case "device":
                     return (
                       <>
-                        <div className="DAT_ProjectData_Header_Right_More">
-                          <RxDashboard
-                            size={20}
-                            color="white"
-                            id="overview"
-                            onClick={(e) => handleView(e)}
-                          />
-                        </div>
-
-                        <div className="DAT_ProjectData_Header_Right_More">
-                          <RiDashboard2Line
-                            size={20}
-                            color="white"
-                            id="dashboard"
-                            onClick={(e) => handleView(e)}
-                          />
-                        </div>
+                        <PopupState
+                          variant="popper"
+                          popupId="demo-popup-popper"
+                        >
+                          {(popupState) => (
+                            <div
+                              style={{ cursor: "pointer" }}
+                              {...bindHover(popupState)}
+                            >
+                              <div className="DAT_ProjectData_Header_Right_More">
+                                <RxDashboard
+                                  size={20}
+                                  color="white"
+                                  id="overview"
+                                  onClick={(e) => handleView(e)}
+                                />
+                              </div>
+                              <Popper {...bindPopper(popupState)} transition>
+                                {({ TransitionProps }) => (
+                                  <Fade {...TransitionProps} timeout={350}>
+                                    <Paper
+                                      sx={{
+                                        width: "fit-content",
+                                        marginLeft: "0px",
+                                        marginTop: "10px",
+                                        height: "20px",
+                                        p: 1,
+                                      }}
+                                    >
+                                      <Typography
+                                        sx={{
+                                          fontSize: "12px",
+                                          textAlign: "justify",
+                                          justifyItems: "center",
+                                          // marginBottom: 1.7,
+                                        }}
+                                      >
+                                        {dataLang.formatMessage({
+                                          id: "projectinfo",
+                                        })}
+                                      </Typography>
+                                    </Paper>
+                                  </Fade>
+                                )}
+                              </Popper>
+                            </div>
+                          )}
+                        </PopupState>
+                        <PopupState
+                          variant="popper"
+                          popupId="demo-popup-popper"
+                        >
+                          {(popupState) => (
+                            <div style={{ cursor: "pointer" }}>
+                              <div
+                                className="DAT_ProjectData_Header_Right_More"
+                                {...bindHover(popupState)}
+                              >
+                                <RiDashboard2Line
+                                  size={20}
+                                  color="white"
+                                  id="dashboard"
+                                  onClick={(e) => handleView(e)}
+                                />
+                              </div>
+                              <Popper {...bindPopper(popupState)} transition>
+                                {({ TransitionProps }) => (
+                                  <Fade {...TransitionProps} timeout={350}>
+                                    <Paper
+                                      sx={{
+                                        width: "fit-content",
+                                        marginLeft: "0px",
+                                        marginTop: "10px",
+                                        height: "20px",
+                                        p: 1,
+                                      }}
+                                    >
+                                      <Typography
+                                        sx={{
+                                          fontSize: "12px",
+                                          textAlign: "justify",
+                                          justifyItems: "center",
+                                          // marginBottom: 1.7,
+                                        }}
+                                      >
+                                        {dataLang.formatMessage({
+                                          id: "overviewinterface",
+                                        })}
+                                      </Typography>
+                                    </Paper>
+                                  </Fade>
+                                )}
+                              </Popper>
+                            </div>
+                          )}
+                        </PopupState>
                       </>
                     );
                   case "overview":
                     return (
                       <>
-                        <div className="DAT_ProjectData_Header_Right_More">
-                          <LuRouter
-                            size={20}
-                            color="white"
-                            id="device"
-                            onClick={(e) => handleView(e)}
-                          />
-                        </div>
+                        <PopupState
+                          variant="popper"
+                          popupId="demo-popup-popper"
+                        >
+                          {(popupState) => (
+                            <div style={{ cursor: "pointer" }}>
+                              <div
+                                className="DAT_ProjectData_Header_Right_More"
+                                {...bindHover(popupState)}
+                              >
+                                <LuRouter
+                                  size={20}
+                                  color="white"
+                                  id="device"
+                                  onClick={(e) => handleView(e)}
+                                />
+                              </div>
+                              <Popper {...bindPopper(popupState)} transition>
+                                {({ TransitionProps }) => (
+                                  <Fade {...TransitionProps} timeout={350}>
+                                    <Paper
+                                      sx={{
+                                        width: "fit-content",
+                                        marginLeft: "0px",
+                                        marginTop: "10px",
+                                        height: "20px",
+                                        p: 1,
+                                      }}
+                                    >
+                                      <Typography
+                                        sx={{
+                                          fontSize: "12px",
+                                          textAlign: "justify",
+                                          justifyItems: "center",
+                                          // marginBottom: 1.7,
+                                        }}
+                                      >
+                                        {dataLang.formatMessage({
+                                          id: "deviceinterface",
+                                        })}
+                                      </Typography>
+                                    </Paper>
+                                  </Fade>
+                                )}
+                              </Popper>
+                            </div>
+                          )}
+                        </PopupState>
 
-                        <div className="DAT_ProjectData_Header_Right_More">
-                          <RiDashboard2Line
-                            size={20}
-                            color="white"
-                            id="dashboard"
-                            onClick={(e) => handleView(e)}
-                          />
-                        </div>
+                        <PopupState
+                          variant="popper"
+                          popupId="demo-popup-popper"
+                        >
+                          {(popupState) => (
+                            <div style={{ cursor: "pointer" }}>
+                              <div
+                                className="DAT_ProjectData_Header_Right_More"
+                                {...bindHover(popupState)}
+                              >
+                                <RiDashboard2Line
+                                  size={20}
+                                  color="white"
+                                  id="dashboard"
+                                  onClick={(e) => handleView(e)}
+                                />
+                              </div>
+                              <Popper {...bindPopper(popupState)} transition>
+                                {({ TransitionProps }) => (
+                                  <Fade {...TransitionProps} timeout={350}>
+                                    <Paper
+                                      sx={{
+                                        width: "fit-content",
+                                        marginLeft: "0px",
+                                        marginTop: "10px",
+                                        height: "20px",
+                                        p: 1,
+                                      }}
+                                    >
+                                      <Typography
+                                        sx={{
+                                          fontSize: "12px",
+                                          textAlign: "justify",
+                                          justifyItems: "center",
+                                          // marginBottom: 1.7,
+                                        }}
+                                      >
+                                        {dataLang.formatMessage({
+                                          id: "overviewinterface",
+                                        })}
+                                      </Typography>
+                                    </Paper>
+                                  </Fade>
+                                )}
+                              </Popper>
+                            </div>
+                          )}
+                        </PopupState>
                       </>
                     );
                   default:
@@ -451,7 +613,7 @@ function Project(props) {
                           id="overview"
                           onClick={(e) => handleView(e)}
                         >
-                          {dataLang.formatMessage({ id: "view" })}
+                          {dataLang.formatMessage({ id: "projectinfo" })}
                         </div>
 
                         <div
@@ -459,7 +621,7 @@ function Project(props) {
                           id="dashboard"
                           onClick={(e) => handleView(e)}
                         >
-                          {dataLang.formatMessage({ id: "dashboard" })}
+                          {dataLang.formatMessage({ id: "overviewinterface" })}
                         </div>
                       </>
                     );
@@ -471,7 +633,7 @@ function Project(props) {
                           id="dashboard"
                           onClick={(e) => handleView(e)}
                         >
-                          {dataLang.formatMessage({ id: "dashboard" })}
+                          {dataLang.formatMessage({ id: "overviewinterface" })}
                         </div>
 
                         <div
@@ -479,7 +641,7 @@ function Project(props) {
                           id="device"
                           onClick={(e) => handleView(e)}
                         >
-                          {dataLang.formatMessage({ id: "device" })}
+                          {dataLang.formatMessage({ id: "deviceinterface" })}
                         </div>
                       </>
                     );

@@ -1,3 +1,5 @@
+import { overview } from "../LibOverview/Tooloverview";
+
 export const host = {
   AUTH: process.env.REACT_APP_SOLAR + "/auth",
   DATA: process.env.REACT_APP_SOLAR + "/data",
@@ -8,12 +10,17 @@ export const host = {
 
 export const messages = {
   en: {
+    watchlist: "Watchlist",
+    deviceinterface: "Device interface",
     erroraddress: "Error code",
+    overviewinterface: "Overview interface",
+    projectinfo: "Project information",
     classic: "Classic type",
     disdefault: "Disable default",
     shortcut: "Shortcut",
-    gatewaylist: "Project list",
+    gatewaylist: "Gateway list",
     registerList: "Register list",
+    register: "Register",
     elevlist: "Elevator list",
     date: "Date",
     registersetting: "Register Setting",
@@ -947,12 +954,17 @@ export const messages = {
     // A_48_17: "Unknown",
   },
   vi: {
+    watchlist: "Theo dõi",
+    deviceinterface: "Giao diện chi tiết",
+    overviewinterface: "Giao diện tổng quan",
+    projectinfo: "Thông tin tổng quan",
     erroraddress: "Mã lỗi",
     classic: "Kiểu cổ điển",
     disdefault: "Tắt màn hình mặc định",
     shortcut: "Truy cập nhanh",
-    gatewaylist: "Danh sách công trình",
+    gatewaylist: "Danh sách gateway",
     registerList: "Danh sách thanh ghi",
+    register: "Thanh ghi",
     elevlist: "Danh sách thang máy",
     date: "Ngày",
     registersetting: "Cài đặt thanh ghi",

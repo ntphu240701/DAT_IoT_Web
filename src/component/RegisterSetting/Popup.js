@@ -17,6 +17,8 @@ export default function Popup(props) {
   const editValRef1 = useRef();
   const editValRef2 = useRef();
   const editValRef3 = useRef();
+  const errNameRef = useRef("");
+  const errNameeditRef = useRef("");
 
   const popup_state = {
     pre: { transform: "rotate(0deg)", transition: "0.5s", color: "white" },
@@ -54,7 +56,9 @@ export default function Popup(props) {
     console.log(props.type);
   }, []);
 
-  useEffect(() => {}, [props.data]);
+  useEffect(() => {
+    console.log(props.data);
+  }, [props.data]);
 
   //addNewReg,
   return (
@@ -82,20 +86,33 @@ export default function Popup(props) {
                 </div>
 
                 <div className="DAT_CreateErrSetting_Body">
-                  <span style={{ width: "48px" }}>
-                    {dataLang.formatMessage({ id: "errcode" })}:
-                  </span>
-                  <input
-                    type="number"
-                    ref={errAddRef1}
-                    style={{ width: "65px" }}
-                  />{" "}
-                  -
-                  <input
-                    type="number"
-                    ref={errAddRef2}
-                    style={{ width: "65px" }}
-                  />
+                  <div className="DAT_CreateErrSetting_Body_Input">
+                    <span style={{ width: "48px" }}>
+                      {dataLang.formatMessage({ id: "errcode" })}:
+                    </span>
+                    <input
+                      type="number"
+                      ref={errAddRef1}
+                      style={{ width: "65px" }}
+                    />{" "}
+                    -
+                    <input
+                      type="number"
+                      ref={errAddRef2}
+                      style={{ width: "65px" }}
+                    />
+                  </div>
+
+                  <div className="DAT_CreateErrSetting_Body_Input">
+                    <span style={{ width: "48px" }}>
+                      {dataLang.formatMessage({ id: "errname" })}:
+                    </span>
+                    <input
+                      type="text"
+                      ref={errNameRef}
+                      style={{ minWidth: "300px" }}
+                    />
+                  </div>
                 </div>
 
                 <div className="DAT_CreateErrSetting_Foot">
@@ -110,7 +127,8 @@ export default function Popup(props) {
                         e.preventDefault();
                         props.handleSubmitAddNewReg(
                           errAddRef1.current.value,
-                          errAddRef2.current.value
+                          errAddRef2.current.value,
+                          errNameRef.current.value
                         );
                         // props.handleConfirm(
                         //   e,
@@ -422,6 +440,60 @@ export default function Popup(props) {
                   </button>
                 </div>
               </div>
+            );
+          case "editName":
+            console.log(props.data);
+            return (
+              <form className="DAT_CreateErrSetting">
+                <div className="DAT_CreateErrSetting_Head">
+                  <div className="DAT_CreateErrSetting_Head_Left">
+                    {dataLang.formatMessage({ id: "edit" })}
+                  </div>
+                  <div className="DAT_CreateErrSetting_Head_Right">
+                    <div
+                      className="DAT_CreateErrSetting_Head_Right_Icon"
+                      id="Popup"
+                      onClick={() => props.closeopen()}
+                      onMouseEnter={(e) => handlePopup("new")}
+                      onMouseLeave={(e) => handlePopup("pre")}
+                    >
+                      <IoClose size={25} />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="DAT_CreateErrSetting_Body">
+                  <div className="DAT_CreateErrSetting_Body_Input">
+                    <span style={{ width: "48px" }}>
+                      {dataLang.formatMessage({ id: "errname" })}:
+                    </span>
+                    <input
+                      type="text"
+                      ref={errNameeditRef}
+                      defaultValue={props.name}
+                      style={{ minWidth: "300px" }}
+                    />
+                  </div>
+                </div>
+
+                <div className="DAT_CreateErrSetting_Foot">
+                  <div className="DAT_CreateErrSetting_Foot_Left"></div>
+                  <div className="DAT_CreateErrSetting_Foot_Right">
+                    <button
+                      style={{
+                        backgroundColor: COLOR.value.PrimaryColor,
+                        color: "white",
+                      }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        props.handleUpdateName(errNameeditRef.current.value);
+                      }}
+                    >
+                      {dataLang.formatMessage({ id: "confirm" })}
+                    </button>
+                  </div>
+                </div>
+              </form>
             );
         }
       })()}

@@ -29,6 +29,10 @@ import PopupState, { bindMenu, bindToggle } from "material-ui-popup-state";
 import { Menu, MenuItem } from "@mui/material";
 import { isBrowser, useMobileOrientation } from "react-device-detect";
 import { device } from "../Control/Device";
+import { plantnameFilterSignal } from "../Control/Dashboard";
+import { PiExportBold } from "react-icons/pi";
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 export const tabLable = signal("");
 export const open = signal([]);
@@ -91,7 +95,7 @@ export default function Warn(props) {
       width: "80px",
     },
     {
-      name: dataLang.formatMessage({ id: "errname" }),
+      name: dataLang.formatMessage({ id: "errcode" }),
       selector: (row) => (
         <div
           style={{ cursor: "pointer" }}
@@ -102,7 +106,7 @@ export default function Warn(props) {
         </div>
       ),
       sortable: true,
-      width: "180px",
+      width: "100px",
       style: {
         justifyContent: "left !important",
       },
@@ -462,6 +466,49 @@ export default function Warn(props) {
     // eslint-disable-next-line
   }, [dataWarn.value]);
 
+  useEffect(() => {
+    if (plantnameFilterSignal.value) {
+      let d = document.getElementById("warnsearch");
+      d.value = plantnameFilterSignal.value;
+      console.log(plantnameFilterSignal.value);
+      let temp_ = dataWarn.value.filter(
+        (item) => item.plant == plantnameFilterSignal.value
+      );
+      setDatafilter([...temp_]);
+    }
+  }, [plantnameFilterSignal.value]);
+
+  // useEffect(() => {console.log(datafilter)}, [datafilter]);
+
+  const handleExport = () => {
+    let data = [];
+    data = datafilter.map((item) => {
+      return{
+        Errorcode: item.boxid,
+        Plant: item.plant,
+        Device: item.device,
+        Opentime: item.opentime,
+        Opendate: item.opendate,
+        Level: item.level,
+      }
+    })
+    // console.log(data);
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+    // Buffer to store the generated Excel file
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+    const blob = new Blob([excelBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+    });
+
+    saveAs(blob, "WarnList.xlsx");
+  };
+
   return (
     <>
       {isBrowser ? (
@@ -493,7 +540,10 @@ export default function Warn(props) {
           </div>
 
           <div className="DAT_Warn">
-            <div className="DAT_Toollist_Tab">
+            <div
+              className="DAT_Toollist_Tab"
+              style={{ display: "flex", justifyContent: "space-between" }}
+            >
               {listTab.map((item, i) => {
                 return warntab.value === item.id ? (
                   <div key={i} className="DAT_Toollist_Tab_main">
@@ -537,6 +587,15 @@ export default function Warn(props) {
                   }}
                 />
               </div> */}
+
+              <div className="DAT_Warn_Export">
+                <div
+                  className="DAT_Warn_Export_Icon"
+                  onClick={() => handleExport()}
+                >
+                  <PiExportBold />
+                </div>
+              </div>
             </div>
 
             <div className="DAT_Warn_Content">

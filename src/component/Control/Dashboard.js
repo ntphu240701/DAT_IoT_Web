@@ -11,6 +11,7 @@ import { IoCalendar } from "react-icons/io5";
 import { FaPhone } from "react-icons/fa6";
 import DatePicker from "react-datepicker";
 import moment from "moment-timezone";
+import { signal } from "@preact/signals-react";
 import {
   BarChart,
   Bar,
@@ -24,6 +25,10 @@ import {
 } from "recharts";
 import { isBrowser } from "react-device-detect";
 import { useIntl } from "react-intl";
+import { Link } from "react-router-dom";
+import { sidebartab, sidebartabli } from "../Sidenar/Sidenar";
+
+export const plantnameFilterSignal = signal("");
 
 export default function Dashboard(props) {
   const [devicedata, setDevicedata] = useState([]);
@@ -205,7 +210,16 @@ export default function Dashboard(props) {
                 {devicedata.length}
               </div>
             </div>
-            <div className="DAT_MainInfo_Status_Item">
+            <Link
+              className="DAT_MainInfo_Status_Item"
+              to="/Warn"
+              style={{ textDecoration: "none" }}
+              onClick={() => {
+                plantnameFilterSignal.value = props.data.name_;
+                sidebartab.value = "Monitor";
+                sidebartabli.value = "/Warn";
+              }}
+            >
               <div
                 className="DAT_MainInfo_Status_Item_Header"
                 style={{ color: "rgba(158, 0, 0, 0.8)" }}
@@ -220,7 +234,7 @@ export default function Dashboard(props) {
                 0/
                 {devicedata.length}
               </div>
-            </div>
+            </Link>
             <div className="DAT_MainInfo_Status_Item">
               <div
                 className="DAT_MainInfo_Status_Item_Header"

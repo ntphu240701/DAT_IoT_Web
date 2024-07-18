@@ -84,7 +84,7 @@ export default function Switch(props) {
 
 
         let switchArray = e.currentTarget.id.split("_");
-        console.log(switchArray)
+        // console.log(switchArray)
         //console.log(setting)
 
         var NUMB;
@@ -102,7 +102,7 @@ export default function Switch(props) {
             NUMB = setting[switchArray[2]].off
             //console.log("OFF:",settingDATA[switchArray[2]].off,settingDATA[switchArray[2]].show,eval(settingDATA[switchArray[2]].cal),settingDATA[switchArray[2]].register)
         }
-        console.log(setting[switchArray[2]])
+        // console.log(setting[switchArray[2]])
         //settingDispatch({ type: "LOAD_STATE", payload: false })
         // alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_19" }), show: 'block' }))
 
@@ -110,7 +110,7 @@ export default function Switch(props) {
         
         const res = await remotecloud('{"deviceCode": "' + props.sn + '","address":"' + setting[switchArray[2]].register + '","value":"' + parseInt(eval(setting[switchArray[2]].cal)) + '"}', Token.value.token);
 
-        console.log(res)
+        // console.log(res)
         if(res.ret === 0){
             // alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_5" }), show: 'block' }))
             let res = await callApi('post', host.DATA + "/updateRegisterScreen", { id: switchArray[0], setting: setting, tab: switchArray[1] })
@@ -131,7 +131,7 @@ export default function Switch(props) {
 
 
         <div className="DAT_Switch">
-            <label className="DAT_Switch-box" style={{width:props.width+"px", height:props.height+"px"}}>
+            <label className="DAT_Switch-box" style={{width:(props.width-2)+"px", height:props.height+"px"}}>
                 <input type="checkbox" className="DAT_Switch-box-check" id={props.deviceid + "_" + props.tab + "_" + props.id + "_SW"}
 
                     onChange={(e) => handleSwitch(e)}

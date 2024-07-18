@@ -13,7 +13,7 @@ export default function Picture(props) {
 
     return (
         <div className="DAT_Pic" style={{ width:props.width+"px", height:props.height+"px", position: "relative", zIndex: "0"}}>
-            <div className="DAT_Pic-img" style={{height:props.height+"px", backgroundImage:"url('/picture/"+setting.pic+".png')"}}></div>
+            <div className="DAT_Pic-img" style={{height:props.height+"px", backgroundImage: "url('/picture/"+setting.pic+".png')"}}></div>
         </div>
     )
 }

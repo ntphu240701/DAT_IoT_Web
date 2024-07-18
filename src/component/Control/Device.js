@@ -137,22 +137,22 @@ function Device(props) {
     getScreen();
   };
 
-  // useEffect(() => {
-  //   // console.log(currentID)
-  //   const getGateway = async () => {
-  //     let res = await callApi("post", host.DATA + "/getLogger", {
-  //       plantid: props.data.plantid_,
-  //     });
-  //     console.log(res)
-  //     if (res.status) {
-  //       // setDevice(res.data)
-  //       let temp = res.data.sort((a, b) => a.id_ - b.id_);
-  //       device.value = temp;
-  //     }
-  //   };
+  useEffect(() => {
+    // console.log(currentID)
+    const getGateway = async () => {
+      let res = await callApi("post", host.DATA + "/getLogger", {
+        plantid: props.data.plantid_,
+      });
+      console.log(res)
+      if (res.status) {
+        // setDevice(res.data)
+        let temp = res.data.sort((a, b) => a.id_ - b.id_);
+        device.value = temp;
+      }
+    };
 
-  //   getGateway();
-  // }, []);
+    getGateway();
+  }, []);
 
   const handleClosePopup = () => {
     setPopupState(false);
@@ -273,6 +273,10 @@ function Device(props) {
 
     // handleScreen(device.value[i].defaultscreenid_);
   }, [device.value, defaultDataState.value]);
+
+  useEffect(() => {
+    console.log(device.value);
+  }, [device.value]);
 
   return (
     <>

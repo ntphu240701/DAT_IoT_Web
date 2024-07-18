@@ -39,7 +39,7 @@ export default function Dimmer(props) {
             }
         }
         setMarks(marks);
-        console.log(marks);
+        // console.log(marks);
     };
 
     useEffect(() => {
@@ -87,19 +87,19 @@ export default function Dimmer(props) {
 
 
         var sliderarry = e.target.name.split("_")
-        console.log(sliderarry)
+        // console.log(sliderarry)
 
         var DIM = e.target.value
         //console.log(settingDATA)
         setting[sliderarry[2]].default = e.target.value
-        console.log(setting[sliderarry[2]])
+        // console.log(setting[sliderarry[2]])
         //settingDispatch({ type: "LOAD_STATE", payload: false })
         // alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_19" }), show: 'block' }))
-        console.log(sliderarry[0],setting[sliderarry[2]].register,parseInt(eval(setting[sliderarry[2]].cal)) )
+        // console.log(sliderarry[0],setting[sliderarry[2]].register,parseInt(eval(setting[sliderarry[2]].cal)) )
 
         const res = await remotecloud('{"deviceCode": "' + props.sn + '","address":"' + setting[sliderarry[2]].register + '","value":"' + parseInt(eval(setting[sliderarry[2]].cal)) + '"}', Token.value.token);
 
-        console.log(res)
+        // console.log(res)
         if (res.ret === 0) {
             // alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_5" }), show: 'block' }))
                 let res = await callApi('post', host.DATA + "/updateRegisterScreen", { id: sliderarry[0], setting: setting, tab: sliderarry[1] })

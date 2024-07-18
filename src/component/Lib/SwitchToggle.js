@@ -88,11 +88,11 @@ export default function SwitchToggle(props) {
     }
     // alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_19" }), show: 'block' }))
     //console.log(e.currentTarget.id);
-    console.log(setting[props.id]);
+    // console.log(setting[props.id]);
 
     const res = await remotecloud('{"deviceCode": "' + props.sn + '","address":"' + setting[props.id].register + '","value":"' + parseInt(eval(setting[props.id].cal)) + '"}', Token.value.token);
 
-    console.log(res)
+    // console.log(res)
     if (res.ret === 0) {
       // alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_5" }), show: 'block' }))
       
@@ -108,7 +108,7 @@ export default function SwitchToggle(props) {
   };
 
   return (
-    <div className="DAT_SwitchToggle" style={{ width: props.width + "px", height: props.height + "px" }}>
+    <div className="DAT_SwitchToggle" style={{ width:(props.width-2) + "px", height: props.height + "px" }}>
       <form
         className="DAT_SwitchToggle-Toggle"
         id={check}

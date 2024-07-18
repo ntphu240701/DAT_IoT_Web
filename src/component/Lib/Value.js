@@ -16,12 +16,27 @@ export default function Value(props) {
     }, [props.setting])
 
 
+    const hexToRgbA = (hex, opacity) => {
+        var c;
+        if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+            c = hex.substring(1).split('');
+            if (c.length == 3) {
+                c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+            }
+            c = '0x' + c.join('');
+            return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ','+opacity+')';
+        }
+        throw new Error('Bad Hex');
+    }
+
+
+
     const handlegetnum = (numstring) => {
         try {
 
             switch (setting.base) {
                 case '10':
-                    return parseFloat(eval(numstring)).toFixed(1) || 0;
+                    return parseFloat(eval(numstring)).toFixed(setting?.decimal || 1) || 0;
                     //break;
                 case '16':
                     var n = eval(numstring)
@@ -66,6 +81,6 @@ export default function Value(props) {
 
 
     return (
-        <div className="DAT_Value" style={{height:props.height+"px", justifyContent:setting?.align || "left",fontSize:setting?.size+"px" || "16px", color:setting?.color || "black", backgroundColor:setting?.bgcolor || "white", border: "solid 1px "+ setting?.bordercolor || "black", borderRadius: setting?.radius +"px" || "10px"}}>{handlegetnum(setting?.cal || 0)}</div>
+        <div className="DAT_Value" style={{height:props.height+"px", justifyContent:setting?.align || "left",fontSize:setting?.size+"px" || "16px", color:setting?.color || "black", backgroundColor:hexToRgbA(setting?.bgcolor || "#FFFFFF", setting?.opacity || "1"), border: `solid  ${setting?.borderwidth || 1}px ${setting?.bordercolor || "black"}`, borderRadius: setting?.radius +"px" || "10px",}}>{handlegetnum(setting?.cal || 0)}</div>
     )
 }

@@ -22,6 +22,21 @@ export default function Input(props) {
     const [setting, setSetting] = useState(props.setting)
 
 
+    const hexToRgbA = (hex, opacity) => {
+        var c;
+        if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+            c = hex.substring(1).split('');
+            if (c.length == 3) {
+                c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+            }
+            c = '0x' + c.join('');
+            return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ','+opacity+')';
+        }
+        throw new Error('Bad Hex');
+    }
+
+
+
     const remotecloud = async (data, token) => {
 
         var reqData = {
@@ -68,7 +83,7 @@ export default function Input(props) {
 
         if (e.key === "Enter") {
             let InputArray = e.currentTarget.id.split("_");
-            console.log(InputArray)
+            // console.log(InputArray)
             //console.log(setting)
 
             var get = document.getElementById(InputArray[0] + "_" + InputArray[1] + "_" + InputArray[2] + "_GETINP")
@@ -79,11 +94,11 @@ export default function Input(props) {
 
                 //settingDispatch({ type: "LOAD_STATE", payload: false })
                 // alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_19" }), show: 'block' }))
-                console.log("INP: ", parseInt(eval(setting[InputArray[2]].cal)), setting[InputArray[2]].register)
+                // console.log("INP: ", parseInt(eval(setting[InputArray[2]].cal)), setting[InputArray[2]].register)
 
                 const res = await remotecloud('{"deviceCode": "' + props.sn + '","address":"' + setting[InputArray[2]].register + '","value":"' + parseInt(eval(setting[InputArray[2]].cal)) + '"}', Token.value.token);
 
-                console.log(res)
+                // console.log(res)
                 if (res.ret === 0) {
                     // alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_5" }), show: 'block' }))
                     let res = await callApi('post', host.DATA + "/updateRegisterScreen", { id: InputArray[0], setting: setting, tab: InputArray[1] })
@@ -96,7 +111,7 @@ export default function Input(props) {
                 } else {
                     // alertDispatch(action('LOAD_CONTENT', { content: dataLang.formatMessage({ id: "alert_3" }), show: 'block' }))
                 }
-                console.log(setting[InputArray[2]])
+                // console.log(setting[InputArray[2]])
 
             } else {
                 //console.log("không được để trống")
@@ -119,8 +134,8 @@ export default function Input(props) {
 
 
     return (
-        <div className="DAT_Input" style={{ height: props.height + "px", width: props.width + "px" }}>
-            <input style={{ width: (props.width - 2) + "px", height: (props.height - 2) + "px", textAlign: setting[props.id]?.align || "left", fontSize: setting[props.id]?.size + "px" ?? "12px", color: setting[props.id]?.color || "black", backgroundColor: setting[props.id]?.bgcolor ?? "white", borderRadius: setting[props.id]?.radius + "px" || "0px", border: "solid 3px " + setting[props.id]?.bordercolor ?? "solid 3px black" }} type="number" id={props.deviceid + "_" + props.tab + "_" + props.id + "_GETINP"} name="Value" placeholder={handlegetnum(setting[props.id]?.curr || 0)} onKeyDownCapture={(e) => { handleInput(e) }}></input>
+        <div className="DAT_Input" style={{ height: props.height + "px", width: (props.width-2) + "px"}}>
+            <input style={{ width: '100%', height: '100%', textAlign: setting[props.id]?.align || "left", fontSize: setting[props.id]?.size + "px" ?? "12px", color: setting[props.id]?.color || "black", backgroundColor: hexToRgbA(setting[props.id]?.bgcolor || "#FFFFFF", setting[props.id]?.opacity || "1"), borderRadius: setting[props.id]?.radius + "px" || "0px", border: `solid  ${setting[props.id]?.borderwidth || 1}px ${setting[props.id]?.bordercolor || "black"}`}} type="number" id={props.deviceid + "_" + props.tab + "_" + props.id + "_GETINP"} name="Value" placeholder={handlegetnum(setting[props.id]?.curr || 0)} onKeyDownCapture={(e) => { handleInput(e) }}></input>
             {/* <button className="DAT_Input-save" style={{height:props.height+"px"}}   id={props.deviceid + "_" + props.tab + "_" + props.id + "_INP"} onClick={(e) => { handleInput(e) }}>Lưu</button> */}
         </div>
     )

@@ -70,7 +70,7 @@ export default function Elevroom(props) {
 
 
     return (
-        <div className="box" id={props.deviceid + "_" + props.tab + "_" + props.id + "_elev"} style={{zIndex:setting.zindex}} >
+        <div className="box" id={props.deviceid + "_" + props.tab + "_" + props.id + "_elev"} style={{zIndex:setting.zindex, scale:setting?.scale || "1"}} >
             <div className="elevator-wrapper">
                 <div className="elevator">
                     <div className="ng ng-instance" >

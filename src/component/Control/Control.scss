@@ -233,6 +233,7 @@
         &_Name {
           color: black;
           font-size: 14px;
+          font-weight: 500 !important;
           margin-bottom: 5px;
           cursor: pointer;
           display: flex;
@@ -244,6 +245,12 @@
             justify-content: flex-end;
             gap: 5px;
           }
+        }
+
+        &_Company {
+          color: gray;
+          font-size: 12px;
+          margin-bottom: 5px;
         }
 
         &_State {
@@ -277,6 +284,14 @@
               font-size: 12px;
             }
           }
+        }
+
+        &_Detail {
+          display: flex;
+          justify-content: flex-end;
+          font-size: 12px;
+          text-decoration: underline;
+          color: #0082CA;
         }
       }
     }

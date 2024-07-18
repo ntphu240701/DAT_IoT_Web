@@ -49,7 +49,7 @@ export default function WarnPopup(props) {
 
   // Handle close when press ESC
   useEffect(() => {
-    console.log(props.data);
+    // console.log(props.data);
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
         props.handleClose();

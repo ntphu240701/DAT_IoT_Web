@@ -129,7 +129,7 @@ export default function Interfaceoverview(props) {
     };
 
     useEffect(() => {
-        var card = document.getElementById("DAT_overview")
+        var card = document.getElementById("CARDOVERVIEW")
 
         if (card === null) return
         var svgcontainner = document.getElementById("OVERVIEW_SVGCONTAINNER")
@@ -149,8 +149,8 @@ export default function Interfaceoverview(props) {
     //scale khi Thay đổi kích thước màn hình
     function handleWindowResize() {
         var card = document.getElementById("CARDOVERVIEW")
-        console.log('resize')
-        console.log(card.offsetWidth)
+        // console.log('resize')
+        // console.log(card.offsetWidth)
         var svgcontainner = document.getElementById("OVERVIEW_SVGCONTAINNER")
         var svgview = document.getElementById("OVERVIEW_SVGVIEW")
         if (overview_config === false) {

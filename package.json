@@ -21,6 +21,7 @@
     "chartjs-plugin-zoom": "^2.0.1",
     "css-filter-converter": "^1.0.109",
     "disable-scroll": "^0.6.0",
+    "file-saver": "^2.0.5",
     "google-maps-react-markers": "^1.4.2",
     "jquery": "^3.7.0",
     "js-file-download": "^0.4.12",
@@ -58,7 +59,8 @@
     "socket.io-client": "^4.7.5",
     "styled-components": "^5.3.11",
     "url": "^0.11.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "react-scripts start",

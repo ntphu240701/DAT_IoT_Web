@@ -10,6 +10,20 @@ export default function Status(props) {
     const [data, setData] = useState(props.data)
     const [setting, setSetting] = useState(props.setting)
 
+    const hexToRgbA = (hex, opacity) => {
+        var c;
+        if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+            c = hex.substring(1).split('');
+            if (c.length == 3) {
+                c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+            }
+            c = '0x' + c.join('');
+            return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ','+opacity+')';
+        }else{
+            return 'rgba(255,255,255,'+opacity+')';
+        }
+        
+    }
 
     useEffect(function () {
         setData(props.data)
@@ -77,8 +91,8 @@ export default function Status(props) {
 
         {(setting.data[handlegetnum(setting.cal)] !== undefined)
 
-        ?<div  style={{position:"relative",zIndex:0,color:setting.data[handlegetnum(setting.cal)].color, height:props.height+"px",  fontWeight:"500", fontSize:setting.size+"px", display:"flex", alignItems:"center",justifyContent:setting.align, textAlign: "justify", backgroundColor:setting.bgcolor, border: "solid 1px "+ setting.bordercolor , borderRadius: setting.radius +"px"}}>{setting.data[handlegetnum(setting.cal)].text}</div>
-        :<div  style={{position:"relative",zIndex:0,color:'yellow', fontWeight:"500", height:props.height+"px", fontSize:setting.size+"px", display:"flex", alignItems:"center",justifyContent:"left",  backgroundColor:setting.bgcolor, border: "solid 1px "+ setting.bordercolor , borderRadius: setting.radius +"px"}}>ERR</div>
+        ?<div className="DAT_Value"  style={{position:"relative",zIndex:0,  color:setting.data[handlegetnum(setting.cal)].color, height:props.height+"px",  fontWeight:"500", fontSize:setting.size+"px", display:"flex", alignItems:"center",justifyContent:setting.align, textAlign: "justify", backgroundColor:hexToRgbA(setting?.bgcolor || "#FFFFFF", setting?.opacity || "1"), border: `solid  ${setting?.borderwidth || 1}px ${setting?.bordercolor || "black"}`, borderRadius: setting.radius +"px"}}>{setting.data[handlegetnum(setting.cal)].text}</div>
+        :<div  className="DAT_Value" style={{position:"relative",zIndex:0,  color:'red', fontWeight:"500", height:props.height+"px", fontSize:setting.size+"px", display:"flex", alignItems:"center",justifyContent:setting.align,  backgroundColor:hexToRgbA(setting?.bgcolor || "white", setting?.opacity || "1"), border: `solid  ${setting?.borderwidth || 1}px ${setting?.bordercolor || "black"}` , borderRadius: setting.radius +"px"}}>UNVALID</div>
         }
         </>
     )

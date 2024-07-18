@@ -242,7 +242,7 @@ export default function LineChart(props) {
     //counterRef.current[index] = handlegetnum(setting.dataset[index].cal)
     setDtset(props.data)
     dataset.map((data, index) => {
-      counterRef.current[index] = handlegetnum(setting.dataset[index].cal)
+      counterRef.current[index] = handlegetnum(setting.dataset[index]?.cal || 10)
     })
 
     //console.log(counterRef.current)
