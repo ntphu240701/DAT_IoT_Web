@@ -60,7 +60,7 @@ function Device(props) {
 
   const handleEdit = (e) => {
     let arr = e.currentTarget.id.split("_");
-    console.log(arr);
+    // console.log(arr);
     let index = device.value.findIndex((data) => data.id_ == arr[0]);
     setDev(device.value[index]);
     setPopupState(true);
@@ -69,7 +69,7 @@ function Device(props) {
 
   const handleEditMonitor = (e) => {
     let arr = e.currentTarget.id.split("_");
-    console.log(arr);
+    // console.log(arr);
     let index = deviceData.value.findIndex((data) => data.id_ == arr[0]);
     setMonitor(deviceData.value[index]);
     setPopupMonitor(true);
@@ -90,7 +90,7 @@ function Device(props) {
       let res = await callApi("post", host.DATA + "/getLoggerScreen", {
         id: id,
       });
-      console.log(res);
+      // console.log(res);
       if (res.status && res.data.length > 0) {
         let index = deviceData.value.findIndex((data) => data.id_ == id);
         // console.log(res.data, arr[0], deviceData.value[index].sn_)
@@ -143,7 +143,7 @@ function Device(props) {
       let res = await callApi("post", host.DATA + "/getLogger", {
         plantid: props.data.plantid_,
       });
-      console.log(res)
+      // console.log(res)
       if (res.status) {
         // setDevice(res.data)
         let temp = res.data.sort((a, b) => a.id_ - b.id_);
@@ -167,7 +167,7 @@ function Device(props) {
     // console.log(arr);
     deviceCurrent.value = arr[0];
     let i = device.value.findIndex((data) => data.id_ == arr[0]);
-    console.log(device.value[i]);
+    // console.log(device.value[i]);
     defaultData.value.defaultscreenid_ = device.value[i].defaultscreenid_;
     defaultData.value.defaultscreenstate_ = device.value[i].defaultscreenstate_;
     // setDefaultdata(device.value[i].defaultscreenid_);
@@ -177,7 +177,7 @@ function Device(props) {
         id: arr[0],
         sn: arr[1],
       });
-      console.log(res);
+      // console.log(res);
       if (res.status) {
         deviceData.value = res.data;
         if (
@@ -194,16 +194,16 @@ function Device(props) {
 
   const handleDefaultScreen = async (e) => {
     let arr = e.currentTarget.id.split("_");
-    console.log(arr);
+    // console.log(arr);
 
     let res = await callApi("post", host.DATA + "/setDefaultScreen", {
       loggerdataid: arr[0],
       sn: arr[1],
     });
 
-    console.log(res);
+    // console.log(res);
     if (res.status) {
-      console.log(device.value);
+      // console.log(device.value);
       let i = device.value.findIndex((data) => data.sn_ == arr[1]);
 
       device.value[i].defaultscreenid_ = parseInt(arr[0]);
@@ -221,14 +221,14 @@ function Device(props) {
 
   const handleDisableDefaultScreen = async (e) => {
     let arr = e.currentTarget.id.split("_");
-    console.log(arr);
+    // console.log(arr);
     let res = await callApi("post", host.DATA + "/disableDefaultScreen", {
       sn: arr[0],
     });
 
-    console.log(res);
+    // console.log(res);
     if (res.status) {
-      console.log(device.value);
+      // console.log(device.value);
       let i = device.value.findIndex((data) => data.sn_ == arr[0]);
       device.value[i].defaultscreenstate_ = 0;
       defaultData.value = {
@@ -245,8 +245,8 @@ function Device(props) {
     if (defaultDataState.value) {
      
       if (device.value && device.value.length > 0) {
-        console.log(defaultDataState.value);
-        console.log(deviceData.value);
+        // console.log(defaultDataState.value);
+        // console.log(deviceData.value);
         const id = device.value[0].id_;
         const sn = device.value[0].sn_;
         const getList = async () => {
@@ -254,7 +254,7 @@ function Device(props) {
             id: id,
             sn: sn,
           });
-          console.log(res);
+          // console.log(res);
           if (res.status) {
             defaultDataState.value = false;
             deviceData.value = res.data;
@@ -274,9 +274,6 @@ function Device(props) {
     // handleScreen(device.value[i].defaultscreenid_);
   }, [device.value, defaultDataState.value]);
 
-  useEffect(() => {
-    console.log(device.value);
-  }, [device.value]);
 
   return (
     <>

@@ -28,6 +28,7 @@ import View32bit from "../Lib/View32bit";
 import { ruleInfor } from "../../App";
 import { isBrowser } from "react-device-detect";
 import Img from "../Lib/Img";
+import Calendar from "./Calendar";
 
 export default function Interfaceoverview(props) {
     const type = useSelector((state) => state.admin.type)
@@ -88,7 +89,8 @@ export default function Interfaceoverview(props) {
                 return <Img id={id} data={invt} setting={overview_setting[id]} width={w} height={h} />
             case 'view32bit':
                 return <View32bit id={id} data={invt} setting={overview_setting[id]} width={w} height={h} />
-
+            case 'calendar':
+                return <Calendar plantid={props.id} deviceid={overview_setting[id].deviceid} tab="0" id={id} data={invt} setting={overview_setting} width={w} height={h} />
             default:
                 return <></>
         }
@@ -142,6 +144,11 @@ export default function Interfaceoverview(props) {
             svgview.style.width = svgcontainner.offsetWidth / (card.offsetWidth / 1500)
         }
 
+        window.addEventListener('resize', handleWindowResize);
+
+        return () => {
+            window.removeEventListener('resize', handleWindowResize);
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -170,11 +177,7 @@ export default function Interfaceoverview(props) {
     useEffect(() => {
         //console.log(props.invt)
         setInvt(props.invt)
-        window.addEventListener('resize', handleWindowResize);
 
-        return () => {
-            window.removeEventListener('resize', handleWindowResize);
-        };
     }, [props])
 
     //Vào trang cài dặt
@@ -220,7 +223,7 @@ export default function Interfaceoverview(props) {
                                         style={{ border: "solid 1px rgb(219, 219, 219,0)" }}
                                     >
                                         <div className="DAT_Edit">
-                                            {visdata(data.type, data.id, data.w, data.h-2)}
+                                            {visdata(data.type, data.id, data.w, data.h - 2)}
                                         </div>
                                     </foreignObject>
                                 ))}

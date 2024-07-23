@@ -322,8 +322,16 @@ export default function Home(props) {
                                         toolState.value = true;
                                 }
                         }
+                        setStep(4)
 
                 }
+                return () => {
+                        if (step === 4) {
+                                // console.log('reset')
+                                settingDispatch({ type: "RESET", payload: [] })
+                                toolDispatch({ type: "RESET_TOOL", payload: [] })
+                        }
+                };
         }, [step])
 
         useEffect(() => {

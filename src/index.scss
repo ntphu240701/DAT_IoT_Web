@@ -460,7 +460,7 @@ iframe {
   }
 
   &_Infor {
-    width: 650px;
+    width: 350px;
     white-space: nowrap; // ngan xuong dong
     overflow: hidden; // an noi dung vuot ra ngoai
     text-overflow: ellipsis !important; // hien thi 3 cham khi vuot ra ngoai
@@ -1465,3 +1465,6 @@ iframe {
     stroke-dashoffset: -200;
   }
 }
+
+
+@-webkit-keyframes swing-in-top-fwd{0%{-webkit-transform:rotateX(-100deg);transform:rotateX(-100deg);-webkit-transform-origin:top;transform-origin:top;opacity:0}100%{-webkit-transform:rotateX(0deg);transform:rotateX(0deg);-webkit-transform-origin:top;transform-origin:top;opacity:1}}@keyframes swing-in-top-fwd{0%{-webkit-transform:rotateX(-100deg);transform:rotateX(-100deg);-webkit-transform-origin:top;transform-origin:top;opacity:0}100%{-webkit-transform:rotateX(0deg);transform:rotateX(0deg);-webkit-transform-origin:top;transform-origin:top;opacity:1}}

@@ -100,12 +100,11 @@ export default function EditRole(props) {
       if (rule.status) {
         datarule.value = rule.data;
         datarule.value = datarule.value.sort((a, b) => a.ruleid_ - b.ruleid_);
-        console.log(datarule.value);
         // setdatafilter(rule.data);
       }
     };
     getRule();
-  }, [groupID.value]);
+  }, [partnerInfor.value.partnerid]);
 
   return (
     <div className="DAT_EditRole">

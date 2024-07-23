@@ -30,6 +30,8 @@ export default function Note(props) {
         throw new Error('Bad Hex');
     }
     return (
-        <div className="DAT_Note" style={{height:props.height+"px", justifyContent:setting?.align || "left",fontSize:setting?.size+"px" || "16px", color:setting?.color || "black", backgroundColor:hexToRgbA(setting?.bgcolor || "#FFFFFF", setting?.opacity || "1"), border: `solid  ${setting?.borderwidth || 1}px ${setting?.bordercolor || "black"}`, textAlign: "justify", borderRadius: setting?.radius +"px" || "10px"}}>{setting?.text || "Note"} </div>
+        <div className="DAT_Note" style={{whiteSpace:'pre-line', height:props.height+"px", alignItems:setting?.justify || "center",  justifyContent:setting?.align || "left",fontSize:setting?.size+"px" || "16px", color:setting?.color || "black", backgroundColor:hexToRgbA(setting?.bgcolor || "#FFFFFF", setting?.opacity || "1"), border: `solid  ${setting?.borderwidth || 1}px ${setting?.bordercolor || "black"}`, textAlign: "justify", borderRadius: setting?.radius +"px" || "10px"}}>
+            {setting?.text || "Note"} 
+        </div>
     )
 }

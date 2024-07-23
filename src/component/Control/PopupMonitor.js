@@ -36,7 +36,7 @@ export default function PopupMonitor(props) {
         sn: sn,
         name: name,
       });
-      console.log(d);
+      // console.log(d);
       if (d.status) {
         alertDispatch(dataLang.formatMessage({ id: "alert_6" }));
         props.handleClose();
@@ -67,7 +67,7 @@ export default function PopupMonitor(props) {
       if (d.status) {
         alertDispatch(dataLang.formatMessage({ id: "alert_6" }));
         props.handleClose();
-        console.log(deviceData.value);
+        // console.log(deviceData.value);
         let index = deviceData.value.findIndex((item) => item.id_ == loggerid);
         deviceData.value[index] = {
           ...deviceData.value[index],
@@ -77,7 +77,7 @@ export default function PopupMonitor(props) {
     };
 
     if (props.type === "monitor") {
-      console.log(props.popupType);
+      // console.log(props.popupType);
       if (props.popupType === "add") {
         if (!name_.current.value) {
           alertDispatch(dataLang.formatMessage({ id: "alert_17" }));
@@ -101,7 +101,7 @@ export default function PopupMonitor(props) {
         if (!editname.value) {
           alertDispatch(dataLang.formatMessage({ id: "alert_17" }));
         } else {
-          console.log(editname.value, props.monitor.id_);
+          // console.log(editname.value, props.monitor.id_);
           updateLoggerData(props.monitor.id_, editname.value);
         }
       }

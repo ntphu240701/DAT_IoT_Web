@@ -57,7 +57,7 @@ export default function EditProject(props) {
     if (check !== 0) {
       alertDispatch(dataLang.formatMessage({ id: "alert_22" }));
     } else {
-      console.log(projectData.value);
+      // console.log(projectData.value);
       const editProject = async () => {
         let d = await callApi("post", host.DATA + "/editPlant", {
           plantid: projectData.value.plantid,
@@ -75,7 +75,7 @@ export default function EditProject(props) {
             ? projectData.value.img
             : `/dat_picture/${props.bu}.jpg`,
         });
-        console.log(d);
+        // console.log(d);
         if (d.status === true) {
           alertDispatch(dataLang.formatMessage({ id: "alert_30" }));
 
@@ -108,7 +108,7 @@ export default function EditProject(props) {
   };
 
   useEffect(() => {
-    console.log(props.data)
+    // console.log(props.data)
     projectData.value = {
       name: props.data.name_,
       phone: props.data.phone_,
@@ -301,7 +301,7 @@ const BasicInfo = (props) => {
   };
 
   useEffect(() => {
-    console.log(projectData.value);
+    // console.log(projectData.value);
     var long_ = document.getElementById("long");
     var lat_ = document.getElementById("lat");
     long_.value = projectData.value.long;
@@ -316,7 +316,7 @@ const BasicInfo = (props) => {
   const handleMap = (e) => {
     const addr = document.getElementById("addr");
 
-    console.log(projectData.value);
+    // console.log(projectData.value);
 
     setKey(process.env.REACT_APP_GGKEY);
     geocode(RequestType.ADDRESS, addr.value)

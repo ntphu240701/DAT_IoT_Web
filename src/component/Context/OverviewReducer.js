@@ -1,5 +1,5 @@
 
-const INITIAL_STATE = {
+let INITIAL_STATE = {
 
     overview_name: '',
     overview_company: '',
@@ -8,8 +8,8 @@ const INITIAL_STATE = {
     overview_setting: {},
     overview_visual: [],
     overview_config: false,
-    overview_control: { stt: false, type: '',  id: '0', w: 0, h: 0 },
-    overview_device: ['0']
+    overview_control: { stt: false, type: '', id: '0', w: 0, h: 0 },
+    overview_device: ['000']
 
 };
 
@@ -54,7 +54,13 @@ const OverviewReducer = (state, action) => {
 
             return {
                 ...state,
-                overview_visual: action.payload
+                overview_visual: [...action.payload]
+            }
+        case 'LOAD_SETTING':
+
+            return {
+                ...state,
+                overview_setting: {...action.payload}
             }
         case 'RESET_TOOLOVERVIEW':
             return {

@@ -201,7 +201,7 @@ export default function LineChart(props) {
         tab: props.tab,
         id: props.id
       })
-      // console.log(res)
+      console.log(res)
       if (res.status) {
 
         const newState = [...dataset]

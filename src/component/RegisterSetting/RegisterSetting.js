@@ -31,9 +31,6 @@ import { lowercasedata } from "../ErrorSetting/ErrorSetting";
 import { alertDispatch } from "../Alert/Alert";
 import { LuRouter } from "react-icons/lu";
 import { BiMessageAltError } from "react-icons/bi";
-import { GrElevator } from "react-icons/gr";
-import { FaGears } from "react-icons/fa6";
-import { MdOutlineSolarPower } from "react-icons/md";
 
 export const groupRegID = signal("");
 export const configEdit = signal("");
@@ -47,8 +44,6 @@ export default function RegisterSetting() {
   const [statePopup, setStatePopup] = useState("");
   const [regList, setRegList] = useState(false);
   const [filterType, setFilterType] = useState(true);
-  const [bu, setBu] = useState("");
-  const [name, setName] = useState("");
   const dataLang = useIntl();
 
   const columnGroupRole = [
@@ -65,31 +60,6 @@ export default function RegisterSetting() {
     {
       name: dataLang.formatMessage({ id: "erroraddress" }),
       selector: (user) => user.addrcode,
-      sortable: true,
-      width: "150px",
-      style: {
-        height: "auto !important",
-        justifyContent: "left !important",
-      },
-    },
-    {
-      name: dataLang.formatMessage({ id: "errname" }),
-      selector: (row) => {
-        return (
-          <div
-            style={{ cursor: "pointer" }}
-            id={row.id + "_" + row.name}
-            onClick={(e) => {
-              setStatePopup("editName");
-              changePopupstate();
-              configEdit.value = e.currentTarget.id;
-              setName(row.name);
-            }}
-          >
-            {row.name === undefined ? "..." : row.name}
-          </div>
-        );
-      },
       sortable: true,
       width: "150px",
       style: {
@@ -239,9 +209,7 @@ export default function RegisterSetting() {
   };
 
   const handleChangeGroup = (e) => {
-    console.log(e.currentTarget.id.split("_"));
-    setBu(e.currentTarget.id.split("_")[1]);
-    groupRegID.value = e.currentTarget.id.split("_")[0];
+    groupRegID.value = e.currentTarget.id;
     console.log(groupRegID.value);
     const getRegister = async (sn) => {
       let inf = await callApi("post", host.DATA + "/getRegister", {
@@ -264,7 +232,7 @@ export default function RegisterSetting() {
       }
     };
     console.log(dataRegister);
-    getRegister(e.currentTarget.id.split("_")[0]);
+    getRegister(e.currentTarget.id);
   };
 
   const changePopupstate = (e) => {
@@ -273,10 +241,10 @@ export default function RegisterSetting() {
 
   //FUNCTION POPUP
 
-  const handleSubmitAddNewReg = (errAdd1, errAdd2, errNameRef) => {
-    console.log(errAdd1, errAdd2, errNameRef);
+  const handleSubmitAddNewReg = (errAdd1, errAdd2) => {
+    console.log(errAdd1, errAdd2);
     let temp = [...dataRegister];
-    if (errAdd1 === "" || errAdd2 === "" || errNameRef === "") {
+    if (errAdd1 === "" || errAdd2 === "") {
       alertDispatch(dataLang.formatMessage({ id: "alert_22" }));
     } else {
       if (
@@ -294,7 +262,6 @@ export default function RegisterSetting() {
                 : temp[parseInt(temp.length) - 1].id + 1,
             // id: parseInt(temp.length) + 1,
             addrcode: `${errAdd1}-${errAdd2}`,
-            name: errNameRef,
             register: [
               {
                 id: 1,
@@ -485,31 +452,6 @@ export default function RegisterSetting() {
     }
   };
 
-  const handleUpdateName = (errNameeditRef) => {
-    // console.log(errNameeditRef);
-    // console.log(configEdit.value);
-    const i = dataRegister.findIndex(
-      (data) => data.id == configEdit.value.split("_")[0]
-    );
-    console.log(i)
-    if(errNameeditRef !== ""){
-      dataRegister[i].name = errNameeditRef;
-      const upReg = async () => {
-        let req = await callApi("post", `${host.DATA}/updateRegister`, {
-          sn: groupRegID.value,
-          data: JSON.stringify(dataRegister),
-        });
-        // console.log(req);
-        setDataRegister([...dataRegister]);
-        setDataRegisterSub([...dataRegister]);
-      };
-      upReg();
-      changePopupstate();
-    } else {
-      alertDispatch(dataLang.formatMessage({ id: "alert_22" }));
-    }
-  };
-
   useEffect(() => {
     setDataRegister(dataRegisterSub);
   }, [dataRegisterSub]);
@@ -538,9 +480,8 @@ export default function RegisterSetting() {
   };
 
   // useEffect(() => {
-  //   // console.log(regList);
-  //   // console.log(dataRegister);
-  //   // console.log(dataGateway);
+  //   console.log(regList);
+  //   console.log(dataRegister);
   // });
 
   return (
@@ -692,7 +633,7 @@ export default function RegisterSetting() {
                       <div
                         className="DAT_RS_Content_DevideTable_Left_ItemList_Item"
                         key={index}
-                        id={item.sn_ + "_" + item.bu_}
+                        id={item.sn_}
                         style={{
                           backgroundColor:
                             groupRegID.value === item.sn_
@@ -707,23 +648,9 @@ export default function RegisterSetting() {
                         <div>
                           <div
                             className="DAT_RS_Content_DevideTable_Left_ItemList_Item_Name"
-                            style={{
-                              fontSize: "15px",
-                              display: "flex",
-                              gap: "10px",
-                            }}
+                            style={{ fontSize: "15px" }}
                           >
                             {item.sn_}
-                            {(() => {
-                              switch (item.bu_) {
-                                case "elev":
-                                  return <GrElevator />;
-                                case "energy":
-                                  return <FaGears />;
-                                case "auto":
-                                  return <MdOutlineSolarPower />;
-                              }
-                            })()}
                           </div>
 
                           <div
@@ -813,9 +740,6 @@ export default function RegisterSetting() {
           {popup ? (
             <div className="DAT_PopupBG">
               <Popup
-                handleUpdateName={handleUpdateName}
-                name={name}
-                bu={bu}
                 closeopen={changePopupstate}
                 type={statePopup}
                 data={dataRegister}
@@ -1030,7 +954,7 @@ export default function RegisterSetting() {
                   <div
                     className="DAT_RSMobile_Content_DevideTable_Left_ItemList_Item"
                     key={index}
-                    id={item.sn_ + "_" + item.bu_}
+                    id={item.sn_}
                     style={{
                       backgroundColor:
                         groupRegID.value === item.sn_
@@ -1119,9 +1043,6 @@ export default function RegisterSetting() {
           {popup ? (
             <div className="DAT_PopupBGMobile">
               <Popup
-                handleUpdateName={handleUpdateName}
-                name={name}
-                bu={bu}
                 closeopen={changePopupstate}
                 type={statePopup}
                 data={dataRegister}

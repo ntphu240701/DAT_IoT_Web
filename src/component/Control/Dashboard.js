@@ -27,6 +27,7 @@ import { isBrowser } from "react-device-detect";
 import { useIntl } from "react-intl";
 import { Link } from "react-router-dom";
 import { sidebartab, sidebartabli } from "../Sidenar/Sidenar";
+import { mode } from "./Signal";
 
 export const plantnameFilterSignal = signal("");
 
@@ -138,7 +139,7 @@ export default function Dashboard(props) {
         "marker"
       );
       let map = new Map(document.getElementById("map2"), defaultProps);
-
+   
       const marker = {
         lat: parseFloat(data?.lat_ ? data.lat_ : 16.0544068),
         lng: parseFloat(data?.long_ ? data.long_ : 108.2021667),
@@ -155,8 +156,10 @@ export default function Dashboard(props) {
   useEffect(() => {
     if (props.data) {
       if (props.data) {
-        console.log(props.data);
-        initMap(props.data);
+        // console.log(props.data);
+      
+          initMap(props.data);
+        
         const getGateway = async () => {
           let res = await callApi("post", host.DATA + "/getLogger", {
             plantid: props.data.plantid_,
@@ -170,7 +173,7 @@ export default function Dashboard(props) {
         getGateway();
       }
     }
-  }, [props.data]);
+  }, [props.data, mode.value]);
 
   return (
     <>

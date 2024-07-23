@@ -501,24 +501,25 @@
         height: 100vh;
         top: 0;
         left: 0;
-        padding-top: 10px;
+        // padding-top: 10px;
         background-color: rgb(0, 0, 0, 0.8);
 
 
 
         &_Container {
 
-            width: 98%;
+            width: 100%;
             margin: auto;
 
             //padding: 15px;
-            border-radius: 10px;
+            // border-radius: 10px;
             background-color: white;
             overflow: hidden;
 
             &_Head {
-                background-color: #e9e9e9;
+                background-color: hwb(0 91% 9%);
                 position: relative;
+                z-index: 25;
                 width: 100%;
                 height: 50px;
                 padding-left: 15px;
@@ -712,11 +713,11 @@
 
         text-align: center;
         transform-origin: 0% 0% 0px;
-        height: calc(100vh - 110px);
+        height: calc(100vh - 50px);
 
         width: 100%;
-        box-shadow: inset 3px 3px 5px rgba(152, 152, 152, 0.5), inset -3px -3px 5px rgba(222, 222, 222, 0.5);
-        border-radius: 15px;
+        // box-shadow: inset 3px 3px 5px rgba(152, 152, 152, 0.5), inset -3px -3px 5px rgba(222, 222, 222, 0.5);
+        // border-radius: 15px;
         //background-image: url("../../../public/theme/theme_1.png");
         // background-image: linear-gradient(135deg, #0061f2 0%, rgba(105, 0, 199, 0.8) 100%) !important;
         // background-position: center top !important;
@@ -738,7 +739,7 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0);
 
-            border-radius: 15px;
+            // border-radius: 15px;
             display: flex;
             justify-content: center;
             overflow-x: hidden;
@@ -1181,6 +1182,28 @@
             }
         }
 
+        &-area{
+            &-content{
+                & textarea{
+                    min-width: 100%;
+                    max-width: 100%;
+                    min-height: 100px;
+                    border-radius: 5px;
+                }
+
+                & button{
+                    width: 100px;
+                    height: 40px;
+                    border-radius: 5px;
+                    border: none;
+                    outline: none;
+                    background-color: #326ba8;
+                    color: white;
+                    cursor: pointer;
+                }
+            }
+        }
+
         &-number {
             &-content {
                 display: flex;
@@ -1348,7 +1371,7 @@
     }
 
     .DAT_TlOverview_SVG {
-        height: 75vh;
+        height: calc(100vh - 50px);
     }
 
 

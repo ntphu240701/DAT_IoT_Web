@@ -259,7 +259,7 @@ export default function App() {
       }
     };
 
-    const checkApi = async () => { };
+    const checkApi = async () => {};
     checkAuth();
 
     if (status) {
@@ -272,10 +272,11 @@ export default function App() {
 
   useEffect(() => {
     const getwarn = async (usr, partnerid, type) => {
-      const warn = await callApi("post", host.DATA + "/getWarn", {
+      const warn = await callApi("post", host.DATA + "/getWarn2", {
         usr: usr,
         partnerid: partnerid,
         type: type,
+        date: moment(new Date()).format("MM/DD/YYYY"),
       });
       // console.log(warn);
       if (warn.status) {
@@ -413,7 +414,7 @@ export default function App() {
         <Alert />
         {loading ? (
           window.location.pathname === "/Verify" ||
-            window.location.pathname === "/VerifyRegister" ? (
+          window.location.pathname === "/VerifyRegister" ? (
             <Verify path={window.location.pathname} />
           ) : (
             <div className="DAT_Loading">
@@ -425,16 +426,16 @@ export default function App() {
             {status ? (
               <>
                 {plantState.value === "toollist" ||
-                  mode.value === "dashboard" ||
-                  toolState.value ? (
+                mode.value === "dashboard" ||
+                toolState.value ? (
                   <></>
                 ) : (
                   <Navigation />
                 )}
                 <div className="DAT_App">
                   {plantState.value === "toollist" ||
-                    mode.value === "dashboard" ||
-                    toolState.value ? (
+                  mode.value === "dashboard" ||
+                  toolState.value ? (
                     <></>
                   ) : (
                     <Sidenar />
@@ -578,7 +579,7 @@ export default function App() {
                       )}
 
                       {userInfor.value.type === "mainadmin" ||
-                        userInfor.value.type === "admin" ? (
+                      userInfor.value.type === "admin" ? (
                         <>
                           <Route
                             path="/Role"

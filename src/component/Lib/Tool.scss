@@ -21,7 +21,7 @@
     border-radius: 5px;
     display: flex;
     align-items: center;
-    padding: 0 5px 0 5px;
+    padding: 5px;
     color: white;
     background-color: rgb(0, 0, 0, 0.3);
     box-shadow: 2px 2px 5px rgba(74, 74, 74, 0.3), -2px -2px 5px rgba(176, 176, 176, 0.3);
@@ -131,7 +131,7 @@
     background-color: #ececec;
     padding: 7px;
     box-sizing: border-box;
-    border-radius: 10px 10px 0 0;
+    // border-radius: 10px 10px 0 0;
     border-bottom: solid 1px rgb(233, 233, 233);
     //height: 60px;
     display: flex;
@@ -292,7 +292,7 @@
     overflow-y: hidden;
     overflow-x: auto;
     background-color: #dadada;
-    border-radius: 10px 10px 0 0;
+    // border-radius: 10px 10px 0 0;
     //border-bottom: solid 1px darkgray;
     padding: 7px 10px 0px 10px;
     height: 40px;
@@ -448,12 +448,12 @@
 
 }
 
-// .DAT_Tool_Loading{
-//     height: calc(100vh - 110px);
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-// }
+.DAT_Tool_Loading{
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 
 .DAT_Toollist_Content {
@@ -822,11 +822,11 @@
         position: relative;
         text-align: center;
         transform-origin: 0% 0% 0px;
-        height: 50vh;
+        height: 100vh;
         width: 100%;
         margin: auto;
-        box-shadow: inset 3px 3px 5px rgba(152, 152, 152, 0.5), inset -3px -3px 5px rgba(222, 222, 222, 0.5);
-        border-radius: 15px;
+        // box-shadow: inset 3px 3px 5px rgba(152, 152, 152, 0.5), inset -3px -3px 5px rgba(222, 222, 222, 0.5);
+        // border-radius: 15px;
         // background-image: url("../../../public/theme/theme_1.png");
         // background-position: center top !important;
         // background-repeat: no-repeat;
@@ -847,7 +847,7 @@
             height: 100%;
 
 
-            border-radius: 15px;
+            // border-radius: 15px;
             display: flex;
             justify-content: center;
             overflow-x: hidden;
@@ -1289,9 +1289,9 @@
 .DAT_Input {
     position: relative;
     z-index: 0;
-    width: 100%;
-    display: flex;
-    justify-content: left;
+    // width: 100%;
+  
+    // justify-content: left;
 
     & input {
         box-sizing: border-box;
@@ -1481,6 +1481,21 @@
     font-weight: 600;
     display: flex;
     align-items: center;
+    box-sizing: border-box;
+    // font-weight: 500;
+    // box-sizing: border-box;
+}
+
+
+//Trạng thái
+.DAT_Multitext {
+    position: relative;
+    z-index: 0;
+    width: 100%;
+    // padding: 10px;
+    font-weight: 600;
+    // display: flex;
+    // align-items: center;
     box-sizing: border-box;
     // font-weight: 500;
     // box-sizing: border-box;
@@ -2047,16 +2062,16 @@
 
 
     .DAT_Tool_SVG {
-        height: calc(100vh - 90px);
+        height: calc(100vh - 40px);
     }
 
     .DAT_Tool_Loading {
-        height: calc(100vh - 90px);
+        height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 7px;
-        box-shadow: inset 0 0 4px 4px rgba(160, 160, 160, 0.5);
+        // box-shadow: inset 0 0 4px 4px rgba(160, 160, 160, 0.5);
     }
 
 

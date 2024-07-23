@@ -100,14 +100,7 @@ function Project(props) {
     };
     defaultDataState.value = true;
   };
-  useEffect(() => {
-    console.log(mode.value);
-  }, [mode.value]);
 
-  useEffect(() => {
-    console.log(props.data.plantid_);
-    console.log(mode.value);
-  }, [mode.value]);
 
   return (
     <>

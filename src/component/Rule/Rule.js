@@ -339,7 +339,7 @@ export default function Rule() {
                 </span>
               </button>
             ) : (
-              <div></div>
+              <></>
             )}
           </div>
 

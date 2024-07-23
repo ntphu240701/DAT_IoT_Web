@@ -37,7 +37,7 @@ export default function AddGateway(props) {
         sn: sn.current.value,
         name: name.current.value,
       });
-      console.log(d)
+      // console.log(d)
       if (d.status) {
         // temp.value = [...temp.value, d.data];
         props.handleClose();

@@ -589,47 +589,39 @@
     color: COLOR.$Gray-color;
     border-bottom: solid 1px rgba(198, 197, 197, 0.5);
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: start !important;
+    align-items: center;
     gap: 10px;
 
-    &_Input {
-      display: flex !important;
-      gap: 10px ;
-      align-items: center;
+    & select {
+      border-radius: 5px;
+      border: solid 1px rgb(199, 199, 199);
+      padding: 4px;
+      font-family: segoeui;
     }
-    // & select {
-    //   border-radius: 5px;
-    //   border: solid 1px rgb(199, 199, 199);
-    //   padding: 4px;
-    //   font-family: segoeui;
-    // }
 
-    // & span {
-    //   font-family: segoeui-sb;
-    //   width: 100px;
-    // }
+    & span {
+      font-family: segoeui-sb;
+      width: 100px;
+    }
 
-    // & input {
-    //   width: 30px !important;
-    //   border-radius: 5px;
-    //   border: solid 1px rgb(199, 199, 199);
-    //   padding: 4px;
-    //   outline: none;
-    //   box-sizing: border-box;
-    //   -webkit-box-sizing: border-box;
-    //   -moz-box-sizing: border-box;
-    //   font-family: segoeui;
-    //   margin: 0;
-    // }
+    & input {
+      width: 30px !important;
+      border-radius: 5px;
+      border: solid 1px rgb(199, 199, 199);
+      padding: 4px;
+      outline: none;
+      box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      font-family: segoeui;
+      margin: 0;
+    }
 
     input [type="number"] &input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
       -webkit-appearance: none;
       margin: 0;
     }
-    
   }
 
   &_Foot {

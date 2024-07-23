@@ -67,7 +67,7 @@ export default function Popup(props) {
         name: name,
         des: des,
       });
-      console.log(d);
+      // console.log(d);
       if (d.status) {
         alertDispatch(dataLang.formatMessage({ id: "alert_6" }));
         props.handleClose();
@@ -83,7 +83,7 @@ export default function Popup(props) {
     if (props.type === "plant") {
       dropProject();
     } else {
-      console.log(props.popupType);
+      // console.log(props.popupType);
       if (props.popupType === "delete") {
         // console.log(props.data, props.plant)
         dropLogger(props.data.sn_, props.plant.plantid_);

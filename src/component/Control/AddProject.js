@@ -84,7 +84,7 @@ export default function AddProject(props) {
           type: plantTemplate.value.type,
           partnerid: userInfor.value.partnerid,
         });
-        console.log(d);
+        // console.log(d);
         if (d.status === true) {
           alertDispatch(dataLang.formatMessage({ id: "alert_29" }));
           plantData.value = [...plantData.value, d.data];
