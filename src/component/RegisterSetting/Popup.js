@@ -7,16 +7,20 @@ import "./RegisterSetting.scss";
 
 export default function Popup(props) {
   const dataLang = useIntl();
-  const errAddRef1 = useRef();
-  const errAddRef2 = useRef();
-  const configAddRef1 = useRef();
-  const configAddRef2 = useRef();
-  const configAddRef3 = useRef();
+  const errAddRef1 = useRef("");
+  const errAddRef2 = useRef("");
+  const errName = useRef("");
+  const configAddRef1 = useRef("");
+  const configAddRef2 = useRef("");
+  const configAddRef3 = useRef("");
   const baseRef = useRef("10");
   const newConfigBaseRef = useRef("10");
-  const editValRef1 = useRef();
-  const editValRef2 = useRef();
-  const editValRef3 = useRef();
+  const editValRef1 = useRef("");
+  const editValRef2 = useRef("");
+  const editValRef3 = useRef("");
+  const regRef1 = useRef("");
+  const regRef2 = useRef("");
+  const regRef3 = useRef("");
 
   const popup_state = {
     pre: { transform: "rotate(0deg)", transition: "0.5s", color: "white" },
@@ -57,6 +61,56 @@ export default function Popup(props) {
   useEffect(() => {}, [props.data]);
 
   //addNewReg,
+  const EditReg = (type, val) => {
+    console.log(val);
+    return (
+      <form className="DAT_CreateErrSetting">
+        <div className="DAT_CreateErrSetting_Head">
+          <div className="DAT_CreateErrSetting_Head_Left">
+            {dataLang.formatMessage({ id: "createNew" })}
+          </div>
+          <div className="DAT_CreateErrSetting_Head_Right">
+            <div
+              className="DAT_CreateErrSetting_Head_Right_Icon"
+              id="Popup"
+              onClick={() => props.closeopen()}
+              onMouseEnter={(e) => handlePopup("new")}
+              onMouseLeave={(e) => handlePopup("pre")}
+            >
+              <IoClose size={25} />
+            </div>
+          </div>
+        </div>
+
+        <div className="DAT_CreateErrSetting_Body">
+          <span style={{ minWidth: "70px" }}>
+            {dataLang.formatMessage({ id: type.type })}:
+          </span>
+          <input type="number" ref={regRef1} style={{ width: "65px" }} /> -
+          <input type="number" ref={regRef2} style={{ width: "65px" }} />
+        </div>
+
+        <div className="DAT_CreateErrSetting_Foot">
+          <div className="DAT_CreateErrSetting_Foot_Left"></div>
+          <div className="DAT_CreateErrSetting_Foot_Right">
+            <button
+              style={{
+                backgroundColor: COLOR.value.PrimaryColor,
+                color: "white",
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                props.updateReg(regRef1.current.value, regRef2.current.value);
+              }}
+            >
+              {dataLang.formatMessage({ id: "confirm" })}
+            </button>
+          </div>
+        </div>
+      </form>
+    );
+  };
+
   return (
     <>
       {(() => {
@@ -81,22 +135,39 @@ export default function Popup(props) {
                   </div>
                 </div>
 
-                <div className="DAT_CreateErrSetting_Body">
+                <div
+                  className="DAT_CreateErrSetting_Body"
+                  style={{ borderBottom: "none", marginBottom: "-10px" }}
+                >
                   <span style={{ width: "48px" }}>
                     {dataLang.formatMessage({ id: "errcode" })}:
                   </span>
                   <input
                     type="number"
                     ref={errAddRef1}
-                    style={{ width: "65px" }}
+                    style={{ width: "55px" }}
                   />{" "}
                   -
                   <input
                     type="number"
                     ref={errAddRef2}
-                    style={{ width: "65px" }}
+                    style={{ width: "55px" }}
                   />
                 </div>
+                {props.bu === "elev" ? (
+                  <div className="DAT_CreateErrSetting_Body">
+                    <span style={{ width: "48px" }}>
+                      {dataLang.formatMessage({ id: "name" })}:
+                    </span>
+                    <input
+                      type="text"
+                      ref={errName}
+                      // style={{ width: "200px !important" }}
+                    />
+                  </div>
+                ) : (
+                  <></>
+                )}
 
                 <div className="DAT_CreateErrSetting_Foot">
                   <div className="DAT_CreateErrSetting_Foot_Left"></div>
@@ -110,14 +181,9 @@ export default function Popup(props) {
                         e.preventDefault();
                         props.handleSubmitAddNewReg(
                           errAddRef1.current.value,
-                          errAddRef2.current.value
+                          errAddRef2.current.value,
+                          errName.current.value
                         );
-                        // props.handleConfirm(
-                        //   e,
-                        //   codeRef1.current.value,
-                        //   codeRef2.current.value,
-                        //   codeRef3.current.value
-                        // );
                       }}
                     >
                       {dataLang.formatMessage({ id: "confirm" })}
@@ -274,7 +340,7 @@ export default function Popup(props) {
                 </div>
 
                 <div className="DAT_CreateErrSetting_Body">
-                  <span style={{ width: "100px" }}>
+                  <span style={{ width: "70px" }}>
                     {dataLang.formatMessage({ id: "config" })}:
                   </span>
                   <input type="number" ref={configAddRef1} /> -
@@ -423,6 +489,123 @@ export default function Popup(props) {
                 </div>
               </div>
             );
+          case "editName":
+            return (
+              <form className="DAT_CreateErrSetting">
+                <div className="DAT_CreateErrSetting_Head">
+                  <div className="DAT_CreateErrSetting_Head_Left">
+                    {dataLang.formatMessage({ id: "createNew" })}
+                  </div>
+                  <div className="DAT_CreateErrSetting_Head_Right">
+                    <div
+                      className="DAT_CreateErrSetting_Head_Right_Icon"
+                      id="Popup"
+                      onClick={() => props.closeopen()}
+                      onMouseEnter={(e) => handlePopup("new")}
+                      onMouseLeave={(e) => handlePopup("pre")}
+                    >
+                      <IoClose size={25} />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="DAT_CreateErrSetting_Body">
+                  <span style={{ width: "48px" }}>
+                    {dataLang.formatMessage({ id: "name" })}:
+                  </span>
+                  <input
+                    type="text"
+                    ref={errName}
+                    style={{ width: "100% !important" }}
+                  />
+                </div>
+
+                <div className="DAT_CreateErrSetting_Foot">
+                  <div className="DAT_CreateErrSetting_Foot_Left"></div>
+                  <div className="DAT_CreateErrSetting_Foot_Right">
+                    <button
+                      style={{
+                        backgroundColor: COLOR.value.PrimaryColor,
+                        color: "white",
+                      }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                      }}
+                    >
+                      {dataLang.formatMessage({ id: "confirm" })}
+                    </button>
+                  </div>
+                </div>
+              </form>
+            );
+          case "editReg":
+            return (() => {
+              switch (configEdit.value.split("_")[2]) {
+                case "floor":
+                  return (
+                    <EditReg
+                      type={configEdit.value.split("_")[2]}
+                      val={configEdit.value.split("_")[1]}
+                    ></EditReg>
+                  );
+                case "inputstate1":
+                  return (
+                    <EditReg
+                      type={configEdit.value.split("_")[2]}
+                      val={configEdit.value.split("_")[1]}
+                    ></EditReg>
+                  );
+                case "inputstate2":
+                  return (
+                    <EditReg
+                      type={configEdit.value.split("_")[2]}
+                      val={configEdit.value.split("_")[1]}
+                    ></EditReg>
+                  );
+                case "outputstate":
+                  return (
+                    <EditReg
+                      type={configEdit.value.split("_")[2]}
+                      val={configEdit.value.split("_")[1]}
+                    ></EditReg>
+                  );
+                case "speed":
+                  return (
+                    <EditReg
+                      type={configEdit.value.split("_")[2]}
+                      val={configEdit.value.split("_")[1]}
+                    ></EditReg>
+                  );
+                case "position":
+                  return (
+                    <EditReg
+                      type={configEdit.value.split("_")[2]}
+                      val={configEdit.value.split("_")[1]}
+                    ></EditReg>
+                  );
+                case "dcbus":
+                  return (
+                    <EditReg
+                      type={configEdit.value.split("_")[2]}
+                      val={configEdit.value.split("_")[1]}
+                    ></EditReg>
+                  );
+                case "current":
+                  return (
+                    <EditReg
+                      type={configEdit.value.split("_")[2]}
+                      val={configEdit.value.split("_")[1]}
+                    ></EditReg>
+                  );
+                case "frequency":
+                  return (
+                    <EditReg
+                      type={configEdit.value.split("_")[2]}
+                      val={configEdit.value.split("_")[1]}
+                    ></EditReg>
+                  );
+              }
+            })();
         }
       })()}
     </>

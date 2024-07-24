@@ -3,7 +3,7 @@ import "./Warn.scss";
 
 import DataTable from "react-data-table-component";
 import { signal } from "@preact/signals-react";
-import { Empty } from "../../App";
+import { Empty, partnerInfor, userInfor } from "../../App";
 import { isMobile, warnfilter } from "../Navigation/Navigation";
 import WarnPopup from "./WarnPopup";
 import { useIntl } from "react-intl";
@@ -31,8 +31,9 @@ import { isBrowser, useMobileOrientation } from "react-device-detect";
 import { device } from "../Control/Device";
 import { plantnameFilterSignal } from "../Control/Dashboard";
 import { PiExportBold } from "react-icons/pi";
-import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+import { useSelector } from "react-redux";
 
 export const tabLable = signal("");
 export const open = signal([]);
@@ -51,19 +52,16 @@ export default function Warn(props) {
   const [datafilter, setDatafilter] = useState([]);
   const [datafilteropen, setDatafilteropen] = useState(open.value);
   const [datafilterclosed, setDatafilterclosed] = useState(closed.value);
-  const [boxid, setBoxid] = useState(""); //
-  const [level, setLevel] = useState(""); //
-  const [plant, setPlant] = useState(""); //
-  const [device, setDevice] = useState(""); //
   const [display, setDisplay] = useState(false);
   const [popupState, setPopupState] = useState(false);
   const [type, setType] = useState("");
-  const [cause, setCause] = useState([]); //
-  const [solution, setSolution] = useState([]); //
-  const [n, setN] = useState("No name");
   const warn = useRef();
   const notice = useRef();
   const { isLandscape } = useMobileOrientation();
+  const [seeAll, setSeeAll] = useState(false);
+  const [datePicked, setDatePicked] = useState(
+    moment(new Date()).format("YYYY-MM-DD")
+  );
 
   const [inf, setInf] = useState({
     boxid: 0,
@@ -483,15 +481,15 @@ export default function Warn(props) {
   const handleExport = () => {
     let data = [];
     data = datafilter.map((item) => {
-      return{
+      return {
         Errorcode: item.boxid,
         Plant: item.plant,
         Device: item.device,
         Opentime: item.opentime,
         Opendate: item.opendate,
         Level: item.level,
-      }
-    })
+      };
+    });
     // console.log(data);
     const worksheet = XLSX.utils.json_to_sheet(data);
     const workbook = XLSX.utils.book_new();
@@ -507,6 +505,117 @@ export default function Warn(props) {
     });
 
     saveAs(blob, "WarnList.xlsx");
+  };
+  const usr = useSelector((state) => state.admin.usr);
+
+  const handlePickDate = async (e) => {
+    const temp = e.currentTarget.value.split("-");
+    const reformat = temp[1] + "/" + temp[2] + "/" + temp[0];
+    console.log(reformat);
+    const warn = await callApi("post", host.DATA + "/getWarn2", {
+      usr: usr,
+      partnerid: partnerInfor.value.partnerid,
+      type: userInfor.value.type,
+      date: reformat,
+    });
+    // console.log(warn);
+    if (warn.status) {
+      dataWarn.value = [];
+      let newdb = warn.data.sort(
+        (a, b) =>
+          new Date(`${b.opendate_} ${b.opentime_}`) -
+          new Date(`${a.opendate_} ${a.opentime_}`)
+      );
+      newdb.map((item, index) => {
+        dataWarn.value = [
+          ...dataWarn.value,
+          {
+            boxid: item.boxid_,
+            warnid: item.warnid_,
+            plant: item.name_,
+            device: item.sn_,
+            opentime: item.opentime_,
+            opendate: item.opendate_,
+            state: item.state_, // 1:false, 0:true
+            level: item.level_,
+            plantid: item.plantid_,
+          },
+        ];
+      });
+    }
+  };
+
+  const handleSeeAll = async () => {
+    console.log(seeAll);
+    if (seeAll === false) {
+      const warn = await callApi("post", host.DATA + "/getWarn", {
+        usr: usr,
+        partnerid: partnerInfor.value.partnerid,
+        type: userInfor.value.type,
+      });
+      // console.log(warn);
+      if (warn.status) {
+        dataWarn.value = [];
+        let newdb = warn.data.sort(
+          (a, b) =>
+            new Date(`${b.opendate_} ${b.opentime_}`) -
+            new Date(`${a.opendate_} ${a.opentime_}`)
+        );
+        newdb.map((item, index) => {
+          dataWarn.value = [
+            ...dataWarn.value,
+            {
+              boxid: item.boxid_,
+              warnid: item.warnid_,
+              plant: item.name_,
+              device: item.sn_,
+              opentime: item.opentime_,
+              opendate: item.opendate_,
+              state: item.state_, // 1:false, 0:true
+              level: item.level_,
+              plantid: item.plantid_,
+            },
+          ];
+        });
+      }
+    } else {
+      let temp = datePicked.split("-");
+      let reformat = temp[1] + "/" + temp[2] + "/" + temp[0];
+      console.log(reformat);
+      const warn = await callApi("post", host.DATA + "/getWarn2", {
+        usr: usr,
+        partnerid: partnerInfor.value.partnerid,
+        type: userInfor.value.type,
+        date: reformat,
+      });
+      // console.log(warn);
+      if (warn.status) {
+        dataWarn.value = [];
+        let newdb = warn.data.sort(
+          (a, b) =>
+            new Date(`${b.opendate_} ${b.opentime_}`) -
+            new Date(`${a.opendate_} ${a.opentime_}`)
+        );
+        newdb.map((item, index) => {
+          dataWarn.value = [
+            ...dataWarn.value,
+            {
+              boxid: item.boxid_,
+              warnid: item.warnid_,
+              plant: item.name_,
+              device: item.sn_,
+              opentime: item.opentime_,
+              opendate: item.opendate_,
+              state: item.state_, // 1:false, 0:true
+              level: item.level_,
+              plantid: item.plantid_,
+            },
+          ];
+        });
+        // open.value = dataWarn.value.filter((item) => item.status == "open");
+        // closed.value = dataWarn.value.filter((item) => item.status == "closed");
+      }
+    }
   };
 
   return (
@@ -575,18 +684,34 @@ export default function Warn(props) {
                 );
               })}
 
-              {/* <div
-                className="DAT_Warn_Filter"
-                onClick={(e) => setDisplay(!display)}
-              >
-                <FiFilter />
-                <IoIosArrowUp
-                  style={{
-                    transform: display ? "rotate(180deg)" : "rotate(0deg)",
-                    transition: "0.5s",
+              <div className="DAT_Warn_Datepicker">
+                {seeAll ? (
+                  <></>
+                ) : (
+                  <input
+                    type="date"
+                    defaultValue={datePicked}
+                    max={moment(new Date()).format("YYYY-MM-DD")}
+                    onChange={(e) => {
+                      handlePickDate(e);
+                      setDatePicked(e.target.value);
+                    }}
+                  ></input>
+                )}
+
+                <div
+                  className="DAT_Warn_Datepicker_SeeAll"
+                  onClick={() => {
+                    setSeeAll(!seeAll);
+                    handleSeeAll();
                   }}
-                />
-              </div> */}
+                  style={{ color: seeAll ? "#195ede" : "black" }}
+                >
+                  {dataLang.formatMessage({
+                    id: seeAll ? "pickdate" : "seeall",
+                  })}
+                </div>
+              </div>
 
               <div className="DAT_Warn_Export">
                 <div

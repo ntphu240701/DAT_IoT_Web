@@ -31,6 +31,8 @@ import { lowercasedata } from "../ErrorSetting/ErrorSetting";
 import { alertDispatch } from "../Alert/Alert";
 import { LuRouter } from "react-icons/lu";
 import { BiMessageAltError } from "react-icons/bi";
+import { MdElevator, MdSolarPower } from "react-icons/md";
+import { FaGears } from "react-icons/fa6";
 
 export const groupRegID = signal("");
 export const configEdit = signal("");
@@ -44,6 +46,7 @@ export default function RegisterSetting() {
   const [statePopup, setStatePopup] = useState("");
   const [regList, setRegList] = useState(false);
   const [filterType, setFilterType] = useState(true);
+  const [bu, setBu] = useState("");
   const dataLang = useIntl();
 
   const columnGroupRole = [
@@ -55,16 +58,6 @@ export default function RegisterSetting() {
       style: {
         justifyContent: "left",
         height: "auto !important",
-      },
-    },
-    {
-      name: dataLang.formatMessage({ id: "erroraddress" }),
-      selector: (user) => user.addrcode,
-      sortable: true,
-      width: "150px",
-      style: {
-        height: "auto !important",
-        justifyContent: "left !important",
       },
     },
     //CONFIG
@@ -148,6 +141,409 @@ export default function RegisterSetting() {
         justifyContent: "center !important",
       },
     },
+    //ADDRESS
+    {
+      name: dataLang.formatMessage({ id: "erroraddress" }),
+      selector: (user) => user.addrcode,
+      sortable: true,
+      width: "100px",
+      style: {
+        height: "auto !important",
+        justifyContent: "left !important",
+      },
+    },
+    //REGISTER
+    {
+      name: dataLang.formatMessage({ id: "name" }),
+      selector: (user) => {
+        return (
+          <div
+            id={user.id + "_" + user.name + "_" + "name"}
+            style={{ cursor: "pointer" }}
+            onClick={(e) => {
+              changePopupstate();
+              setStatePopup("editName");
+              handleSetConfig(e);
+              console.log(user.name);
+            }}
+          >
+            {user.name ? user.name : "..."}
+          </div>
+        );
+      },
+      sortable: true,
+      width: "100px",
+      style: {
+        height: "auto !important",
+        justifyContent: "left !important",
+      },
+    },
+    {
+      name: dataLang.formatMessage({ id: "floor" }),
+      selector: (user) => {
+        return (
+          <div
+            id={user.id + "_" + user.floor + "_" + "floor"}
+            style={{ cursor: "pointer" }}
+            onClick={(e) => {
+              changePopupstate();
+              setStatePopup("editReg");
+              handleSetConfig(e);
+            }}
+          >
+            {user.floor ? user.floor : "..."}
+          </div>
+        );
+      },
+      sortable: true,
+      width: "100px",
+      style: {
+        height: "auto !important",
+        justifyContent: "left !important",
+      },
+    },
+    {
+      name: dataLang.formatMessage({ id: "inputstate1" }),
+      selector: (user) => {
+        return (
+          <div
+            id={user.id + "_" + user.inputstate1 + "_" + "inputstate1"}
+            style={{ cursor: "pointer" }}
+            onClick={(e) => {
+              changePopupstate();
+              setStatePopup("editReg");
+              handleSetConfig(e);
+            }}
+          >
+            {user.inputstate1 ? user.inputstate1 : "..."}
+          </div>
+        );
+      },
+      sortable: true,
+      width: "100px",
+      style: {
+        height: "auto !important",
+        justifyContent: "left !important",
+      },
+    },
+    {
+      name: dataLang.formatMessage({ id: "inputstate2" }),
+      selector: (user) => {
+        return (
+          <div
+            id={user.id + "_" + user.inputstate2 + "_" + "inputstate2"}
+            style={{ cursor: "pointer" }}
+            onClick={(e) => {
+              changePopupstate();
+              setStatePopup("editReg");
+              handleSetConfig(e);
+            }}
+          >
+            {user.inputstate2 ? user.inputstate2 : "..."}
+          </div>
+        );
+      },
+      sortable: true,
+      width: "100px",
+      style: {
+        height: "auto !important",
+        justifyContent: "left !important",
+      },
+    },
+    {
+      name: dataLang.formatMessage({ id: "outputstate" }),
+      selector: (user) => {
+        return (
+          <div
+            id={user.id + "_" + user.outputstate + "_" + "outputstate"}
+            style={{ cursor: "pointer" }}
+            onClick={(e) => {
+              changePopupstate();
+              setStatePopup("editReg");
+              handleSetConfig(e);
+            }}
+          >
+            {user.outputstate ? user.outputstate : "..."}
+          </div>
+        );
+      },
+      sortable: true,
+      width: "100px",
+      style: {
+        height: "auto !important",
+        justifyContent: "left !important",
+      },
+    },
+    {
+      name: dataLang.formatMessage({ id: "speed" }),
+      selector: (user) => {
+        return (
+          <div
+            id={user.id + "_" + user.speed + "_" + "speed"}
+            style={{ cursor: "pointer" }}
+            onClick={(e) => {
+              changePopupstate();
+              setStatePopup("editReg");
+              handleSetConfig(e);
+            }}
+          >
+            {user.speed ? user.speed : "..."}
+          </div>
+        );
+      },
+      sortable: true,
+      width: "100px",
+      style: {
+        height: "auto !important",
+        justifyContent: "left !important",
+      },
+    },
+    {
+      name: dataLang.formatMessage({ id: "position" }),
+      selector: (user) => {
+        return (
+          <div
+            id={user.id + "_" + user.position + "_" + "position"}
+            style={{ cursor: "pointer" }}
+            onClick={(e) => {
+              changePopupstate();
+              setStatePopup("editReg");
+              handleSetConfig(e);
+            }}
+          >
+            {user.position ? user.position : "..."}
+          </div>
+        );
+      },
+      sortable: true,
+      width: "100px",
+      style: {
+        height: "auto !important",
+        justifyContent: "left !important",
+      },
+    },
+    {
+      name: dataLang.formatMessage({ id: "dcbus" }),
+      selector: (user) => {
+        return (
+          <div
+            id={user.id + "_" + user.dcbus + "_" + "dcbus"}
+            style={{ cursor: "pointer" }}
+            onClick={(e) => {
+              changePopupstate();
+              setStatePopup("editReg");
+              handleSetConfig(e);
+            }}
+          >
+            {user.dcbus ? user.dcbus : "..."}
+          </div>
+        );
+      },
+      sortable: true,
+      width: "100px",
+      style: {
+        height: "auto !important",
+        justifyContent: "left !important",
+      },
+    },
+    {
+      name: dataLang.formatMessage({ id: "current" }),
+      selector: (user) => {
+        return (
+          <div
+            id={user.id + "_" + user.current + "_" + "current"}
+            style={{ cursor: "pointer" }}
+            onClick={(e) => {
+              changePopupstate();
+              setStatePopup("editReg");
+              handleSetConfig(e);
+            }}
+          >
+            {user.current ? user.current : "..."}
+          </div>
+        );
+      },
+      sortable: true,
+      width: "100px",
+      style: {
+        height: "auto !important",
+        justifyContent: "left !important",
+      },
+    },
+    {
+      name: dataLang.formatMessage({ id: "Frequency" }),
+      selector: (user) => {
+        return (
+          <div
+            id={user.id + "_" + user.frequency + "_" + "frequency"}
+            style={{ cursor: "pointer" }}
+            onClick={(e) => {
+              changePopupstate();
+              setStatePopup("editReg");
+              handleSetConfig(e);
+            }}
+          >
+            {user.frequency ? user.frequency : "..."}
+          </div>
+        );
+      },
+      sortable: true,
+      width: "100px",
+      style: {
+        height: "auto !important",
+        justifyContent: "left !important",
+      },
+    },
+    //SETTING
+    {
+      name: dataLang.formatMessage({ id: "setting" }),
+      selector: (row) => (
+        <>
+          {row.type_ === "master" ? (
+            <></>
+          ) : ruleInfor.value.setting.registersetting.modify === true ? (
+            <PopupState variant="popper" popupId="demo-popup-popper">
+              {(popupState) => (
+                <div className="DAT_TableEdit">
+                  <IoMdMore size={20} {...bindToggle(popupState)} />
+                  <Menu {...bindMenu(popupState)}>
+                    <MenuItem
+                      id={row.id}
+                      onClick={(e) => {
+                        changePopupstate();
+                        setStatePopup("removeError");
+                        configEdit.value = e.currentTarget.id;
+                        console.log(configEdit.value);
+                        popupState.close();
+                      }}
+                    >
+                      <IoTrashOutline size={16} />
+                      &nbsp;
+                      {dataLang.formatMessage({ id: "delete" })}
+                    </MenuItem>
+                  </Menu>
+                </div>
+              )}
+            </PopupState>
+          ) : (
+            <></>
+          )}
+        </>
+      ),
+      width: "80px",
+      style: {
+        height: "auto !important",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      },
+    },
+  ];
+
+  const columnAnotherBu = [
+    {
+      name: dataLang.formatMessage({ id: "ordinalNumber" }),
+      selector: (row, index) => index + 1,
+      sortable: true,
+      width: "80px",
+      style: {
+        justifyContent: "left",
+        height: "auto !important",
+      },
+    },
+    //CONFIG
+    {
+      name: dataLang.formatMessage({ id: "config" }),
+      selector: (row) => {
+        let cause = row.register.sort((a, b) => a.id - b.id);
+        // console.log(cause);
+        return (
+          <div style={{ height: "auto" }}>
+            {cause.map((err, index) => {
+              return (
+                <div
+                  key={index}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "8px 0",
+                    gap: "20px",
+                  }}
+                >
+                  <div className="DAT_TableText">
+                    {err.addr}: {err.val}. Base: {err.base}
+                  </div>
+                  {ruleInfor.value.setting.registersetting.modify === true ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        gap: "10px",
+                      }}
+                    >
+                      <FiEdit
+                        size={16}
+                        style={{ cursor: "pointer" }}
+                        id={`${row.id}_${err.id}_EDIT`}
+                        onClick={(e) => {
+                          changePopupstate();
+                          setStatePopup("editConfig");
+                          handleSetConfig(e);
+                        }}
+                      />
+                      <IoTrashOutline
+                        size={16}
+                        style={{ cursor: "pointer" }}
+                        id={`${row.id}_${err.id}_REMOVE`}
+                        onClick={(e) => {
+                          changePopupstate();
+                          setStatePopup("removeConfig");
+                          handleSetConfig(e);
+                        }}
+                      />
+                      {parseInt(index) === cause.length - 1 ? (
+                        <IoIosAddCircleOutline
+                          size={16}
+                          style={{ cursor: "pointer" }}
+                          id={`${row.id}_ADD`}
+                          onClick={(e) => {
+                            // handleAddConfig(e);
+                            handleSetConfig(e);
+                            changePopupstate();
+                            setStatePopup("addNewConfig");
+                          }}
+                        />
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        );
+      },
+      style: {
+        minWidth: "200px",
+        height: "auto !important",
+        justifyContent: "center !important",
+      },
+    },
+    //ADDRESS
+    {
+      name: dataLang.formatMessage({ id: "erroraddress" }),
+      selector: (user) => user.addrcode,
+      sortable: true,
+      width: "100px",
+      style: {
+        height: "auto !important",
+        justifyContent: "left !important",
+      },
+    },
+    //SETTING
     {
       name: dataLang.formatMessage({ id: "setting" }),
       selector: (row) => (
@@ -241,50 +637,130 @@ export default function RegisterSetting() {
 
   //FUNCTION POPUP
 
-  const handleSubmitAddNewReg = (errAdd1, errAdd2) => {
-    console.log(errAdd1, errAdd2);
-    let temp = [...dataRegister];
-    if (errAdd1 === "" || errAdd2 === "") {
+  const updateReg = async (reg1, reg2) => {
+    console.log(reg1, reg2);
+    console.log(configEdit.value);
+    if (reg1 === "" || reg2 === "") {
       alertDispatch(dataLang.formatMessage({ id: "alert_22" }));
     } else {
-      if (
-        temp.filter((data) => data.addrcode === `${errAdd1}-${errAdd2}`)
-          .length > 0
-      ) {
-        alertDispatch(dataLang.formatMessage({ id: "alert_49" }));
+      const i = dataRegister.findIndex(
+        (data) => data.id === parseInt(configEdit.value.split("_")[0])
+      );
+      dataRegister[i][configEdit.value.split("_")[2]] = reg1 + "-" + reg2;
+      const upReg = async () => {
+        let req = await callApi("post", `${host.DATA}/updateRegister`, {
+          sn: groupRegID.value,
+          data: JSON.stringify(dataRegister),
+        });
+        console.log(req);
+        setDataRegister([...dataRegister]);
+      };
+      upReg();
+      changePopupstate();
+      console.log(dataRegister);
+    }
+  };
+
+  const handleSubmitAddNewReg = (errAdd1, errAdd2, errName) => {
+    console.log(errAdd1, errAdd2);
+    let temp = [...dataRegister];
+    if (bu === "elev") {
+      if (errAdd1 === "" || errAdd2 === "" || errName === "") {
+        alertDispatch(dataLang.formatMessage({ id: "alert_22" }));
       } else {
-        temp = [
-          ...temp,
-          {
-            id:
-              parseInt(temp.length) === 0
-                ? 1
-                : temp[parseInt(temp.length) - 1].id + 1,
-            // id: parseInt(temp.length) + 1,
-            addrcode: `${errAdd1}-${errAdd2}`,
-            register: [
-              {
-                id: 1,
-                addr: `${errAdd1}-${errAdd2}`,
-                val: "1",
-                base: "10",
-              },
-            ],
-          },
-        ];
-        const upReg = async () => {
-          let req = await callApi("post", `${host.DATA}/updateRegister`, {
-            sn: groupRegID.value,
-            data: JSON.stringify(temp),
-          });
-          console.log(req);
-          if (req.status === true) {
-            setDataRegister([...temp]);
-            setDataRegisterSub([...temp]);
-            changePopupstate();
-          }
-        };
-        upReg();
+        if (
+          temp.filter((data) => data.addrcode === `${errAdd1}-${errAdd2}`)
+            .length > 0
+        ) {
+          alertDispatch(dataLang.formatMessage({ id: "alert_49" }));
+        } else {
+          temp = [
+            ...temp,
+            {
+              id:
+                parseInt(temp.length) === 0
+                  ? 1
+                  : temp[parseInt(temp.length) - 1].id + 1,
+              // id: parseInt(temp.length) + 1,
+              addrcode: `${errAdd1}-${errAdd2}`,
+              name: errName,
+              floor: undefined,
+              inputstate1: undefined,
+              inputstate2: undefined,
+              outputstate: undefined,
+              speed: undefined,
+              position: undefined,
+              dcbus: undefined,
+              current: undefined,
+              frequency: undefined,
+              register: [
+                {
+                  id: 1,
+                  addr: `${errAdd1}-${errAdd2}`,
+                  val: "1",
+                  base: "10",
+                },
+              ],
+            },
+          ];
+          const upReg = async () => {
+            let req = await callApi("post", `${host.DATA}/updateRegister`, {
+              sn: groupRegID.value,
+              data: JSON.stringify(temp),
+            });
+            console.log(req);
+            if (req.status === true) {
+              setDataRegister([...temp]);
+              setDataRegisterSub([...temp]);
+              changePopupstate();
+            }
+          };
+          upReg();
+        }
+      }
+    } else {
+      if (errAdd1 === "" || errAdd2 === "") {
+        alertDispatch(dataLang.formatMessage({ id: "alert_22" }));
+      } else {
+        if (
+          temp.filter((data) => data.addrcode === `${errAdd1}-${errAdd2}`)
+            .length > 0
+        ) {
+          alertDispatch(dataLang.formatMessage({ id: "alert_49" }));
+        } else {
+          temp = [
+            ...temp,
+            {
+              id:
+                parseInt(temp.length) === 0
+                  ? 1
+                  : temp[parseInt(temp.length) - 1].id + 1,
+              // id: parseInt(temp.length) + 1,
+              addrcode: `${errAdd1}-${errAdd2}`,
+              register: [
+                {
+                  id: 1,
+                  addr: `${errAdd1}-${errAdd2}`,
+                  val: "1",
+                  base: "10",
+                },
+              ],
+            },
+          ];
+          const upReg = async () => {
+            let req = await callApi("post", `${host.DATA}/updateRegister`, {
+              sn: groupRegID.value,
+              data: JSON.stringify(temp),
+            });
+            console.log(req);
+            if (req.status === true) {
+              setDataRegister([...temp]);
+              setDataRegisterSub([...temp]);
+              changePopupstate();
+            }
+          };
+          upReg();
+        }
       }
     }
   };
@@ -643,14 +1119,28 @@ export default function RegisterSetting() {
                         onClick={(e) => {
                           handleChangeGroup(e);
                           setRegList(true);
+                          setBu(item.bu_);
                         }}
                       >
                         <div>
                           <div
                             className="DAT_RS_Content_DevideTable_Left_ItemList_Item_Name"
-                            style={{ fontSize: "15px" }}
+                            style={{
+                              fontSize: "15px",
+                              display: "flex",
+                              gap: "15px",
+                            }}
                           >
                             {item.sn_}
+                            {item.bu_ === "elev" ? (
+                              <MdElevator size={19} />
+                            ) : item.bu_ === "auto" ? (
+                              <FaGears size={19} />
+                            ) : item.bu_ === "energy" ? (
+                              <MdSolarPower size={19} />
+                            ) : (
+                              <></>
+                            )}
                           </div>
 
                           <div
@@ -723,7 +1213,9 @@ export default function RegisterSetting() {
                     ) : (
                       <DataTable
                         className="DAT_Table_GroupRole"
-                        columns={columnGroupRole}
+                        columns={
+                          bu === "elev" ? columnGroupRole : columnAnotherBu
+                        }
                         data={dataRegister}
                         pagination
                         paginationComponentOptions={paginationComponentOptions}
@@ -740,6 +1232,8 @@ export default function RegisterSetting() {
           {popup ? (
             <div className="DAT_PopupBG">
               <Popup
+                updateReg={updateReg}
+                bu={bu}
                 closeopen={changePopupstate}
                 type={statePopup}
                 data={dataRegister}
@@ -1043,6 +1537,8 @@ export default function RegisterSetting() {
           {popup ? (
             <div className="DAT_PopupBGMobile">
               <Popup
+                updateReg={updateReg}
+                bu={bu}
                 closeopen={changePopupstate}
                 type={statePopup}
                 data={dataRegister}
