@@ -62,7 +62,9 @@ export default function Popup(props) {
 
   //addNewReg,
   const EditReg = (type, val) => {
-    console.log(val);
+    // console.log(configEdit.value.split("_")[1]);
+    const t = configEdit.value.split("_")[1].split("-");
+    console.log(t);
     return (
       <form className="DAT_CreateErrSetting">
         <div className="DAT_CreateErrSetting_Head">
@@ -86,8 +88,19 @@ export default function Popup(props) {
           <span style={{ minWidth: "70px" }}>
             {dataLang.formatMessage({ id: type.type })}:
           </span>
-          <input type="number" ref={regRef1} style={{ width: "65px" }} /> -
-          <input type="number" ref={regRef2} style={{ width: "65px" }} />
+          <input
+            type="number"
+            ref={regRef1}
+            defaultValue={t[0]}
+            style={{ width: "65px" }}
+          />{" "}
+          -
+          <input
+            type="number"
+            ref={regRef2}
+            defaultValue={t[1]}
+            style={{ width: "65px" }}
+          />
         </div>
 
         <div className="DAT_CreateErrSetting_Foot">
@@ -154,20 +167,16 @@ export default function Popup(props) {
                     style={{ width: "55px" }}
                   />
                 </div>
-                {props.bu === "elev" ? (
-                  <div className="DAT_CreateErrSetting_Body">
-                    <span style={{ width: "48px" }}>
-                      {dataLang.formatMessage({ id: "name" })}:
-                    </span>
-                    <input
-                      type="text"
-                      ref={errName}
-                      // style={{ width: "200px !important" }}
-                    />
-                  </div>
-                ) : (
-                  <></>
-                )}
+                <div className="DAT_CreateErrSetting_Body">
+                  <span style={{ width: "48px" }}>
+                    {dataLang.formatMessage({ id: "name" })}:
+                  </span>
+                  <input
+                    type="text"
+                    ref={errName}
+                    // style={{ width: "200px !important" }}
+                  />
+                </div>
 
                 <div className="DAT_CreateErrSetting_Foot">
                   <div className="DAT_CreateErrSetting_Foot_Left"></div>
@@ -516,6 +525,7 @@ export default function Popup(props) {
                   <input
                     type="text"
                     ref={errName}
+                    defaultValue={configEdit.value.split("_")[1]}
                     style={{ width: "100% !important" }}
                   />
                 </div>
@@ -530,6 +540,7 @@ export default function Popup(props) {
                       }}
                       onClick={(e) => {
                         e.preventDefault();
+                        props.updateName(errName.current.value);
                       }}
                     >
                       {dataLang.formatMessage({ id: "confirm" })}

@@ -12,7 +12,7 @@ import { host } from "../Lang/Contant";
 import { alertDispatch } from "../Alert/Alert";
 import { useIntl } from "react-intl";
 import adminslice from "../Redux/adminslice";
-import { dataWarn } from "../Warn/Warn";
+import { dataWarn, dataWarnNoti } from "../Warn/Warn";
 
 import { BsFillMenuButtonWideFill } from "react-icons/bs";
 import { IoIosNotificationsOutline } from "react-icons/io";
@@ -115,17 +115,50 @@ export default function Navigation(props) {
 
   const handleFilterWarn = async (e) => {
     // projectwarnfilter.value = 0;
+    const t = e.currentTarget.id.split("_");
 
-    let newdata = dataWarn.value.find(
-      (item) => item.warnid == parseInt(e.currentTarget.id)
-    );
+    console.log(t[1]);
+    const warn = await callApi("post", host.DATA + "/getWarn2", {
+      usr: usr,
+      partnerid: partnerInfor.value.partnerid,
+      type: userInfor.value.type,
+      date: t[2],
+    });
+    if (warn.status) {
+      let newdb = warn.data.sort(
+        (a, b) =>
+          new Date(`${b.opendate_} ${b.opentime_}`) -
+          new Date(`${a.opendate_} ${a.opentime_}`)
+      );
+      newdb.map((item, index) => {
+        dataWarn.value = [
+          ...dataWarn.value,
+          {
+            boxid: item.boxid_,
+            warnid: item.warnid_,
+            plant: item.name_,
+            device: item.sn_,
+            name: item.namewarn_,
+            opentime: item.opentime_,
+            opendate: item.opendate_,
+            state: item.state_, // 1:false, 0:true
+            level: item.level_,
+            plantid: item.plantid_,
+          },
+        ];
+      });
+    }
+
+    let newdata = dataWarn.value.find((item) => item.plantid == parseInt(t[1]));
+    console.log(newdata);
 
     warnfilter.value = newdata;
     notifNav.value = false;
 
-    const state = await callApi("post", host.DATA + "/updateWarn", {
-      id: e.currentTarget.id,
+    const state = await callApi("post", host.DATA + "/updateWarnnotif", {
+      id: t[0],
     });
+    console.log(state);
     if (state.status) {
       notifNav.value = false;
     }
@@ -211,11 +244,12 @@ export default function Navigation(props) {
           >
             <IoIosNotificationsOutline color="gray" size={22} />
 
-            {dataWarn.value.filter((item) => item.state == 1).length === 0 ? (
+            {dataWarnNoti.value.filter((item) => item.state == 1).length ===
+            0 ? (
               <></>
             ) : (
               <span>
-                {dataWarn.value.filter((item) => item.state == 1).length}
+                {dataWarnNoti.value.filter((item) => item.state == 1).length}
               </span>
             )}
           </button>
@@ -312,9 +346,9 @@ export default function Navigation(props) {
 
         <div className="DAT_NavNotif-content">
           <div className="DAT_NavNotif-content-main">
-            {dataWarn.value.length !== 0 ? (
+            {dataWarnNoti.value.length !== 0 ? (
               <>
-                {dataWarn.value.map((item, index) => (
+                {dataWarnNoti.value.map((item, index) => (
                   <div className="DAT_NavNotif-content-main-group" key={index}>
                     <div className="DAT_NavNotif-content-main-group-datetime">
                       {item.opentime + " " + item.opendate}
@@ -327,7 +361,9 @@ export default function Navigation(props) {
                     >
                       <div
                         className="DAT_NavNotif-content-main-group-content"
-                        id={item.warnid}
+                        id={
+                          item.warnid + "_" + item.plantid + "_" + item.opendate
+                        }
                         style={{
                           textDecoration: "none",
                           backgroundColor:
@@ -352,7 +388,7 @@ export default function Navigation(props) {
                           &nbsp;
                           {dataLang.formatMessage({ id: "at" })}
                           &nbsp;
-                          {item.plant}
+                          {item.plant} - {item.name}
                         </div>
                         <div className="DAT_NavNotif-content-main-group-content-device">
                           {dataLang.formatMessage({ id: "device" })}: &nbsp;

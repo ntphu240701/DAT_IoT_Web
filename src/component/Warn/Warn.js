@@ -42,6 +42,7 @@ export const temp = signal([]);
 export const idDel = signal();
 export const idInfo = signal();
 export const dataWarn = signal([]);
+export const dataWarnNoti = signal([]);
 
 const warntab = signal("all");
 const tabMobile = signal(false);
@@ -58,7 +59,7 @@ export default function Warn(props) {
   const warn = useRef();
   const notice = useRef();
   const { isLandscape } = useMobileOrientation();
-  const [seeAll, setSeeAll] = useState(false);
+  const [seeAll, setSeeAll] = useState(true);
   const [datePicked, setDatePicked] = useState(
     moment(new Date()).format("YYYY-MM-DD")
   );
@@ -105,6 +106,15 @@ export default function Warn(props) {
       ),
       sortable: true,
       width: "100px",
+      style: {
+        justifyContent: "left !important",
+      },
+    },
+    {
+      name: dataLang.formatMessage({ id: "name" }),
+      selector: (row) => row.name,
+      sortable: true,
+      minWidth: "250px",
       style: {
         justifyContent: "left !important",
       },
@@ -441,13 +451,12 @@ export default function Warn(props) {
   useEffect(() => {
     if (warnfilter.value.device) {
       let d = document.getElementById("warnsearch");
-      d.value = warnfilter.value.device;
+      d.value = warnfilter.value.plant;
       let temp_ = dataWarn.value.filter(
-        (item) => item.warnid == warnfilter.value.warnid
+        (item) => item.plant == warnfilter.value.plant
       );
       setDatafilter([...temp_]);
     }
-
     // eslint-disable-next-line
   }, [dataWarn.value, warnfilter.value]);
 
@@ -534,6 +543,7 @@ export default function Warn(props) {
             warnid: item.warnid_,
             plant: item.name_,
             device: item.sn_,
+            name: item.namewarn_,
             opentime: item.opentime_,
             opendate: item.opendate_,
             state: item.state_, // 1:false, 0:true
@@ -684,22 +694,22 @@ export default function Warn(props) {
                 );
               })}
 
-              <div className="DAT_Warn_Datepicker">
-                {seeAll ? (
+              <div className="DAT_Warn_Export">
+                {/* {seeAll ? (
                   <></>
-                ) : (
-                  <input
-                    type="date"
-                    defaultValue={datePicked}
-                    max={moment(new Date()).format("YYYY-MM-DD")}
-                    onChange={(e) => {
-                      handlePickDate(e);
-                      setDatePicked(e.target.value);
-                    }}
-                  ></input>
-                )}
+                ) : ( */}
+                <input
+                  type="date"
+                  defaultValue={datePicked}
+                  max={moment(new Date()).format("YYYY-MM-DD")}
+                  onChange={(e) => {
+                    handlePickDate(e);
+                    setDatePicked(e.target.value);
+                  }}
+                ></input>
+                {/* )} */}
 
-                <div
+                {/* <div
                   className="DAT_Warn_Datepicker_SeeAll"
                   onClick={() => {
                     setSeeAll(!seeAll);
@@ -710,10 +720,7 @@ export default function Warn(props) {
                   {dataLang.formatMessage({
                     id: seeAll ? "pickdate" : "seeall",
                   })}
-                </div>
-              </div>
-
-              <div className="DAT_Warn_Export">
+                </div> */}
                 <div
                   className="DAT_Warn_Export_Icon"
                   onClick={() => handleExport()}

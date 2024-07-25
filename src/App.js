@@ -18,7 +18,7 @@ import { host } from "./component/Lang/Contant";
 import adminslice from "./component/Redux/adminslice";
 import { callApi } from "./component/Api/Api";
 import { signal } from "@preact/signals-react";
-import { closed, dataWarn, open } from "./component/Warn/Warn";
+import { closed, dataWarn, dataWarnNoti, open } from "./component/Warn/Warn";
 import { useIntl } from "react-intl";
 // import ErrorSetting from "./component/ErrorSetting/ErrorSetting";
 import { io } from "socket.io-client";
@@ -271,14 +271,48 @@ export default function App() {
   }, [status]);
 
   useEffect(() => {
+    const getwarnnotif = async (usr, partnerid, type) => {
+      const warn = await callApi("post", host.DATA + "/getWarnnotif", {
+        usr: usr,
+        partnerid: partnerid,
+        type: type,
+      });
+      console.log(warn.data);
+      if (warn.status) {
+        let newdb = warn.data.sort(
+          (a, b) =>
+            new Date(`${b.opendate_} ${b.opentime_}`) -
+            new Date(`${a.opendate_} ${a.opentime_}`)
+        );
+        newdb.map((item, index) => {
+          dataWarnNoti.value = [
+            ...dataWarnNoti.value,
+            {
+              boxid: item.boxid_,
+              warnid: item.warnid_,
+              plant: item.name_,
+              device: item.sn_,
+              name: item.namewarn_,
+              opentime: item.opentime_,
+              opendate: item.opendate_,
+              state: item.state_, // 1:false, 0:true
+              level: item.level_,
+              plantid: item.plantid_,
+            },
+          ];
+        });
+      }
+    };
+
     const getwarn = async (usr, partnerid, type) => {
       const warn = await callApi("post", host.DATA + "/getWarn2", {
         usr: usr,
         partnerid: partnerid,
         type: type,
         date: moment(new Date()).format("MM/DD/YYYY"),
+        // date: "07/23/2024",
       });
-      // console.log(warn);
+      console.log(warn.data);
       if (warn.status) {
         let newdb = warn.data.sort(
           (a, b) =>
@@ -293,6 +327,7 @@ export default function App() {
               warnid: item.warnid_,
               plant: item.name_,
               device: item.sn_,
+              name: item.namewarn_,
               opentime: item.opentime_,
               opendate: item.opendate_,
               state: item.state_, // 1:false, 0:true
@@ -314,53 +349,96 @@ export default function App() {
       // console.log(res);
       if (res.status) {
         res.data.map((item, index) => {
-          socket.value.on("Server/notice/" + item.sn_, function (data) {
-            console.log("Notice socket", item.sn_, data);
-            if (data.type === "add") {
-              dataWarn.value = [
-                {
-                  boxid: data.boxid_,
-                  warnid: data.warnid_,
-                  plant: data.name_,
-                  device: data.sn_,
-                  opentime: data.opentime_,
-                  opendate: data.opendate_,
-                  state: data.state_, // 1:false, 0:true
-                  level: "warn",
-                  plantid: data.plantid_,
-                },
-                ...dataWarn.value,
-              ];
-            } else {
-              // let index = dataWarn.value.findIndex((item) => item.warnid == data.warnid_);
-              let newWarn = dataWarn.value.filter(
-                (item) => item.warnid != data.warnid_
-              );
-              newWarn = [
-                {
-                  boxid: data.boxid_,
-                  warnid: data.warnid_,
-                  plant: data.name_,
-                  device: data.sn_,
-                  opentime: data.opentime_,
-                  opendate: data.opendate_,
-                  state: data.state_, // 1:false, 0:true
-                  level: "warn",
-                  plantid: data.plantid_,
-                },
-                ...newWarn,
-              ];
-              // console.log(newWarn[index])
-              // newWarn[index]={
-              //     ...newWarn[index],
-              //     state: data.state_,
-              //     opentime: data.opentime_,
-              //     opendate: data.opendate_,
-              // }
+          socket.value.on(
+            "Server/notice/" + item.sn_,
+            function (data, datanoti) {
+              console.log("Notice socket", item.sn_, data, datanoti);
+              if (data.type === "add") {
+                dataWarn.value = [
+                  {
+                    boxid: data.boxid_,
+                    warnid: data.warnid_,
+                    plant: data.name_,
+                    name: data.namewarn_,
+                    device: data.sn_,
+                    opentime: data.opentime_,
+                    opendate: data.opendate_,
+                    state: data.state_, // 1:false, 0:true
+                    level: "warn",
+                    plantid: data.plantid_,
+                  },
+                  ...dataWarn.value,
+                ];
+              } else {
+                // let index = dataWarn.value.findIndex((item) => item.warnid == data.warnid_);
+                let newWarn = dataWarn.value.filter(
+                  (item) => item.warnid != data.warnid_
+                );
+                newWarn = [
+                  {
+                    boxid: data.boxid_,
+                    warnid: data.warnid_,
+                    plant: data.name_,
+                    name: data.namewarn_,
+                    device: data.sn_,
+                    opentime: data.opentime_,
+                    opendate: data.opendate_,
+                    state: data.state_, // 1:false, 0:true
+                    level: "warn",
+                    plantid: data.plantid_,
+                  },
+                  ...newWarn,
+                ];
+                // console.log(newWarn[index])
+                // newWarn[index]={
+                //     ...newWarn[index],
+                //     state: data.state_,
+                //     opentime: data.opentime_,
+                //     opendate: data.opendate_,
+                // }
 
-              dataWarn.value = [...newWarn];
+                dataWarn.value = [...newWarn];
+              }
+              if (datanoti.type === "add") {
+                dataWarnNoti.value = [
+                  {
+                    boxid: data.boxid_,
+                    warnid: data.warnid_,
+                    plant: data.name_,
+                    name: data.namewarn_,
+                    device: data.sn_,
+                    opentime: data.opentime_,
+                    opendate: data.opendate_,
+                    state: data.state_, // 1:false, 0:true
+                    level: "warn",
+                    plantid: data.plantid_,
+                  },
+                  ...dataWarnNoti.value,
+                ];
+              } else {
+                let newWarn = dataWarnNoti.value.filter(
+                  (item) => item.plantid != data.plantid_
+                );
+                console.log(newWarn);
+                newWarn = [
+                  {
+                    boxid: data.boxid_,
+                    warnid: data.warnid_,
+                    plant: data.name_,
+                    name: data.namewarn_,
+                    device: data.sn_,
+                    opentime: data.opentime_,
+                    opendate: data.opendate_,
+                    state: data.state_, // 1:false, 0:true
+                    level: "warn",
+                    plantid: data.plantid_,
+                  },
+                  ...newWarn,
+                ];
+                dataWarnNoti.value = [...newWarn];
+              }
             }
-          });
+          );
         });
       }
     };
@@ -368,6 +446,7 @@ export default function App() {
     if (userInfor.value.type && partnerInfor.value.partnerid && usr) {
       getwarn(usr, partnerInfor.value.partnerid, userInfor.value.type);
       getAllLogger(usr, partnerInfor.value.partnerid, userInfor.value.type);
+      getwarnnotif(usr, partnerInfor.value.partnerid, userInfor.value.type);
     }
   }, [userInfor.value.type, partnerInfor.value.partnerid, usr]);
   const handleOut = () => {

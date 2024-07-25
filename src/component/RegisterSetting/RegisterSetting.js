@@ -543,6 +543,31 @@ export default function RegisterSetting() {
         justifyContent: "left !important",
       },
     },
+    {
+      name: dataLang.formatMessage({ id: "name" }),
+      selector: (user) => {
+        return (
+          <div
+            id={user.id + "_" + user.name + "_" + "name"}
+            style={{ cursor: "pointer" }}
+            onClick={(e) => {
+              changePopupstate();
+              setStatePopup("editName");
+              handleSetConfig(e);
+              console.log(user.name);
+            }}
+          >
+            {user.name ? user.name : "..."}
+          </div>
+        );
+      },
+      sortable: true,
+      width: "100px",
+      style: {
+        height: "auto !important",
+        justifyContent: "left !important",
+      },
+    },
     //SETTING
     {
       name: dataLang.formatMessage({ id: "setting" }),
@@ -637,6 +662,28 @@ export default function RegisterSetting() {
 
   //FUNCTION POPUP
 
+  const updateName = async (name) => {
+    if (name === "") {
+      alertDispatch(dataLang.formatMessage({ id: "alert_22" }));
+    } else {
+      const i = dataRegister.findIndex(
+        (data) => data.id === parseInt(configEdit.value.split("_")[0])
+      );
+      dataRegister[i].name = name;
+      const upReg = async () => {
+        let req = await callApi("post", `${host.DATA}/updateRegister`, {
+          sn: groupRegID.value,
+          data: JSON.stringify(dataRegister),
+        });
+        console.log(req);
+        setDataRegister([...dataRegister]);
+      };
+      upReg();
+      changePopupstate();
+      console.log(dataRegister);
+    }
+  };
+
   const updateReg = async (reg1, reg2) => {
     console.log(reg1, reg2);
     console.log(configEdit.value);
@@ -719,7 +766,7 @@ export default function RegisterSetting() {
         }
       }
     } else {
-      if (errAdd1 === "" || errAdd2 === "") {
+      if (errAdd1 === "" || errAdd2 === "" || errName === "") {
         alertDispatch(dataLang.formatMessage({ id: "alert_22" }));
       } else {
         if (
@@ -737,6 +784,7 @@ export default function RegisterSetting() {
                   : temp[parseInt(temp.length) - 1].id + 1,
               // id: parseInt(temp.length) + 1,
               addrcode: `${errAdd1}-${errAdd2}`,
+              name: errName,
               register: [
                 {
                   id: 1,
@@ -1232,6 +1280,7 @@ export default function RegisterSetting() {
           {popup ? (
             <div className="DAT_PopupBG">
               <Popup
+                updateName={updateName}
                 updateReg={updateReg}
                 bu={bu}
                 closeopen={changePopupstate}
@@ -1537,6 +1586,7 @@ export default function RegisterSetting() {
           {popup ? (
             <div className="DAT_PopupBGMobile">
               <Popup
+                updateName={updateName}
                 updateReg={updateReg}
                 bu={bu}
                 closeopen={changePopupstate}

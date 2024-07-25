@@ -189,6 +189,11 @@
   }
 
   &_Export {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-top: -5px;
 
     &_Icon {
       display: flex;
@@ -204,6 +209,15 @@
       &:hover {
         background-color: #fff;
       }
+    }
+
+    & input {
+      border: none;
+      outline: none;
+      font-size: 14px;
+      font-family: segoeui;
+      padding: 7px;
+      border-radius: 5px;
     }
   }
 
@@ -222,8 +236,10 @@
       padding: 7px;
       border-radius: 5px;
     }
+
     &_SeeAll {
       cursor: pointer;
+
       &:hover {
         color: #6495ed;
         transition: 0.2s ease-in-out;
