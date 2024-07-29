@@ -4,7 +4,12 @@ import "./Warn.scss";
 import DataTable from "react-data-table-component";
 import { signal } from "@preact/signals-react";
 import { Empty, partnerInfor, userInfor } from "../../App";
-import { isMobile, warnfilter } from "../Navigation/Navigation";
+import {
+  datePickedSignal,
+  isMobile,
+  notifid,
+  warnfilter,
+} from "../Navigation/Navigation";
 import WarnPopup from "./WarnPopup";
 import { useIntl } from "react-intl";
 import { ruleInfor } from "../../App";
@@ -34,6 +39,7 @@ import { PiExportBold } from "react-icons/pi";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { useSelector } from "react-redux";
+import { lowercasedata } from "../ErrorSetting/ErrorSetting";
 
 export const tabLable = signal("");
 export const open = signal([]);
@@ -60,9 +66,6 @@ export default function Warn(props) {
   const notice = useRef();
   const { isLandscape } = useMobileOrientation();
   const [seeAll, setSeeAll] = useState(true);
-  const [datePicked, setDatePicked] = useState(
-    moment(new Date()).format("YYYY-MM-DD")
-  );
 
   const [inf, setInf] = useState({
     boxid: 0,
@@ -447,43 +450,66 @@ export default function Warn(props) {
     setDatafilter(newdb);
   };
 
-  // by Mr Loc
   useEffect(() => {
-    if (warnfilter.value.device) {
-      let d = document.getElementById("warnsearch");
-      d.value = warnfilter.value.plant;
-      let temp_ = dataWarn.value.filter(
-        (item) => item.plant == warnfilter.value.plant
-      );
-      setDatafilter([...temp_]);
-    }
-    // eslint-disable-next-line
-  }, [dataWarn.value, warnfilter.value]);
-
-  // by Mr Loc
-  useEffect(() => {
-    tabLable.value = listTab[0].name;
-    if (warnfilter.value.device === undefined) {
+    if (plantnameFilterSignal.value !== "") {
+      let search = document.getElementById("warnsearch");
+      search.value = plantnameFilterSignal.value;
+      const newdb = dataWarn.value.filter((item) =>
+        lowercasedata(item.plant).includes(lowercasedata(plantnameFilterSignal.value)))
+      setDatafilter([...newdb]);
+    } else {
       setDatafilter([...dataWarn.value]);
     }
-    return () => {
-      warntab.value = "all";
-    };
-
     // eslint-disable-next-line
-  }, [dataWarn.value]);
+  }, [plantnameFilterSignal.value, dataWarn.value]);
 
   useEffect(() => {
-    if (plantnameFilterSignal.value) {
-      let d = document.getElementById("warnsearch");
-      d.value = plantnameFilterSignal.value;
-      console.log(plantnameFilterSignal.value);
-      let temp_ = dataWarn.value.filter(
-        (item) => item.plant == plantnameFilterSignal.value
-      );
-      setDatafilter([...temp_]);
+    const getWarn = async () => {
+      const warn = await callApi("post", host.DATA + "/getWarn2", {
+        usr: usr,
+        partnerid: partnerInfor.value.partnerid,
+        type: userInfor.value.type,
+        date: notifid.value.date,
+      });
+      // console.log(warn);
+      if (warn.status) {
+        dataWarn.value = [];
+        let newdb = warn.data.sort(
+          (a, b) =>
+            new Date(`${b.opendate_} ${b.opentime_}`) -
+            new Date(`${a.opendate_} ${a.opentime_}`)
+        );
+        newdb.map((item, index) => {
+          dataWarn.value = [
+            ...dataWarn.value,
+            {
+              boxid: item.boxid_,
+              warnid: item.warnid_,
+              plant: item.name_,
+              device: item.sn_,
+              name: item.namewarn_,
+              opentime: item.opentime_,
+              opendate: item.opendate_,
+              state: item.state_, // 1:false, 0:true
+              level: item.level_,
+              plantid: item.plantid_,
+            },
+          ];
+        });
+
+        setDatafilter([...dataWarn.value]);
+        let search = document.getElementById("warnsearch");
+        search.value = notifid.value.name;
+        let date = document.getElementById("inputdate");
+        date.value = `${notifid.value.date.split("/")[2]}-${
+          notifid.value.date.split("/")[0]
+        }-${notifid.value.date.split("/")[1]}`;
+      }
+    };
+    if (notifid.value.name !== "") {
+      getWarn();
     }
-  }, [plantnameFilterSignal.value]);
+  }, [notifid.value.name]);
 
   // useEffect(() => {console.log(datafilter)}, [datafilter]);
 
@@ -518,16 +544,20 @@ export default function Warn(props) {
   const usr = useSelector((state) => state.admin.usr);
 
   const handlePickDate = async (e) => {
+    let d = document.getElementById("warnsearch");
+    d.value = "";
+    plantnameFilterSignal.value = "";
     const temp = e.currentTarget.value.split("-");
+    // console.log(e.currentTarget.value, datePickedSignal.value);
     const reformat = temp[1] + "/" + temp[2] + "/" + temp[0];
-    console.log(reformat);
+    // console.log(reformat);
     const warn = await callApi("post", host.DATA + "/getWarn2", {
       usr: usr,
       partnerid: partnerInfor.value.partnerid,
       type: userInfor.value.type,
       date: reformat,
     });
-    // console.log(warn);
+    // console.log(warn.data);
     if (warn.status) {
       dataWarn.value = [];
       let newdb = warn.data.sort(
@@ -552,79 +582,6 @@ export default function Warn(props) {
           },
         ];
       });
-    }
-  };
-
-  const handleSeeAll = async () => {
-    console.log(seeAll);
-    if (seeAll === false) {
-      const warn = await callApi("post", host.DATA + "/getWarn", {
-        usr: usr,
-        partnerid: partnerInfor.value.partnerid,
-        type: userInfor.value.type,
-      });
-      // console.log(warn);
-      if (warn.status) {
-        dataWarn.value = [];
-        let newdb = warn.data.sort(
-          (a, b) =>
-            new Date(`${b.opendate_} ${b.opentime_}`) -
-            new Date(`${a.opendate_} ${a.opentime_}`)
-        );
-        newdb.map((item, index) => {
-          dataWarn.value = [
-            ...dataWarn.value,
-            {
-              boxid: item.boxid_,
-              warnid: item.warnid_,
-              plant: item.name_,
-              device: item.sn_,
-              opentime: item.opentime_,
-              opendate: item.opendate_,
-              state: item.state_, // 1:false, 0:true
-              level: item.level_,
-              plantid: item.plantid_,
-            },
-          ];
-        });
-      }
-    } else {
-      let temp = datePicked.split("-");
-      let reformat = temp[1] + "/" + temp[2] + "/" + temp[0];
-      console.log(reformat);
-      const warn = await callApi("post", host.DATA + "/getWarn2", {
-        usr: usr,
-        partnerid: partnerInfor.value.partnerid,
-        type: userInfor.value.type,
-        date: reformat,
-      });
-      // console.log(warn);
-      if (warn.status) {
-        dataWarn.value = [];
-        let newdb = warn.data.sort(
-          (a, b) =>
-            new Date(`${b.opendate_} ${b.opentime_}`) -
-            new Date(`${a.opendate_} ${a.opentime_}`)
-        );
-        newdb.map((item, index) => {
-          dataWarn.value = [
-            ...dataWarn.value,
-            {
-              boxid: item.boxid_,
-              warnid: item.warnid_,
-              plant: item.name_,
-              device: item.sn_,
-              opentime: item.opentime_,
-              opendate: item.opendate_,
-              state: item.state_, // 1:false, 0:true
-              level: item.level_,
-              plantid: item.plantid_,
-            },
-          ];
-        });
-        // open.value = dataWarn.value.filter((item) => item.status == "open");
-        // closed.value = dataWarn.value.filter((item) => item.status == "closed");
-      }
     }
   };
 
@@ -700,11 +657,12 @@ export default function Warn(props) {
                 ) : ( */}
                 <input
                   type="date"
-                  defaultValue={datePicked}
+                  id="inputdate"
+                  defaultValue={datePickedSignal.value}
                   max={moment(new Date()).format("YYYY-MM-DD")}
                   onChange={(e) => {
                     handlePickDate(e);
-                    setDatePicked(e.target.value);
+                    datePickedSignal.value = e.target.value;
                   }}
                 ></input>
                 {/* )} */}

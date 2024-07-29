@@ -674,6 +674,7 @@ export default function RegisterSetting() {
         let req = await callApi("post", `${host.DATA}/updateRegister`, {
           sn: groupRegID.value,
           data: JSON.stringify(dataRegister),
+          bu: bu
         });
         console.log(req);
         setDataRegister([...dataRegister]);
@@ -698,6 +699,7 @@ export default function RegisterSetting() {
         let req = await callApi("post", `${host.DATA}/updateRegister`, {
           sn: groupRegID.value,
           data: JSON.stringify(dataRegister),
+          bu: bu
         });
         console.log(req);
         setDataRegister([...dataRegister]);
@@ -754,6 +756,7 @@ export default function RegisterSetting() {
             let req = await callApi("post", `${host.DATA}/updateRegister`, {
               sn: groupRegID.value,
               data: JSON.stringify(temp),
+              bu: bu
             });
             console.log(req);
             if (req.status === true) {
@@ -799,6 +802,7 @@ export default function RegisterSetting() {
             let req = await callApi("post", `${host.DATA}/updateRegister`, {
               sn: groupRegID.value,
               data: JSON.stringify(temp),
+              bu: bu
             });
             console.log(req);
             if (req.status === true) {
@@ -840,6 +844,7 @@ export default function RegisterSetting() {
           let req = await callApi("post", `${host.DATA}/updateRegister`, {
             sn: groupRegID.value,
             data: JSON.stringify(t),
+            bu: bu,
           });
           console.log(req);
           setDataRegister([...t]);
@@ -868,6 +873,7 @@ export default function RegisterSetting() {
         let req = await callApi("post", `${host.DATA}/updateRegister`, {
           sn: groupRegID.value,
           data: JSON.stringify(t),
+          bu: bu
         });
         console.log(req);
         setDataRegister([...t]);
@@ -904,6 +910,7 @@ export default function RegisterSetting() {
           let req = await callApi("post", `${host.DATA}/updateRegister`, {
             sn: groupRegID.value,
             data: JSON.stringify(t),
+            bu: bu
           });
           console.log(req);
           setDataRegister([...t]);
@@ -925,6 +932,7 @@ export default function RegisterSetting() {
       let req = await callApi("post", `${host.DATA}/updateRegister`, {
         sn: groupRegID.value,
         data: JSON.stringify(t),
+        bu: bu
       });
       console.log(req);
       setDataRegister([...t]);

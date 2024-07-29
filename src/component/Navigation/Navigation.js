@@ -23,6 +23,7 @@ import { IoLogInOutline } from "react-icons/io5";
 import { PiUserCircle } from "react-icons/pi";
 import { BiMessageAltX, BiMessageCheck } from "react-icons/bi";
 import { isBrowser, useMobileOrientation } from "react-device-detect";
+import moment from "moment-timezone";
 
 const userNav = signal(false);
 const langNav = signal(false);
@@ -33,6 +34,11 @@ const messageOption = signal("default");
 export const warnfilter = signal({ warnid: "" });
 export const isMobile = signal(false);
 export const notifNav = signal(false);
+export const datePickedSignal = signal(moment(new Date()).format("YYYY-MM-DD"));
+export const notifid = signal({
+  name: "",
+  date: moment(new Date()).format("MM/DD/YYYY"),
+});
 
 export default function Navigation(props) {
   const { isLandscape } = useMobileOrientation();
@@ -116,49 +122,65 @@ export default function Navigation(props) {
   const handleFilterWarn = async (e) => {
     // projectwarnfilter.value = 0;
     const t = e.currentTarget.id.split("_");
+    // datePickedSignal.value =
+    //   t[2].split("/")[2] + "-" + t[2].split("/")[0] + "-" + t[2].split("/")[1];
 
-    console.log(t[1]);
-    const warn = await callApi("post", host.DATA + "/getWarn2", {
-      usr: usr,
-      partnerid: partnerInfor.value.partnerid,
-      type: userInfor.value.type,
+    let i = dataWarnNoti.value.findIndex((data) => data.plantid == t[1]);
+
+    
+
+
+
+    notifid.value = {
+      name: dataWarnNoti.value[i].plant,
       date: t[2],
-    });
-    if (warn.status) {
-      let newdb = warn.data.sort(
-        (a, b) =>
-          new Date(`${b.opendate_} ${b.opentime_}`) -
-          new Date(`${a.opendate_} ${a.opentime_}`)
-      );
-      newdb.map((item, index) => {
-        dataWarn.value = [
-          ...dataWarn.value,
-          {
-            boxid: item.boxid_,
-            warnid: item.warnid_,
-            plant: item.name_,
-            device: item.sn_,
-            name: item.namewarn_,
-            opentime: item.opentime_,
-            opendate: item.opendate_,
-            state: item.state_, // 1:false, 0:true
-            level: item.level_,
-            plantid: item.plantid_,
-          },
-        ];
-      });
     }
 
-    let newdata = dataWarn.value.find((item) => item.plantid == parseInt(t[1]));
-    console.log(newdata);
 
-    warnfilter.value = newdata;
+
+    // const warn = await callApi("post", host.DATA + "/getWarn2", {
+    //   usr: usr,
+    //   partnerid: partnerInfor.value.partnerid,
+    //   type: userInfor.value.type,
+    //   date: t[2],
+    // });
+    // // console.log(warn);
+    // if (warn.status) {
+    //   dataWarn.value = [];
+    //   let newdb = warn.data.sort(
+    //     (a, b) =>
+    //       new Date(`${b.opendate_} ${b.opentime_}`) -
+    //       new Date(`${a.opendate_} ${a.opentime_}`)
+    //   );
+    //   newdb.map((item, index) => {
+    //     dataWarn.value = [
+    //       ...dataWarn.value,
+    //       {
+    //         boxid: item.boxid_,
+    //         warnid: item.warnid_,
+    //         plant: item.name_,
+    //         device: item.sn_,
+    //         name: item.namewarn_,
+    //         opentime: item.opentime_,
+    //         opendate: item.opendate_,
+    //         state: item.state_, // 1:false, 0:true
+    //         level: item.level_,
+    //         plantid: item.plantid_,
+    //       },
+    //     ];
+    //   });
+    // }
+    // console.log(dataWarn.value);
+    // let newdata = dataWarn.value.find((item) => item.plantid == parseInt(t[1]));
+    // console.log(newdata);
+
+    // warnfilter.value = newdata;
     notifNav.value = false;
 
     const state = await callApi("post", host.DATA + "/updateWarnnotif", {
       id: t[0],
     });
-    console.log(state);
+    // console.log(state);
     if (state.status) {
       notifNav.value = false;
     }

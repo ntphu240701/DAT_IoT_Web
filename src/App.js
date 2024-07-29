@@ -312,7 +312,7 @@ export default function App() {
         date: moment(new Date()).format("MM/DD/YYYY"),
         // date: "07/23/2024",
       });
-      console.log(warn.data);
+      // console.log(warn.data);
       if (warn.status) {
         let newdb = warn.data.sort(
           (a, b) =>
