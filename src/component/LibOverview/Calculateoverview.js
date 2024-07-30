@@ -775,6 +775,12 @@ export default function Calculateoverview(props) {
                                     {color('color', 'Border Color', 'bordercolor')}
                                     {color('color', 'BG Color', 'bgcolor')}
                                     {input('inp', 'Opacity', "number", 'opacity')}
+                                    
+                                    <div className="DAT_Calculateoverview-line" style={{ fontSize: "18px", width: "100%", borderBottom: "1px solid #326ba8", marginBottom: "15px" }}>Control</div>
+                                    {box('box', 'Link', pwd, 'link')}
+                                    {box('box', 'Gateway', overview_device, 'deviceid')}
+                                    {input('inp', 'ID Screen', "number", 'loggerdataid')}
+                                    
 
                                 </>
                             )

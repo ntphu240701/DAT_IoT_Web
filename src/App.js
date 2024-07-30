@@ -312,7 +312,7 @@ export default function App() {
         date: moment(new Date()).format("MM/DD/YYYY"),
         // date: "07/23/2024",
       });
-      // console.log(warn.data);
+      console.log(warn.data);
       if (warn.status) {
         let newdb = warn.data.sort(
           (a, b) =>
@@ -333,6 +333,7 @@ export default function App() {
               state: item.state_, // 1:false, 0:true
               level: item.level_,
               plantid: item.plantid_,
+              more: item.more_,
             },
           ];
         });
@@ -366,6 +367,7 @@ export default function App() {
                     state: data.state_, // 1:false, 0:true
                     level: "warn",
                     plantid: data.plantid_,
+                    more: item.more_,
                   },
                   ...dataWarn.value,
                 ];
@@ -386,6 +388,7 @@ export default function App() {
                     state: data.state_, // 1:false, 0:true
                     level: "warn",
                     plantid: data.plantid_,
+                    more: item.more_,
                   },
                   ...newWarn,
                 ];

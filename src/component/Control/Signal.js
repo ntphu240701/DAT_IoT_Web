@@ -9,3 +9,5 @@ export const defaultData = signal({
   defaultscreenid_: 0,
   defaultscreenstate_: 0,
 });
+
+export const plantobjauto = signal({});

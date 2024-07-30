@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./Warn.scss";
 
 import { dataWarn, idDel, inf } from "./Warn";
@@ -13,6 +13,7 @@ import { IoClose } from "react-icons/io5";
 export default function WarnPopup(props) {
   const dataLang = useIntl();
   const lang = useSelector((state) => state.admin.lang);
+  const [dataMoreElev, setDataMoreElev] = useState({});
 
   const popup_state = {
     pre: { transform: "rotate(0deg)", transition: "0.5s", color: "white" },
@@ -64,6 +65,19 @@ export default function WarnPopup(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.data]);
 
+  const parseBase16 = (num) => {
+    var n = eval(num);
+    if (n < 0) {
+      n = 0xffffffff + n + 1;
+    }
+    return parseInt(n, 10).toString(16) || 0;
+  };
+
+  useEffect(() => {
+    // console.log(props.type);
+    console.log(props.more);
+  }, [props.more]);
+
   return (
     <>
       {props.type === "info" ? (
@@ -104,6 +118,60 @@ export default function WarnPopup(props) {
               {dataLang.formatMessage({ id: "device" })}: &nbsp;
               {props.data.device}
             </div>
+
+            {props.more === null || Object.keys(props.more).length === 0 ? (
+              <></>
+            ) : (
+              <>
+                <div className="DAT_PopupWarnInfo_Box_Body_Info">
+                  <div>
+                    {dataLang.formatMessage({ id: "floor" })}: &nbsp;
+                    {props.more.floor}
+                  </div>
+                  <div>
+                    {dataLang.formatMessage({ id: "current" })+ " (A)"}: &nbsp;
+                    {parseFloat(props.more.current) * 0.1}
+                  </div>
+                  <div>
+                    {dataLang.formatMessage({ id: "dcbus" })+ " (V)"}: &nbsp;
+                    {parseFloat(props.more.dcbus) * 0.1}
+                  </div>
+                </div>
+
+                <div className="DAT_PopupWarnInfo_Box_Body_Info">
+                  <div>
+                    {dataLang.formatMessage({ id: "inputstate1" })}: &nbsp;
+                    {parseBase16(props.more.inputstate1)}
+                  </div>
+                  <div>
+                    {dataLang.formatMessage({ id: "inputstate2" })}: &nbsp;
+                    {parseBase16(props.more.inputstate2)}
+                  </div>
+                  <div>
+                    {dataLang.formatMessage({ id: "outputstate" })}: &nbsp;
+                    {parseBase16(props.more.outputstate)}
+                  </div>
+                </div>
+
+                <div
+                  className="DAT_PopupWarnInfo_Box_Body_Info"
+                  style={{ marginBottom: "16px" }}
+                >
+                  <div>
+                    {dataLang.formatMessage({ id: "Frequency" })+ " (Hz)"}: &nbsp;
+                    {parseFloat(props.more.frequency) * 0.01}
+                  </div>
+                  <div>
+                    {dataLang.formatMessage({ id: "position" })+ " (mm)"}: &nbsp;
+                    {parseFloat(props.more.position) * 10}
+                  </div>
+                  <div>
+                    {dataLang.formatMessage({ id: "speed" })+ " (mm/s)"}: &nbsp;
+                    {props.more.speed}
+                  </div>
+                </div>
+              </>
+            )}
 
             <div style={{ marginBottom: "8px" }}>
               {dataLang.formatMessage({ id: "cause" })}:

@@ -88,7 +88,7 @@ export default function Home(props) {
                         }
                 }
                 s.value = parseInt((360 - x.value) / 42);
-                console.log(x.value, s.value);
+                // console.log(x.value, s.value);
         };
 
         const stopDragging = () => {
@@ -145,7 +145,7 @@ export default function Home(props) {
                                                 partnerid: id,
                                                 type: type,
                                         })
-                                        console.log(res)
+                                        // console.log(res)
                                         if (res.status) {
                                                 // setLogger(res.data)
                                                 setPlant(res.data)
@@ -187,7 +187,7 @@ export default function Home(props) {
                 // setViewMode(!viewMode);
                 viewMode.value = !viewMode.value;
                 if (viewMode.value) {
-                        console.log(x.value, s.value);
+                        // console.log(x.value, s.value);
                 }
                 // x.value = 108;
                 // s.value = 6;
@@ -196,7 +196,6 @@ export default function Home(props) {
 
         useEffect(() => {
                 const getAllLogger = async (usr, id, type) => {
-
                         let res = await callApi("post", host.DATA + "/getAllLogger", {
                                 usr: usr,
                                 partnerid: id,
@@ -237,7 +236,7 @@ export default function Home(props) {
                         });
                         // console.log(res);
                         if (res.status) {
-                                console.log(data.defaulttab_);
+                                // console.log(data.defaulttab_);
 
                                 // console.log(res.data, arr[0], deviceData.value[index].sn_)
 
@@ -287,7 +286,7 @@ export default function Home(props) {
                                 partnerid: id,
                                 type: type,
                         })
-                        console.log(res)
+                        // console.log(res)
                         if (res.status) {
                                 // setLogger(res.data)
                                 setPlant(res.data)
@@ -309,6 +308,7 @@ export default function Home(props) {
                 }
 
                 if (step === 2) {
+                        // console.log(loggerdata)
                         getScreen(loggerdata)
                 }
 
@@ -367,10 +367,10 @@ export default function Home(props) {
 
         const handleWindowResize = () => {
                 let home = document.getElementById("Home");
-                console.log(home.offsetWidth);
+                // console.log(home.offsetWidth);
 
                 if (home?.offsetWidth >= 1300) {
-                        console.log("max");
+                        // console.log("max");
                         sizedesktop.value = {
                                 icon: { fontSize: 80 },
                                 tit: { fontSize: 20 },
@@ -378,7 +378,7 @@ export default function Home(props) {
                                 value: { fontSize: 32 },
                         };
                 } else if (home?.offsetWidth >= 1200 && home?.offsetWidth < 1300) {
-                        console.log("middle");
+                        // console.log("middle");
                         sizedesktop.value = {
                                 icon: { fontSize: 70 },
                                 tit: { fontSize: 18 },
@@ -386,7 +386,7 @@ export default function Home(props) {
                                 value: { fontSize: 30 },
                         };
                 } else {
-                        console.log("small");
+                        // console.log("small");
                         sizedesktop.value = {
                                 icon: { fontSize: 60 },
                                 tit: { fontSize: 16 },
@@ -404,10 +404,10 @@ export default function Home(props) {
 
         useEffect(function () {
                 let home = document.getElementById("Home");
-                console.log(home.offsetWidth);
+                // console.log(home.offsetWidth);
 
                 if (home?.offsetWidth >= 1300) {
-                        console.log("max");
+                        // console.log("max");
                         sizedesktop.value = {
                                 icon: { fontSize: 80 },
                                 tit: { fontSize: 20 },
@@ -415,7 +415,7 @@ export default function Home(props) {
                                 value: { fontSize: 32 },
                         };
                 } else if (home?.offsetWidth >= 1200 && home?.offsetWidth < 1300) {
-                        console.log("middle");
+                        // console.log("middle");
                         sizedesktop.value = {
                                 icon: { fontSize: 70 },
                                 tit: { fontSize: 18 },
@@ -423,7 +423,7 @@ export default function Home(props) {
                                 value: { fontSize: 30 },
                         };
                 } else {
-                        console.log("small");
+                        // console.log("small");
                         sizedesktop.value = {
                                 icon: { fontSize: 60 },
                                 tit: { fontSize: 16 },

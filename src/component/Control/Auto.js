@@ -24,7 +24,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { isBrowser } from "react-device-detect";
 import EditProject from "./EditProject";
 import AddProject from "./AddProject";
-import { defaultData, defaultDataState, listDevice, mode, plantData, plantState } from "./Signal";
+import { defaultData, defaultDataState, listDevice, mode, plantData, plantState, plantobjauto } from "./Signal";
 import ShareBox from "./ShareBox";
 import Project from "./Project";
 import Toollist from "../Lib/Toollist";
@@ -40,7 +40,7 @@ const warn = signal([]);
 const demo = signal([]);
 const care = signal([]);
 
-export const plantobjauto = signal({});
+
 
 export const Empty = (props) => {
   const dataLang = useIntl();

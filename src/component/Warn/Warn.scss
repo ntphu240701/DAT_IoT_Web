@@ -760,11 +760,11 @@
 // INFO BOX IN WARN SECTION
 .DAT_PopupWarnInfo_Box {
   position: relative;
-  width: 400px;
+  width: 500px;
   background-color: white;
   border-radius: 5px;
   margin: auto;
-  margin-top: 80px;
+  margin-top: 100px;
   margin-bottom: 100px;
   overflow: hidden;
   box-shadow: 2px 2px 5px rgb(73, 73, 73, 0.2),
@@ -832,6 +832,15 @@
         border: 2px solid #d6d6d6;
         outline: none;
         margin-bottom: 10px;
+      }
+    }
+
+    &_Info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      & div {
+        width: 120px;
       }
     }
   }

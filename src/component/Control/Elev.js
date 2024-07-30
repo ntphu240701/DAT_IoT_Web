@@ -31,6 +31,7 @@ import {
   mode,
   plantData,
   plantState,
+  plantobjauto,
 } from "./Signal";
 import ShareBox from "./ShareBox";
 import Project from "./Project";
@@ -48,7 +49,6 @@ const warn = signal([]);
 const demo = signal([]);
 const care = signal([]);
 
-export const plantobjauto = signal({});
 
 export const Empty = (props) => {
   const dataLang = useIntl();
@@ -398,17 +398,17 @@ export default function Auto(props) {
 
   const handlePlant = async (e) => {
     plantState.value = "info";
-    console.log(e.currentTarget.id);
+    // console.log(e.currentTarget.id);
     const newPlant = plantData.value.find(
       (item) => item.plantid_ == e.currentTarget.id
     );
-    console.log(newPlant);
+    // console.log(newPlant);
 
     let sn = [0];
     let res = await callApi("post", host.DATA + "/getLogger", {
       plantid: parseInt(e.currentTarget.id),
     });
-    console.log(res.data);
+    // console.log(res.data);
     if (res.status) {
       // setDevice(res.data)
       listDevice.value = res.data;
@@ -449,7 +449,7 @@ export default function Auto(props) {
     let newPlant = plantData.value.find(
       (item) => item.plantid_ == e.currentTarget.id
     );
-    console.log(newPlant);
+    // console.log(newPlant);
     plantobjauto.value = { ...newPlant };
     plantState.value = "edit";
     // setplantobjauto(newPlant);
@@ -513,7 +513,7 @@ export default function Auto(props) {
 
   const handleTabMobile = (e) => {
     const id = e.currentTarget.id;
-    console.log(id);
+    // console.log(id);
     setTabMobile(id);
     // projtab.value = id;
     // const newLabel = listTab.find((item) => item.id == id);
@@ -552,7 +552,7 @@ export default function Auto(props) {
         type: userInfor.value.type,
         system: bu,
       });
-      console.log(pD);
+      // console.log(pD);
       if (pD.status === true) {
         plantData.value = pD.data.sort((a, b) => a.plantid_ - b.plantid_);
         plantData.value.map((item) => {
@@ -584,7 +584,7 @@ export default function Auto(props) {
         };
         getAllLogger();
 
-        console.log(plantData.value);
+        // console.log(plantData.value);
       }
     };
     getPlant();
@@ -639,19 +639,19 @@ export default function Auto(props) {
 
   useEffect(() => {
     const setScreen = async () => {
-      console.log(currentSN);
+      // console.log(currentSN);
       let d = await callApi("post", host.DATA + "/resetLoggerData", {
         sn: currentSN,
       });
 
-      console.log(d);
+      // console.log(d);
       if (d.status) {
         settingDispatch({ type: "LOAD_LASTTAB", payload: 0 });
         settingDispatch({ type: "LOAD_DEFAULT", payload: 0 });
       }
     };
     if (plantState.value === "toollist") {
-      console.log(screen.length);
+      // console.log(screen.length);
       screen.map((data, index) => {
         toolDispatch({
           type: "LOAD_DEVICE",

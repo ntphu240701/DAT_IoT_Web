@@ -547,6 +547,10 @@ export default function Sidenar(props) {
     }
   }, [sidenar.value, viewMode.value]);
 
+  useEffect(() => {
+    console.log(sidebartab.value);
+  }, [sidebartab.value]);
+
   const SelectBox = () => {
     const position = {
       Dashboard: { top: "70px", left: "70px" },

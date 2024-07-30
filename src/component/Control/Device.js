@@ -243,7 +243,7 @@ function Device(props) {
   useEffect(() => {
 
     if (defaultDataState.value) {
-     
+
       if (device.value && device.value.length > 0) {
         // console.log(defaultDataState.value);
         // console.log(deviceData.value);
@@ -496,6 +496,8 @@ function Device(props) {
                             <div className="DAT_Screen_Right_sub_list_item_content_name_icon">
                               <FiMonitor size={20} />
                             </div>
+
+
                             {/* &nbsp; */}
                             <div className="DAT_Screen_Right_sub_list_item_content_name_text">
                               {data.name_}
@@ -505,6 +507,7 @@ function Device(props) {
                         {ruleInfor.value.setting.monitor.modify ||
                           ruleInfor.value.setting.monitor.remove ? (
                           <div className="DAT_Screen_Right_sub_list_item_modify">
+                            <div style={{ position: "absolute", left: 10, color: "gray" }} >ID:{data.id_}</div>
                             <PiScreencastDuotone
                               size={18}
                               color={
@@ -644,6 +647,7 @@ function Device(props) {
                         {ruleInfor.value.setting.monitor.modify ||
                           ruleInfor.value.setting.monitor.remove ? (
                           <div className="DAT_ScreenMobile_sub_list_item_modify">
+                             <div style={{ position: "absolute", left: 10, color: "gray" }} >ID:{data.id_}</div>
                             <PiScreencastDuotone
                               size={18}
                               color={

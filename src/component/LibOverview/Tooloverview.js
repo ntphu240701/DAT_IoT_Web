@@ -13,9 +13,10 @@ import { signal } from "@preact/signals-react";
 import { Token, socket } from '../../App'
 import { useMobileOrientation } from 'react-device-detect';
 import { IoMdClose } from "react-icons/io";
-import { listDevice, mode, plantState } from "../Control/Signal";
+import { listDevice, mode, plantData, plantState, plantobjauto } from "../Control/Signal";
 import { useOrientation } from "react-use";
-import {  ScaleLoader } from "react-spinners";
+import { ScaleLoader } from "react-spinners";
+
 
 export const overview = signal(false)
 export const whatdevicegroup = signal({ id: '', groupid: '', tab: '' })
@@ -27,7 +28,7 @@ export default function Tooloverview(props) {
     // const { isLandscape } = useMobileOrientation()
     const { type } = useOrientation();
     const [load, setLoad] = useState(true)
-    const [isLand, setIsLand] =  useState(false)
+    const [isLand, setIsLand] = useState(false)
     const popup_state = {
         pre: { transform: "rotate(0deg)", transition: "0.5s", color: "rgba(11, 25, 103)" },
         new: { transform: "rotate(90deg)", transition: "0.5s", color: "rgba(11, 25, 103)" }
@@ -79,14 +80,15 @@ export default function Tooloverview(props) {
     }
 
     useEffect(() => {
-        console.log("Tooloverview", type)
+        // console.log("Tooloverview", type)
+        console.log(plantobjauto.value)
 
         setLoad(true)
         const l = setInterval(() => {
             setLoad(false)
-            if(type === 'landscape-primary'){
+            if (type === 'landscape-primary') {
                 setIsLand(true)
-            }else{
+            } else {
                 setIsLand(false)
             }
             clearInterval(l)
@@ -231,12 +233,21 @@ export default function Tooloverview(props) {
 
 
                     {load
-                        ? <div style={{ position: "fixed", top: "0", left: "0", width: "100%", height: "100vh", backgroundColor: "rgba(255,255,255)", zIndex: "9999", display: "flex", justifyContent: "center", alignItems: "center" }}><ScaleLoader                        color="#007bff" size={40} loading={load} /></div>
+                        ? <div style={{ position: "fixed", top: "0", left: "0", width: "100%", height: "100vh", backgroundColor: "rgba(255,255,255)", zIndex: "9999", display: "flex", justifyContent: "center", alignItems: "center" }}><ScaleLoader color="#007bff" size={40} loading={load} /></div>
                         : isLand
                             ? <div className="DAT_ToolOverview_Overview_Container">
                                 <div className="DAT_ToolOverview_Overview_Container_Head">
                                     <div className="DAT_ToolOverview_Overview_Container_Head_Tit">
-                                        {overview_name}
+                                        <div className="DAT_ToolOverview_Overview_Container_Head_Tit_Avatar">
+                                            <img
+                                                style={{
+                                            
+                                                    width: "100%",
+                                                    height: "100%",
+                                                }}
+                                                src={plantobjauto.value.img ? plantobjauto.value.img : `/dat_picture/${plantobjauto.value.type_}.jpg`} />
+                                        </div>
+                                        <div className="DAT_ToolOverview_Overview_Container_Head_Tit_Name">{overview_name}</div>
                                     </div>
                                     <div className="DAT_ToolOverview_Overview_Container_Head_Close"
                                         onClick={(e) => handleTabCheck(e)}
@@ -250,19 +261,19 @@ export default function Tooloverview(props) {
                                 </div>
                                 <div className="DAT_ToolOverview_Overview_Container_Content" id="CARDOVERVIEW" >
 
-                                    {/* {(overview_config)
+                                    {(overview_config)
                                         ? <>
-                                            <Configoverview id={props.projectid} type={props.type} invt={invt} />
+                                            {/* <Configoverview id={props.projectid} type={props.type} invt={invt} />
                                             {(overview_control.stt)
                                                 ? <Calculateoverview id={props.projectid} invt={invt} />
                                                 : <></>
-                                            }
+                                            } */}
                                         </>
                                         : <Interfaceoverview id={props.projectid} type={props.code} invt={invt} />
-                                    } */}
+                                    }
                                 </div>
                             </div>
-                            :<div className="DAT_Landscape" >
+                            : <div className="DAT_Landscape" >
                                 <div className="DAT_Landscape_cancel" onClick={(e) => handleTabCheck(e)} ><div className="DAT_Landscape_cancel_icon"  ><span>Thoát</span></div></div>
                                 <div className="DAT_Landscape_content" >
                                     <div className="DAT_Landscape_content_tit">Embody</div>

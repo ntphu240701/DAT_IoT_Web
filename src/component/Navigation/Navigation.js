@@ -12,7 +12,7 @@ import { host } from "../Lang/Contant";
 import { alertDispatch } from "../Alert/Alert";
 import { useIntl } from "react-intl";
 import adminslice from "../Redux/adminslice";
-import { dataWarn, dataWarnNoti } from "../Warn/Warn";
+import { dataWarn, dataWarnNoti, seeAll } from "../Warn/Warn";
 
 import { BsFillMenuButtonWideFill } from "react-icons/bs";
 import { IoIosNotificationsOutline } from "react-icons/io";
@@ -127,16 +127,10 @@ export default function Navigation(props) {
 
     let i = dataWarnNoti.value.findIndex((data) => data.plantid == t[1]);
 
-    
-
-
-
     notifid.value = {
       name: dataWarnNoti.value[i].plant,
       date: t[2],
-    }
-
-
+    };
 
     // const warn = await callApi("post", host.DATA + "/getWarn2", {
     //   usr: usr,
@@ -176,6 +170,7 @@ export default function Navigation(props) {
 
     // warnfilter.value = newdata;
     notifNav.value = false;
+    seeAll.value = false;
 
     const state = await callApi("post", host.DATA + "/updateWarnnotif", {
       id: t[0],
@@ -245,7 +240,7 @@ export default function Navigation(props) {
         <div className="DAT_Navigation_left">
           <div className="DAT_Navigation_left-logo">
             <img
-              onClick={() => navigate("/")}
+              onClick={() => {navigate("/"); sidebartab.value = "Dashboard";}}
               src={
                 partnerInfor.value.logo
                   ? partnerInfor.value.logo

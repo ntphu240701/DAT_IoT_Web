@@ -532,7 +532,23 @@
 
                 &_Tit {
                     flex: 1;
-                    color: #0061f2;
+                   
+                    display: flex;
+                    gap: 10px;
+                    align-items: center;
+
+                    &_Avatar {
+                        width: 35px;
+                        height: 35px;
+                        border-radius: 50%;
+                        background-color: white;
+                        overflow: hidden;
+                    }
+                    &_Name{
+                        
+                        color: rgb(97, 97, 97);
+                        font-family: Montserrat-Bold;
+                    }
 
                 }
 
