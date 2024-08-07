@@ -109,6 +109,7 @@ export const messages = {
     unreadNotif: "Unread",
     warnLevel: "Warning level:",
     openWarnTime: "Warning opening time",
+    openWarnDate: "Warning opening date",
     closeWarnTime: "Warning closing time",
     allowNoti: "Allow Notification",
     offNoti: "Disable Notification",
@@ -267,6 +268,7 @@ export const messages = {
     errname: "Error Name",
     cause: "Caused by",
     solution: "Solution",
+    errorconfig: "Error configuration",
     change: "Edit",
     edits: "Edit",
     edit: "Edit",
@@ -660,6 +662,7 @@ export const messages = {
     delSolution: "Are you sure want to delete this solution?",
     delErrorInfo: "Are you sure want to delete this error?",
     delErrorAddr: "Are you sure want to delete this error address?",
+    delErrorConfig: "Are you sure want to delete this error config?",
     delWarnmess: "Are you sure want to delete this warning?",
     delreportmess: "Are you sure want to delete this report?",
     delaccountmess: "Are you sure want to delete this account?",
@@ -670,6 +673,9 @@ export const messages = {
     remindAlert: "Please check this error!",
     accountLockAlert:
       "Your account is currently locked. Please contact the administrator to reactivate it!",
+    confirmtransfer1: "Are you sure you want to transfer ",
+    confirmtransfer2:
+      " error configurations. This action will remove all configurations existed cannot be reversed!",
 
     //ALERT DISPATCH
     alert_0: "Username or password is incorrect!",
@@ -739,6 +745,10 @@ export const messages = {
     alert_63: "Page default not found!",
     alert_64: "Setup Page default successfully!",
     alert_65: "Disable Page default successfully!",
+    alert_66: "Phone number is not valid!",
+    alert_67: "Error code existed!",
+    alert_68: "Atleast one error code is required!",
+    alert_69: "Please select Gateway code!",
 
     // --------------------------------- //
 
@@ -1064,6 +1074,7 @@ export const messages = {
     unreadNotif: "Chưa xem",
     warnLevel: "Mức độ cảnh báo:",
     openWarnTime: "Thời gian mở cảnh báo",
+    openWarnDate: "Ngày mở cảnh báo",
     closeWarnTime: "Thời gian dóng cảnh báo",
     allowNoti: "Cho phép thông báo",
     offNoti: "Tắt thông báo",
@@ -1224,6 +1235,7 @@ export const messages = {
     cause: "Nguyên nhân",
     solution: "Biện pháp",
     config: "Cấu hình",
+    errorconfig: "Cấu hình lỗi",
     method: "Phương thức",
     update: "Cập nhật",
     remove: "Gỡ",
@@ -1614,6 +1626,7 @@ export const messages = {
     delSolution: "Bạn có chắc muốn xóa biện pháp này không?",
     delErrorInfo: "Bạn có chắc muốn xóa thông tin mã lỗi này không?",
     delErrorAddr: "Bạn có chắc muốn xóa mã lỗi này không?",
+    delErrorConfig: "Bạn có chắc muốn xóa cấu hình mã lỗi này không?",
     delWarnmess: "Bạn có chắc muốn xóa mẫu cảnh báo này không?",
     delreportmess: "Bạn có chắc muốn xóa mẫu báo cáo này không?",
     delDevicemess: "Bạn có chắc muốn xóa thiết bị:",
@@ -1624,6 +1637,9 @@ export const messages = {
     remindAlert: "Vui lòng kiểm tra!",
     accountLockAlert:
       "Tài khoản của bạn hiện đang bị khoá vui lòng liên hệ quản trị viên để kích hoạt lại!",
+    confirmtransfer1: "Bạn có chắc muốn chuyển ",
+    confirmtransfer2:
+      " cấu hình lỗi. Thao tác này sẽ xóa hết các lỗi ở Gateway ",
 
     //ALERT DISPATCH
     alert_0: "Tài khoản hoặc mật khẩu không đúng!",
@@ -1692,6 +1708,11 @@ export const messages = {
     alert_63: "Màn hình mặc định không tồn tại!",
     alert_64: "Thiết lập màn hình mặc định thành công!",
     alert_65: "Tắt màn hình mặc định thành công!",
+    alert_66: "Số điện thoại sai định dạng!",
+    alert_67: "Mã lỗi đã tồn tại!",
+    alert_68: "Ít nhất phải tồn tại 1 lỗi!",
+    alert_69: "Vui lòng chọn Gateway!",
+
 
     // --------------------------------- //
 

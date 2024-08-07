@@ -61,21 +61,31 @@ export default function RemoveErr(props) {
           case "REMOVECAUSE":
             return (
               <div className="DAT_RemoveErr_Body">
-                {dataLang.formatMessage({ id: 'delCause' })}
+                {dataLang.formatMessage({ id: "delCause" })}
               </div>
-            )
+            );
           case "REMOVESOLUTION":
             return (
               <div className="DAT_RemoveErr_Body">
-                {dataLang.formatMessage({ id: 'delSolution' })}
+                {dataLang.formatMessage({ id: "delSolution" })}
               </div>
-            )
+            );
+          case "CONFIRMTRANSFERDATA":
+            return (
+              <div className="DAT_RemoveErr_Body">
+                {dataLang.formatMessage({ id: "confirmtransfer1" }) +
+                  props.errorlength +
+                  dataLang.formatMessage({ id: "confirmtransfer2" }) + 
+                  props.sn
+                  }
+              </div>
+            );
           default:
             return (
               <div className="DAT_RemoveErr_Body">
-                {dataLang.formatMessage({ id: 'delErrorInfo' })}
+                {dataLang.formatMessage({ id: "delErrorInfo" })}
               </div>
-            )
+            );
         }
       })()}
 

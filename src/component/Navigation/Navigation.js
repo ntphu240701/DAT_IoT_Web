@@ -256,7 +256,7 @@ export default function Navigation(props) {
           <button
             className="DAT_Navigation_right-item"
             id="notif"
-            onClick={() => (notifNav.value = !notifNav.value)}
+            onClick={() => {(notifNav.value = !notifNav.value); console.log(sidebartab.value)}}
             ref={notif_icon}
           >
             <IoIosNotificationsOutline color="gray" size={22} />
@@ -390,7 +390,7 @@ export default function Navigation(props) {
                         }}
                         onClick={(e) => {
                           handleFilterWarn(e);
-                          sidebartab.value = "Monitor";
+                          sidebartab.value = "Analytics";
                           sidebartabli.value = "/Warn";
                           item.state = 0;
                         }}

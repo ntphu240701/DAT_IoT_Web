@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { IoClose } from "react-icons/io5";
+import { IoClose, IoTrashOutline } from "react-icons/io5";
 import { useIntl } from "react-intl";
 import { COLOR } from "../../App";
 import { configEdit } from "./RegisterSetting";
 import "./RegisterSetting.scss";
+import { IoIosAddCircleOutline } from "react-icons/io";
+import { alertDispatch } from "../Alert/Alert";
 
 export default function Popup(props) {
   const dataLang = useIntl();
@@ -21,6 +23,8 @@ export default function Popup(props) {
   const regRef1 = useRef("");
   const regRef2 = useRef("");
   const regRef3 = useRef("");
+  const [ErrConfig, setErrConfig] = useState([]);
+  const [newPhone, setNewPhone] = useState([]);
 
   const popup_state = {
     pre: { transform: "rotate(0deg)", transition: "0.5s", color: "white" },
@@ -58,7 +62,18 @@ export default function Popup(props) {
     console.log(props.type);
   }, []);
 
-  useEffect(() => {}, [props.data]);
+  useEffect(() => {
+    if (props.type === "editError") {
+      const t = props.data.filter(
+        (item) => item.id == parseInt(configEdit.value.split("_")[0])
+      );
+      const i = t[0].level.findIndex(
+        (data) => data.id == parseInt(configEdit.value.split("_")[1])
+      );
+      // console.log(t[0].level[i].phone);
+      setErrConfig(t[0].level[i].phone);
+    }
+  }, []);
 
   //addNewReg,
   const EditReg = (type, val) => {
@@ -122,6 +137,49 @@ export default function Popup(props) {
         </div>
       </form>
     );
+  };
+
+  const handleAddPhoneEdit = () => {
+    const regex = /^(\+84|0)[3|5|7|8|9][0-9]{8}$/;
+    const isPhone = regex.test(editValRef2.current.value);
+    const isExist = ErrConfig.filter(
+      (item) => item == editValRef2.current.value
+    ).length;
+    // console.log(isPhone);
+    if (isPhone && ErrConfig.length < 5 && isExist == 0) {
+      setErrConfig([...ErrConfig, editValRef2.current.value]);
+      console.log(ErrConfig);
+    } else {
+      alertDispatch(dataLang.formatMessage({ id: "alert_66" }));
+    }
+  };
+
+  const handleCloseEditErr = () => {
+    const t = props.data.filter(
+      (item) => item.id == parseInt(configEdit.value.split("_")[0])
+    );
+    setErrConfig(t);
+    console.log("noo");
+  };
+
+  const handleAddNewPhoneConfig = () => {
+    const regex = /^(\+84|0)[3|5|7|8|9][0-9]{8}$/;
+    const isPhone = regex.test(editValRef2.current.value);
+    const isExist = newPhone.filter(
+      (item) => item == editValRef2.current.value
+    ).length;
+    // console.log(isPhone);
+    if (isPhone && newPhone.length < 5 && isExist == 0) {
+      setNewPhone([...newPhone, editValRef2.current.value]);
+    } else {
+      alertDispatch(dataLang.formatMessage({ id: "alert_66" }));
+    }
+  };
+
+  const handleDeletePhone = (phone) => {
+    console.log(phone);
+    const t = ErrConfig.filter((item) => item !== phone);
+    setErrConfig([...t]);
   };
 
   return (
@@ -617,6 +675,341 @@ export default function Popup(props) {
                   );
               }
             })();
+          case "editError":
+            return (
+              <div className="DAT_EditErrConfig">
+                <div className="DAT_EditErrConfig_Head">
+                  <div className="DAT_EditErrConfig_Head_Left">
+                    {dataLang.formatMessage({ id: "edit" })}
+                  </div>
+                  <div className="DAT_EditErrConfig_Head_Right">
+                    <div
+                      className="DAT_EditErrConfig_Head_Right_Icon"
+                      id="Popup"
+                      onClick={() => props.closeopen()}
+                      onMouseEnter={(e) => handlePopup("new")}
+                      onMouseLeave={(e) => handlePopup("pre")}
+                    >
+                      <IoClose size={25} onClick={() => handleCloseEditErr()} />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="DAT_EditErrConfig_Body">
+                  <div className="DAT_EditErrConfig_Body_Head">
+                    {dataLang.formatMessage({ id: "errorconfig" })}
+                  </div>
+                  <div className="DAT_EditErrConfig_Body_Content">
+                    <div className="DAT_EditErrConfig_Body_Content_Item">
+                      <div className="DAT_EditErrConfig_Body_Content_Item_Error">
+                        <input
+                          type="number"
+                          required
+                          defaultValue={
+                            props.data
+                              .filter(
+                                (item) =>
+                                  item.id ==
+                                  parseInt(configEdit.value.split("_")[0])
+                              )[0]
+                              ?.level.filter(
+                                (data) =>
+                                  data.id ==
+                                  parseInt(configEdit.value.split("_")[1])
+                              )[0].code
+                          }
+                          ref={editValRef1}
+                          style={{ width: "100px !important" }}
+                        />{" "}
+                      </div>
+                      :
+                      <div className="DAT_EditErrConfig_Body_Content_Item_Phone">
+                        <div className="DAT_EditErrConfig_Body_Content_Item_Phone_Row">
+                          <input
+                            type="text"
+                            ref={editValRef2}
+                            style={{ width: "200px !important" }}
+                          />
+                          <IoIosAddCircleOutline
+                            size={16}
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              handleAddPhoneEdit();
+                            }}
+                          ></IoIosAddCircleOutline>
+                        </div>
+                        <div>
+                          {ErrConfig.map((item, index) => {
+                            return (
+                              <div
+                                key={index}
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  alignItems: "center",
+                                  width: "100%",
+                                  gap: "20px",
+                                }}
+                              >
+                                {item}
+                                <IoTrashOutline
+                                  size={16}
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => handleDeletePhone(item)}
+                                ></IoTrashOutline>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="DAT_EditErrConfig_Foot">
+                  <button
+                    style={{
+                      backgroundColor: COLOR.value.PrimaryColor,
+                      color: "white",
+                    }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      props.handleEditErr(editValRef1.current.value, ErrConfig);
+                    }}
+                  >
+                    {dataLang.formatMessage({ id: "confirm" })}
+                  </button>
+                </div>
+              </div>
+            );
+          case "addNewError":
+            return (
+              <div className="DAT_EditErrConfig">
+                <div className="DAT_EditErrConfig_Head">
+                  <div className="DAT_EditErrConfig_Head_Left">
+                    {dataLang.formatMessage({ id: "add" })}
+                  </div>
+                  <div className="DAT_EditErrConfig_Head_Right">
+                    <div
+                      className="DAT_EditErrConfig_Head_Right_Icon"
+                      id="Popup"
+                      onClick={() => props.closeopen()}
+                      onMouseEnter={(e) => handlePopup("new")}
+                      onMouseLeave={(e) => handlePopup("pre")}
+                    >
+                      <IoClose size={25} />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="DAT_EditErrConfig_Body">
+                  <div className="DAT_EditErrConfig_Body_Head">
+                    {dataLang.formatMessage({ id: "errorconfig" })}
+                  </div>
+                  <div className="DAT_EditErrConfig_Body_Content">
+                    <div className="DAT_EditErrConfig_Body_Content_Item">
+                      <div className="DAT_EditErrConfig_Body_Content_Item_Error">
+                        <input
+                          type="number"
+                          required
+                          ref={editValRef1}
+                          style={{ width: "100px !important" }}
+                        />{" "}
+                      </div>
+                      :
+                      <div className="DAT_EditErrConfig_Body_Content_Item_Phone">
+                        <div className="DAT_EditErrConfig_Body_Content_Item_Phone_Row">
+                          <input
+                            type="text"
+                            ref={editValRef2}
+                            style={{ width: "200px !important" }}
+                          />
+                          <IoIosAddCircleOutline
+                            size={16}
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              handleAddNewPhoneConfig();
+                            }}
+                          ></IoIosAddCircleOutline>
+                        </div>
+                        <div>
+                          {newPhone.map((item, index) => {
+                            return (
+                              <div
+                                key={index}
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  alignItems: "center",
+                                  width: "100%",
+                                  gap: "20px",
+                                }}
+                              >
+                                {item}
+                                <IoTrashOutline
+                                  size={16}
+                                  style={{ cursor: "pointer" }}
+                                ></IoTrashOutline>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="DAT_EditErrConfig_Foot">
+                  <button
+                    style={{
+                      backgroundColor: COLOR.value.PrimaryColor,
+                      color: "white",
+                    }}
+                    onClick={(e) => {
+                      props.handleAddConfigError(
+                        editValRef1.current.value,
+                        newPhone
+                      );
+                    }}
+                  >
+                    {dataLang.formatMessage({ id: "confirm" })}
+                  </button>
+                </div>
+              </div>
+            );
+          case "addNewErrorOldData":
+            return (
+              <div className="DAT_EditErrConfig">
+                <div className="DAT_EditErrConfig_Head">
+                  <div className="DAT_EditErrConfig_Head_Left">
+                    {dataLang.formatMessage({ id: "add" })}
+                  </div>
+                  <div className="DAT_EditErrConfig_Head_Right">
+                    <div
+                      className="DAT_EditErrConfig_Head_Right_Icon"
+                      id="Popup"
+                      onClick={() => props.closeopen()}
+                      onMouseEnter={(e) => handlePopup("new")}
+                      onMouseLeave={(e) => handlePopup("pre")}
+                    >
+                      <IoClose size={25} />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="DAT_EditErrConfig_Body">
+                  <div className="DAT_EditErrConfig_Body_Head">
+                    {dataLang.formatMessage({ id: "errorconfig" })}
+                  </div>
+                  <div className="DAT_EditErrConfig_Body_Content">
+                    <div className="DAT_EditErrConfig_Body_Content_Item">
+                      <div className="DAT_EditErrConfig_Body_Content_Item_Error">
+                        <input
+                          type="number"
+                          required
+                          ref={editValRef1}
+                          style={{ width: "100px !important" }}
+                        />{" "}
+                      </div>
+                      :
+                      <div className="DAT_EditErrConfig_Body_Content_Item_Phone">
+                        <div className="DAT_EditErrConfig_Body_Content_Item_Phone_Row">
+                          <input
+                            type="text"
+                            ref={editValRef2}
+                            style={{ width: "200px !important" }}
+                          />
+                          <IoIosAddCircleOutline
+                            size={16}
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              handleAddNewPhoneConfig();
+                            }}
+                          ></IoIosAddCircleOutline>
+                        </div>
+                        <div>
+                          {newPhone.map((item, index) => {
+                            return (
+                              <div
+                                key={index}
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  alignItems: "center",
+                                  width: "100%",
+                                  gap: "20px",
+                                }}
+                              >
+                                {item}
+                                <IoTrashOutline
+                                  size={16}
+                                  style={{ cursor: "pointer" }}
+                                ></IoTrashOutline>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="DAT_EditErrConfig_Foot">
+                  <button
+                    style={{
+                      backgroundColor: COLOR.value.PrimaryColor,
+                      color: "white",
+                    }}
+                    onClick={(e) => {
+                      props.handleAddConfigErrorOldData(
+                        editValRef1.current.value,
+                        newPhone
+                      );
+                    }}
+                  >
+                    {dataLang.formatMessage({ id: "confirm" })}
+                  </button>
+                </div>
+              </div>
+            );
+          case "delErrConfig":
+            return (
+              <div className="DAT_RemoveErr">
+                <div className="DAT_RemoveErr_Head">
+                  <div className="DAT_RemoveErr_Head_Left">
+                    {dataLang.formatMessage({ id: "delete" })}
+                  </div>
+                  <div className="DAT_RemoveErr_Head_Right">
+                    <div
+                      className="DAT_RemoveErr_Head_Right_Icon"
+                      id="Popup"
+                      onClick={() => props.closeopen()}
+                      onMouseEnter={(e) => handlePopup("new")}
+                      onMouseLeave={(e) => handlePopup("pre")}
+                    >
+                      <IoClose size={25} />
+                    </div>
+                  </div>
+                </div>
+                <div className="DAT_RemoveErr_Body">
+                  {dataLang.formatMessage({ id: "delErrorConfig" })}
+                </div>
+                <div className="DAT_RemoveErr_Foot">
+                  <button
+                    style={{
+                      backgroundColor: COLOR.value.PrimaryColor,
+                      color: "white",
+                    }}
+                    onClick={(e) => {
+                      props.closeopen();
+                      props.handleDelConfigError();
+                    }}
+                  >
+                    {dataLang.formatMessage({ id: "confirm" })}
+                  </button>
+                </div>
+              </div>
+            );
         }
       })()}
     </>

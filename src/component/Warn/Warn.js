@@ -702,6 +702,13 @@ export default function Warn(props) {
     }
   };
 
+  // useEffect(() => {
+  //   if (seeAll.value === false) {
+  //     console.log("qweqwe");
+  //     handleSeeAll();
+  //   }
+  // }, [seeAll.value]);
+
   return (
     <>
       {isBrowser ? (
@@ -896,7 +903,35 @@ export default function Warn(props) {
           </div>
 
           <div className="DAT_WarnMobile">
-            <div className="DAT_Toollist_Tab_Mobile">
+            <div className="DAT_WarnMobile_Datepicker">
+              {seeAll.value ? (
+                <></>
+              ) : (
+                <input
+                  type="date"
+                  id="inputdate"
+                  defaultValue={datePickedSignal.value}
+                  max={moment(new Date()).format("YYYY-MM-DD")}
+                  onChange={(e) => {
+                    handlePickDate(e);
+                    datePickedSignal.value = e.target.value;
+                  }}
+                ></input>
+              )}
+
+              <div
+                className="DAT_Warn_Datepicker_SeeAll"
+                onClick={() => {
+                  handleSeeAll();
+                }}
+                style={{ color: seeAll.value ? "#195ede" : "black" }}
+              >
+                {dataLang.formatMessage({
+                  id: seeAll.value ? "pickdate" : "seeall",
+                })}
+              </div>
+            </div>
+            {/* <div className="DAT_Toollist_Tab_Mobile">
               <button
                 className="DAT_Toollist_Tab_Mobile_content"
                 onClick={() => (tabMobile.value = !tabMobile.value)}
@@ -935,7 +970,7 @@ export default function Warn(props) {
                   );
                 })}
               </div>
-            </div>
+            </div> */}
 
             {(() => {
               switch (warntab.value) {
@@ -1007,9 +1042,9 @@ export default function Warn(props) {
                                 </div>
                                 <div className="DAT_WarnMobile_Content_Bottom_Left_Close">
                                   {dataLang.formatMessage({
-                                    id: "closeWarnTime",
+                                    id: "openWarnDate",
                                   })}
-                                  : {item.closedtime}
+                                  : {item.opendate}
                                 </div>
                               </div>
                               <div className="DAT_WarnMobile_Content_Bottom_Right">

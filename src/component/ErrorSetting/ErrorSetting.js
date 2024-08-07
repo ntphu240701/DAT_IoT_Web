@@ -87,6 +87,10 @@ export default function ErrorSetting(props) {
   const [dataErr, setDataErr] = useState([]);
   const [errList, setErrList] = useState(false);
   const [filterType, setFilterType] = useState(true);
+  const [transState, setTransState] = useState(false);
+  const [transData, setTransData] = useState([]);
+  const [transSN, setTransSN] = useState("");
+  const usr = useSelector((state) => state.admin.usr);
 
   const paginationComponentOptions = {
     rowsPerPageText: dataLang.formatMessage({ id: "row" }),
@@ -322,13 +326,6 @@ export default function ErrorSetting(props) {
     },
   ];
 
-  // const handleModify = (e, type) => {
-  //   const id = e.currentTarget.id;
-  //   var arr = id.split("_");
-
-  //   const mod = document.getElementById(arr[0] + "_Modify");
-  //   mod.style.display = type;
-  // };
   const handleChangeGroup = (e) => {
     groupErrSN.value = e.currentTarget.id;
     console.log(groupErrSN.value);
@@ -558,7 +555,19 @@ export default function ErrorSetting(props) {
           setRemoveState(false);
         }
         break;
-      default:
+      // case "CONFIRMTRANSFERDATA": 
+      //   let req3 = await callApi("post", `${host.DATA}/updateWarnBox`, {
+      //     sn: transSN,
+      //     boxid: boxid,
+      //     name: dataErr.find((item) => item.boxid_ === boxid).name_,
+      //     cause: JSON.stringify(
+      //       dataErr.find((item) => item.boxid_ === boxid).cause_
+      //     ),
+      //     solution: JSON.stringify(
+      //       dataErr.find((item) => item.boxid_ === boxid).solution_
+      //     ),
+      //   })
+        default:
         let req = await callApi("post", `${host.DATA}/removeWarnBox`, {
           sn: groupErrSN.value,
           boxid: boxid,
@@ -744,7 +753,6 @@ export default function ErrorSetting(props) {
     setData(dataApi);
   }, [dataApi]);
 
-  const usr = useSelector((state) => state.admin.usr);
   useEffect(() => {
     const getAllLogger = async (usr, id, type) => {
       let res = await callApi("post", host.DATA + "/getAllLogger", {
@@ -883,6 +891,41 @@ export default function ErrorSetting(props) {
           <div className="DAT_ES">
             <div className="DAT_ES_Header">
               {dataLang.formatMessage({ id: "errorsetting" })}
+              {groupErrSN.value === "" ? (
+                <></>
+              ) : (
+                <div className="DAT_ES_Header_Right">
+                  Transfer error configuration to
+                  <select
+                    defaultValue={"none"}
+                    onChange={(e) => {
+                      setTransSN(e.target.value);
+                      console.log(e.target.value);
+                    }}
+                  >
+                    <option value="none">None</option>
+                    {dataGateway.map((item, index) => (
+                      <option key={index} value={item.sn_}>
+                        {item.sn_}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    onClick={() => {
+                      if (transSN !== "") {
+                        setTransData([...dataErr]);
+                        console.log(dataErr);
+                        setRemoveType("CONFIRMTRANSFERDATA");
+                        setRemoveState(true);
+                      } else {
+                        alertDispatch(dataLang.formatMessage({ id: "alert_69" }));
+                      }
+                    }}
+                  >
+                    Apply
+                  </button>
+                </div>
+              )}
             </div>
             <div className="DAT_ES_Content">
               <div className="DAT_ES_Content_DevideTable">
@@ -1008,6 +1051,8 @@ export default function ErrorSetting(props) {
             <></>
           )}
 
+          {transState}
+
           {editState ? (
             <div className="DAT_PopupBG">
               <EditErr
@@ -1038,6 +1083,8 @@ export default function ErrorSetting(props) {
           {removeState ? (
             <div className="DAT_PopupBG">
               <RemoveErr
+                errorlength={transData.length}
+                sn={transSN}
                 type={removeType}
                 handleClose={handleCloseRemove}
                 handleDel={handleDelete}
@@ -1432,6 +1479,8 @@ export default function ErrorSetting(props) {
           {removeState ? (
             <div className="DAT_PopupBGMobile">
               <RemoveErr
+                errorlength={transData.length}
+                sn={transSN}
                 type={removeType}
                 handleClose={handleCloseRemove}
                 handleDel={handleDelete}

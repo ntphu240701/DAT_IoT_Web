@@ -76,6 +76,7 @@ export default function WarnPopup(props) {
   useEffect(() => {
     // console.log(props.type);
     console.log(props.more);
+    console.log(props.data);
   }, [props.more]);
 
   return (

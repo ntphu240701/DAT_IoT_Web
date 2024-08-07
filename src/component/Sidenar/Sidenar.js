@@ -41,6 +41,7 @@ export default function Sidenar(props) {
   const set_box = useRef();
   const [preID, setPreID] = useState("");
 
+
   const data = {
     Dashboard: {
       icon: <VscDashboard />,
@@ -76,33 +77,34 @@ export default function Sidenar(props) {
       iconmobilefull: <ion-icon name="settings" />,
       link: "none",
       li:
-        userInfor.value.type === "master"
+        userInfor.value.type === "master" && isBrowser
           ? [
-            { link: "/Role", name: dataLang.formatMessage({ id: "role" }) },
-            {
-              link: "/GroupRole",
-              name: dataLang.formatMessage({ id: "grouprole" }),
-            },
-            {
-              link: "/User",
-              name: dataLang.formatMessage({ id: "account" }),
-            },
-            {
-              link: "/Contact",
-              name: dataLang.formatMessage({ id: "contact" }),
-            },
-            {
-              link: "/ErrorSetting",
-              name: dataLang.formatMessage({ id: "errorsetting" }),
-            },
-            {
-              link: "/RegisterSetting",
-              name: dataLang.formatMessage({ id: "registersetting" }),
-            },
-            { link: "/Rule", name: dataLang.formatMessage({ id: "rule" }) },
-          ]
-          : userInfor.value.type === "mainadmin"
-            ? [
+              { link: "/Role", name: dataLang.formatMessage({ id: "role" }) },
+              {
+                link: "/GroupRole",
+                name: dataLang.formatMessage({ id: "grouprole" }),
+              },
+              {
+                link: "/User",
+                name: dataLang.formatMessage({ id: "account" }),
+              },
+              {
+                link: "/Contact",
+                name: dataLang.formatMessage({ id: "contact" }),
+              },
+
+              {
+                link: "/ErrorSetting",
+                name: dataLang.formatMessage({ id: "errorsetting" }),
+              },
+              {
+                link: "/RegisterSetting",
+                name: dataLang.formatMessage({ id: "registersetting" }),
+              },
+              { link: "/Rule", name: dataLang.formatMessage({ id: "rule" }) },
+            ]
+          : userInfor.value.type === "mainadmin" && isBrowser
+          ? [
               { link: "/Role", name: dataLang.formatMessage({ id: "role" }) },
               // { link: "/GroupRole", name: dataLang.formatMessage({ id: 'grouprole' }) },
               {
@@ -123,39 +125,39 @@ export default function Sidenar(props) {
               },
               { link: "/Rule", name: dataLang.formatMessage({ id: "rule" }) },
             ]
-            : userInfor.value.type === "admin"
-              ? [
-                { link: "/Role", name: dataLang.formatMessage({ id: "role" }) },
-                // { link: "/GroupRole", name: dataLang.formatMessage({ id: 'grouprole' }) },
-                {
-                  link: "/User",
-                  name: dataLang.formatMessage({ id: "account" }),
-                },
-                {
-                  link: "/Contact",
-                  name: dataLang.formatMessage({ id: "contact" }),
-                },
-                {
-                  link: "/ErrorSetting",
-                  name: dataLang.formatMessage({ id: "errorsetting" }),
-                },
-                {
-                  link: "/RegisterSetting",
-                  name: dataLang.formatMessage({ id: "registersetting" }),
-                },
-                { link: "/Rule", name: dataLang.formatMessage({ id: "rule" }) },
-              ]
-              : [
-                // { link: "/GroupRole", name: dataLang.formatMessage({ id: 'grouprole' }) },
-                {
-                  link: "/User",
-                  name: dataLang.formatMessage({ id: "account" }),
-                },
-                {
-                  link: "/Contact",
-                  name: dataLang.formatMessage({ id: "contact" }),
-                },
-              ],
+          : userInfor.value.type === "admin" && isBrowser
+          ? [
+              { link: "/Role", name: dataLang.formatMessage({ id: "role" }) },
+              // { link: "/GroupRole", name: dataLang.formatMessage({ id: 'grouprole' }) },
+              {
+                link: "/User",
+                name: dataLang.formatMessage({ id: "account" }),
+              },
+              {
+                link: "/Contact",
+                name: dataLang.formatMessage({ id: "contact" }),
+              },
+              {
+                link: "/ErrorSetting",
+                name: dataLang.formatMessage({ id: "errorsetting" }),
+              },
+              {
+                link: "/RegisterSetting",
+                name: dataLang.formatMessage({ id: "registersetting" }),
+              },
+              { link: "/Rule", name: dataLang.formatMessage({ id: "rule" }) },
+            ]
+          : [
+              // { link: "/GroupRole", name: dataLang.formatMessage({ id: 'grouprole' }) },
+              {
+                link: "/User",
+                name: dataLang.formatMessage({ id: "account" }),
+              },
+              {
+                link: "/Contact",
+                name: dataLang.formatMessage({ id: "contact" }),
+              },
+            ],
     },
   };
 
@@ -188,33 +190,33 @@ export default function Sidenar(props) {
       iconmobilefull: <ion-icon name="settings" />,
       link: "none",
       li:
-        userInfor.value.type === "master"
+        userInfor.value.type === "master" && isBrowser
           ? [
-            { link: "/Role", name: dataLang.formatMessage({ id: "role" }) },
-            {
-              link: "/GroupRole",
-              name: dataLang.formatMessage({ id: "grouprole" }),
-            },
-            {
-              link: "/User",
-              name: dataLang.formatMessage({ id: "account" }),
-            },
-            {
-              link: "/Contact",
-              name: dataLang.formatMessage({ id: "contact" }),
-            },
-            {
-              link: "/ErrorSetting",
-              name: dataLang.formatMessage({ id: "errorsetting" }),
-            },
-            {
-              link: "/RegisterSetting",
-              name: dataLang.formatMessage({ id: "registersetting" }),
-            },
-            { link: "/Rule", name: dataLang.formatMessage({ id: "rule" }) },
-          ]
-          : userInfor.value.type === "mainadmin"
-            ? [
+              { link: "/Role", name: dataLang.formatMessage({ id: "role" }) },
+              {
+                link: "/GroupRole",
+                name: dataLang.formatMessage({ id: "grouprole" }),
+              },
+              {
+                link: "/User",
+                name: dataLang.formatMessage({ id: "account" }),
+              },
+              {
+                link: "/Contact",
+                name: dataLang.formatMessage({ id: "contact" }),
+              },
+              {
+                link: "/ErrorSetting",
+                name: dataLang.formatMessage({ id: "errorsetting" }),
+              },
+              {
+                link: "/RegisterSetting",
+                name: dataLang.formatMessage({ id: "registersetting" }),
+              },
+              { link: "/Rule", name: dataLang.formatMessage({ id: "rule" }) },
+            ]
+          : userInfor.value.type === "mainadmin" && isBrowser
+          ? [
               { link: "/Role", name: dataLang.formatMessage({ id: "role" }) },
               // { link: "/GroupRole", name: dataLang.formatMessage({ id: 'grouprole' }) },
               {
@@ -235,39 +237,39 @@ export default function Sidenar(props) {
               },
               { link: "/Rule", name: dataLang.formatMessage({ id: "rule" }) },
             ]
-            : userInfor.value.type === "admin"
-              ? [
-                { link: "/Role", name: dataLang.formatMessage({ id: "role" }) },
-                // { link: "/GroupRole", name: dataLang.formatMessage({ id: 'grouprole' }) },
-                {
-                  link: "/User",
-                  name: dataLang.formatMessage({ id: "account" }),
-                },
-                {
-                  link: "/Contact",
-                  name: dataLang.formatMessage({ id: "contact" }),
-                },
-                {
-                  link: "/ErrorSetting",
-                  name: dataLang.formatMessage({ id: "errorsetting" }),
-                },
-                {
-                  link: "/RegisterSetting",
-                  name: dataLang.formatMessage({ id: "registersetting" }),
-                },
-                { link: "/Rule", name: dataLang.formatMessage({ id: "rule" }) },
-              ]
-              : [
-                // { link: "/GroupRole", name: dataLang.formatMessage({ id: 'grouprole' }) },
-                {
-                  link: "/User",
-                  name: dataLang.formatMessage({ id: "account" }),
-                },
-                {
-                  link: "/Contact",
-                  name: dataLang.formatMessage({ id: "contact" }),
-                },
-              ],
+          : userInfor.value.type === "admin" && isBrowser
+          ? [
+              { link: "/Role", name: dataLang.formatMessage({ id: "role" }) },
+              // { link: "/GroupRole", name: dataLang.formatMessage({ id: 'grouprole' }) },
+              {
+                link: "/User",
+                name: dataLang.formatMessage({ id: "account" }),
+              },
+              {
+                link: "/Contact",
+                name: dataLang.formatMessage({ id: "contact" }),
+              },
+              {
+                link: "/ErrorSetting",
+                name: dataLang.formatMessage({ id: "errorsetting" }),
+              },
+              {
+                link: "/RegisterSetting",
+                name: dataLang.formatMessage({ id: "registersetting" }),
+              },
+              { link: "/Rule", name: dataLang.formatMessage({ id: "rule" }) },
+            ]
+          : [
+              // { link: "/GroupRole", name: dataLang.formatMessage({ id: 'grouprole' }) },
+              {
+                link: "/User",
+                name: dataLang.formatMessage({ id: "account" }),
+              },
+              {
+                link: "/Contact",
+                name: dataLang.formatMessage({ id: "contact" }),
+              },
+            ],
     },
   };
 
@@ -551,8 +553,8 @@ export default function Sidenar(props) {
     console.log(sidebartab.value);
   }, [sidebartab.value]);
 
-  const SelectBox = () => {
-    const position = {
+  const SelectBox = (props) => {
+    let position = {
       Dashboard: { top: "70px", left: "70px" },
       Analytics: { top: "130px", left: "70px" },
       Setting: { top: "190px", left: "70px" },
@@ -560,12 +562,18 @@ export default function Sidenar(props) {
       // Notif: { top: "270px", left: "70px" },
     };
 
+    useEffect(() => {
+      console.log(props.type);
+      console.log(position[props.type]);
+    }, [props.type]);
+
+
     return (
       <div
         className="DAT_SelectBox"
         style={{
-          top: position[sidebartab.value].top,
-          left: position[sidebartab.value].left,
+          top: position[props.type].top,
+          left: position[props.type].left,
           width: showList.value ? "fit-content" : "0",
           transition: "0.5s",
         }}
@@ -734,7 +742,7 @@ export default function Sidenar(props) {
             }}
           ></div>
           {raiseInfo.value ? <InforBox /> : <></>}
-          {viewMode.value ? <></> : <SelectBox />}
+          {viewMode.value ? <></> : <SelectBox type={sidebartab.value} />}
         </>
       ) : (
         <>

@@ -329,7 +329,7 @@ export default function Dashboard(props) {
             {/* <div className="DAT_MainInfo_Graph_Header"></div> */}
             <div className="DAT_MainInfo_Graph_Head">
               <div className="DAT_MainInfo_Graph_Head_Title">
-                {datalang.formatMessage({ id: "history" })}
+                {datalang.formatMessage({ id: "TotalConsumptionPower" })}
               </div>
               <div className="DAT_MainInfo_Graph_Head_Option">
                 <span

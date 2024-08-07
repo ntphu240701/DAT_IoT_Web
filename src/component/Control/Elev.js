@@ -335,7 +335,7 @@ export default function Auto(props) {
       width: "100px",
     },
     {
-      name: dataLang.formatMessage({ id: "warn" }),
+      name: dataLang.formatMessage({ id: "status" }),
       selector: (row) => (
         <div
         // style={{ cursor: "pointer" }}

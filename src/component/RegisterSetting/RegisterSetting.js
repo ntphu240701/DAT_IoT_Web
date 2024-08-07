@@ -36,6 +36,7 @@ import { FaGears } from "react-icons/fa6";
 
 export const groupRegID = signal("");
 export const configEdit = signal("");
+export const zalo = signal([]);
 
 export default function RegisterSetting() {
   const [dataGateway, setDataGateway] = useState([]);
@@ -139,6 +140,121 @@ export default function RegisterSetting() {
         minWidth: "200px",
         height: "auto !important",
         justifyContent: "center !important",
+      },
+    },
+    //ERROR
+    {
+      name: dataLang.formatMessage({ id: "errorconfig" }),
+      selector: (row, i) => {
+        return (
+          <div style={{ height: "auto", minWidth: "300px" }}>
+            {row.level ? (
+              row.level.map((err, index) => {
+                return (
+                  <div
+                    key={index}
+                    style={{
+                      display: "flex",
+                      gap: "30px",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: "8px 0",
+                    }}
+                  >
+                    {err.code === undefined ? "..." : err.code} :{" "}
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "5px",
+                      }}
+                    >
+                      {err.phone
+                        ? err.phone.map((num, index) => {
+                            return <div key={index}>{num}</div>;
+                          })
+                        : "..."}
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "10px",
+                        justifyContent: "flex-start",
+                        width: "80px",
+                      }}
+                    >
+                      <FiEdit
+                        size={16}
+                        id={`${row.id}_${err.id}_EDIT`}
+                        style={{ cursor: "pointer" }}
+                        onClick={(e) => {
+                          setStatePopup("editError");
+                          changePopupstate();
+                          handleSetConfig(e);
+                        }}
+                      />
+                      <IoTrashOutline
+                        size={16}
+                        style={{ cursor: "pointer" }}
+                        id={`${row.id}_${err.id}_REMOVE`}
+                        onClick={(e) => {
+                          setStatePopup("delErrConfig");
+                          changePopupstate();
+                          handleSetConfig(e);
+                        }}
+                      />
+                      {parseInt(index) === row.level.length - 1 ? (
+                        <IoIosAddCircleOutline
+                          size={16}
+                          style={{ cursor: "pointer" }}
+                          id={`${row.id}_ADD`}
+                          onClick={(e) => {
+                            // handleAddNewError(e);
+                            handleSetConfig(e);
+                            changePopupstate();
+                            setStatePopup("addNewError");
+                          }}
+                        />
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  cursor: "pointer",
+                }}
+              >
+                <IoIosAddCircleOutline
+                  id={`${row.id}_ADD`}
+                  size={16}
+                  onClick={(e) => {
+                    // handleAddNewError(e);
+                    handleSetConfig(e);
+                    changePopupstate();
+                    setStatePopup("addNewErrorOldData");
+                  }}
+                ></IoIosAddCircleOutline>
+              </div>
+            )}
+          </div>
+        );
+      },
+      style: {
+        display: "flex",
+        flexDirection: "column",
+        gap: "3px",
+        minWidth: "300px",
+        height: "auto !important",
+        justifyContent: "center !important",
+        alignItems: "center !important",
       },
     },
     //ADDRESS
@@ -661,6 +777,159 @@ export default function RegisterSetting() {
   };
 
   //FUNCTION POPUP
+  const handleDelConfigError = () => {
+    const i = dataRegister.findIndex(
+      (data) => data.id === parseInt(configEdit.value.split("_")[0])
+    );
+    const levelindex = dataRegister[i].level.findIndex(
+      (data) => data.id === parseInt(configEdit.value.split("_")[1])
+    );
+    const isLast = dataRegister[i].level.length;
+    console.log(isLast);
+    if (isLast === 1) {
+      alertDispatch(dataLang.formatMessage({ id: "alert_68" }));
+    } else {
+      dataRegister[i].level.splice(levelindex, 1);
+      setDataRegister([...dataRegister]);
+      const upReg = async () => {
+        let req = await callApi("post", `${host.DATA}/updateRegister`, {
+          sn: groupRegID.value,
+          data: JSON.stringify(dataRegister),
+          bu: bu,
+        });
+        console.log(req);
+        setDataRegister([...dataRegister]);
+      };
+      upReg();
+      changePopupstate();
+      console.log(dataRegister);
+    }
+  };
+
+  const handleAddConfigError = (code, phonelist) => {
+    console.log(code, phonelist);
+    const i = dataRegister.findIndex(
+      (data) => data.id === parseInt(configEdit.value.split("_")[0])
+    );
+    console.log(i);
+    const levelindex = dataRegister[i].level.findIndex(
+      (data) => data.id === parseInt(configEdit.value.split("_")[1])
+    );
+    const isCodeExist = dataRegister[i].level.filter(
+      (data) => data.code === parseInt(code)
+    ).length;
+    console.log(isCodeExist);
+    if (code === "") {
+      alertDispatch(dataLang.formatMessage({ id: "alert_22" }));
+    } else {
+      const isExist = dataRegister[i].level.filter(
+        (data) => data.code === code
+      ).length;
+      if (isExist > 0) {
+        alertDispatch(dataLang.formatMessage({ id: "alert_49" }));
+      } else if (isCodeExist > 0) {
+        alertDispatch(dataLang.formatMessage({ id: "alert_67" }));
+      } else {
+        dataRegister[i].level.push({
+          id: dataRegister[i].level[dataRegister[i].level.length - 1].id + 1,
+          code: parseInt(code),
+          phone: phonelist,
+        });
+        const upReg = async () => {
+          let req = await callApi("post", `${host.DATA}/updateRegister`, {
+            sn: groupRegID.value,
+            data: JSON.stringify(dataRegister),
+            bu: bu,
+          });
+          console.log(req);
+          setDataRegister([...dataRegister]);
+        };
+        upReg();
+        changePopupstate();
+        console.log(dataRegister);
+      }
+    }
+  };
+
+  const handleAddConfigErrorOldData = (code, phonelist) => {
+    console.log(code, phonelist);
+    const i = dataRegister.findIndex(
+      (data) => data.id === parseInt(configEdit.value.split("_")[0])
+    );
+    console.log(i);
+    // const levelindex = dataRegister[i].level.findIndex(
+    //   (data) => data.id === parseInt(configEdit.value.split("_")[1])
+    // );
+    if (code === "") {
+      alertDispatch(dataLang.formatMessage({ id: "alert_22" }));
+    } else {
+      const t = dataRegister
+      t[i] = {
+        ...t[i],
+        level: [
+          {
+            id: 1,
+            code: parseInt(code),
+            phone: phonelist,
+          },
+        ],
+      };
+      setDataRegister([...t]);
+      const upReg = async () => {
+        let req = await callApi("post", `${host.DATA}/updateRegister`, {
+          sn: groupRegID.value,
+          data: JSON.stringify(dataRegister),
+          bu: bu,
+        });
+        console.log(req);
+        setDataRegister([...dataRegister]);
+      };
+      upReg();
+      changePopupstate();
+      console.log(dataRegister);
+    }
+  };
+  const handleEditErr = (code, data) => {
+    // console.log(code, data);
+    // console.log(dataRegister);
+    const i = dataRegister.findIndex(
+      (data) => data.id === parseInt(configEdit.value.split("_")[0])
+    );
+    console.log(i);
+    const levelindex = dataRegister[i].level.findIndex(
+      (data) => data.id === parseInt(configEdit.value.split("_")[1])
+    );
+    if (code === "") {
+      alertDispatch(dataLang.formatMessage({ id: "alert_22" }));
+    } else {
+      const isExist = dataRegister[i].level.filter(
+        (data) => data.code === code
+      ).length;
+      if (isExist > 0) {
+        alertDispatch(dataLang.formatMessage({ id: "alert_49" }));
+      } else {
+        dataRegister[i].level[levelindex].code = parseInt(code);
+        dataRegister[i].level[levelindex].phone = data;
+        console.log(dataRegister);
+        const upReg = async () => {
+          let req = await callApi("post", `${host.DATA}/updateRegister`, {
+            sn: groupRegID.value,
+            data: JSON.stringify(dataRegister),
+            bu: bu,
+          });
+          console.log(req);
+          setDataRegister([...dataRegister]);
+        };
+        upReg();
+        changePopupstate();
+        console.log(dataRegister);
+      }
+    }
+  };
+
+  useEffect(() => {
+    zalo.value = [...dataRegister];
+  }, [dataRegister]);
 
   const updateName = async (name) => {
     if (name === "") {
@@ -674,7 +943,7 @@ export default function RegisterSetting() {
         let req = await callApi("post", `${host.DATA}/updateRegister`, {
           sn: groupRegID.value,
           data: JSON.stringify(dataRegister),
-          bu: bu
+          bu: bu,
         });
         console.log(req);
         setDataRegister([...dataRegister]);
@@ -699,7 +968,7 @@ export default function RegisterSetting() {
         let req = await callApi("post", `${host.DATA}/updateRegister`, {
           sn: groupRegID.value,
           data: JSON.stringify(dataRegister),
-          bu: bu
+          bu: bu,
         });
         console.log(req);
         setDataRegister([...dataRegister]);
@@ -742,6 +1011,13 @@ export default function RegisterSetting() {
               dcbus: undefined,
               current: undefined,
               frequency: undefined,
+              level: [
+                {
+                  id: 1,
+                  code: 0,
+                  phone: [],
+                },
+              ],
               register: [
                 {
                   id: 1,
@@ -756,7 +1032,7 @@ export default function RegisterSetting() {
             let req = await callApi("post", `${host.DATA}/updateRegister`, {
               sn: groupRegID.value,
               data: JSON.stringify(temp),
-              bu: bu
+              bu: bu,
             });
             console.log(req);
             if (req.status === true) {
@@ -802,7 +1078,7 @@ export default function RegisterSetting() {
             let req = await callApi("post", `${host.DATA}/updateRegister`, {
               sn: groupRegID.value,
               data: JSON.stringify(temp),
-              bu: bu
+              bu: bu,
             });
             console.log(req);
             if (req.status === true) {
@@ -813,6 +1089,39 @@ export default function RegisterSetting() {
           };
           upReg();
         }
+      }
+    }
+  };
+
+  const handleEditConfigError = (editVal1, editVal2) => {
+    const temp = configEdit.value.split("_");
+    const i = dataRegister.findIndex((data) => data.id == temp[0]);
+    const j = dataRegister[i].level.findIndex((lvl) => lvl.id == temp[1]);
+    let t = dataRegister;
+    // console.log(t[i]);
+    if (editVal1 === "") {
+      alertDispatch(dataLang.formatMessage({ id: "alert_22" }));
+    } else {
+      if (t[i].level.filter((data) => data.code === `${editVal1}`).length > 0) {
+        alertDispatch(dataLang.formatMessage({ id: "alert_49" }));
+      } else {
+        t[i].level[j].code = editVal1;
+        t[i].level[j].phone = editVal2;
+        console.log(t[i].level);
+        const upReg = async () => {
+          let req = await callApi("post", `${host.DATA}/updateRegister`, {
+            sn: groupRegID.value,
+            data: JSON.stringify(t),
+            bu: bu,
+          });
+          console.log(req);
+          if (req.status === true) {
+            setDataRegister([...t]);
+            setDataRegisterSub([...t]);
+            changePopupstate();
+          }
+        };
+        upReg();
       }
     }
   };
@@ -873,7 +1182,7 @@ export default function RegisterSetting() {
         let req = await callApi("post", `${host.DATA}/updateRegister`, {
           sn: groupRegID.value,
           data: JSON.stringify(t),
-          bu: bu
+          bu: bu,
         });
         console.log(req);
         setDataRegister([...t]);
@@ -910,7 +1219,7 @@ export default function RegisterSetting() {
           let req = await callApi("post", `${host.DATA}/updateRegister`, {
             sn: groupRegID.value,
             data: JSON.stringify(t),
-            bu: bu
+            bu: bu,
           });
           console.log(req);
           setDataRegister([...t]);
@@ -932,7 +1241,7 @@ export default function RegisterSetting() {
       let req = await callApi("post", `${host.DATA}/updateRegister`, {
         sn: groupRegID.value,
         data: JSON.stringify(t),
-        bu: bu
+        bu: bu,
       });
       console.log(req);
       setDataRegister([...t]);
@@ -1288,6 +1597,11 @@ export default function RegisterSetting() {
           {popup ? (
             <div className="DAT_PopupBG">
               <Popup
+                handleAddConfigErrorOldData={handleAddConfigErrorOldData}
+                handleDelConfigError={handleDelConfigError}
+                handleAddConfigError={handleAddConfigError}
+                handleEditErr={handleEditErr}
+                handleEditConfigError={handleEditConfigError}
                 updateName={updateName}
                 updateReg={updateReg}
                 bu={bu}
@@ -1594,6 +1908,11 @@ export default function RegisterSetting() {
           {popup ? (
             <div className="DAT_PopupBGMobile">
               <Popup
+                handleAddConfigErrorOldData={handleAddConfigErrorOldData}
+                handleDelConfigError={handleDelConfigError}
+                handleAddConfigError={handleAddConfigError}
+                handleEditErr={handleEditErr}
+                handleEditConfigError={handleEditConfigError}
                 updateName={updateName}
                 updateReg={updateReg}
                 bu={bu}
