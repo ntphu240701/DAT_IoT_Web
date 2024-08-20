@@ -745,11 +745,11 @@ export const messages = {
     alert_63: "Page default not found!",
     alert_64: "Setup Page default successfully!",
     alert_65: "Disable Page default successfully!",
-    alert_66: "Phone number is not valid!",
+    alert_66: "Err format!",
     alert_67: "Error code existed!",
     alert_68: "Atleast one error code is required!",
     alert_69: "Please select Gateway code!",
-
+    alert_70: "Phone number is not valid!",
     // --------------------------------- //
 
     maxkWp: "Max kWp",
@@ -1708,11 +1708,11 @@ export const messages = {
     alert_63: "Màn hình mặc định không tồn tại!",
     alert_64: "Thiết lập màn hình mặc định thành công!",
     alert_65: "Tắt màn hình mặc định thành công!",
-    alert_66: "Số điện thoại sai định dạng!",
+    alert_66: "Lỗi định dạng!",
     alert_67: "Mã lỗi đã tồn tại!",
     alert_68: "Ít nhất phải tồn tại 1 lỗi!",
     alert_69: "Vui lòng chọn Gateway!",
-
+    alert_70: "Số điện thoại sai định dạng!",
 
     // --------------------------------- //
 

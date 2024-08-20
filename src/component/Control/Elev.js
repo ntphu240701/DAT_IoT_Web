@@ -121,7 +121,7 @@ export default function Auto(props) {
           }}
         >
           {ruleInfor.value.setting.project.modify == true ||
-          ruleInfor.value.setting.project.remove == true ? (
+            ruleInfor.value.setting.project.remove == true ? (
             row.shared == 1 ? (
               <></>
             ) : (
@@ -221,7 +221,7 @@ export default function Auto(props) {
               }}
               onClick={(e) => {
                 handlePlant(e);
-                mode.value = "dashboard";
+                // mode.value = "dashboard";
                 sidenar.value = false;
               }}
             />
@@ -233,7 +233,7 @@ export default function Auto(props) {
                 style={{ cursor: "pointer", width: "fit-content" }}
                 onClick={(e) => {
                   handlePlant(e);
-                  mode.value = "dashboard";
+                  // mode.value = "dashboard";
                   sidenar.value = false;
                 }}
               >
@@ -248,7 +248,7 @@ export default function Auto(props) {
               <div style={{ cursor: "pointer" }}>
                 <div
                   className="DAT_TableMark"
-                  style={{ cursor: "pointer"}}
+                  style={{ cursor: "pointer" }}
                   {...bindHover(popupState)}
                 >
                   <FaStar
@@ -311,19 +311,19 @@ export default function Auto(props) {
               alignItems: "center",
               gap: "5px",
             }}
-            // id={row.name_}
-            // onClick={(e) => {
-            // connectval.value = e.currentTarget.id;
-            // sidebartab.value = "Monitor";
-            // sidebartabli.value = "/Device";
-            // navigate("/Device");
-            // }}
+          // id={row.name_}
+          // onClick={(e) => {
+          // connectval.value = e.currentTarget.id;
+          // sidebartab.value = "Monitor";
+          // sidebartabli.value = "/Device";
+          // navigate("/Device");
+          // }}
           >
             {row.online} / {row.total}
             {row.state_ === 1 ? (
               <FaCheckCircle size={20} color="green" />
             ) : (
-              <MdOutlineError size={22} color="red" />
+              <MdOutlineError size={22} color="gray" />
             )}
             {/* {row.newState.length > 0
             ? "ok"
@@ -335,7 +335,7 @@ export default function Auto(props) {
       width: "100px",
     },
     {
-      name: dataLang.formatMessage({ id: "status" }),
+      name: dataLang.formatMessage({ id: "warn" }),
       selector: (row) => (
         <div
         // style={{ cursor: "pointer" }}
@@ -348,11 +348,14 @@ export default function Auto(props) {
         // navigate("/Warn");
         // }}
         >
-          {row.warn_ === 1 ? (
-            <FaCheckCircle size={20} color="green" />
-          ) : (
-            <MdOutlineError size={22} color="red" />
-          )}
+          {row.warn_ === 1
+            ? <FaCheckCircle size={20} color="green" />
+            : row.warn_ === 2
+              ? <MdOutlineError size={22} color="gray" />
+
+              : <MdOutlineError size={22} color="red" />
+          }
+
         </div>
       ),
       width: "100px",
@@ -374,7 +377,7 @@ export default function Auto(props) {
             id={row.plantid_}
             style={{ cursor: "pointer", color: "#0082CA" }}
             onClick={(e) => {
-              handlePlant(e);
+              handlePlant2(e);
               sidenar.value = false;
             }}
           >
@@ -397,6 +400,57 @@ export default function Auto(props) {
   ];
 
   const handlePlant = async (e) => {
+    mode.value = "dashboard";
+    plantState.value = "info";
+    // console.log(e.currentTarget.id);
+    const newPlant = plantData.value.find(
+      (item) => item.plantid_ == e.currentTarget.id
+    );
+    // console.log(newPlant);
+
+    let sn = [0];
+    let res = await callApi("post", host.DATA + "/getLogger", {
+      plantid: parseInt(e.currentTarget.id),
+    });
+    // console.log(res.data);
+    if (res.status) {
+      // setDevice(res.data)
+      listDevice.value = res.data;
+      res.data.map((data, index) => {
+        sn.push(data.sn_);
+      });
+      device.value = res.data;
+      plantobjauto.value = newPlant;
+    }
+
+    // plantobjauto.value = newPlant;
+    // setplantobjauto(newPlant);
+    overviewDispatch({
+      type: "LOAD_DEVICE",
+      payload: {
+        id: newPlant.plantid_,
+        visual: newPlant.data_.data,
+        setting: newPlant.setting_,
+        company: newPlant.company_,
+        name: newPlant.name_,
+      },
+    });
+    overviewDispatch({
+      type: "SET_LASTID",
+      payload: newPlant.data_.id,
+    });
+
+    overviewDispatch({
+      type: "SET_ID",
+      payload: sn,
+    });
+
+    // console.log(overview_visual);
+    deviceData.value = [];
+  };
+
+  const handlePlant2 = async (e) => {
+    mode.value = "overview";
     plantState.value = "info";
     // console.log(e.currentTarget.id);
     const newPlant = plantData.value.find(
@@ -546,20 +600,19 @@ export default function Auto(props) {
 
   useEffect(() => {
     const getPlant = async () => {
-      let pD = await callApi("post", host.DATA + "/getPlant", {
+      let d = await callApi("post", host.DATA + "/getPlant", {
         usr: user,
         partnerid: userInfor.value.partnerid,
         type: userInfor.value.type,
         system: bu,
       });
-      // console.log(pD);
-      if (pD.status === true) {
-        plantData.value = pD.data.sort((a, b) => a.plantid_ - b.plantid_);
-        plantData.value.map((item) => {
-          item["online"] = 0;
-          item["total"] = 0;
-        });
-
+      // console.log(d);
+      if (d.status === true) {
+        plantData.value = d.data.sort((a, b) => a.plantid_ - b.plantid_);
+        // plantData.value.map((item) => {
+        //   item["online"] = 0;
+        //   item["total"] = 0;
+        // });
         const getAllLogger = async () => {
           let res = await callApi("post", host.DATA + "/getAllLogger", {
             usr: user,
@@ -568,23 +621,26 @@ export default function Auto(props) {
           });
           // console.log(res.data);
           if (res.status) {
-            let newdb = [...pD.data];
-            res.data.forEach((data) => {
+            plantData.value.map((item) => {
+              item["online"] = 0;
+              item["total"] = 0;
+            });
+            let newdb = [...plantData.value];
+            res.data.map((data) => {
               let id = newdb.findIndex(
                 (item) => item.plantid_ === data.plantid_
               );
-              if (id !== -1) {
+              if(id >= 0) {
                 newdb[id]["total"] += 1;
-                if (newdb[id]["state_"] === 1) {
+                if (data.state_ === 1) {
                   newdb[id]["online"] += 1;
                 }
               }
             });
+            plantData.value = [...newdb];
           }
         };
         getAllLogger();
-
-        // console.log(plantData.value);
       }
     };
     getPlant();
@@ -1044,7 +1100,7 @@ export default function Auto(props) {
                                     id={item.plantid_}
                                     onClick={(e) => {
                                       handlePlant(e);
-                                      mode.value = "dashboard";
+                                      // mode.value = "dashboard";
                                       sidenar.value = false;
                                     }}
                                   >
@@ -1095,28 +1151,21 @@ export default function Auto(props) {
                                     )}
                                   </div>
                                   <div className="DAT_ProjectMobile_Content_Top_Info_State_Item">
-                                    {item.warn_ ? (
-                                      <>
-                                        <FaCheckCircle
-                                          size={14}
-                                          color="green"
-                                        />
-                                        <span>
-                                          {dataLang.formatMessage({
-                                            id: "noAlert",
-                                          })}
-                                        </span>
+                                    {item.warn_ === 1
+                                      ? <>
+                                        <FaCheckCircle size={14} color="green" />
+                                        <span>{dataLang.formatMessage({ id: "noAlert", })}</span>
                                       </>
-                                    ) : (
-                                      <>
-                                        <MdOutlineError size={16} color="red" />
-                                        <span>
-                                          {dataLang.formatMessage({
-                                            id: "alert",
-                                          })}
-                                        </span>
-                                      </>
-                                    )}
+                                      : item.warn_ === 2
+                                        ? <>
+                                          <MdOutlineError size={16} color="gray" />
+                                          <span>{dataLang.formatMessage({ id: "noAlert", })}</span>
+                                        </>
+                                        : <>
+                                          <MdOutlineError size={16} color="red" />
+                                          <span>{dataLang.formatMessage({ id: "alert", })}</span>
+                                        </>
+                                    }
                                   </div>
                                 </div>
 
@@ -1204,7 +1253,7 @@ export default function Auto(props) {
                                 <div
                                   className="DAT_ProjectMobile_Content_Top_Info_Detail"
                                   id={item.plantid_}
-                                  onClick={(e) => handlePlant(e)}
+                                  onClick={(e) => handlePlant2(e)}
                                 >
                                   {dataLang.formatMessage({
                                     id: "projectInfo",
@@ -1232,7 +1281,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1244,7 +1293,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1272,7 +1321,7 @@ export default function Auto(props) {
                               <div className="DAT_ProjectMobile_Content_Top_Avatar">
                                 <img
                                   src={
-                                    item.img_
+                                    item.img
                                       ? item.img
                                       : `/dat_picture/${bu}.jpg`
                                   }
@@ -1287,7 +1336,11 @@ export default function Auto(props) {
                                   <div
                                     className="DAT_ProjectMobile_Content_Top_Info_Name_Left"
                                     id={item.plantid_}
-                                    onClick={(e) => handlePlant(e)}
+                                    onClick={(e) => {
+                                      handlePlant(e);
+                                      // mode.value = "dashboard";
+                                      sidenar.value = false;
+                                    }}
                                   >
                                     {item.name_}
                                   </div>
@@ -1305,6 +1358,9 @@ export default function Auto(props) {
                                       onClick={(e) => handleLike(e)}
                                     />
                                   </div>
+                                </div>
+                                <div className="DAT_ProjectMobile_Content_Top_Info_Company">
+                                  {item.company_}
                                 </div>
 
                                 <div className="DAT_ProjectMobile_Content_Top_Info_State">
@@ -1333,63 +1389,113 @@ export default function Auto(props) {
                                     )}
                                   </div>
                                   <div className="DAT_ProjectMobile_Content_Top_Info_State_Item">
-                                    {item.warn_ ? (
-                                      <>
-                                        <FaCheckCircle
-                                          size={14}
-                                          color="green"
-                                        />
-                                        <span>
-                                          {dataLang.formatMessage({
-                                            id: "noAlert",
-                                          })}
-                                        </span>
+                                    {item.warn_ === 1
+                                      ? <>
+                                        <FaCheckCircle size={14} color="green" />
+                                        <span>{dataLang.formatMessage({ id: "noAlert", })}</span>
                                       </>
-                                    ) : (
-                                      <>
-                                        <MdOutlineError size={16} color="red" />
-                                        <span>
-                                          {dataLang.formatMessage({
-                                            id: "alert",
-                                          })}
-                                        </span>
-                                      </>
-                                    )}
+                                      : item.warn_ === 2
+                                        ? <>
+                                          <MdOutlineError size={16} color="gray" />
+                                          <span>{dataLang.formatMessage({ id: "noAlert", })}</span>
+                                        </>
+                                        : <>
+                                          <MdOutlineError size={16} color="red" />
+                                          <span>{dataLang.formatMessage({ id: "alert", })}</span>
+                                        </>
+                                    }
                                   </div>
                                 </div>
 
                                 <div className="DAT_ProjectMobile_Content_Top_Info_Data">
                                   {/* <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
-                                    <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
-                                      {dataLang.formatMessage({ id: "power" })}
-                                    </div>
-                                    <div>
-                                      {item.power}
-                                      <span>%</span>
-                                    </div>
+                                  <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
+                                    {dataLang.formatMessage({
+                                      id: "inCapacity",
+                                    })}
                                   </div>
-
-                                  <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
-                                    <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
-                                      {dataLang.formatMessage({ id: "capacity" })}
-                                    </div>
-                                    <div>
-                                      {item.capacity}
-                                      <span>kWp</span>
-                                    </div>
+                                  <div>
+                                    {Number(
+                                      parseFloat(
+                                        convertUnit(item.capacity)
+                                      ).toFixed(2)
+                                    ).toLocaleString("en-US")}
+                                    &nbsp;
+                                    {showUnitk(item.capacity)}Wp
                                   </div>
+                                </div>
 
-                                  <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
-                                    <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
-                                      {dataLang.formatMessage({
-                                        id: "production",
-                                      })}
-                                    </div>
-                                    <div>
-                                      {item.production}
-                                      <span>kWh</span>
-                                    </div>
-                                  </div> */}
+                                <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
+                                  <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
+                                    {dataLang.formatMessage({ id: "daily" })}
+                                  </div>
+                                  <div>
+                                    {parseFloat(
+                                      dailyProduction[item.plantid_]
+                                    ).toFixed(2) === "NaN" ? (
+                                      <>
+                                        0 &nbsp;
+                                        {showUnitk(
+                                          dailyProduction[item.plantid_]
+                                        )}
+                                        Wh
+                                      </>
+                                    ) : (
+                                      <>
+                                        {Number(
+                                          parseFloat(
+                                            convertUnit(
+                                              dailyProduction[item.plantid_]
+                                            )
+                                          ).toFixed(2)
+                                        ).toLocaleString("en-US")}
+                                        &nbsp;
+                                        {showUnitk(
+                                          dailyProduction[item.plantid_]
+                                        )}
+                                        Wh
+                                      </>
+                                    )}
+                                  </div>
+                                </div>
+
+                                <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
+                                  <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
+                                    {dataLang.formatMessage({ id: "power" })}
+                                  </div>
+                                  <div>
+                                    {parseFloat(power[item.plantid_]).toFixed(
+                                      2
+                                    ) === "NaN" ? (
+                                      <>
+                                        0 &nbsp;
+                                        {showUnitk(power[item.plantid_])}W
+                                      </>
+                                    ) : (
+                                      <>
+                                        {Number(
+                                          parseFloat(
+                                            convertUnit(
+                                              power[item.plantid_] / 1000
+                                            )
+                                          ).toFixed(2)
+                                        ).toLocaleString("en-US")}
+                                        &nbsp;
+                                        {showUnit(power[item.plantid_])}W
+                                      </>
+                                    )}
+                                  </div>
+                                </div> */}
+                                </div>
+
+                                <div
+                                  className="DAT_ProjectMobile_Content_Top_Info_Detail"
+                                  id={item.plantid_}
+                                  onClick={(e) => handlePlant2(e)}
+                                >
+                                  {dataLang.formatMessage({
+                                    id: "projectInfo",
+                                  })}
                                 </div>
                               </div>
                             </div>
@@ -1413,7 +1519,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1425,7 +1531,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1453,7 +1559,7 @@ export default function Auto(props) {
                               <div className="DAT_ProjectMobile_Content_Top_Avatar">
                                 <img
                                   src={
-                                    item.img_
+                                    item.img
                                       ? item.img
                                       : `/dat_picture/${bu}.jpg`
                                   }
@@ -1468,7 +1574,11 @@ export default function Auto(props) {
                                   <div
                                     className="DAT_ProjectMobile_Content_Top_Info_Name_Left"
                                     id={item.plantid_}
-                                    onClick={(e) => handlePlant(e)}
+                                    onClick={(e) => {
+                                      handlePlant(e);
+                                      // mode.value = "dashboard";
+                                      sidenar.value = false;
+                                    }}
                                   >
                                     {item.name_}
                                   </div>
@@ -1486,6 +1596,9 @@ export default function Auto(props) {
                                       onClick={(e) => handleLike(e)}
                                     />
                                   </div>
+                                </div>
+                                <div className="DAT_ProjectMobile_Content_Top_Info_Company">
+                                  {item.company_}
                                 </div>
 
                                 <div className="DAT_ProjectMobile_Content_Top_Info_State">
@@ -1514,63 +1627,113 @@ export default function Auto(props) {
                                     )}
                                   </div>
                                   <div className="DAT_ProjectMobile_Content_Top_Info_State_Item">
-                                    {item.warn_ ? (
-                                      <>
-                                        <FaCheckCircle
-                                          size={14}
-                                          color="green"
-                                        />
-                                        <span>
-                                          {dataLang.formatMessage({
-                                            id: "noAlert",
-                                          })}
-                                        </span>
+                                    {item.warn_ === 1
+                                      ? <>
+                                        <FaCheckCircle size={14} color="green" />
+                                        <span>{dataLang.formatMessage({ id: "noAlert", })}</span>
                                       </>
-                                    ) : (
-                                      <>
-                                        <MdOutlineError size={16} color="red" />
-                                        <span>
-                                          {dataLang.formatMessage({
-                                            id: "alert",
-                                          })}
-                                        </span>
-                                      </>
-                                    )}
+                                      : item.warn_ === 2
+                                        ? <>
+                                          <MdOutlineError size={16} color="gray" />
+                                          <span>{dataLang.formatMessage({ id: "noAlert", })}</span>
+                                        </>
+                                        : <>
+                                          <MdOutlineError size={16} color="red" />
+                                          <span>{dataLang.formatMessage({ id: "alert", })}</span>
+                                        </>
+                                    }
                                   </div>
                                 </div>
 
                                 <div className="DAT_ProjectMobile_Content_Top_Info_Data">
                                   {/* <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
-                                    <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
-                                      {dataLang.formatMessage({ id: "power" })}
-                                    </div>
-                                    <div>
-                                      {item.power}
-                                      <span>%</span>
-                                    </div>
+                                  <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
+                                    {dataLang.formatMessage({
+                                      id: "inCapacity",
+                                    })}
                                   </div>
-
-                                  <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
-                                    <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
-                                      {dataLang.formatMessage({ id: "capacity" })}
-                                    </div>
-                                    <div>
-                                      {item.capacity}
-                                      <span>kWp</span>
-                                    </div>
+                                  <div>
+                                    {Number(
+                                      parseFloat(
+                                        convertUnit(item.capacity)
+                                      ).toFixed(2)
+                                    ).toLocaleString("en-US")}
+                                    &nbsp;
+                                    {showUnitk(item.capacity)}Wp
                                   </div>
+                                </div>
 
-                                  <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
-                                    <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
-                                      {dataLang.formatMessage({
-                                        id: "production",
-                                      })}
-                                    </div>
-                                    <div>
-                                      {item.production}
-                                      <span>kWh</span>
-                                    </div>
-                                  </div> */}
+                                <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
+                                  <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
+                                    {dataLang.formatMessage({ id: "daily" })}
+                                  </div>
+                                  <div>
+                                    {parseFloat(
+                                      dailyProduction[item.plantid_]
+                                    ).toFixed(2) === "NaN" ? (
+                                      <>
+                                        0 &nbsp;
+                                        {showUnitk(
+                                          dailyProduction[item.plantid_]
+                                        )}
+                                        Wh
+                                      </>
+                                    ) : (
+                                      <>
+                                        {Number(
+                                          parseFloat(
+                                            convertUnit(
+                                              dailyProduction[item.plantid_]
+                                            )
+                                          ).toFixed(2)
+                                        ).toLocaleString("en-US")}
+                                        &nbsp;
+                                        {showUnitk(
+                                          dailyProduction[item.plantid_]
+                                        )}
+                                        Wh
+                                      </>
+                                    )}
+                                  </div>
+                                </div>
+
+                                <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
+                                  <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
+                                    {dataLang.formatMessage({ id: "power" })}
+                                  </div>
+                                  <div>
+                                    {parseFloat(power[item.plantid_]).toFixed(
+                                      2
+                                    ) === "NaN" ? (
+                                      <>
+                                        0 &nbsp;
+                                        {showUnitk(power[item.plantid_])}W
+                                      </>
+                                    ) : (
+                                      <>
+                                        {Number(
+                                          parseFloat(
+                                            convertUnit(
+                                              power[item.plantid_] / 1000
+                                            )
+                                          ).toFixed(2)
+                                        ).toLocaleString("en-US")}
+                                        &nbsp;
+                                        {showUnit(power[item.plantid_])}W
+                                      </>
+                                    )}
+                                  </div>
+                                </div> */}
+                                </div>
+
+                                <div
+                                  className="DAT_ProjectMobile_Content_Top_Info_Detail"
+                                  id={item.plantid_}
+                                  onClick={(e) => handlePlant2(e)}
+                                >
+                                  {dataLang.formatMessage({
+                                    id: "projectInfo",
+                                  })}
                                 </div>
                               </div>
                             </div>
@@ -1594,7 +1757,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1606,7 +1769,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1634,7 +1797,7 @@ export default function Auto(props) {
                               <div className="DAT_ProjectMobile_Content_Top_Avatar">
                                 <img
                                   src={
-                                    item.img_
+                                    item.img
                                       ? item.img
                                       : `/dat_picture/${bu}.jpg`
                                   }
@@ -1649,7 +1812,11 @@ export default function Auto(props) {
                                   <div
                                     className="DAT_ProjectMobile_Content_Top_Info_Name_Left"
                                     id={item.plantid_}
-                                    onClick={(e) => handlePlant(e)}
+                                    onClick={(e) => {
+                                      handlePlant(e);
+                                      // mode.value = "dashboard";
+                                      sidenar.value = false;
+                                    }}
                                   >
                                     {item.name_}
                                   </div>
@@ -1667,6 +1834,9 @@ export default function Auto(props) {
                                       onClick={(e) => handleLike(e)}
                                     />
                                   </div>
+                                </div>
+                                <div className="DAT_ProjectMobile_Content_Top_Info_Company">
+                                  {item.company_}
                                 </div>
 
                                 <div className="DAT_ProjectMobile_Content_Top_Info_State">
@@ -1695,63 +1865,113 @@ export default function Auto(props) {
                                     )}
                                   </div>
                                   <div className="DAT_ProjectMobile_Content_Top_Info_State_Item">
-                                    {item.warn_ ? (
-                                      <>
-                                        <FaCheckCircle
-                                          size={14}
-                                          color="green"
-                                        />
-                                        <span>
-                                          {dataLang.formatMessage({
-                                            id: "noAlert",
-                                          })}
-                                        </span>
+                                    {item.warn_ === 1
+                                      ? <>
+                                        <FaCheckCircle size={14} color="green" />
+                                        <span>{dataLang.formatMessage({ id: "noAlert", })}</span>
                                       </>
-                                    ) : (
-                                      <>
-                                        <MdOutlineError size={16} color="red" />
-                                        <span>
-                                          {dataLang.formatMessage({
-                                            id: "alert",
-                                          })}
-                                        </span>
-                                      </>
-                                    )}
+                                      : item.warn_ === 2
+                                        ? <>
+                                          <MdOutlineError size={16} color="gray" />
+                                          <span>{dataLang.formatMessage({ id: "noAlert", })}</span>
+                                        </>
+                                        : <>
+                                          <MdOutlineError size={16} color="red" />
+                                          <span>{dataLang.formatMessage({ id: "alert", })}</span>
+                                        </>
+                                    }
                                   </div>
                                 </div>
 
                                 <div className="DAT_ProjectMobile_Content_Top_Info_Data">
                                   {/* <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
-                                    <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
-                                      {dataLang.formatMessage({ id: "power" })}
-                                    </div>
-                                    <div>
-                                      {item.power}
-                                      <span>%</span>
-                                    </div>
+                                  <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
+                                    {dataLang.formatMessage({
+                                      id: "inCapacity",
+                                    })}
                                   </div>
-
-                                  <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
-                                    <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
-                                      {dataLang.formatMessage({ id: "capacity" })}
-                                    </div>
-                                    <div>
-                                      {item.capacity}
-                                      <span>kWp</span>
-                                    </div>
+                                  <div>
+                                    {Number(
+                                      parseFloat(
+                                        convertUnit(item.capacity)
+                                      ).toFixed(2)
+                                    ).toLocaleString("en-US")}
+                                    &nbsp;
+                                    {showUnitk(item.capacity)}Wp
                                   </div>
+                                </div>
 
-                                  <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
-                                    <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
-                                      {dataLang.formatMessage({
-                                        id: "production",
-                                      })}
-                                    </div>
-                                    <div>
-                                      {item.production}
-                                      <span>kWh</span>
-                                    </div>
-                                  </div> */}
+                                <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
+                                  <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
+                                    {dataLang.formatMessage({ id: "daily" })}
+                                  </div>
+                                  <div>
+                                    {parseFloat(
+                                      dailyProduction[item.plantid_]
+                                    ).toFixed(2) === "NaN" ? (
+                                      <>
+                                        0 &nbsp;
+                                        {showUnitk(
+                                          dailyProduction[item.plantid_]
+                                        )}
+                                        Wh
+                                      </>
+                                    ) : (
+                                      <>
+                                        {Number(
+                                          parseFloat(
+                                            convertUnit(
+                                              dailyProduction[item.plantid_]
+                                            )
+                                          ).toFixed(2)
+                                        ).toLocaleString("en-US")}
+                                        &nbsp;
+                                        {showUnitk(
+                                          dailyProduction[item.plantid_]
+                                        )}
+                                        Wh
+                                      </>
+                                    )}
+                                  </div>
+                                </div>
+
+                                <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
+                                  <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
+                                    {dataLang.formatMessage({ id: "power" })}
+                                  </div>
+                                  <div>
+                                    {parseFloat(power[item.plantid_]).toFixed(
+                                      2
+                                    ) === "NaN" ? (
+                                      <>
+                                        0 &nbsp;
+                                        {showUnitk(power[item.plantid_])}W
+                                      </>
+                                    ) : (
+                                      <>
+                                        {Number(
+                                          parseFloat(
+                                            convertUnit(
+                                              power[item.plantid_] / 1000
+                                            )
+                                          ).toFixed(2)
+                                        ).toLocaleString("en-US")}
+                                        &nbsp;
+                                        {showUnit(power[item.plantid_])}W
+                                      </>
+                                    )}
+                                  </div>
+                                </div> */}
+                                </div>
+
+                                <div
+                                  className="DAT_ProjectMobile_Content_Top_Info_Detail"
+                                  id={item.plantid_}
+                                  onClick={(e) => handlePlant2(e)}
+                                >
+                                  {dataLang.formatMessage({
+                                    id: "projectInfo",
+                                  })}
                                 </div>
                               </div>
                             </div>
@@ -1775,7 +1995,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1787,7 +2007,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1815,7 +2035,7 @@ export default function Auto(props) {
                               <div className="DAT_ProjectMobile_Content_Top_Avatar">
                                 <img
                                   src={
-                                    item.img_
+                                    item.img
                                       ? item.img
                                       : `/dat_picture/${bu}.jpg`
                                   }
@@ -1830,7 +2050,11 @@ export default function Auto(props) {
                                   <div
                                     className="DAT_ProjectMobile_Content_Top_Info_Name_Left"
                                     id={item.plantid_}
-                                    onClick={(e) => handlePlant(e)}
+                                    onClick={(e) => {
+                                      handlePlant(e);
+                                      // mode.value = "dashboard";
+                                      sidenar.value = false;
+                                    }}
                                   >
                                     {item.name_}
                                   </div>
@@ -1848,6 +2072,9 @@ export default function Auto(props) {
                                       onClick={(e) => handleLike(e)}
                                     />
                                   </div>
+                                </div>
+                                <div className="DAT_ProjectMobile_Content_Top_Info_Company">
+                                  {item.company_}
                                 </div>
 
                                 <div className="DAT_ProjectMobile_Content_Top_Info_State">
@@ -1876,63 +2103,113 @@ export default function Auto(props) {
                                     )}
                                   </div>
                                   <div className="DAT_ProjectMobile_Content_Top_Info_State_Item">
-                                    {item.warn_ ? (
-                                      <>
-                                        <FaCheckCircle
-                                          size={14}
-                                          color="green"
-                                        />
-                                        <span>
-                                          {dataLang.formatMessage({
-                                            id: "noAlert",
-                                          })}
-                                        </span>
+                                    {item.warn_ === 1
+                                      ? <>
+                                        <FaCheckCircle size={14} color="green" />
+                                        <span>{dataLang.formatMessage({ id: "noAlert", })}</span>
                                       </>
-                                    ) : (
-                                      <>
-                                        <MdOutlineError size={16} color="red" />
-                                        <span>
-                                          {dataLang.formatMessage({
-                                            id: "alert",
-                                          })}
-                                        </span>
-                                      </>
-                                    )}
+                                      : item.warn_ === 2
+                                        ? <>
+                                          <MdOutlineError size={16} color="gray" />
+                                          <span>{dataLang.formatMessage({ id: "noAlert", })}</span>
+                                        </>
+                                        : <>
+                                          <MdOutlineError size={16} color="red" />
+                                          <span>{dataLang.formatMessage({ id: "alert", })}</span>
+                                        </>
+                                    }
                                   </div>
                                 </div>
 
                                 <div className="DAT_ProjectMobile_Content_Top_Info_Data">
                                   {/* <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
-                                    <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
-                                      {dataLang.formatMessage({ id: "power" })}
-                                    </div>
-                                    <div>
-                                      {item.power}
-                                      <span>%</span>
-                                    </div>
+                                  <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
+                                    {dataLang.formatMessage({
+                                      id: "inCapacity",
+                                    })}
                                   </div>
-
-                                  <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
-                                    <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
-                                      {dataLang.formatMessage({ id: "capacity" })}
-                                    </div>
-                                    <div>
-                                      {item.capacity}
-                                      <span>kWp</span>
-                                    </div>
+                                  <div>
+                                    {Number(
+                                      parseFloat(
+                                        convertUnit(item.capacity)
+                                      ).toFixed(2)
+                                    ).toLocaleString("en-US")}
+                                    &nbsp;
+                                    {showUnitk(item.capacity)}Wp
                                   </div>
+                                </div>
 
-                                  <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
-                                    <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
-                                      {dataLang.formatMessage({
-                                        id: "production",
-                                      })}
-                                    </div>
-                                    <div>
-                                      {item.production}
-                                      <span>kWh</span>
-                                    </div>
-                                  </div> */}
+                                <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
+                                  <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
+                                    {dataLang.formatMessage({ id: "daily" })}
+                                  </div>
+                                  <div>
+                                    {parseFloat(
+                                      dailyProduction[item.plantid_]
+                                    ).toFixed(2) === "NaN" ? (
+                                      <>
+                                        0 &nbsp;
+                                        {showUnitk(
+                                          dailyProduction[item.plantid_]
+                                        )}
+                                        Wh
+                                      </>
+                                    ) : (
+                                      <>
+                                        {Number(
+                                          parseFloat(
+                                            convertUnit(
+                                              dailyProduction[item.plantid_]
+                                            )
+                                          ).toFixed(2)
+                                        ).toLocaleString("en-US")}
+                                        &nbsp;
+                                        {showUnitk(
+                                          dailyProduction[item.plantid_]
+                                        )}
+                                        Wh
+                                      </>
+                                    )}
+                                  </div>
+                                </div>
+
+                                <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
+                                  <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
+                                    {dataLang.formatMessage({ id: "power" })}
+                                  </div>
+                                  <div>
+                                    {parseFloat(power[item.plantid_]).toFixed(
+                                      2
+                                    ) === "NaN" ? (
+                                      <>
+                                        0 &nbsp;
+                                        {showUnitk(power[item.plantid_])}W
+                                      </>
+                                    ) : (
+                                      <>
+                                        {Number(
+                                          parseFloat(
+                                            convertUnit(
+                                              power[item.plantid_] / 1000
+                                            )
+                                          ).toFixed(2)
+                                        ).toLocaleString("en-US")}
+                                        &nbsp;
+                                        {showUnit(power[item.plantid_])}W
+                                      </>
+                                    )}
+                                  </div>
+                                </div> */}
+                                </div>
+
+                                <div
+                                  className="DAT_ProjectMobile_Content_Top_Info_Detail"
+                                  id={item.plantid_}
+                                  onClick={(e) => handlePlant2(e)}
+                                >
+                                  {dataLang.formatMessage({
+                                    id: "projectInfo",
+                                  })}
                                 </div>
                               </div>
                             </div>
@@ -1956,7 +2233,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1968,7 +2245,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -1996,7 +2273,7 @@ export default function Auto(props) {
                               <div className="DAT_ProjectMobile_Content_Top_Avatar">
                                 <img
                                   src={
-                                    item.img_
+                                    item.img
                                       ? item.img
                                       : `/dat_picture/${bu}.jpg`
                                   }
@@ -2011,7 +2288,11 @@ export default function Auto(props) {
                                   <div
                                     className="DAT_ProjectMobile_Content_Top_Info_Name_Left"
                                     id={item.plantid_}
-                                    onClick={(e) => handlePlant(e)}
+                                    onClick={(e) => {
+                                      handlePlant(e);
+                                      // mode.value = "dashboard";
+                                      sidenar.value = false;
+                                    }}
                                   >
                                     {item.name_}
                                   </div>
@@ -2029,6 +2310,9 @@ export default function Auto(props) {
                                       onClick={(e) => handleLike(e)}
                                     />
                                   </div>
+                                </div>
+                                <div className="DAT_ProjectMobile_Content_Top_Info_Company">
+                                  {item.company_}
                                 </div>
 
                                 <div className="DAT_ProjectMobile_Content_Top_Info_State">
@@ -2057,63 +2341,113 @@ export default function Auto(props) {
                                     )}
                                   </div>
                                   <div className="DAT_ProjectMobile_Content_Top_Info_State_Item">
-                                    {item.warn_ ? (
-                                      <>
-                                        <FaCheckCircle
-                                          size={14}
-                                          color="green"
-                                        />
-                                        <span>
-                                          {dataLang.formatMessage({
-                                            id: "noAlert",
-                                          })}
-                                        </span>
+                                    {item.warn_ === 1
+                                      ? <>
+                                        <FaCheckCircle size={14} color="green" />
+                                        <span>{dataLang.formatMessage({ id: "noAlert", })}</span>
                                       </>
-                                    ) : (
-                                      <>
-                                        <MdOutlineError size={16} color="red" />
-                                        <span>
-                                          {dataLang.formatMessage({
-                                            id: "alert",
-                                          })}
-                                        </span>
-                                      </>
-                                    )}
+                                      : item.warn_ === 2
+                                        ? <>
+                                          <MdOutlineError size={16} color="gray" />
+                                          <span>{dataLang.formatMessage({ id: "noAlert", })}</span>
+                                        </>
+                                        : <>
+                                          <MdOutlineError size={16} color="red" />
+                                          <span>{dataLang.formatMessage({ id: "alert", })}</span>
+                                        </>
+                                    }
                                   </div>
                                 </div>
 
                                 <div className="DAT_ProjectMobile_Content_Top_Info_Data">
                                   {/* <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
-                                    <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
-                                      {dataLang.formatMessage({ id: "power" })}
-                                    </div>
-                                    <div>
-                                      {item.power}
-                                      <span>%</span>
-                                    </div>
-                                  </div>
+                                <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
+                                  {dataLang.formatMessage({
+                                    id: "inCapacity",
+                                  })}
+                                </div>
+                                <div>
+                                  {Number(
+                                    parseFloat(
+                                      convertUnit(item.capacity)
+                                    ).toFixed(2)
+                                  ).toLocaleString("en-US")}
+                                  &nbsp;
+                                  {showUnitk(item.capacity)}Wp
+                                </div>
+                              </div>
 
-                                  <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
-                                    <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
-                                      {dataLang.formatMessage({ id: "capacity" })}
-                                    </div>
-                                    <div>
-                                      {item.capacity}
-                                      <span>kWp</span>
-                                    </div>
-                                  </div>
+                              <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
+                                <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
+                                  {dataLang.formatMessage({ id: "daily" })}
+                                </div>
+                                <div>
+                                  {parseFloat(
+                                    dailyProduction[item.plantid_]
+                                  ).toFixed(2) === "NaN" ? (
+                                    <>
+                                      0 &nbsp;
+                                      {showUnitk(
+                                        dailyProduction[item.plantid_]
+                                      )}
+                                      Wh
+                                    </>
+                                  ) : (
+                                    <>
+                                      {Number(
+                                        parseFloat(
+                                          convertUnit(
+                                            dailyProduction[item.plantid_]
+                                          )
+                                        ).toFixed(2)
+                                      ).toLocaleString("en-US")}
+                                      &nbsp;
+                                      {showUnitk(
+                                        dailyProduction[item.plantid_]
+                                      )}
+                                      Wh
+                                    </>
+                                  )}
+                                </div>
+                              </div>
 
-                                  <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
-                                    <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
-                                      {dataLang.formatMessage({
-                                        id: "production",
-                                      })}
-                                    </div>
-                                    <div>
-                                      {item.production}
-                                      <span>kWh</span>
-                                    </div>
-                                  </div> */}
+                              <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item">
+                                <div className="DAT_ProjectMobile_Content_Top_Info_Data_Item_Name">
+                                  {dataLang.formatMessage({ id: "power" })}
+                                </div>
+                                <div>
+                                  {parseFloat(power[item.plantid_]).toFixed(
+                                    2
+                                  ) === "NaN" ? (
+                                    <>
+                                      0 &nbsp;
+                                      {showUnitk(power[item.plantid_])}W
+                                    </>
+                                  ) : (
+                                    <>
+                                      {Number(
+                                        parseFloat(
+                                          convertUnit(
+                                            power[item.plantid_] / 1000
+                                          )
+                                        ).toFixed(2)
+                                      ).toLocaleString("en-US")}
+                                      &nbsp;
+                                      {showUnit(power[item.plantid_])}W
+                                    </>
+                                  )}
+                                </div>
+                              </div> */}
+                                </div>
+
+                                <div
+                                  className="DAT_ProjectMobile_Content_Top_Info_Detail"
+                                  id={item.plantid_}
+                                  onClick={(e) => handlePlant2(e)}
+                                >
+                                  {dataLang.formatMessage({
+                                    id: "projectInfo",
+                                  })}
                                 </div>
                               </div>
                             </div>
@@ -2137,7 +2471,7 @@ export default function Auto(props) {
                                   />
                                 </div>
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}
@@ -2149,7 +2483,7 @@ export default function Auto(props) {
                                   <div></div>
                                 )}
                                 {ruleInfor.value.setting.project.modify ===
-                                true ? (
+                                  true ? (
                                   <div
                                     className="DAT_ProjectMobile_Content_Bottom_Right_Item"
                                     id={item.plantid_}

@@ -302,7 +302,7 @@
         position: absolute;
         z-index: 10;
         // top: 10px;
-        right: 10px;
+        right: 20px;
         width: 40px;
         height: 40px;
         // background-color: rgba(253, 253, 253, 0.5);
@@ -311,6 +311,17 @@
         justify-content: center;
         border-radius: 50%;
         cursor: pointer;
+        &_Warn {
+            margin-top: -5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            &:hover {
+                background-color: rgb(128, 128, 128, 0.3);
+            }
+        }
 
 
         // & ion-icon {

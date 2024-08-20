@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./Tool.scss"
-// import Config from "./Config";
+import Config from "./Config";
 import { ToolContext } from "../Context/ToolContext";
 import { SettingContext } from "../Context/SettingContext";
 import Calculate from "./Calculate";
@@ -21,6 +21,8 @@ import { alertDispatch } from "../Alert/Alert";
 import { toolState } from "../Home/Home";
 import { useOrientation } from "react-use";
 import { ScaleLoader } from "react-spinners";
+import { RiErrorWarningLine } from "react-icons/ri";
+import PullUp from "../LibOverview/PullUp";
 
 
 const length = signal(0);
@@ -29,7 +31,7 @@ export const _tab = signal();
 export default function Toollist(props) {
     const dataLang = useIntl();
     const { name, config, control, toolDispatch } = useContext(ToolContext)
-    const { lasttab, defaulttab, currentID, currentSN, screen, settingDispatch } = useContext(SettingContext)
+    const { currentName, lasttab, defaulttab, currentID, currentSN, screen, settingDispatch } = useContext(SettingContext)
     const [tab, setTab] = useState(String(defaulttab))
     const [statetab, setStatetab] = useState(false)
     const navigate = useNavigate()
@@ -37,6 +39,7 @@ export default function Toollist(props) {
     const { type } = useOrientation();
     const [load, setLoad] = useState(true)
     const [isLand, setIsLand] = useState(false)
+    const [warnBoxState, setWarnBoxState] = useState(false);
 
     const popup_state = {
         pre: { transform: "rotate(0deg)", transition: "0.5s", color: "rgba(11, 25, 103)" },
@@ -98,11 +101,14 @@ export default function Toollist(props) {
             name: name
         })
 
-
         if (res.status) {
             alertDispatch(dataLang.formatMessage({ id: "alert_6" }));
         }
 
+    }
+
+    const handleClose = () => {
+        setWarnBoxState(!warnBoxState)
     }
 
     const handleDirect = (link) => {
@@ -230,11 +236,29 @@ export default function Toollist(props) {
 
 
                                         <div className="DAT_Tool_Tab-close"
-                                            onClick={handleTabclose}
-                                            id="Popup"
-                                            onMouseEnter={(e) => handlePopup("new")}
-                                            onMouseLeave={(e) => handlePopup("pre")}
-                                        ><IoMdClose size={20} /></div>
+                                        >
+                                            <div className="DAT_Tool_Tab-close_Warn"
+                                                onClick={(e) => {
+                                                    setWarnBoxState(!warnBoxState);
+                                                }
+                                                }>
+                                                <RiErrorWarningLine
+                                                    size={20}
+                                                    color="orange"
+                                                    style={{
+                                                        padding: "5px",
+                                                        borderRadius: "50%",
+                                                        cursor: "pointer",
+                                                    }}
+                                                />
+                                            </div>
+                                            <div onClick={handleTabclose}
+                                                id="Popup"
+                                                onMouseEnter={(e) => handlePopup("new")}
+                                                onMouseLeave={(e) => handlePopup("pre")}>
+                                                <IoMdClose size={20} />
+                                            </div>
+                                        </div>
                                     </div>
                             : <div className="DAT_Tool_Tab_Mobile">
 
@@ -282,11 +306,11 @@ export default function Toollist(props) {
                                 ? (config[tab].stt)
 
                                     ? <>
-                                        {/* <Config id={currentID} sn={currentSN} tab={tab} ></Config>
+                                        <Config id={currentID} sn={currentSN} tab={tab} ></Config>
                                         {(control[tab].stt)
                                             ? <Calculate id={currentID} sn={currentSN} tab={tab} />
                                             : <></>
-                                        } */}
+                                        }
                                     </>
                                     : <Interface id={currentID} sn={currentSN} tab={tab} />
 
@@ -312,6 +336,7 @@ export default function Toollist(props) {
 
             }
 
+            {warnBoxState ? <PullUp type="detail" detailname = {currentName} handleClose={handleClose}/> : <></>}
 
 
 

@@ -140,7 +140,7 @@ export default function Popup(props) {
   };
 
   const handleAddPhoneEdit = () => {
-    const regex = /^(\+84|0)[3|5|7|8|9][0-9]{8}$/;
+    const regex = /^(84|0)[3|5|7|8|9][0-9]{8}$/;
     const isPhone = regex.test(editValRef2.current.value);
     const isExist = ErrConfig.filter(
       (item) => item == editValRef2.current.value
@@ -163,7 +163,7 @@ export default function Popup(props) {
   };
 
   const handleAddNewPhoneConfig = () => {
-    const regex = /^(\+84|0)[3|5|7|8|9][0-9]{8}$/;
+    const regex = /^(84|0)[3|5|7|8|9][0-9]{8}$/;
     const isPhone = regex.test(editValRef2.current.value);
     const isExist = newPhone.filter(
       (item) => item == editValRef2.current.value

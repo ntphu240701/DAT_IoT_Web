@@ -4,7 +4,7 @@ import { callApi } from "../Api/Api";
 import { host } from "../Lang/Contant";
 import { LuInfo } from "react-icons/lu";
 import { Loader } from "@googlemaps/js-api-loader";
-import { MdDriveFileRenameOutline } from "react-icons/md";
+import { MdDriveFileRenameOutline, MdOutlineError } from "react-icons/md";
 import { IoCalendarOutline, IoLocationSharp } from "react-icons/io5";
 import { IoMdContact } from "react-icons/io";
 import { IoCalendar } from "react-icons/io5";
@@ -28,6 +28,9 @@ import { useIntl } from "react-intl";
 import { Link } from "react-router-dom";
 import { sidebartab, sidebartabli } from "../Sidenar/Sidenar";
 import { mode } from "./Signal";
+import { seeAll } from "../Warn/Warn";
+import { notifid } from "../Navigation/Navigation";
+import { FaCheckCircle } from "react-icons/fa";
 
 export const plantnameFilterSignal = signal("");
 
@@ -139,7 +142,7 @@ export default function Dashboard(props) {
         "marker"
       );
       let map = new Map(document.getElementById("map2"), defaultProps);
-   
+
       const marker = {
         lat: parseFloat(data?.lat_ ? data.lat_ : 16.0544068),
         lng: parseFloat(data?.long_ ? data.long_ : 108.2021667),
@@ -157,9 +160,9 @@ export default function Dashboard(props) {
     if (props.data) {
       if (props.data) {
         // console.log(props.data);
-      
-          initMap(props.data);
-        
+
+        initMap(props.data);
+
         const getGateway = async () => {
           let res = await callApi("post", host.DATA + "/getLogger", {
             plantid: props.data.plantid_,
@@ -174,6 +177,10 @@ export default function Dashboard(props) {
       }
     }
   }, [props.data, mode.value]);
+
+  useEffect(() => {
+    console.log(devicedata);
+  }, [devicedata]);
 
   return (
     <>
@@ -219,6 +226,11 @@ export default function Dashboard(props) {
               style={{ textDecoration: "none" }}
               onClick={() => {
                 plantnameFilterSignal.value = props.data.name_;
+                notifid.value = {
+                  name: "",
+                  date: moment(new Date()).format("MM/DD/YYYY"),
+                };
+                seeAll.value = false;
                 sidebartab.value = "Monitor";
                 sidebartabli.value = "/Warn";
               }}
@@ -227,15 +239,26 @@ export default function Dashboard(props) {
                 className="DAT_MainInfo_Status_Item_Header"
                 style={{ color: "rgba(158, 0, 0, 0.8)" }}
               >
-                <span>{datalang.formatMessage({ id: "erroccur" })}</span>
+                {props.data.warn_ === 1
+                  ? <span>{datalang.formatMessage({ id: "noAlert" })}</span>
+                  : props.data.warn_ === 2
+                    ? <span>{datalang.formatMessage({ id: "offline" })}</span>
+
+                    : <span>{datalang.formatMessage({ id: "alert" })}</span>
+                }
                 <LuInfo />
               </div>
               <div
                 className="DAT_MainInfo_Status_Item_State"
                 style={{ color: "#0B1967" }}
               >
-                0/
-                {devicedata.length}
+                {props.data.warn_ === 1
+                  ? <FaCheckCircle size={30} color="green" />
+                  : props.data.warn_ === 2
+                    ? <MdOutlineError size={30} color="gray" />
+
+                    : <MdOutlineError size={30} color="red" />
+                }
               </div>
             </Link>
             <div className="DAT_MainInfo_Status_Item">
@@ -440,22 +463,48 @@ export default function Dashboard(props) {
                 {devicedata.length}
               </div>
             </div>
-            <div className="DAT_MainInfoMobile_Status_Item">
+
+            <Link className="DAT_MainInfoMobile_Status_Item"
+              to="/Warn"
+              style={{ textDecoration: "none" }}
+              onClick={() => {
+                plantnameFilterSignal.value = props.data.name_;
+                notifid.value = {
+                  name: "",
+                  date: moment(new Date()).format("MM/DD/YYYY"),
+                };
+                seeAll.value = false;
+                sidebartab.value = "Monitor";
+                sidebartabli.value = "/Warn";
+              }}
+            >
               <div
                 className="DAT_MainInfoMobile_Status_Item_Header"
                 style={{ color: "rgba(158, 0, 0, 0.8)" }}
               >
-                <span>{datalang.formatMessage({ id: "erroccur" })}</span>
+                {props.data.warn_ === 1
+                  ? <span>{datalang.formatMessage({ id: "noAlert" })}</span>
+                  : props.data.warn_ === 2
+                    ? <span>{datalang.formatMessage({ id: "offline" })}</span>
+
+                    : <span>{datalang.formatMessage({ id: "alert" })}</span>
+                }
                 <LuInfo />
               </div>
               <div
                 className="DAT_MainInfoMobile_Status_Item_State"
                 style={{ color: "#0B1967" }}
               >
-                0/
-                {devicedata.length}
+                {props.data.warn_ === 1
+                  ? <FaCheckCircle size={30} color="green" />
+                  : props.data.warn_ === 2
+                    ? <MdOutlineError size={30} color="gray" />
+
+                    : <MdOutlineError size={30} color="red" />
+                }
               </div>
-            </div>
+            </Link>
+
             <div className="DAT_MainInfoMobile_Status_Item">
               <div
                 className="DAT_MainInfoMobile_Status_Item_Header"

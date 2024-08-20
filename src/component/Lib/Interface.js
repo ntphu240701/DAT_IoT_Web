@@ -41,6 +41,7 @@ import { isBrowser } from "react-device-detect";
 import Img from "./Img";
 import Multitext from "./Multitext";
 import Calendar from "./Calendar";
+import BarChart from "./BarChart";
 const show = signal(true)
 
 export default function Interface(props) {
@@ -265,6 +266,8 @@ export default function Interface(props) {
                 return <Circle deviceid={deviceid} tab={tab} id={id} data={invt} setting={setting[tab][id]} width={w} height={h} />
             case 'lineChart':
                 return <LineChart deviceid={deviceid} sn={sn} tab={tab} id={id} data={invt} setting={setting[tab][id]} width={w} height={h} />
+            case 'barChart':
+                return <BarChart deviceid={deviceid} sn={sn} tab={tab} id={id} data={invt} setting={setting[tab][id]} width={w} height={h} />
             case 'switch':
                 return <Switch deviceid={deviceid} sn={sn} tab={tab} id={id} data={invt} setting={setting[tab]} width={w} height={h} />
             case 'switchtoggle':

@@ -40,6 +40,7 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { useSelector } from "react-redux";
 import { lowercasedata } from "../ErrorSetting/ErrorSetting";
+import { set } from "lodash";
 
 export const tabLable = signal("");
 export const open = signal([]);
@@ -49,25 +50,22 @@ export const idDel = signal();
 export const idInfo = signal();
 export const dataWarn = signal([]);
 export const dataWarnNoti = signal([]);
-export const seeAll = signal(false);
+export const seeAll = signal(true);
 
 const warntab = signal("all");
-const tabMobile = signal(false);
 
 export default function Warn(props) {
   const dataLang = useIntl();
-  // const [filter, setFilter] = useState(false);
   const [datafilter, setDatafilter] = useState([]);
   const [datafilteropen, setDatafilteropen] = useState(open.value);
   const [datafilterclosed, setDatafilterclosed] = useState(closed.value);
-  const [display, setDisplay] = useState(false);
   const [popupState, setPopupState] = useState(false);
   const [type, setType] = useState("");
-  const warn = useRef();
-  const notice = useRef();
   const { isLandscape } = useMobileOrientation();
-  // const [seeAll, setSeeAll] = useState(false);
+  const usr = useSelector((state) => state.admin.usr);
   const [dataMore, setDataMore] = useState({});
+  const [mode, setMode] = useState('mode3');
+  const [state, setState] = useState(false);
 
   const [inf, setInf] = useState({
     boxid: 0,
@@ -188,7 +186,7 @@ export default function Warn(props) {
       selector: (row) => (
         <>
           {ruleInfor.value.setting.warn.modify === true ||
-          ruleInfor.value.setting.warn.remove === true ? (
+            ruleInfor.value.setting.warn.remove === true ? (
             <PopupState variant="popper" popupId="demo-popup-popper">
               {(popupState) => (
                 <div className="DAT_TableEdit">
@@ -320,37 +318,11 @@ export default function Warn(props) {
     setPopupState(false);
   };
 
-  const closeFilter = () => {
-    setDisplay(false);
-  };
-
-  // const handleModify = (e, type) => {
-  //   const id = e.currentTarget.id;
-  //   var arr = id.split("_");
-  //   const mod = document.getElementById(
-  //     `${arr[0]}_${arr[1]}_${arr[2]}_${arr[3]}_Modify`
-  //   );
-  //   mod.style.display = type;
-  // };
-
-  const handleTabMobile = (e) => {
-    const id = e.currentTarget.id;
-    warntab.value = id;
-    const newLabel = listTab.find((item) => item.id == id);
-    tabLable.value = newLabel.name;
-  };
-
-  useEffect(() => {
-    setDatafilteropen(open.value);
-    setDatafilterclosed(closed.value);
-
-    // eslint-disable-next-line
-  }, [open.value, closed.value]);
 
   // by Mr Loc
   const handleSearch = (e) => {
     const searchTerm = lowercasedata(e.currentTarget.value);
-
+    // console.log(searchTerm);
     if (searchTerm === "") {
       setDatafilter([...dataWarn.value]);
       warnfilter.value = {};
@@ -367,185 +339,213 @@ export default function Warn(props) {
             .includes(searchTerm)
       );
       setDatafilter([...temp]);
-      let temp2 = open.value.filter(
-        (item) =>
-          lowercasedata(item.plant).includes(searchTerm) ||
-          lowercasedata(item.device).includes(searchTerm) ||
-          lowercasedata(item.boxid).includes(searchTerm) ||
-          dataLang
-            .formatMessage({ id: item.boxid, defaultMessage: item.boxid })
-            .toLowerCase()
-            .includes(searchTerm)
-      );
-      setDatafilteropen([...temp2]);
-      let temp3 = closed.value.filter(
-        (item) =>
-          lowercasedata(item.plant).includes(searchTerm) ||
-          lowercasedata(item.device).includes(searchTerm) ||
-          lowercasedata(item.boxid).includes(searchTerm) ||
-          dataLang
-            .formatMessage({ id: item.boxid, defaultMessage: item.boxid })
-            .toLowerCase()
-            .includes(searchTerm)
-      );
-      setDatafilterclosed([...temp3]);
+      // let temp2 = open.value.filter(
+      //   (item) =>
+      //     lowercasedata(item.plant).includes(searchTerm) ||
+      //     lowercasedata(item.device).includes(searchTerm) ||
+      //     lowercasedata(item.boxid).includes(searchTerm) ||
+      //     dataLang
+      //       .formatMessage({ id: item.boxid, defaultMessage: item.boxid })
+      //       .toLowerCase()
+      //       .includes(searchTerm)
+      // );
+      // setDatafilteropen([...temp2]);
+      // let temp3 = closed.value.filter(
+      //   (item) =>
+      //     lowercasedata(item.plant).includes(searchTerm) ||
+      //     lowercasedata(item.device).includes(searchTerm) ||
+      //     lowercasedata(item.boxid).includes(searchTerm) ||
+      //     dataLang
+      //       .formatMessage({ id: item.boxid, defaultMessage: item.boxid })
+      //       .toLowerCase()
+      //       .includes(searchTerm)
+      // );
+      // setDatafilterclosed([...temp3]);
 
       warnfilter.value = {};
     }
   };
 
-  const handleResetFilter = () => {
-    setDisplay(false);
-    setDatafilter(dataWarn.value);
+  const handleSearchManual = (value) => {
+
+    let search = document.getElementById("warnsearch");
+    search.value = value;
+
+    const searchTerm = lowercasedata(value);
+    // console.log(searchTerm);
+    if (searchTerm === "") {
+      setDatafilter([...dataWarn.value]);
+      warnfilter.value = {};
+      // projectwarnfilter.value = 0;
+    } else {
+
+
+
+
+      let temp = dataWarn.value.filter(
+        (item) =>
+          lowercasedata(item.plant).includes(searchTerm) ||
+          lowercasedata(item.device).includes(searchTerm) ||
+          lowercasedata(item.boxid).includes(searchTerm) ||
+          dataLang
+            .formatMessage({ id: item.boxid, defaultMessage: item.boxid })
+            .toLowerCase()
+            .includes(searchTerm)
+      );
+      // setDatafilter([...temp]);
+      // console.log(temp);
+      setDatafilter([...temp]);
+
+      // let temp2 = open.value.filter(
+      //   (item) =>
+      //     lowercasedata(item.plant).includes(searchTerm) ||
+      //     lowercasedata(item.device).includes(searchTerm) ||
+      //     lowercasedata(item.boxid).includes(searchTerm) ||
+      //     dataLang
+      //       .formatMessage({ id: item.boxid, defaultMessage: item.boxid })
+      //       .toLowerCase()
+      //       .includes(searchTerm)
+      // );
+      // setDatafilteropen([...temp2]);
+      // let temp3 = closed.value.filter(
+      //   (item) =>
+      //     lowercasedata(item.plant).includes(searchTerm) ||
+      //     lowercasedata(item.device).includes(searchTerm) ||
+      //     lowercasedata(item.boxid).includes(searchTerm) ||
+      //     dataLang
+      //       .formatMessage({ id: item.boxid, defaultMessage: item.boxid })
+      //       .toLowerCase()
+      //       .includes(searchTerm)
+      // );
+      // setDatafilterclosed([...temp3]);
+
+      // warnfilter.value = {};
+    }
   };
 
-  const handleCloseFilter = () => {
-    setDisplay(false);
-  };
-
-  const handleWarnFilter = (opentime, closetime) => {
-    //Bật tắt filter layout
-    setDisplay(false);
-
-    //Gọi biến thời gian nhập vào
-    const openInput = moment(opentime).format("MM/DD/YYYY");
-    const closeInput = moment(closetime).format("MM/DD/YYYY");
-
-    const newdb = dataWarn.value.filter((item) => {
-      // Gọi biến thời gian trong dataWarn
-      const openData = moment(item.opentime).format("MM/DD/YYYY");
-      const closeData = moment(item.closetime).format("MM/DD/YYYY");
-
-      // Nếu người dùng không chỉnh ngày thì vẫn chạy điều kiện checkbox
-      if (openInput == "Invalid date" && closeInput == "Invalid date") {
-        const levelChange =
-          item.level == warn.value || item.level == notice.value;
-        return levelChange;
-      }
-
-      // Trường hợp 1 : Nhập ngày vào open time thì những ngày sau open time xuất hiện
-      else if (closeInput === "Invalid date") {
-        const timeChange = moment(openData).isSameOrAfter(openInput);
-        return timeChange;
-      }
-
-      // Trường hợp 2 : Nhập ngày vào close time thì những trước sau close time xuất hiện
-      else if (openInput === "Invalid date") {
-        const timeChange = moment(openData).isSameOrBefore(closeInput);
-        return timeChange;
-      }
-
-      // Nếu người dùng không check type warning thì vẫn chạy điều kiện thời gian
-      else if (warn.value == null && notice.value == null) {
-        const timeChange =
-          (openData >= openInput && openData <= closeInput) ||
-          (closeData >= openInput && closeData < closeInput);
-        return timeChange;
-      } else {
-        const levelChange =
-          item.level == warn.value || item.level == notice.value;
-        const timeChange =
-          (openData >= openInput && openData <= closeInput) ||
-          (closeData >= openInput && closeData < closeInput);
-        return levelChange && timeChange;
-      }
-    });
-    setDatafilter(newdb);
-  };
 
   const handleSeeAll = async () => {
-    console.log(datePickedSignal.value);
-    const t = datePickedSignal.value.split("-");
+    // console.log(datePickedSignal.value);
+    const t = datePickedSignal.value?.split("-") || moment(new Date()).format("YYYY-MM-DD").split("-");
     const reformat = t[1] + "/" + t[2] + "/" + t[0];
-    if (seeAll.value === false) {
-      const warn = await callApi("post", host.DATA + "/getWarn", {
-        usr: usr,
-        partnerid: partnerInfor.value.partnerid,
-        type: userInfor.value.type,
-      });
-      console.log(warn);
-      if (warn.status) {
-        seeAll.value = !seeAll.value;
-        dataWarn.value = [];
-        let newdb = warn.data.sort(
-          (a, b) =>
-            new Date(`${b.opendate_} ${b.opentime_}`) -
-            new Date(`${a.opendate_} ${a.opentime_}`)
-        );
-        newdb.map((item, index) => {
-          dataWarn.value = [
-            ...dataWarn.value,
-            {
-              boxid: item.boxid_,
-              warnid: item.warnid_,
-              plant: item.name_,
-              device: item.sn_,
-              name: item.namewarn_,
-              opentime: item.opentime_,
-              opendate: item.opendate_,
-              state: item.state_, // 1:false, 0:true
-              level: item.level_,
-              plantid: item.plantid_,
-              more: item.more_,
-            },
-          ];
+    if (usr && partnerInfor.value && userInfor.value) {
+      if (seeAll.value === false) {
+        const warn = await callApi("post", host.DATA + "/getWarn", {
+          usr: usr,
+          partnerid: partnerInfor.value.partnerid,
+          type: userInfor.value.type,
         });
-      }
-    } else {
-      const warn = await callApi("post", host.DATA + "/getWarn2", {
-        usr: usr,
-        partnerid: partnerInfor.value.partnerid,
-        type: userInfor.value.type,
-        date: reformat,
-      });
-      console.log(warn);
-      if (warn.status) {
-        seeAll.value = !seeAll.value;
-        dataWarn.value = [];
-        let newdb = warn.data.sort(
-          (a, b) =>
-            new Date(`${b.opendate_} ${b.opentime_}`) -
-            new Date(`${a.opendate_} ${a.opentime_}`)
-        );
-        newdb.map((item, index) => {
-          dataWarn.value = [
-            ...dataWarn.value,
-            {
-              boxid: item.boxid_,
-              warnid: item.warnid_,
-              plant: item.name_,
-              device: item.sn_,
-              name: item.namewarn_,
-              opentime: item.opentime_,
-              opendate: item.opendate_,
-              state: item.state_, // 1:false, 0:true
-              level: item.level_,
-              plantid: item.plantid_,
-              more: item.more_,
-            },
-          ];
+        // console.log(warn);
+        if (warn.status) {
+
+          dataWarn.value = [];
+          let newdb = warn.data.sort(
+            (a, b) =>
+              new Date(`${b.opendate_} ${b.opentime_}`) -
+              new Date(`${a.opendate_} ${a.opentime_}`)
+          );
+          newdb.map((item, index) => {
+            dataWarn.value = [
+              ...dataWarn.value,
+              {
+                boxid: item.boxid_,
+                warnid: item.warnid_,
+                plant: item.name_,
+                device: item.sn_,
+                name: item.namewarn_,
+                opentime: item.opentime_,
+                opendate: item.opendate_,
+                state: item.state_, // 1:false, 0:true
+                level: item.level_,
+                plantid: item.plantid_,
+                more: item.more_,
+              },
+            ];
+          });
+          setDatafilter([...dataWarn.value]);
+          return true
+        } else {
+          return false
+        }
+      } else {
+        // console.log(usr, partnerInfor.value.partnerid, userInfor.value.type, reformat);
+
+        const warn = await callApi("post", host.DATA + "/getWarn2", {
+          usr: usr,
+          partnerid: partnerInfor.value.partnerid,
+          type: userInfor.value.type,
+          date: reformat,
         });
+        // console.log(warn);
+        if (warn.status) {
+          // seeAll.value = !seeAll.value;
+          dataWarn.value = [];
+          let newdb = warn.data.sort(
+            (a, b) =>
+              new Date(`${b.opendate_} ${b.opentime_}`) -
+              new Date(`${a.opendate_} ${a.opentime_}`)
+          );
+          newdb.map((item, index) => {
+            dataWarn.value = [
+              ...dataWarn.value,
+              {
+                boxid: item.boxid_,
+                warnid: item.warnid_,
+                plant: item.name_,
+                device: item.sn_,
+                name: item.namewarn_,
+                opentime: item.opentime_,
+                opendate: item.opendate_,
+                state: item.state_, // 1:false, 0:true
+                level: item.level_,
+                plantid: item.plantid_,
+                more: item.more_,
+              },
+            ];
+          });
+          setDatafilter([...dataWarn.value]);
+          return true
+        } else {
+          return false
+        }
       }
     }
   };
 
   useEffect(() => {
-    if (plantnameFilterSignal.value !== "") {
-      let search = document.getElementById("warnsearch");
-      search.value = plantnameFilterSignal.value;
-      const newdb = dataWarn.value.filter((item) =>
-        lowercasedata(item.plant).includes(
-          lowercasedata(plantnameFilterSignal.value)
-        )
-      );
-      setDatafilter([...newdb]);
-    } else {
-      setDatafilter([...dataWarn.value]);
+
+    let x = async () => {
+      let y = await handleSeeAll();
+      setState(y);
     }
-    // eslint-disable-next-line
-  }, [plantnameFilterSignal.value, dataWarn.value]);
+
+
+    x();
+
+
+  }, [usr, partnerInfor.value, userInfor.value, datePickedSignal.value]);
 
   useEffect(() => {
+    if (state) {
+      if (plantnameFilterSignal.value) {
+        setMode('mode1');
+        console.log('mode1');
+      }
+      if (notifid.value.name) {
+        setMode('mode2');
+        console.log('mode2');
+      }
+      if (notifid.value.name === "" && plantnameFilterSignal.value === "") {
+        setMode('mode3');
+        console.log('mode3');
+      }
+    }
+
+  }, [state, plantnameFilterSignal.value, notifid.value.name]);
+
+
+  useEffect(() => {
+
     const getWarn = async () => {
       const warn = await callApi("post", host.DATA + "/getWarn2", {
         usr: usr,
@@ -581,20 +581,42 @@ export default function Warn(props) {
         });
 
         setDatafilter([...dataWarn.value]);
-        let search = document.getElementById("warnsearch");
-        search.value = notifid.value.name;
+        // let search = document.getElementById("warnsearch");
+        // search.value = notifid.value.name;
         let date = document.getElementById("inputdate");
-        date.value = `${notifid.value.date.split("/")[2]}-${
-          notifid.value.date.split("/")[0]
-        }-${notifid.value.date.split("/")[1]}`;
+        date.value = `${notifid.value.date.split("/")[2]}-${notifid.value.date.split("/")[0]
+          }-${notifid.value.date.split("/")[1]}`;
+
+        handleSearchManual(notifid.value.name)
+
       }
     };
-    if (notifid.value.name !== "") {
-      getWarn();
-    }
-  }, [notifid.value.name]);
 
-  // useEffect(() => {console.log(datafilter)}, [datafilter]);
+    switch (mode) {
+      case 'mode1':
+        console.log(plantnameFilterSignal.value);
+        handleSearchManual(plantnameFilterSignal.value)
+        setMode('mode0');
+        break;
+      case 'mode2':
+        getWarn();
+        setMode('mode0');
+        break;
+      default:
+        break;
+    }
+
+
+  }, [mode])
+
+
+  // useEffect(() => {
+  //     if(mode === 'mode3'){
+  //       setDatafilter([...dataWarn.value]);
+
+  //     }
+  // },[mode,dataWarn.value])
+
 
   const handleExport = () => {
     console.log(datafilter);
@@ -657,7 +679,7 @@ export default function Warn(props) {
 
     saveAs(blob, "WarnList.xlsx");
   };
-  const usr = useSelector((state) => state.admin.usr);
+
 
   const handlePickDate = async (e) => {
     let d = document.getElementById("warnsearch");
@@ -701,13 +723,6 @@ export default function Warn(props) {
       });
     }
   };
-
-  // useEffect(() => {
-  //   if (seeAll.value === false) {
-  //     console.log("qweqwe");
-  //     handleSeeAll();
-  //   }
-  // }, [seeAll.value]);
 
   return (
     <>
@@ -776,32 +791,46 @@ export default function Warn(props) {
               })}
 
               <div className="DAT_Warn_Export">
-                {seeAll.value ? (
-                  <></>
-                ) : (
-                  <input
-                    type="date"
-                    id="inputdate"
-                    defaultValue={datePickedSignal.value}
-                    max={moment(new Date()).format("YYYY-MM-DD")}
-                    onChange={(e) => {
-                      handlePickDate(e);
-                      datePickedSignal.value = e.target.value;
-                    }}
-                  ></input>
-                )}
 
-                <div
-                  className="DAT_Warn_Datepicker_SeeAll"
-                  onClick={() => {
-                    handleSeeAll();
-                  }}
-                  style={{ color: seeAll.value ? "#195ede" : "black" }}
-                >
-                  {dataLang.formatMessage({
-                    id: seeAll.value ? "pickdate" : "seeall",
-                  })}
-                </div>
+                {seeAll.value
+                  ? <>
+                    <input
+                      type="date"
+                      id="inputdate"
+                      defaultValue={datePickedSignal.value}
+                      max={moment(new Date()).format("YYYY-MM-DD")}
+                      onChange={(e) => {
+                        handlePickDate(e);
+                        datePickedSignal.value = e.target.value;
+                      }}
+                    ></input>
+                    <div
+                      className="DAT_Warn_Datepicker_SeeAll"
+                      onClick={() => {
+                        seeAll.value = false;
+                        handleSeeAll();
+                      }}
+                      style={{ color: seeAll.value ? "#195ede" : "black" }}
+                    >
+                      {dataLang.formatMessage({
+                        id: "seeall",
+                      })}
+                    </div>
+                  </>
+                  : <div
+                    className="DAT_Warn_Datepicker_SeeAll"
+                    onClick={() => {
+                      seeAll.value = true;
+                      handleSeeAll();
+                    }}
+                    style={{ color: seeAll.value ? "#195ede" : "black" }}
+                  >
+                    {dataLang.formatMessage({
+                      id: "pickdate",
+                    })}
+                  </div>
+                }
+
                 <div
                   className="DAT_Warn_Export_Icon"
                   onClick={() => handleExport()}
@@ -901,35 +930,46 @@ export default function Warn(props) {
               <span>{dataLang.formatMessage({ id: "warn" })}</span>
             </div>
           </div>
-
           <div className="DAT_WarnMobile">
             <div className="DAT_WarnMobile_Datepicker">
-              {seeAll.value ? (
-                <></>
-              ) : (
-                <input
-                  type="date"
-                  id="inputdate"
-                  defaultValue={datePickedSignal.value}
-                  max={moment(new Date()).format("YYYY-MM-DD")}
-                  onChange={(e) => {
-                    handlePickDate(e);
-                    datePickedSignal.value = e.target.value;
+              {seeAll.value
+                ? <>
+                  <input
+                    type="date"
+                    id="inputdate"
+                    defaultValue={datePickedSignal.value}
+                    max={moment(new Date()).format("YYYY-MM-DD")}
+                    onChange={(e) => {
+                      handlePickDate(e);
+                      datePickedSignal.value = e.target.value;
+                    }}
+                  ></input>
+                  <div
+                    className="DAT_Warn_Datepicker_SeeAll"
+                    onClick={() => {
+                      seeAll.value = false;
+                      handleSeeAll();
+                    }}
+                    style={{ color: seeAll.value ? "#195ede" : "black" }}
+                  >
+                    {dataLang.formatMessage({
+                      id: "seeall",
+                    })}
+                  </div>
+                </>
+                : <div
+                  className="DAT_Warn_Datepicker_SeeAll"
+                  onClick={() => {
+                    seeAll.value = true;
+                    handleSeeAll();
                   }}
-                ></input>
-              )}
-
-              <div
-                className="DAT_Warn_Datepicker_SeeAll"
-                onClick={() => {
-                  handleSeeAll();
-                }}
-                style={{ color: seeAll.value ? "#195ede" : "black" }}
-              >
-                {dataLang.formatMessage({
-                  id: seeAll.value ? "pickdate" : "seeall",
-                })}
-              </div>
+                  style={{ color: seeAll.value ? "#195ede" : "black" }}
+                >
+                  {dataLang.formatMessage({
+                    id: "pickdate",
+                  })}
+                </div>
+              }
             </div>
             {/* <div className="DAT_Toollist_Tab_Mobile">
               <button
@@ -1243,7 +1283,6 @@ export default function Warn(props) {
               }
             })()}
           </div>
-
           {isLandscape ? (
             <div
               className="DAT_ViewPopupMobile"

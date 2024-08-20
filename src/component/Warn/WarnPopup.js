@@ -73,11 +73,11 @@ export default function WarnPopup(props) {
     return parseInt(n, 10).toString(16) || 0;
   };
 
-  useEffect(() => {
-    // console.log(props.type);
-    console.log(props.more);
-    console.log(props.data);
-  }, [props.more]);
+  // useEffect(() => {
+  //   // console.log(props.type);
+  //   console.log(props.more);
+  //   console.log(props.data);
+  // }, [props.more]);
 
   return (
     <>

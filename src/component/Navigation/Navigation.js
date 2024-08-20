@@ -24,6 +24,7 @@ import { PiUserCircle } from "react-icons/pi";
 import { BiMessageAltX, BiMessageCheck } from "react-icons/bi";
 import { isBrowser, useMobileOrientation } from "react-device-detect";
 import moment from "moment-timezone";
+import { plantnameFilterSignal } from "../Control/Dashboard";
 
 const userNav = signal(false);
 const langNav = signal(false);
@@ -131,6 +132,8 @@ export default function Navigation(props) {
       name: dataWarnNoti.value[i].plant,
       date: t[2],
     };
+    plantnameFilterSignal.value = '';
+
 
     // const warn = await callApi("post", host.DATA + "/getWarn2", {
     //   usr: usr,
@@ -170,7 +173,7 @@ export default function Navigation(props) {
 
     // warnfilter.value = newdata;
     notifNav.value = false;
-    seeAll.value = false;
+    seeAll.value = true;
 
     const state = await callApi("post", host.DATA + "/updateWarnnotif", {
       id: t[0],
@@ -256,7 +259,7 @@ export default function Navigation(props) {
           <button
             className="DAT_Navigation_right-item"
             id="notif"
-            onClick={() => {(notifNav.value = !notifNav.value); console.log(sidebartab.value)}}
+            onClick={() => (notifNav.value = !notifNav.value)}
             ref={notif_icon}
           >
             <IoIosNotificationsOutline color="gray" size={22} />

@@ -86,6 +86,16 @@
       font-size: 20px;
       font-family: segoeui-sb;
       color: COLOR.$Primary-color;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      
+      & select{
+        border: none;
+        outline: none;
+        font-size: 14px;
+        font-family: segoeui;
+      }
     }
 
     &_Box {

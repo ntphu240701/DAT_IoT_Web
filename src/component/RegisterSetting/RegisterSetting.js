@@ -648,6 +648,120 @@ export default function RegisterSetting() {
         justifyContent: "center !important",
       },
     },
+    {
+      name: dataLang.formatMessage({ id: "errorconfig" }),
+      selector: (row, i) => {
+        return (
+          <div style={{ height: "auto", minWidth: "300px" }}>
+            {row.level ? (
+              row.level.map((err, index) => {
+                return (
+                  <div
+                    key={index}
+                    style={{
+                      display: "flex",
+                      gap: "30px",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: "8px 0",
+                    }}
+                  >
+                    {err.code === undefined ? "..." : err.code} :{" "}
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "5px",
+                      }}
+                    >
+                      {err.phone
+                        ? err.phone.map((num, index) => {
+                            return <div key={index}>{num}</div>;
+                          })
+                        : "..."}
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "10px",
+                        justifyContent: "flex-start",
+                        width: "80px",
+                      }}
+                    >
+                      <FiEdit
+                        size={16}
+                        id={`${row.id}_${err.id}_EDIT`}
+                        style={{ cursor: "pointer" }}
+                        onClick={(e) => {
+                          setStatePopup("editError");
+                          changePopupstate();
+                          handleSetConfig(e);
+                        }}
+                      />
+                      <IoTrashOutline
+                        size={16}
+                        style={{ cursor: "pointer" }}
+                        id={`${row.id}_${err.id}_REMOVE`}
+                        onClick={(e) => {
+                          setStatePopup("delErrConfig");
+                          changePopupstate();
+                          handleSetConfig(e);
+                        }}
+                      />
+                      {parseInt(index) === row.level.length - 1 ? (
+                        <IoIosAddCircleOutline
+                          size={16}
+                          style={{ cursor: "pointer" }}
+                          id={`${row.id}_ADD`}
+                          onClick={(e) => {
+                            // handleAddNewError(e);
+                            handleSetConfig(e);
+                            changePopupstate();
+                            setStatePopup("addNewError");
+                          }}
+                        />
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  cursor: "pointer",
+                }}
+              >
+                <IoIosAddCircleOutline
+                  id={`${row.id}_ADD`}
+                  size={16}
+                  onClick={(e) => {
+                    // handleAddNewError(e);
+                    handleSetConfig(e);
+                    changePopupstate();
+                    setStatePopup("addNewErrorOldData");
+                  }}
+                ></IoIosAddCircleOutline>
+              </div>
+            )}
+          </div>
+        );
+      },
+      style: {
+        display: "flex",
+        flexDirection: "column",
+        gap: "3px",
+        minWidth: "300px",
+        height: "auto !important",
+        justifyContent: "center !important",
+        alignItems: "center !important",
+      },
+    },
     //ADDRESS
     {
       name: dataLang.formatMessage({ id: "erroraddress" }),

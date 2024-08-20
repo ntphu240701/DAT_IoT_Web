@@ -13,16 +13,31 @@ import { format, eachDayOfInterval } from "date-fns";
 import { isBrowser } from "react-device-detect";
 import { IoCaretBackOutline } from "react-icons/io5";
 import { CiSearch } from "react-icons/ci";
+import { lowercasedata } from "../ErrorSetting/ErrorSetting";
 
 function ExportEnergy(props) {
   const dataLang = useIntl();
   const user = useSelector((state) => state.admin.usr);
   const [logger, setLogger] = useState([]);
   const [list, setList] = useState([]);
+  const [loggerFilter, setLoggerFilter] = useState([]);
   const [dayofweek, setDayofweek] = useState(0);
   const [dailyCustom, setDailyCustom] = useState(true);
   const [reporttype, setReporttype] = useState("Day");
   const [reportState, setReportState] = useState(false);
+  const [ex, setEx] = useState('PA');
+  const [rp, setRp] = useState('Consumption');
+
+
+  const Ex = [
+    { id: 'PA', name: 'Phuc An Report' },
+    { id: 'EMS', name: 'EMS Report' },
+  ]
+
+  const RP = [
+    { id: 'Consumption', name: 'Bám tải' },
+    { id: 'Hybrid', name: 'Hybrid' },
+  ]
 
   const logger_ = useRef();
   const machine_ = useRef();
@@ -202,8 +217,10 @@ function ExportEnergy(props) {
       });
       console.log(res);
       setLogger(res.data);
+      setLoggerFilter(res.data);
       if (res.status) {
-        setLogger(res.data);
+      setLoggerFilter(res.data);
+      setLogger(res.data);
       }
     };
 
@@ -241,25 +258,21 @@ function ExportEnergy(props) {
       if (type_.current.value === "custom") {
         if (
           Date.parse(
-            `${moment(date_.current.value).format("MM/DD/YYYY")} ${
-              from_.current.value
+            `${moment(date_.current.value).format("MM/DD/YYYY")} ${from_.current.value
             }:00`
           ) < new Date() &&
           Date.parse(
-            `${moment(date_.current.value).format("MM/DD/YYYY")} ${
-              to_.current.value
+            `${moment(date_.current.value).format("MM/DD/YYYY")} ${to_.current.value
             }:00`
           ) < new Date()
         ) {
           if (
             Date.parse(
-              `${moment(date_.current.value).format("MM/DD/YYYY")} ${
-                from_.current.value
+              `${moment(date_.current.value).format("MM/DD/YYYY")} ${from_.current.value
               }:00`
             ) <=
             Date.parse(
-              `${moment(date_.current.value).format("MM/DD/YYYY")} ${
-                to_.current.value
+              `${moment(date_.current.value).format("MM/DD/YYYY")} ${to_.current.value
               }:00`
             )
           ) {
@@ -441,6 +454,49 @@ function ExportEnergy(props) {
     }
   };
 
+
+  const exportExcelEMS = async (e) => {
+
+    if (list.length > 0) {
+      var i = list.findIndex((d) => d.code === machine_.current.value);
+      // console.log(list[i]);
+      console.log(logger_.current, machine_.current.value, list[i].name, list[i].register, rp, moment(date_.current.value).format("MM/DD/YYYY"))
+
+      let res = await Download(host.DATA + "/ReportDailyEMS", {
+        deviceid: logger_.current,
+        code: machine_.current.value,
+        name: list[i].name,
+        register: list[i].register,
+        type: rp,
+        date: moment(date_.current.value).format("MM/DD/YYYY"),
+      });
+
+      console.log(res);
+      if (res.type === "application/json") {
+      } else {
+        fileDownload(res, `Daily_${list[i].name}_${moment(date_.current.value).format("MMDDYYYY")}.xlsx`);
+      }
+
+
+    }
+  }
+
+  const handleSearch = (e) => {
+    if (e.currentTarget.value === "") {
+      setLoggerFilter(logger);
+    } else {
+      const t = lowercasedata(e.currentTarget.value);
+      const db = loggerFilter.filter((row) => {
+        return (
+          lowercasedata(row.name_).includes(t) ||
+          lowercasedata(row.sn_).includes(t)
+        );
+      });
+      setLoggerFilter(db);
+    }
+  }
+
+
   return (
     <>
       {isBrowser ? (
@@ -456,6 +512,7 @@ function ExportEnergy(props) {
                 placeholder={dataLang.formatMessage({ id: "enterInfo" })}
                 id="warnsearch"
                 autoComplete="off"
+                onChange={(e) => handleSearch(e)}
               />
               <CiSearch color="gray" size={20} />
             </div>
@@ -465,10 +522,15 @@ function ExportEnergy(props) {
           <div className="DAT_Export">
             <div className="DAT_Export_Left">
               <div className="DAT_Export_Left_Tit">
-                {dataLang.formatMessage({ id: "device" })}
+                <span>{dataLang.formatMessage({ id: "device" })}</span>
+                <select onChange={(e) => setEx(e.target.value)}>
+                  {Ex.map((item, i) => {
+                    return <option key={i} value={item.id}>{item.name}</option>;
+                  })}
+                </select>
               </div>
               <div className="DAT_Export_Left_Box">
-                {logger.map((item, i) => {
+                {loggerFilter.map((item, i) => {
                   return (
                     <div key={i} className="DAT_Export_Left_Box_Item">
                       <div
@@ -486,106 +548,93 @@ function ExportEnergy(props) {
                 })}
               </div>
             </div>
-            <div className="DAT_Export_Right">
-              <div className="DAT_Export_Right_Tit">
-                {dataLang.formatMessage({ id: "export" })}
-              </div>
-              <div className="DAT_Export_Right_Box">
-                <div className="DAT_Export_Right_Box_Item">
-                  <div className="DAT_Export_Right_Box_Item_Name">
-                    {dataLang.formatMessage({ id: "machine" })}
-                  </div>
-                  <select ref={machine_}>
-                    {list.map((data, index) => {
-                      return (
-                        <option key={index} value={data.code}>
-                          {data.name}
-                        </option>
-                      );
-                    })}
-                  </select>
+            {ex === 'PA'
+              ? <div className="DAT_Export_Right">
+                <div className="DAT_Export_Right_Tit">
+                  {dataLang.formatMessage({ id: "export" })}
                 </div>
-
-                <div className="DAT_Export_Right_Box_Item">
-                  <div className="DAT_Export_Right_Box_Item_Name">
-                    {dataLang.formatMessage({ id: "reportType" })}
+                <div className="DAT_Export_Right_Box">
+                  <div className="DAT_Export_Right_Box_Item">
+                    <div className="DAT_Export_Right_Box_Item_Name">
+                      {dataLang.formatMessage({ id: "machine" })}
+                    </div>
+                    <select ref={machine_}>
+                      {list.map((data, index) => {
+                        return (
+                          <option key={index} value={data.code}>
+                            {data.name}
+                          </option>
+                        );
+                      })}
+                    </select>
                   </div>
-                  <select onChange={(e) => setReporttype(e.target.value)}>
-                    <option value="Day">
-                      {dataLang.formatMessage({ id: "reportDay" })}
-                    </option>
-                    <option value="Month">
-                      {dataLang.formatMessage({ id: "reportMonth" })}
-                    </option>
-                  </select>
-                </div>
 
-                {(() => {
-                  switch (reporttype) {
-                    case "Day":
-                      return (
-                        <>
-                          <div className="DAT_Export_Right_Box_Item">
-                            <div className="DAT_Export_Right_Box_Item_Name">
-                              {dataLang.formatMessage({ id: "date" })}
-                            </div>
-                            <input
-                              type="date"
-                              ref={date_}
-                              defaultValue={moment(new Date()).format(
-                                "YYYY-MM-DD"
-                              )}
-                              max={moment(new Date()).format("YYYY-MM-DD")}
-                            />
-                          </div>
+                  <div className="DAT_Export_Right_Box_Item">
+                    <div className="DAT_Export_Right_Box_Item_Name">
+                      {dataLang.formatMessage({ id: "reportType" })}
+                    </div>
+                    <select onChange={(e) => setReporttype(e.target.value)}>
+                      <option value="Day">
+                        {dataLang.formatMessage({ id: "reportDay" })}
+                      </option>
+                      <option value="Month">
+                        {dataLang.formatMessage({ id: "reportMonth" })}
+                      </option>
+                    </select>
+                  </div>
 
-                          <div className="DAT_Export_Right_Box_Item">
-                            <div className="DAT_Export_Right_Box_Item_Name">
-                              {dataLang.formatMessage({ id: "timeRange" })}
-                            </div>
-
-                            <select ref={type_} onChange={(e) => handleType(e)}>
-                              <option value="custom">
-                                {dataLang.formatMessage({ id: "custom" })}
-                              </option>
-                              <option
-                                value="high"
-                                style={{
-                                  display: dayofweek === 0 ? "none" : "block",
-                                }}
-                              >
-                                {dataLang.formatMessage({ id: "rushHour" })}
-                              </option>
-                              <option value="mid">
-                                {dataLang.formatMessage({ id: "normalHour" })}
-                              </option>
-                              <option value="low">
-                                {dataLang.formatMessage({ id: "lowHour" })}
-                              </option>
-                            </select>
-                          </div>
-
-                          {dailyCustom ? (
+                  {(() => {
+                    switch (reporttype) {
+                      case "Day":
+                        return (
+                          <>
                             <div className="DAT_Export_Right_Box_Item">
                               <div className="DAT_Export_Right_Box_Item_Name">
-                                {dataLang.formatMessage({ id: "from" })}
+                                {dataLang.formatMessage({ id: "date" })}
+                              </div>
+                              <input
+                                type="date"
+                                ref={date_}
+                                defaultValue={moment(new Date()).format(
+                                  "YYYY-MM-DD"
+                                )}
+                                max={moment(new Date()).format("YYYY-MM-DD")}
+                              />
+                            </div>
+
+                            <div className="DAT_Export_Right_Box_Item">
+                              <div className="DAT_Export_Right_Box_Item_Name">
+                                {dataLang.formatMessage({ id: "timeRange" })}
                               </div>
 
-                              <select ref={from_}>
-                                {time.map((item, index) => {
-                                  return (
-                                    <option key={index} value={item}>
-                                      {item}
-                                    </option>
-                                  );
-                                })}
+                              <select ref={type_} onChange={(e) => handleType(e)}>
+                                <option value="custom">
+                                  {dataLang.formatMessage({ id: "custom" })}
+                                </option>
+                                <option
+                                  value="high"
+                                  style={{
+                                    display: dayofweek === 0 ? "none" : "block",
+                                  }}
+                                >
+                                  {dataLang.formatMessage({ id: "rushHour" })}
+                                </option>
+                                <option value="mid">
+                                  {dataLang.formatMessage({ id: "normalHour" })}
+                                </option>
+                                <option value="low">
+                                  {dataLang.formatMessage({ id: "lowHour" })}
+                                </option>
                               </select>
+                            </div>
 
+                            {dailyCustom ? (
                               <div className="DAT_Export_Right_Box_Item">
                                 <div className="DAT_Export_Right_Box_Item_Name">
-                                  {dataLang.formatMessage({ id: "To" })}
+                                  {dataLang.formatMessage({ id: "from" })}
                                 </div>
-                                <select ref={to_}>
+
+                                <select ref={from_}>
                                   {time.map((item, index) => {
                                     return (
                                       <option key={index} value={item}>
@@ -594,119 +643,200 @@ function ExportEnergy(props) {
                                     );
                                   })}
                                 </select>
+
+                                <div className="DAT_Export_Right_Box_Item">
+                                  <div className="DAT_Export_Right_Box_Item_Name">
+                                    {dataLang.formatMessage({ id: "To" })}
+                                  </div>
+                                  <select ref={to_}>
+                                    {time.map((item, index) => {
+                                      return (
+                                        <option key={index} value={item}>
+                                          {item}
+                                        </option>
+                                      );
+                                    })}
+                                  </select>
+                                </div>
+                              </div>
+                            ) : (
+                              <></>
+                            )}
+
+                            <div className="DAT_Export_Right_Box_Item">
+                              <div
+                                className="DAT_Export_Right_Box_Item_Export"
+                                onClick={(e) => exportExcelDaily(e)}
+                              >
+                                <span>
+                                  {dataLang.formatMessage({ id: "exportFile" })}
+                                </span>
+                                &nbsp;
+                                <FaFileExcel
+                                  size={24}
+                                  style={{ color: "white" }}
+                                />
                               </div>
                             </div>
-                          ) : (
-                            <></>
-                          )}
+                          </>
+                        );
+                      case "Month":
+                        return (
+                          <>
+                            <div className="DAT_Export_Right_Box_Item">
+                              <div className="DAT_Export_Right_Box_Item_Name">
+                                {dataLang.formatMessage({ id: "month" })}{" "}
+                              </div>
+                              <input
+                                type="month"
+                                ref={month_}
+                                defaultValue={moment(new Date()).format(
+                                  "YYYY-MM"
+                                )}
+                                max={moment(new Date()).format("YYYY-MM-DD")}
+                              />
+                            </div>
 
-                          <div className="DAT_Export_Right_Box_Item">
+                            <div className="DAT_Export_Right_Box_Item">
+                              <div className="DAT_Export_Right_Box_Item_Name">
+                                {dataLang.formatMessage({ id: "timeRange" })}
+                              </div>
+
+                              <select ref={type_} onChange={(e) => handleType(e)}>
+                                <option value="custom">
+                                  {dataLang.formatMessage({ id: "custom" })}
+                                </option>
+                                <option value="high">
+                                  {dataLang.formatMessage({ id: "rushHour" })}
+                                </option>
+                                <option value="mid">
+                                  {dataLang.formatMessage({ id: "normalHour" })}
+                                </option>
+                                <option value="low">
+                                  {dataLang.formatMessage({ id: "lowHour" })}
+                                </option>
+                              </select>
+                            </div>
+
+                            <div className="DAT_Export_Right_Box_Item">
+                              <div className="DAT_Export_Right_Box_Item_Name">
+                                {dataLang.formatMessage({ id: "from" })}
+                              </div>
+                              <input
+                                style={{ marginRight: "10px" }}
+                                ref={datefrom_}
+                                type="date"
+                                defaultValue={moment(new Date()).format(
+                                  "YYYY-MM-DD"
+                                )}
+                                max={moment(new Date()).format("YYYY-MM-DD")}
+                              />
+                            </div>
+
+                            <div className="DAT_Export_Right_Box_Item">
+                              <div className="DAT_Export_Right_Box_Item_Name">
+                                {dataLang.formatMessage({ id: "To" })}
+                              </div>
+                              <input
+                                type="date"
+                                ref={dateto_}
+                                defaultValue={moment(new Date()).format(
+                                  "YYYY-MM-DD"
+                                )}
+                                max={moment(new Date()).format("YYYY-MM-DD")}
+                              />
+                            </div>
+
                             <div
-                              className="DAT_Export_Right_Box_Item_Export"
-                              onClick={(e) => exportExcelDaily(e)}
+                              className="DAT_Export_Right_Box_Item"
+                              onClick={(e) => exportExcelMonth(e)}
                             >
-                              <span>
-                                {dataLang.formatMessage({ id: "exportFile" })}
-                              </span>
-                              &nbsp;
-                              <FaFileExcel
-                                size={24}
-                                style={{ color: "white" }}
-                              />
+                              <div className="DAT_Export_Right_Box_Item_Export">
+                                <span>
+                                  {dataLang.formatMessage({ id: "exportFile" })}
+                                </span>
+                                &nbsp;
+                                <FaFileExcel
+                                  size={24}
+                                  style={{ color: "white" }}
+                                />
+                              </div>
                             </div>
-                          </div>
-                        </>
-                      );
-                    case "Month":
-                      return (
-                        <>
-                          <div className="DAT_Export_Right_Box_Item">
-                            <div className="DAT_Export_Right_Box_Item_Name">
-                              {dataLang.formatMessage({ id: "month" })}{" "}
-                            </div>
-                            <input
-                              type="month"
-                              ref={month_}
-                              defaultValue={moment(new Date()).format(
-                                "YYYY-MM"
-                              )}
-                              max={moment(new Date()).format("YYYY-MM-DD")}
-                            />
-                          </div>
-
-                          <div className="DAT_Export_Right_Box_Item">
-                            <div className="DAT_Export_Right_Box_Item_Name">
-                              {dataLang.formatMessage({ id: "timeRange" })}
-                            </div>
-
-                            <select ref={type_} onChange={(e) => handleType(e)}>
-                              <option value="custom">
-                                {dataLang.formatMessage({ id: "custom" })}
-                              </option>
-                              <option value="high">
-                                {dataLang.formatMessage({ id: "rushHour" })}
-                              </option>
-                              <option value="mid">
-                                {dataLang.formatMessage({ id: "normalHour" })}
-                              </option>
-                              <option value="low">
-                                {dataLang.formatMessage({ id: "lowHour" })}
-                              </option>
-                            </select>
-                          </div>
-
-                          <div className="DAT_Export_Right_Box_Item">
-                            <div className="DAT_Export_Right_Box_Item_Name">
-                              {dataLang.formatMessage({ id: "from" })}
-                            </div>
-                            <input
-                              style={{ marginRight: "10px" }}
-                              ref={datefrom_}
-                              type="date"
-                              defaultValue={moment(new Date()).format(
-                                "YYYY-MM-DD"
-                              )}
-                              max={moment(new Date()).format("YYYY-MM-DD")}
-                            />
-                          </div>
-
-                          <div className="DAT_Export_Right_Box_Item">
-                            <div className="DAT_Export_Right_Box_Item_Name">
-                              {dataLang.formatMessage({ id: "To" })}
-                            </div>
-                            <input
-                              type="date"
-                              ref={dateto_}
-                              defaultValue={moment(new Date()).format(
-                                "YYYY-MM-DD"
-                              )}
-                              max={moment(new Date()).format("YYYY-MM-DD")}
-                            />
-                          </div>
-
-                          <div
-                            className="DAT_Export_Right_Box_Item"
-                            onClick={(e) => exportExcelMonth(e)}
-                          >
-                            <div className="DAT_Export_Right_Box_Item_Export">
-                              <span>
-                                {dataLang.formatMessage({ id: "exportFile" })}
-                              </span>
-                              &nbsp;
-                              <FaFileExcel
-                                size={24}
-                                style={{ color: "white" }}
-                              />
-                            </div>
-                          </div>
-                        </>
-                      );
-                    default:
-                      return <></>;
-                  }
-                })()}
+                          </>
+                        );
+                      default:
+                        return <></>;
+                    }
+                  })()}
+                </div>
               </div>
-            </div>
+              : <div className="DAT_Export_Right">
+                <div className="DAT_Export_Right_Tit">
+                  {dataLang.formatMessage({ id: "export" })}
+                </div>
+                <div className="DAT_Export_Right_Box">
+                  <div className="DAT_Export_Right_Box_Item">
+                    <div className="DAT_Export_Right_Box_Item_Name">
+                      {dataLang.formatMessage({ id: "machine" })}
+                    </div>
+                    <select ref={machine_}>
+                      {list.map((data, index) => {
+                        return (
+                          <option key={index} value={data.code}>
+                            {data.name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+
+                  <div className="DAT_Export_Right_Box_Item">
+                    <div className="DAT_Export_Right_Box_Item_Name">
+                      {dataLang.formatMessage({ id: "reportType" })}
+                    </div>
+                    <select onChange={(e) => setRp(e.target.value)} >
+                      {RP.map((data, index) => {
+                        return (
+                          <option key={index} value={data.id}>
+                            {data.name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                  <div className="DAT_Export_Right_Box_Item">
+                    <div className="DAT_Export_Right_Box_Item_Name">
+                      {dataLang.formatMessage({ id: "date" })}
+                    </div>
+                    <input
+                      type="date"
+                      ref={date_}
+                      defaultValue={moment(new Date()).format(
+                        "YYYY-MM-DD"
+                      )}
+                      max={moment(new Date()).format("YYYY-MM-DD")}
+                    />
+                  </div>
+
+                  <div
+                    className="DAT_Export_Right_Box_Item"
+                    onClick={(e) => exportExcelEMS(e)}
+                  >
+                    <div className="DAT_Export_Right_Box_Item_Export">
+                      <span>
+                        {dataLang.formatMessage({ id: "exportFile" })}
+                      </span>
+                      &nbsp;
+                      <FaFileExcel
+                        size={24}
+                        style={{ color: "white" }}
+                      />
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            }
           </div>
         </>
       ) : (

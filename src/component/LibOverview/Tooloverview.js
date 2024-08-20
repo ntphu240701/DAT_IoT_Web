@@ -26,6 +26,7 @@ import { RiErrorWarningLine } from "react-icons/ri";
 import { seeAll } from "../Warn/Warn";
 import { plantnameFilterSignal } from "../Control/Dashboard";
 import { useNavigate } from "react-router-dom";
+import PullUp from "./PullUp";
 
 export const overview = signal(false);
 export const whatdevicegroup = signal({ id: "", groupid: "", tab: "" });
@@ -38,6 +39,7 @@ export default function Tooloverview(props) {
   const { type } = useOrientation();
   const [load, setLoad] = useState(true);
   const [isLand, setIsLand] = useState(false);
+  const [warnBoxState, setWarnBoxState] = useState(false);
   const Navigate = useNavigate();
   const popup_state = {
     pre: {
@@ -219,6 +221,10 @@ export default function Tooloverview(props) {
     });
   };
 
+  const handleClose = () => {
+    setWarnBoxState(!warnBoxState);
+  }
+
   return (
     <>
       <div className="DAT_ToolOverview">
@@ -264,15 +270,21 @@ export default function Tooloverview(props) {
                 <div
                   className="DAT_ToolOverview_Overview_Container_Head_Warn"
                   onClick={(e) => {
-                    Navigate("/Warn");
-                    seeAll.value = false;
-                    plantnameFilterSignal.value = overview_name;
+                    setWarnBoxState(!warnBoxState);
+                    // console.log(overview_config, overview_control, overview_name)
+                    // Navigate("/Warn");
+                    // seeAll.value = false;
+                    // plantnameFilterSignal.value = overview_name;
                   }}
                 >
                   <RiErrorWarningLine
                     size={20}
                     color="orange"
-                    style={{ padding: "5px", borderRadius: "50%", cursor: "pointer" }}
+                    style={{
+                      padding: "5px",
+                      borderRadius: "50%",
+                      cursor: "pointer",
+                    }}
                   />
                 </div>
 
@@ -330,6 +342,8 @@ export default function Tooloverview(props) {
             </div>
           )}
         </div>
+
+        {warnBoxState ? <PullUp projectname={overview_name} handleClose={handleClose}/> : <></>}
       </div>
     </>
   );

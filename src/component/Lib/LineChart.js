@@ -9,7 +9,10 @@ import zoomPlugin from "chartjs-plugin-zoom";
 import axios from "axios";
 import { host } from "../Lang/Contant";
 import { _tab } from "./Toollist";
-import { callApi } from "../Api/Api";
+import { Download, callApi } from "../Api/Api";
+import moment from "moment-timezone";
+import { BiExport } from "react-icons/bi";
+import fileDownload from "js-file-download";
 
 Chart.register(zoomPlugin);
 
@@ -192,8 +195,17 @@ export default function LineChart(props) {
 
   useEffect(function () {
 
+    const getchartv2 = async () => {
+      let res = await callApi("post", host.DATA + "/getChartv2", {
+        deviceid: props.sn,
+        tab: props.tab,
+        id: props.id,
+        date: moment(new Date()).format('MM/DD/YYYY')
+      })
+      console.log(res)
+    }
 
-
+    getchartv2()
 
     const getchart = async () => {
       let res = await callApi("post", host.DATA + "/getChart", {
@@ -278,13 +290,33 @@ export default function LineChart(props) {
 
   }
 
+  const handeExport = async() => {
+    let res = await Download(host.DATA + "/Reportchart", {
+      deviceid: props.sn,
+      tab: props.tab,
+      id: props.id,
+      date: moment(new Date()).format("MM/DD/YYYY"),
+    });
+
+    console.log(res);
+    if (res.type === "application/json") {
+    } else {
+      fileDownload(
+        res,
+        `Report_3Phase_${moment(new Date()).format(
+          "MMDDYYYY"
+        )}.xlsx`
+      );
+    }
+  }
+
 
 
 
   return (
     <div className="DAT_LineChart" style={{ width: (props.width) + "px", height: (props.height) + "px", }} >
 
-
+      {/* <button onClick={handeExport} style={{ position: "absolute", top: "10px", right: "60px" }}><BiExport size={20} color="gray" /></button> */}
       {(onzoom)
         ? <>
           <button onClick={handleTabreset} style={{ position: "absolute", top: "10px", right: "60px" }}><ion-icon name="expand-outline"></ion-icon></button>

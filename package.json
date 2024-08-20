@@ -43,6 +43,7 @@
     "react-icons": "^4.12.0",
     "react-image-file-resizer": "^0.4.8",
     "react-intl": "^6.4.4",
+    "react-moveable": "^0.56.0",
     "react-query": "^3.39.3",
     "react-redux": "^8.1.2",
     "react-router-dom": "^6.14.1",

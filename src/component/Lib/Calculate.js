@@ -159,6 +159,7 @@ export default function Calculate(props) {
 
 
     const chart = () => {
+        console.log(setting[props.tab][control[props.tab].id].dataset)
         return (
             <>
                 <div className="DAT_Calculate-cover-box">
@@ -215,14 +216,49 @@ export default function Calculate(props) {
                             </div>
                         </div>
 
+                        <div className="DAT_Calculateoverview-cover-box">
 
-                        <div className="DAT_Calculateoverview-cover-input">
-                            <span>Control</span>
-                            <div className="DAT_Calculateoverview-cover-input-content">
-                                <input type="text" id={`${index}_calchart`} defaultValue={data.cal} ></input>
-                                <button name={"cal_" + index} id="chart" onClick={(e) => handleCalculate(e)}>Xác nhận</button>
-                            </div>
+                            <span>Type</span>
+                            <select id='chart' name={'type_' + index} defaultValue={data.type ? data.type : 'real'} onChange={(e) => handleCalculate(e)}>
+                                <option value="real"  >Real</option>
+                                <option value="word"  >Word</option>
+                            </select>
                         </div>
+                        {data.type == 'word'
+                            ? <>
+                                <div className="DAT_Calculateoverview-cover-box">
+
+                                    <span>Number</span>
+                                    <select id='chart' name={'number_' + index} defaultValue={data.number ? data.number : 'float'} onChange={(e) => handleCalculate(e)}>
+                                        <option value="int"  >DoupleWord</option>
+                                        <option value="float"  >Float</option>
+                                    </select>
+                                </div>
+                                <div className="DAT_Calculateoverview-cover-input">
+                                    <span>Scale</span>
+                                    <div className="DAT_Calculateoverview-cover-input-content">
+                                        <input type="number" id={`${index}_scalechart`} defaultValue={data?.scale || 1} ></input>
+                                        <button name={"scale_" + index} id="chart" onClick={(e) => handleCalculate(e)}>Xác nhận</button>
+                                    </div>
+                                </div>
+                                <div className="DAT_Calculateoverview-cover-input" >
+                                    <span>Bit0:Bit1</span>
+                                    <div className="DAT_Calculateoverview-cover-input-content">
+                                        <input type="text" id={"word_0_" + index} onClick={(e) => setWord(0)} defaultValue={data.cal[0] || 10}></input>
+                                        <input type="text" id={"word_1_" + index} onClick={(e) => setWord(1)} defaultValue={data.cal[1] || 10}></input>
+                                        <button name={"cal32_" + index} id="chart" onClick={(e) => handleCalculate(e)} >Xác nhận</button>
+                                    </div>
+                                </div >
+                            </>
+                            : <div className="DAT_Calculateoverview-cover-input">
+                                <span>Control</span>
+                                <div className="DAT_Calculateoverview-cover-input-content">
+                                    <input type="text" id={`${index}_calchart`} defaultValue={data.cal} ></input>
+                                    <button name={"cal_" + index} id="chart" onClick={(e) => handleCalculate(e)}>Xác nhận</button>
+                                </div>
+                            </div>
+
+                        }
 
                     </div>
                 ))
@@ -553,7 +589,7 @@ export default function Calculate(props) {
                     setting[props.tab][control[props.tab].id].dataset = newdevice
                     const chart = async () => {
                         let res = await callApi('POST', host.DATA + '/dropChart', { deviceid: props.sn, tabid: `${props.tab}_${control[props.tab].id}`, index: e.currentTarget.value })
-                        // console.log(res)
+                        console.log(res)
                     }
                     chart();
                 }
@@ -567,6 +603,9 @@ export default function Calculate(props) {
                         lineTension: 0.5,
                         backgroundColor: "rgba(255,99,132,0.5)",
                         borderColor: "rgba(255,99,132,0.5)",
+                        type: "real",
+                        scale: 1,
+                        number: "int",
                         cal: "10"
                     })
                     setting[props.tab][control[props.tab].id].dataset = newdevice
@@ -603,19 +642,49 @@ export default function Calculate(props) {
                 if (chart_arr[0] === "label") {
                     let chart_val = document.getElementById(`${chart_arr[1]}_${chart_arr[0]}chart`)
                     if (chart_val.value !== "") {
+                       
                         setting[props.tab][control[props.tab].id].dataset[chart_arr[1]][chart_arr[0]] = chart_val.value
                     } else {
                         alertDispatch(dataLang.formatMessage({ id: "alert_33" }))
                     }
                 }
 
-                if (chart_arr[0] === "read") {
+
+                if (chart_arr[0] === "scale") {
                     let chart_val = document.getElementById(`${chart_arr[1]}_${chart_arr[0]}chart`)
-                    let chart_math = document.getElementById(`${chart_arr[1]}_calchart`)
                     if (chart_val.value !== "") {
-                        chart_math.value += "parseFloat(data[\"" + chart_val.value + "\"])"
-                        chart_val.value = ""
+                        setting[props.tab][control[props.tab].id].dataset[chart_arr[1]][chart_arr[0]] = chart_val.value
+                    } else {
+                        alertDispatch(dataLang.formatMessage({ id: "alert_33" }))
                     }
+                }
+
+                if (chart_arr[0] === "number") {
+                    console.log(chart_arr, e.currentTarget.value)
+                    setting[props.tab][control[props.tab].id].dataset[chart_arr[1]][chart_arr[0]] = e.currentTarget.value
+                }
+
+                if (chart_arr[0] === "read") {
+                    if (setting[props.tab][control[props.tab].id].dataset[chart_arr[1]]?.type || 'real' === 'word') {
+                        let chart_val = document.getElementById(`${chart_arr[1]}_${chart_arr[0]}chart`)
+                        let chart_math = document.getElementById(`word_${word}_${chart_arr[1]}`)
+                        if (chart_val.value !== "") {
+                            chart_math.value += "parseFloat(data[\"" + chart_val.value + "\"])"
+                            chart_val.value = ""
+                        }
+                    } else {
+                        let chart_val = document.getElementById(`${chart_arr[1]}_${chart_arr[0]}chart`)
+                        let chart_math = document.getElementById(`${chart_arr[1]}_calchart`)
+                        if (chart_val.value !== "") {
+                            chart_math.value += "parseFloat(data[\"" + chart_val.value + "\"])"
+                            chart_val.value = ""
+                        }
+                    }
+                }
+
+                if (chart_arr[0] === "type") {
+                    console.log(chart_arr, e.currentTarget.value)
+                    setting[props.tab][control[props.tab].id].dataset[chart_arr[1]][chart_arr[0]] = e.currentTarget.value
                 }
 
                 if (chart_arr[0] === "cal") {
@@ -625,8 +694,8 @@ export default function Calculate(props) {
                         if (String(result) !== 'NaN') {
                             setting[props.tab][control[props.tab].id].dataset[chart_arr[1]][chart_arr[0]] = chart_val.value
                             const chart = async () => {
-                                let res = await callApi('POST', host.DATA + '/setChart', { deviceid: props.sn, tabid: `${props.tab}_${control[props.tab].id}`, index: chart_arr[1], cal: chart_val.value })
-                                // console.log(res)
+                                let res = await callApi('POST', host.DATA + '/setChart', { deviceid: props.sn, tabid: `${props.tab}_${control[props.tab].id}`, index: chart_arr[1], type: 'real', scale: 1, number:'int', cal: chart_val.value })
+                                console.log(res)
                             }
                             chart();
                             alertDispatch(dataLang.formatMessage({ id: "alert_6" }))
@@ -641,6 +710,40 @@ export default function Calculate(props) {
                     }
 
                 }
+
+                if (chart_arr[0] === "cal32") {
+                    console.log(chart_arr[1])
+                    let chart_val_0 = document.getElementById(`word_0_${chart_arr[1]}`)
+                    let chart_val_1 = document.getElementById(`word_1_${chart_arr[1]}`)
+                    console.log(chart_val_0.value, chart_val_1.value)
+
+                    try {
+                        var word_cal_0 = eval(chart_val_0.value);
+                        var word_cal_1 = eval(chart_val_1.value);
+                        if (String(word_cal_0) !== 'NaN' && String(word_cal_1) !== 'NaN') {
+
+                            setting[props.tab][control[props.tab].id].dataset[chart_arr[1]].cal = [chart_val_0.value, chart_val_1.value]
+                            const chart = async () => {
+                                let res = await callApi('POST', host.DATA + '/setChart', { deviceid: props.sn, tabid: `${props.tab}_${control[props.tab].id}`, index: chart_arr[1], type: 'word', number:  setting[props.tab][control[props.tab].id].dataset[chart_arr[1]]?.number || 'float', scale: setting[props.tab][control[props.tab].id].dataset[chart_arr[1]]?.scale || 1, cal: [chart_val_0.value, chart_val_1.value] })
+                                console.log(res)
+                            }
+                            chart();
+                            alertDispatch(dataLang.formatMessage({ id: "alert_6" }))
+                        } else {
+                            // console.log("Thanh gi không có trong hệ thống")
+                            setting[props.tab][control[props.tab].id].dataset[chart_arr[1]].cal = [chart_val_0.value, chart_val_1.value]
+                            alertDispatch(dataLang.formatMessage({ id: "alert_66" }))
+
+                        }
+
+                    } catch (error) {
+                        // console.log("Thanh gi err")
+                        alertDispatch(dataLang.formatMessage({ id: "alert_33" }))
+                    }
+                }
+
+
+
                 break;
             case 'box': //new ver
 
@@ -1270,7 +1373,21 @@ export default function Calculate(props) {
                                     {input('inp', 'X label', "text", 'xlb')}
                                     {input('inp', 'Y label', "text", 'ylb')}
                                     {input('inp', 'Step', "number", 'step')}
+                                    <div className="DAT_Calculateoverview-line" style={{ fontSize: "18px", width: "100%", borderBottom: "1px solid #326ba8", marginBottom: "15px" }}>Control</div>
                                     {chart()}
+                                </>
+                            )
+                        case 'barChart':
+                            return (
+                                <>
+                                    <div className="DAT_Calculateoverview-tit" style={{ position: 'absolute', top: '20px', left: '20px', fontSize: "22px", color: "#326ba8" }}>Line Chart</div>
+                                    <div className="DAT_Calculateoverview-line" style={{ fontSize: "18px", width: "100%", borderBottom: "1px solid #326ba8", marginBottom: "15px" }}>Display</div>
+                                    {size('size', 'Width', 'w')}
+                                    {size('size', 'Height', 'h')}
+                                    {input('inp', 'X label', "text", 'xlb')}
+                                    {input('inp', 'Y label', "text", 'ylb')}
+                                    {input('inp', 'Step', "number", 'step')}
+                                    {/* {chart()} */}
                                 </>
                             )
                         case 'switch':
